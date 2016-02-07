@@ -281,8 +281,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
             }
 
-
-
         }
         
 
@@ -297,6 +295,23 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         //Also have to remove the view at at position
         //take away that menu from the selectedMenuList in blackgarlicadapter
         //set that particular menu's boolean to true
+
+    }
+
+    public void clearAll(View view) {
+
+        BlackGarlicAdapter getCurrentMmenuListandSelectedInteger = new BlackGarlicAdapter(null, null, null);
+
+        getCurrentMmenuListandSelectedInteger.setAdapterSelectedInteger(0);
+        getCurrentMmenuListandSelectedInteger.clearCurrentSelectedMenus();
+        getCurrentMmenuListandSelectedInteger.clearmmenuList();
+
+        this.selectedInteger = 0;
+
+        RelativeLayout mainOrderSummaryLayout = (RelativeLayout) findViewById(R.id.orderSummaryRelativeLayout);
+
+        mainOrderSummaryLayout.removeAllViews();
+
 
 
 

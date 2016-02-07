@@ -58,6 +58,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         myViewHolder.menuNetworkImageView.setImageUrl(BLACKGARLIC_PICTURES.replace("menu_id", currentMenu.getMenuId()),
                 ConnectionManager.getImageLoader(mContext));
 
+
         if (currentMenu.getIsSelected() == true) {
             myViewHolder.selectedImageView.setVisibility(View.VISIBLE);
         } else {
@@ -121,6 +122,22 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
 
     public static interface MyListItemClickListener{
         public void OnItemClick(Menu onItemClicked, View view, List<Menu> menuList);
+    }
+
+    public void clearCurrentSelectedMenus() {
+        this.currentSelectedMenus.clear();
+    }
+
+    public void clearmmenuList() {
+        for (int i = 0; i < mmenuList.length; i++) {
+            if (this.mmenuList[i].getIsSelected() == true) {
+                this.mmenuList[i].setIsSelected(false);
+            }
+        }
+    }
+
+    public void setAdapterSelectedInteger(int input) {
+       this.selectedInteger = input;
     }
 
 
