@@ -1,0 +1,21 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" tools:context="id.blackgarlic.blackgarlic.welcome.YouCook">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/youcook"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="220dp"
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/youcooktext"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="360dp"
+        />
+
+</FrameLayout>

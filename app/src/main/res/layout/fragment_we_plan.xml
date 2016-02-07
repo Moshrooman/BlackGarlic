@@ -1,0 +1,36 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="id.blackgarlic.blackgarlic.welcome.WePlan"
+    android:background="@drawable/omwillwithbox">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cook with BlackGarlic!"
+        android:textSize="30dp"
+        android:layout_gravity="center_horizontal"
+        fontPath="fonts/Roboto-Medium.ttf"
+        android:layout_marginTop="60dp"
+        />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/weplan"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="220dp"
+        />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="WE PLAN"
+        android:textSize="25dp"
+        android:layout_gravity="center_horizontal"
+        fontPath="fonts/Roboto-Medium.ttf"
+        android:layout_marginTop="360dp"
+        />
+</FrameLayout>
