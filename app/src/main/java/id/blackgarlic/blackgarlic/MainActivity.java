@@ -74,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             @Override
             public void onErrorResponse(VolleyError error) {
 
+
+
             }
         });
 
@@ -300,17 +302,17 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     public void clearAll(View view) {
 
-        BlackGarlicAdapter getCurrentMmenuListandSelectedInteger = new BlackGarlicAdapter(null, null, null);
+        //BlackGarlicAdapter getCurrentMmenuListandSelectedInteger = new BlackGarlicAdapter(null, null, null);
 
-        getCurrentMmenuListandSelectedInteger.setAdapterSelectedInteger(0);
-        getCurrentMmenuListandSelectedInteger.clearCurrentSelectedMenus();
-        getCurrentMmenuListandSelectedInteger.clearmmenuList();
+        //getCurrentMmenuListandSelectedInteger.setAdapterSelectedInteger(0);
+        //getCurrentMmenuListandSelectedInteger.clearCurrentSelectedMenus();
+        //getCurrentMmenuListandSelectedInteger.clearmmenuList();
 
         this.selectedInteger = 0;
 
-        RelativeLayout mainOrderSummaryLayout = (RelativeLayout) findViewById(R.id.orderSummaryRelativeLayout);
+        //RelativeLayout mainOrderSummaryLayout = (RelativeLayout) findViewById(R.id.orderSummaryRelativeLayout);
 
-        mainOrderSummaryLayout.removeAllViews();
+        //mainOrderSummaryLayout.removeAllViews();
 
 
 
