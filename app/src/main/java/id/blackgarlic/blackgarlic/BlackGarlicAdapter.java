@@ -55,7 +55,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
     public void onBindViewHolder(MyViewHolder myViewHolder, int position) {
         Menu currentMenu = mmenuList[position];
         myViewHolder.menuTitleTextView.setText(currentMenu.getMenuName());
-        myViewHolder.menuNetworkImageView.setImageUrl(BLACKGARLIC_PICTURES.replace("menu_id", currentMenu.getMenuId()),
+        myViewHolder.menuNetworkImageView.setImageUrl(currentMenu.getMenuImageUrl(),
                 ConnectionManager.getImageLoader(mContext));
 
 

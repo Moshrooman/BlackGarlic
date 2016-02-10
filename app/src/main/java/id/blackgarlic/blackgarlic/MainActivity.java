@@ -28,6 +28,8 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import id.blackgarlic.blackgarlic.database.BlackGarlicDAO;
+import id.blackgarlic.blackgarlic.database.DBOpenHelper;
 import id.blackgarlic.blackgarlic.model.Menu;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -53,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             @Override
             public void onResponse(String response) {
 
+                Toast.makeText(MainActivity.this, "Taking From Internet", Toast.LENGTH_SHORT).show();
+
                 String jsonResponse = response;
 
                 jsonResponse = jsonResponse.replace("\\", "");
@@ -67,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
                 BlackGarlicAdapter blackGarlicAdapter = new BlackGarlicAdapter(menuList, MainActivity.this, MainActivity.this);
 
+                BlackGarlicDAO.getInstance().storeMenus(MainActivity.this, menuList);
+
                 recyclerView.setAdapter(blackGarlicAdapter);
 
             }
@@ -74,6 +80,13 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             @Override
             public void onErrorResponse(VolleyError error) {
 
+                Toast.makeText(MainActivity.this, "Taking From Database", Toast.LENGTH_SHORT).show();
+
+                Menu[] menuListDatabase = BlackGarlicDAO.getInstance().getPostsFromDB(MainActivity.this);
+
+                BlackGarlicAdapter blackGarlicAdapter2 = new BlackGarlicAdapter(menuListDatabase, MainActivity.this, MainActivity.this);
+
+                recyclerView.setAdapter(blackGarlicAdapter2);
 
 
             }
@@ -297,6 +310,14 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         //Also have to remove the view at at position
         //take away that menu from the selectedMenuList in blackgarlicadapter
         //set that particular menu's boolean to true
+
+        //TODO: TRY TO FIX THE DATABASE, TO LOAD PICTURES WHEN THERE IS NO INTERNET
+        //In the BlackGarlicDAO in the method getPostsFromDb what I did was I created a new arraylist and stored the existing posts there
+        //Then i created a new array, put all of the stuff that was in the arraylist in there and returned the array
+        //The error that I'm getting is that It is null
+        //Also in getPostsFromDB I logged the first menu's name and id
+        //And created to log taking from internet or database
+        //There is an error with the method in the Menu class of getMenuImageUrl
 
     }
 

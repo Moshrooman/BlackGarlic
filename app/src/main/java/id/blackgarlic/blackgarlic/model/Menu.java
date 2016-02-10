@@ -20,15 +20,17 @@ public class Menu {
     @SerializedName("menu_name")
     private String menuName;
 
+    private String menuImageUrl;
+
     public String getMenuImageUrl() {
         return BLACKGARLIC_PICTURES.replace("menu_id", menuId);
     }
 
     public boolean mIsSelected = false;
 
-    public Menu(String menuId, String menuName) {
-        this.menuId = menuId;
+    public Menu(String menuName, String menuImageUrl) {
         this.menuName = menuName;
+        this.menuImageUrl = menuImageUrl;
 
     }
 
