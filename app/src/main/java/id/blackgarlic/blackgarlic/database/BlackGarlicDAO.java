@@ -105,6 +105,10 @@ public class BlackGarlicDAO {
         cursor.close();
         db.close();
 
+        if (menuListList.size() == 0) {
+            return new Menu[0];
+        }
+
         for (int i = 0; i < menuList.length; i++) {
             menuList[i] = menuListList.get(menuListList.size() - i - 1);
         }

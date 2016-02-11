@@ -80,14 +80,18 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                Toast.makeText(MainActivity.this, "Taking From Database", Toast.LENGTH_SHORT).show();
+                if (BlackGarlicDAO.getInstance().getMenusFromDB(MainActivity.this).length != 0) {
 
-                Menu[] menuListDatabase = BlackGarlicDAO.getInstance().getMenusFromDB(MainActivity.this);
+                    Menu[] menuListDatabase = BlackGarlicDAO.getInstance().getMenusFromDB(MainActivity.this);
+                    Toast.makeText(MainActivity.this, "Taking From Database", Toast.LENGTH_SHORT).show();
+                    BlackGarlicAdapter blackGarlicAdapter2 = new BlackGarlicAdapter(menuListDatabase, MainActivity.this, MainActivity.this);
+                    recyclerView.setAdapter(blackGarlicAdapter2);
 
-                BlackGarlicAdapter blackGarlicAdapter2 = new BlackGarlicAdapter(menuListDatabase, MainActivity.this, MainActivity.this);
+                } else {
 
-                recyclerView.setAdapter(blackGarlicAdapter2);
+                    Toast.makeText(MainActivity.this, "Please Connect To The Internet!", Toast.LENGTH_LONG).show();
 
+                }
 
             }
         });
