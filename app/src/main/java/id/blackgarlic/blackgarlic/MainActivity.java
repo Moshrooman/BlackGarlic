@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
                 Toast.makeText(MainActivity.this, "Taking From Database", Toast.LENGTH_SHORT).show();
 
-                Menu[] menuListDatabase = BlackGarlicDAO.getInstance().getPostsFromDB(MainActivity.this);
+                Menu[] menuListDatabase = BlackGarlicDAO.getInstance().getMenusFromDB(MainActivity.this);
 
                 BlackGarlicAdapter blackGarlicAdapter2 = new BlackGarlicAdapter(menuListDatabase, MainActivity.this, MainActivity.this);
 
@@ -308,7 +308,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         //TODO: X BUTTON NEXT TO EACH MENU
         //When clicked, i have to remove 1 from selected integer in mainActivity, and Blackgarlicadapter
         //Also have to remove the view at at position
-        //take away that menu from the selectedMenuList in blackgarlicadapter
+        //take away that menu from the selectedMenuList in BlackGarlicAdapter
         //set that particular menu's boolean to true
 
         //TODO: TRY TO FIX THE DATABASE, TO LOAD PICTURES WHEN THERE IS NO INTERNET

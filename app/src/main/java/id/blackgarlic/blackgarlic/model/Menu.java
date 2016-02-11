@@ -28,10 +28,11 @@ public class Menu {
 
     public boolean mIsSelected = false;
 
-    public Menu(String menuName, String menuImageUrl) {
+    public Menu(String menuId, String menuName, String menuImageUrl, boolean mIsSelected) {
+        this.menuId = menuId;
         this.menuName = menuName;
         this.menuImageUrl = menuImageUrl;
-
+        this.mIsSelected = mIsSelected;
     }
 
     public boolean getIsSelected() {

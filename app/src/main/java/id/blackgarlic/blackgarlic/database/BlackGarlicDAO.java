@@ -41,6 +41,11 @@ public class BlackGarlicDAO {
                 ContentValues cv = new ContentValues();
                 cv.put(DatabaseContract.PostTable.TITLE, menuList[j].getMenuName());
                 cv.put(DatabaseContract.PostTable.IMAGELINK, menuList[j].getMenuImageUrl());
+                cv.put(DatabaseContract.PostTable.MENUID, menuList[j].getMenuId());
+                cv.put(DatabaseContract.PostTable.ISSELECTED, menuList[j].getIsSelected());
+
+                Log.e("Name: ", cv.getAsString(DatabaseContract.PostTable.TITLE));
+                Log.e("URL: ", cv.getAsString(DatabaseContract.PostTable.IMAGELINK));
 
                 db.insert(DatabaseContract.PostTable.TABLE_NAME, null, cv);
 
@@ -65,7 +70,7 @@ public class BlackGarlicDAO {
         return true;
     }
 
-    public Menu[] getPostsFromDB(Context context) {
+    public Menu[] getMenusFromDB(Context context) {
 
         Menu[] menuList = new Menu[9];
 
@@ -82,22 +87,27 @@ public class BlackGarlicDAO {
 
             String menuName = cursor.getString(cursor.getColumnIndex(DatabaseContract.PostTable.TITLE));
             String menuImageUrl = cursor.getString(cursor.getColumnIndex(DatabaseContract.PostTable.IMAGELINK));
+            String menuId = cursor.getString(cursor.getColumnIndex(DatabaseContract.PostTable.MENUID));
+            String isSelected = cursor.getString(cursor.getColumnIndex(DatabaseContract.PostTable.ISSELECTED));
 
-            Menu menu = new Menu(menuName, menuImageUrl);
+            Menu menu = new Menu(menuId, menuName, menuImageUrl, Boolean.valueOf(isSelected));
+
+            Log.e("Name: ", String.valueOf(menu.getMenuName()));
+            Log.e("URL: ", String.valueOf(menu.getMenuImageUrl()));
 
             menuListList.add(menu);
 
         }
 
+        //Log.e("Name: ", menuListList.get(0).getMenuName());
+        //Log.e("ID: ", menuListList.get(0).getMenuImageUrl());
+
         cursor.close();
         db.close();
 
         for (int i = 0; i < menuList.length; i++) {
-            menuList[i] = menuListList.get(i);
+            menuList[i] = menuListList.get(menuListList.size() - i - 1);
         }
-
-        Log.e("Name: ", menuList[0].getMenuName());
-        Log.e("ID: ", menuList[0].getMenuImageUrl());
 
         return menuList;
 

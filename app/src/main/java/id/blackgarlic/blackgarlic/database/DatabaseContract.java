@@ -12,6 +12,8 @@ public class DatabaseContract {
         public static final String TABLE_NAME = "menu_table";
         public static final String TITLE = "title";
         public static final String IMAGELINK = "imagelink";
+        public static final String MENUID = "menuId";
+        public static final String ISSELECTED = "isSelected";
 
     }
 

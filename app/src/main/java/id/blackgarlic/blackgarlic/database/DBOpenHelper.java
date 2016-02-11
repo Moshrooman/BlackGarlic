@@ -18,6 +18,8 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_POST_TABLE = "CREATE TABLE " + DatabaseContract.PostTable.TABLE_NAME + " ("
             + DatabaseContract.PostTable.TITLE + TEXT_TYPE + COMMA
+            + DatabaseContract.PostTable.MENUID + TEXT_TYPE + COMMA
+            + DatabaseContract.PostTable.ISSELECTED + TEXT_TYPE + COMMA
             + DatabaseContract.PostTable.IMAGELINK + TEXT_TYPE + " )";
 
     private static final String DROP_POST_TABLE = "DROP TABLE IF EXISTS " + DatabaseContract.PostTable.TABLE_NAME;
