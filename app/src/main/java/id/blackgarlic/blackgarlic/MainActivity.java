@@ -41,6 +41,9 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     int selectedInteger;
 
+    private static Menu[] menuList = new Menu[9];
+    private static View specificView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 
         StringRequest request = new StringRequest(Request.Method.GET, BLACKGARLIC_MENUS_URL, new Response.Listener<String>() {
             @Override
@@ -67,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
                 jsonResponse = stringBuilder.toString();
 
-                id.blackgarlic.blackgarlic.model.Menu[] menuList = new Gson().fromJson(jsonResponse, id.blackgarlic.blackgarlic.model.Menu[].class);
+                menuList = new Gson().fromJson(jsonResponse, id.blackgarlic.blackgarlic.model.Menu[].class);
 
                 BlackGarlicAdapter blackGarlicAdapter = new BlackGarlicAdapter(menuList, MainActivity.this, MainActivity.this);
 
@@ -108,6 +112,8 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     @Override
     public void OnItemClick(id.blackgarlic.blackgarlic.model.Menu itemClicked, View view, List<Menu> menuList) {
+
+        specificView = view;
 
         ImageView orderBoxImageView = (ImageView) findViewById(R.id.orderBoxImageView);
 
@@ -309,35 +315,46 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         //Loop through all menus and set all to false, use a for each true inside menulist
         //And clear the sliding layout of all of its children views
 
+        //But main thing that needs to be done is that a new blackgarlic adapter needs to be set
+
         //TODO: X BUTTON NEXT TO EACH MENU
         //When clicked, i have to remove 1 from selected integer in mainActivity, and Blackgarlicadapter
         //Also have to remove the view at at position
         //take away that menu from the selectedMenuList in BlackGarlicAdapter
         //set that particular menu's boolean to true
 
-        //TODO: TRY TO FIX THE DATABASE, TO LOAD PICTURES WHEN THERE IS NO INTERNET
-        //In the BlackGarlicDAO in the method getPostsFromDb what I did was I created a new arraylist and stored the existing posts there
-        //Then i created a new array, put all of the stuff that was in the arraylist in there and returned the array
-        //The error that I'm getting is that It is null
-        //Also in getPostsFromDB I logged the first menu's name and id
-        //And created to log taking from internet or database
-        //There is an error with the method in the Menu class of getMenuImageUrl
-
     }
 
     public void clearAll(View view) {
 
-        //BlackGarlicAdapter getCurrentMmenuListandSelectedInteger = new BlackGarlicAdapter(null, null, null);
+        //Create private static variable to get all menuList
+        for (int i = 0; i < menuList.length; i++) {
 
-        //getCurrentMmenuListandSelectedInteger.setAdapterSelectedInteger(0);
-        //getCurrentMmenuListandSelectedInteger.clearCurrentSelectedMenus();
-        //getCurrentMmenuListandSelectedInteger.clearmmenuList();
+            if (menuList[i].getIsSelected() == true) {
+                menuList[i].setIsSelected(false);
+            }
+
+            if (specificView.findViewById(R.id.selectedImageView).getVisibility() == View.VISIBLE) {
+                specificView.findViewById(R.id.selectedImageView).setVisibility(View.GONE);
+            }
+
+            Log.e("Menu Selected: ", String.valueOf(menuList[i].getIsSelected()));
+
+        }
+
+        BlackGarlicAdapter newBlackGarlicAdapter = new BlackGarlicAdapter(menuList, MainActivity.this, MainActivity.this);
+
+        recyclerView.setAdapter(newBlackGarlicAdapter);
+
+        ImageView orderBoxImageView = (ImageView) findViewById(R.id.orderBoxImageView);
+
+        orderBoxImageView.setImageResource(R.drawable.orderboxone);
 
         this.selectedInteger = 0;
 
-        //RelativeLayout mainOrderSummaryLayout = (RelativeLayout) findViewById(R.id.orderSummaryRelativeLayout);
+        RelativeLayout mainOrderSummaryLayout = (RelativeLayout) findViewById(R.id.orderSummaryRelativeLayout);
+        mainOrderSummaryLayout.removeAllViews();
 
-        //mainOrderSummaryLayout.removeAllViews();
 
 
 
