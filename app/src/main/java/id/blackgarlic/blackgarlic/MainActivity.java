@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -325,7 +327,12 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     }
 
+
     public void clearAll(View view) {
+
+        Animation animScale = AnimationUtils.loadAnimation(this, R.anim.anim_scale);
+
+        view.startAnimation(animScale);
 
         //Create private static variable to get all menuList
         for (int i = 0; i < menuList.length; i++) {
@@ -354,9 +361,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
         RelativeLayout mainOrderSummaryLayout = (RelativeLayout) findViewById(R.id.orderSummaryRelativeLayout);
         mainOrderSummaryLayout.removeAllViews();
-
-
-
 
 
     }
