@@ -49,6 +49,7 @@ public class WelcomeActivity extends AppCompatActivity {
                         radioGroup.check(R.id.radioButton4);
                         Intent switchToMainActivityIntent = new Intent(WelcomeActivity.this, MainActivity.class);
                         startActivity(switchToMainActivityIntent);
+                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         finish();
                         break;
                 }

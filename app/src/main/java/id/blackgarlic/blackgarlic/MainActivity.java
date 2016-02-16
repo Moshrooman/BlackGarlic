@@ -334,6 +334,12 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
         view.startAnimation(animScale);
 
+        RelativeLayout mainOrderSummaryLayout = (RelativeLayout) findViewById(R.id.orderSummaryRelativeLayout);
+
+        if (mainOrderSummaryLayout.getChildCount() == 0) {
+            return;
+        }
+
         //Create private static variable to get all menuList
         for (int i = 0; i < menuList.length; i++) {
 
@@ -359,7 +365,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
         this.selectedInteger = 0;
 
-        RelativeLayout mainOrderSummaryLayout = (RelativeLayout) findViewById(R.id.orderSummaryRelativeLayout);
         mainOrderSummaryLayout.removeAllViews();
 
 
