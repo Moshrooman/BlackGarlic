@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import id.blackgarlic.blackgarlic.MainActivity;
 import id.blackgarlic.blackgarlic.R;
@@ -37,21 +38,28 @@ public class WelcomeActivity extends AppCompatActivity {
 
                 switch (position) {
                     case 0:
-                        radioGroup.check(R.id.radioButton1);
+                        radioGroup.check(R.id.radioButton0);
+
                         break;
                     case 1:
-                        radioGroup.check(R.id.radioButton2);
+                        radioGroup.check(R.id.radioButton1);
+
                         break;
                     case 2:
-                        radioGroup.check(R.id.radioButton3);
+                        radioGroup.check(R.id.radioButton2);
+
                         break;
                     case 3:
+                        radioGroup.check(R.id.radioButton3);
+
+                        break;
+                    case 4:
                         radioGroup.check(R.id.radioButton4);
                         Intent switchToMainActivityIntent = new Intent(WelcomeActivity.this, MainActivity.class);
                         startActivity(switchToMainActivityIntent);
                         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         finish();
-                        break;
+                        return;
                 }
 
             }
@@ -75,11 +83,17 @@ public class WelcomeActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             if (position == 0) {
-                return new WePlan();
+                return new YoutubeWelcomeVideo();
+
             } else if (position == 1){
-                return new WeShop();
+                return new WePlan();
+
             } else if (position == 2){
+                return new WeShop();
+
+            } else if (position ==3) {
                 return new YouCook();
+
             } else {
                 return new SwitchToMainActivity();
             }
@@ -87,7 +101,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 4;
+            return 5;
         }
     }
 

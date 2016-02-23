@@ -1,0 +1,36 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="id.blackgarlic.blackgarlic.welcome.YoutubeWelcomeVideo"
+    android:background="@drawable/omwillwithbox">
+
+
+    <VideoView
+        android:layout_width="fill_parent"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:id="@+id/welcomeVideoView"
+        />
+
+
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_gravity="center_horizontal"
+       android:text="Welcome To BlackGarlic!"
+       fontPath="fonts/Roboto-Medium.ttf"
+       android:layout_marginTop="50dp"
+       android:textSize="30dp"
+       />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remember to get new api key for release certificate!"
+        android:layout_marginTop="450dp"
+        android:textSize="20dp"
+        android:textAlignment="center"
+        />
+
+</FrameLayout>
