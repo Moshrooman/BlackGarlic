@@ -8,8 +8,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.PopupWindow;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -99,10 +103,12 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         }
 
+
         @Override
         public int getCount() {
             return 5;
         }
+
     }
 
     @Override
@@ -110,5 +116,12 @@ public class WelcomeActivity extends AppCompatActivity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+    public void playVideo(View view) {
+        Intent intent = new Intent(WelcomeActivity.this, PopUpYouTube.class);
+        startActivity(intent);
+
+
+
+    }
 
 }
