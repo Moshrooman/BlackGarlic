@@ -43,6 +43,7 @@ public class PopUpYouTube extends AppCompatActivity {
         final VideoView welcomeVideoView = (VideoView) findViewById(R.id.welcomeVideoView);
 
         welcomeVideoView.setVideoURI(uri);
+
         welcomeVideoView.seekTo(currentTimeVideo);
         welcomeVideoView.start();
 

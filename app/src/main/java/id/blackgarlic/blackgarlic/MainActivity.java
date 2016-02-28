@@ -27,6 +27,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +37,7 @@ import id.blackgarlic.blackgarlic.database.DBOpenHelper;
 import id.blackgarlic.blackgarlic.model.Menu;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MainActivity extends AppCompatActivity implements BlackGarlicAdapter.MyListItemClickListener{
+public class MainActivity extends AppCompatActivity implements BlackGarlicAdapter.MyListItemClickListener {
 
     public final String BLACKGARLIC_MENUS_URL = "http://api.blackgarlic.id:7000/bo/menu/ordering/2015-12-22";
 
@@ -104,7 +106,34 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
         ConnectionManager.getInstance(MainActivity.this).add(request);
 
+//        try {
+//            getConnection();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
     }
+
+//    public static Connection getConnection() throws Exception{
+//        try {
+//            String driver = "com.mysql.jdbc.Driver";
+//            String url = "jdbc:mysql://localhost:3306/Database";
+//            String username = "root";
+//            String password = "justin145";
+//            Class.forName(driver);
+//
+//            Connection con = DriverManager.getConnection(url, username, password);
+//
+//            Log.e("Connection: ", "Successful");
+//
+//            return con;
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return null;
+//    }
 
     @Override
     protected void attachBaseContext(Context newBase) {
