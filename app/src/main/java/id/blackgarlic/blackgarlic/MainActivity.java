@@ -1,6 +1,7 @@
 package id.blackgarlic.blackgarlic;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -29,6 +30,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
     private static View specificView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -106,34 +108,12 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
         ConnectionManager.getInstance(MainActivity.this).add(request);
 
-//        try {
-//            getConnection();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        AsyncTask myAsyncTask = new MyAsyncTask();
+        myAsyncTask.execute();
 
     }
 
-//    public static Connection getConnection() throws Exception{
-//        try {
-//            String driver = "com.mysql.jdbc.Driver";
-//            String url = "jdbc:mysql://localhost:3306/Database";
-//            String username = "root";
-//            String password = "justin145";
-//            Class.forName(driver);
-//
-//            Connection con = DriverManager.getConnection(url, username, password);
-//
-//            Log.e("Connection: ", "Successful");
-//
-//            return con;
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        return null;
-//    }
+
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -391,5 +371,38 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     }
 
+
+
+    //TODO need to create a server and create mysql database on that and store data on that.
+
+    private class MyAsyncTask extends AsyncTask<Object, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Object... params) {
+
+            try {
+                String driver = "com.mysql.jdbc.Driver";
+                String url = "jdbc:mysql://10.0.1.173:3306/Database";
+                String username = "root";
+                String password = "justin145";
+                String order = "Fried Chicken";
+                Class.forName(driver).newInstance();
+
+                Connection con = DriverManager.getConnection(url, username, password);
+
+                PreparedStatement statement = con.prepareStatement("INSERT INTO Orders VALUES ('" + order + "')");
+
+                statement.executeUpdate();
+
+                Log.e("Connection: ", "Successful");
+
+            } catch (Exception e) {
+                Log.e("Connection: ", "Unsuccessful");
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+    }
 
 }
