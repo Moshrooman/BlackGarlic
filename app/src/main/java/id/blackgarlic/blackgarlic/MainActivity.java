@@ -108,8 +108,8 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
         ConnectionManager.getInstance(MainActivity.this).add(request);
 
-        AsyncTask myAsyncTask = new MyAsyncTask();
-        myAsyncTask.execute();
+//        AsyncTask myAsyncTask = new MyAsyncTask();
+//        myAsyncTask.execute();
 
     }
 
@@ -375,34 +375,34 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     //TODO need to create a server and create mysql database on that and store data on that.
 
-    private class MyAsyncTask extends AsyncTask<Object, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Object... params) {
-
-            try {
-                String driver = "com.mysql.jdbc.Driver";
-                String url = "jdbc:mysql://10.0.1.173:3306/Database";
-                String username = "root";
-                String password = "justin145";
-                String order = "Fried Chicken";
-                Class.forName(driver).newInstance();
-
-                Connection con = DriverManager.getConnection(url, username, password);
-
-                PreparedStatement statement = con.prepareStatement("INSERT INTO Orders VALUES ('" + order + "')");
-
-                statement.executeUpdate();
-
-                Log.e("Connection: ", "Successful");
-
-            } catch (Exception e) {
-                Log.e("Connection: ", "Unsuccessful");
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-    }
+//    private class MyAsyncTask extends AsyncTask<Object, Void, Void> {
+//
+//        @Override
+//        protected Void doInBackground(Object... params) {
+//
+//            try {
+//                String driver = "com.mysql.jdbc.Driver";
+//                String url = "jdbc:mysql://10.0.1.173:3306/Database";
+//                String username = "root";
+//                String password = "justin145";
+//                String order = "Fried Chicken";
+//                Class.forName(driver).newInstance();
+//
+//                Connection con = DriverManager.getConnection(url, username, password);
+//
+//                PreparedStatement statement = con.prepareStatement("INSERT INTO Orders VALUES ('" + order + "')");
+//
+//                statement.executeUpdate();
+//
+//                Log.e("Connection: ", "Successful");
+//
+//            } catch (Exception e) {
+//                Log.e("Connection: ", "Unsuccessful");
+//                e.printStackTrace();
+//            }
+//            return null;
+//        }
+//
+//    }
 
 }
