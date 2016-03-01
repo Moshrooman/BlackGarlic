@@ -13,10 +13,10 @@ import id.blackgarlic.blackgarlic.MainActivity;
 import id.blackgarlic.blackgarlic.R;
 
 
-public class SwitchToMainActivity extends Fragment {
+public class SwitchToLoginFragment extends Fragment {
 
 
-    public SwitchToMainActivity() {
+    public SwitchToLoginFragment() {
         // Required empty public constructor
     }
 

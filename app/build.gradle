@@ -29,5 +29,14 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.1.1'
     compile 'uk.co.chrisjenx:calligraphy:2.1.0'
     compile 'com.sothree.slidinguppanel:library:3.2.1'
-    compile files('libs/mysql-connector-java-5.0.8-bin.jar')
+    compile files('libs/commons-codec-1.9.jar')
+    compile 'org.apache.directory.studio:org.apache.commons.io:2.4'
 }
+
+android {
+    packagingOptions {
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/LICENSE.txt'
+    }
+}
+

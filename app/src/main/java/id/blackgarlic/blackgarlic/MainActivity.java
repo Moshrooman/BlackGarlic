@@ -41,6 +41,12 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity implements BlackGarlicAdapter.MyListItemClickListener {
 
+    //TODO: X BUTTON NEXT TO EACH MENU
+    //When clicked, i have to remove 1 from selected integer in mainActivity, and Blackgarlicadapter
+    //Also have to remove the view at at position
+    //take away that menu from the selectedMenuList in BlackGarlicAdapter
+    //set that particular menu's boolean to true
+
     public final String BLACKGARLIC_MENUS_URL = "http://api.blackgarlic.id:7000/bo/menu/ordering/2015-12-22";
 
     private RecyclerView recyclerView;
@@ -107,9 +113,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         });
 
         ConnectionManager.getInstance(MainActivity.this).add(request);
-
-//        AsyncTask myAsyncTask = new MyAsyncTask();
-//        myAsyncTask.execute();
 
     }
 
@@ -204,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
                 RelativeLayout.LayoutParams relativeLayoutParams2 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, heightNetworkImageLayoutandTextView);
                 RelativeLayout relativeLayout2 = new RelativeLayout(MainActivity.this);
-                relativeLayoutParams2.setMargins(0, ((int)(display.getHeight()*0.16)) , 0, 0);
+                relativeLayoutParams2.setMargins(0, ((int) (display.getHeight() * 0.16)), 0, 0);
 
                 relativeLayout2.setLayoutParams(relativeLayoutParams2);
                 relativeLayout2.setId(1);
@@ -319,13 +322,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
         }
 
-
-        //TODO: X BUTTON NEXT TO EACH MENU
-        //When clicked, i have to remove 1 from selected integer in mainActivity, and Blackgarlicadapter
-        //Also have to remove the view at at position
-        //take away that menu from the selectedMenuList in BlackGarlicAdapter
-        //set that particular menu's boolean to true
-
     }
 
 
@@ -370,39 +366,5 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
 
     }
-
-
-
-    //TODO need to create a server and create mysql database on that and store data on that.
-
-//    private class MyAsyncTask extends AsyncTask<Object, Void, Void> {
-//
-//        @Override
-//        protected Void doInBackground(Object... params) {
-//
-//            try {
-//                String driver = "com.mysql.jdbc.Driver";
-//                String url = "jdbc:mysql://10.0.1.173:3306/Database";
-//                String username = "root";
-//                String password = "justin145";
-//                String order = "Fried Chicken";
-//                Class.forName(driver).newInstance();
-//
-//                Connection con = DriverManager.getConnection(url, username, password);
-//
-//                PreparedStatement statement = con.prepareStatement("INSERT INTO Orders VALUES ('" + order + "')");
-//
-//                statement.executeUpdate();
-//
-//                Log.e("Connection: ", "Successful");
-//
-//            } catch (Exception e) {
-//                Log.e("Connection: ", "Unsuccessful");
-//                e.printStackTrace();
-//            }
-//            return null;
-//        }
-//
-//    }
 
 }
