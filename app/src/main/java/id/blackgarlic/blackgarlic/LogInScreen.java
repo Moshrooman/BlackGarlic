@@ -1,5 +1,6 @@
 package id.blackgarlic.blackgarlic;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
@@ -11,12 +12,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.gson.Gson;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -33,10 +37,17 @@ import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import id.blackgarlic.blackgarlic.model.UserCredentials;
+
 public class LogInScreen extends AppCompatActivity {
 
     private static String username;
     private static String password;
+    private static UserCredentials userCredentials;
+
+    public static UserCredentials getUserCredentials() {
+        return userCredentials;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +57,19 @@ public class LogInScreen extends AppCompatActivity {
         final EditText usernameEditText = (EditText)findViewById(R.id.userNameEditText);
         final EditText passwordEditText = (EditText) findViewById(R.id.passwordEditText);
 
+        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        final TextView loggingYouInTextView = (TextView) findViewById(R.id.loggingYouInTextView);
+
         Button loginButton = (Button) findViewById(R.id.loginButton);
         passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                progressBar.setVisibility(View.VISIBLE);
+                loggingYouInTextView.setVisibility(View.VISIBLE);
+
                 username = String.valueOf(usernameEditText.getText());
                 password = String.valueOf(passwordEditText.getText());
 
@@ -62,20 +80,28 @@ public class LogInScreen extends AppCompatActivity {
 
                 //Run the httpget method for the login, save all of the things that it returns, and if it gets it, go to mainActivity
 
-                String url = "http://api.blackgarlic.id:7000/app/login/"+ username +"/"+ sha1Password +"";
+                String url = "http://api.blackgarlic.id:7000/app/login/" + username + "/" + sha1Password + "";
 
                 StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
-                        Log.e("Data: ", response);
+                        userCredentials = new Gson().fromJson(response, UserCredentials.class);
 
+                        progressBar.setVisibility(View.GONE);
+                        loggingYouInTextView.setVisibility(View.GONE);
+
+                        Intent mainActivityIntent = new Intent(LogInScreen.this, MainActivity.class);
+                        startActivity(mainActivityIntent);
+                        finish();
 
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
+                        progressBar.setVisibility(View.GONE);
+                        loggingYouInTextView.setVisibility(View.GONE);
                         Toast.makeText(LogInScreen.this, "Invalid Username/Password!", Toast.LENGTH_LONG).show();
 
                     }
@@ -85,6 +111,7 @@ public class LogInScreen extends AppCompatActivity {
 
             }
         });
+
     }
 
 }

@@ -22,7 +22,7 @@
         android:layout_height="50dp"
         android:id="@+id/userNameEditText"
         android:layout_centerHorizontal="true"
-        android:hint="Username"
+        android:hint="Email"
         android:textAlignment="center"
         android:layout_marginTop="230dp"
         />
@@ -45,5 +45,26 @@
         android:id="@+id/loginButton"
         android:layout_marginTop="380dp"
         />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Logging You In..."
+        android:textSize="23dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="530dp"
+        android:visibility="gone"
+        android:id="@+id/loggingYouInTextView"
+        />
+
+    <ProgressBar
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="480dp"
+        android:visibility="gone"
+        android:id="@+id/progressBar"
+        />
+
 
 </RelativeLayout>

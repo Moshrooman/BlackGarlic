@@ -26,18 +26,22 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_splash"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".welcome.WelcomeActivity"
             android:label="@string/title_activity_welcome"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".welcome.PopUpYouTube"
             android:label="@string/title_activity_pop_up_you_tube"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".LogInScreen"
             android:label="@string/title_activity_log_in_screen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MyAccount"
+            android:label="@string/title_activity_my_account"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

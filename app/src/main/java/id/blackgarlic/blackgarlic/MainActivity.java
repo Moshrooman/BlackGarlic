@@ -1,6 +1,7 @@
 package id.blackgarlic.blackgarlic;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +29,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import org.w3c.dom.Text;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -37,6 +40,7 @@ import java.util.List;
 import id.blackgarlic.blackgarlic.database.BlackGarlicDAO;
 import id.blackgarlic.blackgarlic.database.DBOpenHelper;
 import id.blackgarlic.blackgarlic.model.Menu;
+import id.blackgarlic.blackgarlic.model.UserCredentials;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity implements BlackGarlicAdapter.MyListItemClickListener {
@@ -55,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     private static Menu[] menuList = new Menu[9];
     private static View specificView;
+    private static UserCredentials userCredentials;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -66,6 +71,19 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        userCredentials = LogInScreen.getUserCredentials();
+        TextView welcomeTextView = (TextView) findViewById(R.id.welcomeTextView);
+        String welcomeTextViewString = (String) welcomeTextView.getText();
+        welcomeTextViewString = welcomeTextViewString.replace("Name", userCredentials.getCustomer_name());
+        welcomeTextView.setText(welcomeTextViewString);
+
+        welcomeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myAccountIntent = new Intent(MainActivity.this, MyAccount.class);
+                startActivity(myAccountIntent);
+            }
+        });
 
         StringRequest request = new StringRequest(Request.Method.GET, BLACKGARLIC_MENUS_URL, new Response.Listener<String>() {
             @Override
