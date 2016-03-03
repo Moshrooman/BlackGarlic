@@ -28,7 +28,7 @@ public class SplashActivity extends AppCompatActivity {
                     nextWelcomeActivity();
                 } else {
 
-                    goToMainActivity();
+                    goToLoginActivity();
                 }
 
             }
@@ -45,9 +45,9 @@ public class SplashActivity extends AppCompatActivity {
         finish();
     }
 
-    public void goToMainActivity() {
-        Intent mainActivityIntent = new Intent(SplashActivity.this, MainActivity.class);
-        startActivity(mainActivityIntent);
+    public void goToLoginActivity() {
+        Intent loginActivityIntent = new Intent(SplashActivity.this, LogInScreen.class);
+        startActivity(loginActivityIntent);
         finish();
     }
 

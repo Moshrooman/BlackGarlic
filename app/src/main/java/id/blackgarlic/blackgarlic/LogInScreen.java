@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -25,6 +26,8 @@ import com.google.gson.Gson;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,7 +39,16 @@ import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
 
+import id.blackgarlic.blackgarlic.database.DatabaseContract;
 import id.blackgarlic.blackgarlic.model.UserCredentials;
 
 public class LogInScreen extends AppCompatActivity {
@@ -73,16 +85,24 @@ public class LogInScreen extends AppCompatActivity {
                 username = String.valueOf(usernameEditText.getText());
                 password = String.valueOf(passwordEditText.getText());
 
-                String sha1Password = new String(Hex.encodeHex(DigestUtils.sha1(password)));
+                final String sha1Password = new String(Hex.encodeHex(DigestUtils.sha1(password)));
 
                 usernameEditText.setText("");
                 passwordEditText.setText("");
 
                 //Run the httpget method for the login, save all of the things that it returns, and if it gets it, go to mainActivity
 
-                String url = "http://api.blackgarlic.id:7000/app/login/" + username + "/" + sha1Password + "";
+                String url = "http://api.blackgarlic.id:7000/app/login";
 
-                StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                final JSONObject body = new JSONObject();
+                try {
+                    body.put("email", username);
+                    body.put("password", sha1Password);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
 
@@ -105,7 +125,20 @@ public class LogInScreen extends AppCompatActivity {
                         Toast.makeText(LogInScreen.this, "Invalid Username/Password!", Toast.LENGTH_LONG).show();
 
                     }
-                });
+                }) {
+
+                    @Override
+                    public byte[] getBody() throws AuthFailureError {
+                        return body.toString().getBytes();
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json";
+                    }
+
+
+                };
 
                 ConnectionManager.getInstance(LogInScreen.this).add(request);
 

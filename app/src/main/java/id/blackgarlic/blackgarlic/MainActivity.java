@@ -2,7 +2,6 @@ package id.blackgarlic.blackgarlic;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -13,11 +12,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,19 +23,19 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import org.w3c.dom.Text;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.util.ArrayList;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import id.blackgarlic.blackgarlic.database.BlackGarlicDAO;
-import id.blackgarlic.blackgarlic.database.DBOpenHelper;
+import id.blackgarlic.blackgarlic.model.Data;
+import id.blackgarlic.blackgarlic.model.MenuId;
 import id.blackgarlic.blackgarlic.model.Menu;
+import id.blackgarlic.blackgarlic.model.Menus;
 import id.blackgarlic.blackgarlic.model.UserCredentials;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -57,14 +53,33 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     int selectedInteger;
 
-    private static Menu[] menuList = new Menu[9];
+    private static Menu[] firstMenuList = new Menu[9];
     private static View specificView;
     private static UserCredentials userCredentials;
+    private static List<Data> menuList;
+    private static int[] menuIdList;
+
+    public static List<Data> getMenuList() {
+        return menuList;
+    }
+
+    public static int[] getMenuIdList() {
+        return menuIdList;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Getting Current date and time:
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        Date currentLocalTime = cal.getTime();
+        DateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+        date.setTimeZone(TimeZone.getTimeZone("Asia/Bangkok"));
+        String localTime = date.format(currentLocalTime);
+
+        String BlackGarlicMenusNew = "http://api.blackgarlic.id:7000/app/menu/"+localTime+"";
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerListView);
         recyclerView.setHasFixedSize(true);
@@ -85,29 +100,26 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             }
         });
 
-        StringRequest request = new StringRequest(Request.Method.GET, BLACKGARLIC_MENUS_URL, new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.GET, BlackGarlicMenusNew, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
                 Toast.makeText(MainActivity.this, "Taking From Internet", Toast.LENGTH_SHORT).show();
 
-                String jsonResponse = response;
+                MenuId menuId = new Gson().fromJson(response, MenuId.class);
+                Menus menus = new Gson().fromJson(response, Menus.class);
 
-                jsonResponse = jsonResponse.replace("\\", "");
+                menuList = menus.getDataList();
+                menuIdList = menuId.getMenuIds();
 
-                StringBuilder stringBuilder = new StringBuilder(jsonResponse);
-                stringBuilder.deleteCharAt(0);
-                stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+                Log.e("Test name: ", menuList.get(0).getMenu_name());
+                Log.e("Test Id: ", String.valueOf(menuIdList[0]));
 
-                jsonResponse = stringBuilder.toString();
-
-                menuList = new Gson().fromJson(jsonResponse, id.blackgarlic.blackgarlic.model.Menu[].class);
-
-                BlackGarlicAdapter blackGarlicAdapter = new BlackGarlicAdapter(menuList, MainActivity.this, MainActivity.this);
-
-                BlackGarlicDAO.getInstance().storeMenus(MainActivity.this, menuList);
-
-                recyclerView.setAdapter(blackGarlicAdapter);
+// BlackGarlicAdapter blackGarlicAdapter = new BlackGarlicAdapter(firstMenuList, MainActivity.this, MainActivity.this);
+//
+//                BlackGarlicDAO.getInstance().storeMenus(MainActivity.this, firstMenuList);
+//
+//                recyclerView.setAdapter(blackGarlicAdapter);
 
             }
         }, new Response.ErrorListener() {
@@ -172,8 +184,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         } else if (selectedInteger == 5){
             orderBoxImageView.setImageResource(R.drawable.orderboxsix);
         }
-
-
 
 
         android.view.Display display = ((android.view.WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
@@ -355,22 +365,22 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             return;
         }
 
-        //Create private static variable to get all menuList
-        for (int i = 0; i < menuList.length; i++) {
+        //Create private static variable to get all firstMenuList
+        for (int i = 0; i < firstMenuList.length; i++) {
 
-            if (menuList[i].getIsSelected() == true) {
-                menuList[i].setIsSelected(false);
+            if (firstMenuList[i].getIsSelected() == true) {
+                firstMenuList[i].setIsSelected(false);
             }
 
             if (specificView.findViewById(R.id.selectedImageView).getVisibility() == View.VISIBLE) {
                 specificView.findViewById(R.id.selectedImageView).setVisibility(View.GONE);
             }
 
-            Log.e("Menu Selected: ", String.valueOf(menuList[i].getIsSelected()));
+            Log.e("Menu Selected: ", String.valueOf(firstMenuList[i].getIsSelected()));
 
         }
 
-        BlackGarlicAdapter newBlackGarlicAdapter = new BlackGarlicAdapter(menuList, MainActivity.this, MainActivity.this);
+        BlackGarlicAdapter newBlackGarlicAdapter = new BlackGarlicAdapter(firstMenuList, MainActivity.this, MainActivity.this);
 
         recyclerView.setAdapter(newBlackGarlicAdapter);
 
