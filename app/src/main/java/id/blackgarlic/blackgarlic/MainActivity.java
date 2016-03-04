@@ -203,7 +203,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         });
 
         ConnectionManager.getInstance(MainActivity.this).add(request);
-//        listViewOrderSummary.setAdapter(new MyAdapter(menuList, menuIdList));
 
     }
 
@@ -243,6 +242,8 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         for (int i = 0; i < selectedMenuList.size(); i++) {
             Log.e("Selected Menu: ", selectedMenuList.get(i).getMenu_name() + ": " + String.valueOf(selectedMenuIdList.get(i)));
         }
+
+        listViewOrderSummary.setAdapter(new MyAdapter(selectedMenuList, selectedMenuIdList));
 
     }
 
@@ -307,17 +308,22 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     public class MyAdapter extends BaseAdapter {
 
-        List<Data> menuListAdapter;
-        int[] menuIdListAdapter;
+        private List<Data> currentMenuList;
+        private List<Integer> currentMenuIdList;
+
+        public MyAdapter(List<Data> currentSelectedMenuList, List<Integer> currentSelectedMenuIdList){
+            this.currentMenuList = currentSelectedMenuList;
+            this.currentMenuIdList = currentSelectedMenuIdList;
+        }
 
         @Override
         public int getCount() {
-            return menuListAdapter.size();
+            return currentMenuList.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return menuListAdapter.get(position);
+            return currentMenuList.get(position);
         }
 
         @Override
@@ -329,11 +335,11 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         public View getView(int position, View convertView, ViewGroup parent) {
             View orderSummaryView = getLayoutInflater().inflate(R.layout.row_ordersummary, null);
 
-            TextView orderSummaryMenuName = (TextView) findViewById(R.id.orderSummaryMenuName);
-            NetworkImageView orderSummaryMenuImage = (NetworkImageView) findViewById(R.id.orderSummaryMenuImage);
+            TextView orderSummaryMenuName = (TextView) orderSummaryView.findViewById(R.id.orderSummaryMenuName);
+            NetworkImageView orderSummaryMenuImage = (NetworkImageView) orderSummaryView.findViewById(R.id.orderSummaryMenuImage);
 
-            orderSummaryMenuName.setText(menuListAdapter.get(position).getMenu_name());
-            orderSummaryMenuImage.setImageUrl(menuListAdapter.get(position).getMenuUrl().replace("menu_id", String.valueOf(menuIdListAdapter[position])),
+            orderSummaryMenuName.setText(currentMenuList.get(position).getMenu_name());
+            orderSummaryMenuImage.setImageUrl(currentMenuList.get(position).getMenuUrl().replace("menu_id", String.valueOf(currentMenuIdList.get(position))),
                     ConnectionManager.getImageLoader(MainActivity.this));
 
             return orderSummaryView;
