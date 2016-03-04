@@ -3,17 +3,19 @@ package id.blackgarlic.blackgarlic;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,15 +25,20 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
+import com.sothree.slidinguppanel.ScrollableViewHelper;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import id.blackgarlic.blackgarlic.database.BlackGarlicDAO;
 import id.blackgarlic.blackgarlic.model.Data;
 import id.blackgarlic.blackgarlic.model.MenuId;
 import id.blackgarlic.blackgarlic.model.Menu;
@@ -57,13 +64,17 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
     private static View specificView;
     private static UserCredentials userCredentials;
     private static List<Data> menuList;
-    private static int[] menuIdList;
+    private static List<Integer> menuIdList;
+    private static TextView orderQuantityTextView;
+    private static com.sothree.slidinguppanel.SlidingUpPanelLayout sliding_layout;
+    private static ListView listViewOrderSummary;
+    private static NestedScrollView nestedScrollView;
 
     public static List<Data> getMenuList() {
         return menuList;
     }
 
-    public static int[] getMenuIdList() {
+    public static List<Integer> getMenuIdList() {
         return menuIdList;
     }
 
@@ -72,14 +83,51 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        orderQuantityTextView = (TextView) findViewById(R.id.orderQuantityTextView);
+        sliding_layout = (com.sothree.slidinguppanel.SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+        listViewOrderSummary = (ListView) findViewById(R.id.orderSummaryListView);
+        nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
+
+        sliding_layout.setScrollableViewHelper(new NestedScrollableViewHelper());
+
         //Getting Current date and time:
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         Date currentLocalTime = cal.getTime();
+
+        //Checking variables, returns the current hours:
+        DateFormat checkDate = new SimpleDateFormat("HH");
+        checkDate.setTimeZone(TimeZone.getTimeZone("Asia/Bangkok"));
+        String checkIfAfter3 = checkDate.format(currentLocalTime);
+
+        //Actual Variables
         DateFormat date = new SimpleDateFormat("yyyy-MM-dd");
         date.setTimeZone(TimeZone.getTimeZone("Asia/Bangkok"));
         String localTime = date.format(currentLocalTime);
 
-        String BlackGarlicMenusNew = "http://api.blackgarlic.id:7000/app/menu/"+localTime+"";
+        //Joda-Time Library, parsing it into a jodatime object, easier to add dates.
+        LocalDate localDate = new LocalDate(localTime);
+
+        Log.e("Before Date: ", String.valueOf(localDate));
+
+        Integer checkIfAfter3Integer = Integer.valueOf(checkIfAfter3);
+
+        //Need to check if greater than 15, not just equals to 15
+        if ((checkIfAfter3Integer.intValue() >= 15)) {
+            localDate = localDate.plusDays(1);
+        }
+
+        //Add 2 days
+        localDate = localDate.plusDays(2);
+
+        //Check if sunday or monday, if it is, skip to tuesday
+        if ((localDate.getDayOfWeek() == 7) || (localDate.getDayOfWeek() == 1)) {
+            localDate = localDate.dayOfWeek().setCopy(2);
+
+        }
+
+        Log.e("After Date: ", String.valueOf(localDate));
+
+        String BlackGarlicMenusNew = "http://api.blackgarlic.id:7000/app/menu/"+String.valueOf(localDate)+"";
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerListView);
         recyclerView.setHasFixedSize(true);
@@ -104,6 +152,8 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             @Override
             public void onResponse(String response) {
 
+                Log.e("Response: ", response);
+
                 Toast.makeText(MainActivity.this, "Taking From Internet", Toast.LENGTH_SHORT).show();
 
                 MenuId menuId = new Gson().fromJson(response, MenuId.class);
@@ -112,37 +162,48 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                 menuList = menus.getDataList();
                 menuIdList = menuId.getMenuIds();
 
-                Log.e("Test name: ", menuList.get(0).getMenu_name());
-                Log.e("Test Id: ", String.valueOf(menuIdList[0]));
+                for (int i = 0; i < menuList.size(); i++) {
+                    int currentsize = menuList.size();
 
-// BlackGarlicAdapter blackGarlicAdapter = new BlackGarlicAdapter(firstMenuList, MainActivity.this, MainActivity.this);
-//
-//                BlackGarlicDAO.getInstance().storeMenus(MainActivity.this, firstMenuList);
-//
-//                recyclerView.setAdapter(blackGarlicAdapter);
+                    if (menuList.get(i).getMenu_type().equals("1")) {
+                        menuList.remove(i);
+                        menuIdList.remove(i);
+
+                        if (menuList.size() != currentsize) {
+                            i = i - 1;
+                        }
+                    }
+                }
+
+                BlackGarlicAdapter blackGarlicAdapter = new BlackGarlicAdapter(menuList, menuIdList, MainActivity.this, MainActivity.this);
+
+//              BlackGarlicDAO.getInstance().storeMenus(MainActivity.this, firstMenuList);
+
+                recyclerView.setAdapter(blackGarlicAdapter);
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                if (BlackGarlicDAO.getInstance().getMenusFromDB(MainActivity.this).length != 0) {
-
-                    Menu[] menuListDatabase = BlackGarlicDAO.getInstance().getMenusFromDB(MainActivity.this);
-                    Toast.makeText(MainActivity.this, "Taking From Database", Toast.LENGTH_SHORT).show();
-                    BlackGarlicAdapter blackGarlicAdapter2 = new BlackGarlicAdapter(menuListDatabase, MainActivity.this, MainActivity.this);
-                    recyclerView.setAdapter(blackGarlicAdapter2);
-
-                } else {
-
-                    Toast.makeText(MainActivity.this, "Please Connect To The Internet!", Toast.LENGTH_LONG).show();
-
-                }
+//                if (BlackGarlicDAO.getInstance().getMenusFromDB(MainActivity.this).length != 0) {
+//
+//                    Menu[] menuListDatabase = BlackGarlicDAO.getInstance().getMenusFromDB(MainActivity.this);
+//                    Toast.makeText(MainActivity.this, "Taking From Database", Toast.LENGTH_SHORT).show();
+//                    BlackGarlicAdapter blackGarlicAdapter2 = new BlackGarlicAdapter(menuListDatabase, MainActivity.this, MainActivity.this);
+//                    recyclerView.setAdapter(blackGarlicAdapter2);
+//
+//                } else {
+//
+//                    Toast.makeText(MainActivity.this, "Please Connect To The Internet!", Toast.LENGTH_LONG).show();
+//
+//                }
 
             }
         });
 
         ConnectionManager.getInstance(MainActivity.this).add(request);
+//        listViewOrderSummary.setAdapter(new MyAdapter(menuList, menuIdList));
 
     }
 
@@ -155,11 +216,13 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
 
     @Override
-    public void OnItemClick(id.blackgarlic.blackgarlic.model.Menu itemClicked, View view, List<Menu> menuList) {
+    public void OnItemClick(Data itemClicked, View view, List<Data> selectedMenuList, List<Integer> selectedMenuIdList) {
 
         specificView = view;
 
         ImageView orderBoxImageView = (ImageView) findViewById(R.id.orderBoxImageView);
+
+        orderQuantityTextView.bringToFront();
 
         if (view.findViewById(R.id.selectedImageView).getVisibility() == View.GONE) {
             selectedInteger++;
@@ -168,186 +231,17 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             selectedInteger--;
         }
 
-        if (selectedInteger > 5) {
-            selectedInteger--;
-            Toast.makeText(MainActivity.this, "You can't order more than 5 menus! Please remove one menu", Toast.LENGTH_LONG).show();
-        } else if (selectedInteger == 0) {
+        if (selectedInteger == 0) {
             orderBoxImageView.setImageResource(R.drawable.orderboxone);
-        } else if (selectedInteger == 1) {
-            orderBoxImageView.setImageResource(R.drawable.orderboxtwo);
-        } else if (selectedInteger == 2) {
-            orderBoxImageView.setImageResource(R.drawable.orderboxthree);
-        } else if (selectedInteger == 3) {
-            orderBoxImageView.setImageResource(R.drawable.orderboxfour);
-        } else if (selectedInteger == 4) {
-            orderBoxImageView.setImageResource(R.drawable.orderboxfive);
-        } else if (selectedInteger == 5){
-            orderBoxImageView.setImageResource(R.drawable.orderboxsix);
+            orderQuantityTextView.setVisibility(View.GONE);
+        } else {
+            orderBoxImageView.setImageResource(R.drawable.orderboxtwopng);
+            orderQuantityTextView.setVisibility(View.VISIBLE);
+            orderQuantityTextView.setText(String.valueOf(selectedInteger));
         }
 
-
-        android.view.Display display = ((android.view.WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-
-        int heightNetworkImageLayoutandTextView = (int) (display.getHeight() * 0.15);
-        int widthNetworkImage = (int) (display.getWidth() * 0.4);
-
-        //Grabbing the relative layout from the content_main.xml that will hold all of the ordered menus
-        RelativeLayout mainOrderSummaryLayout = (RelativeLayout) findViewById(R.id.orderSummaryRelativeLayout);
-
-        //Then you clear all of the views, now the next step is to loop through currentSelectedMenus and for every one create a new view
-        mainOrderSummaryLayout.removeAllViews();
-
-        for (int j = 0; j < menuList.size(); j++) {
-
-            if (mainOrderSummaryLayout.getChildCount() == 0) {
-
-                //Main Layout
-                RelativeLayout.LayoutParams relativeLayoutParams1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, heightNetworkImageLayoutandTextView);
-                RelativeLayout relativeLayout1 = new RelativeLayout(MainActivity.this);
-                relativeLayoutParams1.setMargins(0, 5, 0, 0);
-                relativeLayout1.setLayoutParams(relativeLayoutParams1);
-                relativeLayout1.setId(0);
-
-                //Creating NetWorkImage View
-
-                NetworkImageView networkImageView1 = new NetworkImageView(MainActivity.this);
-                networkImageView1.setImageUrl(menuList.get(0).getMenuImageUrl(), ConnectionManager.getImageLoader(MainActivity.this));
-                networkImageView1.setLayoutParams(new RelativeLayout.LayoutParams(widthNetworkImage, heightNetworkImageLayoutandTextView));
-
-                //Creating the TextView
-
-                RelativeLayout.LayoutParams textViewLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, heightNetworkImageLayoutandTextView);
-                textViewLayoutParams.setMargins(widthNetworkImage, 0, 0, 0);
-                TextView textView1 = new TextView(MainActivity.this);
-                textView1.setText(menuList.get(0).getMenuName());
-                textView1.setLayoutParams(textViewLayoutParams);
-                textView1.setGravity(Gravity.CENTER_VERTICAL);
-                textView1.setTextSize(15);
-
-
-                //Adding the netWorkImageView to the layout, adding the relativelayou to the main Layout containing all layouts
-                relativeLayout1.addView(networkImageView1);
-                relativeLayout1.addView(textView1);
-                mainOrderSummaryLayout.addView(relativeLayout1);
-
-
-            } else if (mainOrderSummaryLayout.getChildCount() == 1) {
-
-                RelativeLayout.LayoutParams relativeLayoutParams2 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, heightNetworkImageLayoutandTextView);
-                RelativeLayout relativeLayout2 = new RelativeLayout(MainActivity.this);
-                relativeLayoutParams2.setMargins(0, ((int) (display.getHeight() * 0.16)), 0, 0);
-
-                relativeLayout2.setLayoutParams(relativeLayoutParams2);
-                relativeLayout2.setId(1);
-
-                //Creating NetWorkImage View
-
-                NetworkImageView networkImageView2 = new NetworkImageView(MainActivity.this);
-                networkImageView2.setImageUrl(menuList.get(1).getMenuImageUrl(), ConnectionManager.getImageLoader(MainActivity.this));
-                networkImageView2.setLayoutParams(new RelativeLayout.LayoutParams(widthNetworkImage, heightNetworkImageLayoutandTextView));
-
-                //Creating the TextView
-
-                RelativeLayout.LayoutParams textViewLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, heightNetworkImageLayoutandTextView);
-                textViewLayoutParams.setMargins(widthNetworkImage, 0, 0, 0);
-                TextView textView2 = new TextView(MainActivity.this);
-                textView2.setText(menuList.get(1).getMenuName());
-                textView2.setLayoutParams(textViewLayoutParams);
-                textView2.setGravity(Gravity.CENTER_VERTICAL);
-                textView2.setTextSize(15);
-
-                relativeLayout2.addView(networkImageView2);
-                relativeLayout2.addView(textView2);
-                mainOrderSummaryLayout.addView(relativeLayout2);
-
-
-            } else if (mainOrderSummaryLayout.getChildCount() == 2) {
-
-                RelativeLayout.LayoutParams relativeLayoutParams3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, heightNetworkImageLayoutandTextView);
-                RelativeLayout relativeLayout3 = new RelativeLayout(MainActivity.this);
-                relativeLayoutParams3.setMargins(0, ((int) (display.getHeight() * 0.32)), 0, 0);
-                relativeLayout3.setLayoutParams(relativeLayoutParams3);
-                relativeLayout3.setId(2);
-
-                //Creating NetWorkImage View
-
-                NetworkImageView networkImageView3 = new NetworkImageView(MainActivity.this);
-                networkImageView3.setImageUrl(menuList.get(2).getMenuImageUrl(), ConnectionManager.getImageLoader(MainActivity.this));
-                networkImageView3.setLayoutParams(new RelativeLayout.LayoutParams(widthNetworkImage, heightNetworkImageLayoutandTextView));
-
-                //Creating the TextView
-
-                RelativeLayout.LayoutParams textViewLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, heightNetworkImageLayoutandTextView);
-                textViewLayoutParams.setMargins(widthNetworkImage, 0, 0, 0);
-                TextView textView3 = new TextView(MainActivity.this);
-                textView3.setText(menuList.get(2).getMenuName());
-                textView3.setLayoutParams(textViewLayoutParams);
-                textView3.setGravity(Gravity.CENTER_VERTICAL);
-                textView3.setTextSize(15);
-
-                relativeLayout3.addView(networkImageView3);
-                relativeLayout3.addView(textView3);
-                mainOrderSummaryLayout.addView(relativeLayout3);
-
-
-            } else if (mainOrderSummaryLayout.getChildCount() == 3) {
-
-                RelativeLayout.LayoutParams relativeLayoutParams4 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, heightNetworkImageLayoutandTextView);
-                RelativeLayout relativeLayout4 = new RelativeLayout(MainActivity.this);
-                relativeLayoutParams4.setMargins(0, ((int) (display.getHeight() * 0.48)), 0, 0);
-                relativeLayout4.setLayoutParams(relativeLayoutParams4);
-                relativeLayout4.setId(3);
-
-                //Creating NetWorkImage View
-
-                NetworkImageView networkImageView4 = new NetworkImageView(MainActivity.this);
-                networkImageView4.setImageUrl(menuList.get(3).getMenuImageUrl(), ConnectionManager.getImageLoader(MainActivity.this));
-                networkImageView4.setLayoutParams(new RelativeLayout.LayoutParams(widthNetworkImage, heightNetworkImageLayoutandTextView));
-
-                //Creating the TextView
-
-                RelativeLayout.LayoutParams textViewLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, heightNetworkImageLayoutandTextView);
-                textViewLayoutParams.setMargins(widthNetworkImage, 0, 0, 0);
-                TextView textView4 = new TextView(MainActivity.this);
-                textView4.setText(menuList.get(3).getMenuName());
-                textView4.setLayoutParams(textViewLayoutParams);
-                textView4.setGravity(Gravity.CENTER_VERTICAL);
-                textView4.setTextSize(15);
-
-                relativeLayout4.addView(networkImageView4);
-                relativeLayout4.addView(textView4);
-                mainOrderSummaryLayout.addView(relativeLayout4);
-
-            } else if (mainOrderSummaryLayout.getChildCount() == 4) {
-
-                RelativeLayout.LayoutParams relativeLayoutParams5 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, heightNetworkImageLayoutandTextView);
-                RelativeLayout relativeLayout5 = new RelativeLayout(MainActivity.this);
-                relativeLayoutParams5.setMargins(0, ((int) (display.getHeight() * 0.64)), 0, 0);
-                relativeLayout5.setLayoutParams(relativeLayoutParams5);
-                relativeLayout5.setId(4);
-
-                //Creating NetWorkImage View
-
-                NetworkImageView networkImageView5 = new NetworkImageView(MainActivity.this);
-                networkImageView5.setImageUrl(menuList.get(4).getMenuImageUrl(), ConnectionManager.getImageLoader(MainActivity.this));
-                networkImageView5.setLayoutParams(new RelativeLayout.LayoutParams(widthNetworkImage, heightNetworkImageLayoutandTextView));
-
-                //Creating the TextView
-
-                RelativeLayout.LayoutParams textViewLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, heightNetworkImageLayoutandTextView);
-                textViewLayoutParams.setMargins(widthNetworkImage, 0, 0, 0);
-                TextView textView5 = new TextView(MainActivity.this);
-                textView5.setText(menuList.get(4).getMenuName());
-                textView5.setLayoutParams(textViewLayoutParams);
-                textView5.setGravity(Gravity.CENTER_VERTICAL);
-                textView5.setTextSize(15);
-
-                relativeLayout5.addView(networkImageView5);
-                relativeLayout5.addView(textView5);
-                mainOrderSummaryLayout.addView(relativeLayout5);
-
-            }
-
+        for (int i = 0; i < selectedMenuList.size(); i++) {
+            Log.e("Selected Menu: ", selectedMenuList.get(i).getMenu_name() + ": " + String.valueOf(selectedMenuIdList.get(i)));
         }
 
     }
@@ -359,11 +253,11 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
         view.startAnimation(animScale);
 
-        RelativeLayout mainOrderSummaryLayout = (RelativeLayout) findViewById(R.id.orderSummaryRelativeLayout);
+//        RelativeLayout mainOrderSummaryLayout = (RelativeLayout) findViewById(R.id.orderSummaryRelativeLayout);
 
-        if (mainOrderSummaryLayout.getChildCount() == 0) {
-            return;
-        }
+//        if (mainOrderSummaryLayout.getChildCount() == 0) {
+//            return;
+//        }
 
         //Create private static variable to get all firstMenuList
         for (int i = 0; i < firstMenuList.length; i++) {
@@ -380,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
         }
 
-        BlackGarlicAdapter newBlackGarlicAdapter = new BlackGarlicAdapter(firstMenuList, MainActivity.this, MainActivity.this);
+        BlackGarlicAdapter newBlackGarlicAdapter = new BlackGarlicAdapter(menuList, menuIdList, MainActivity.this, MainActivity.this);
 
         recyclerView.setAdapter(newBlackGarlicAdapter);
 
@@ -390,9 +284,60 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
         this.selectedInteger = 0;
 
-        mainOrderSummaryLayout.removeAllViews();
+//        mainOrderSummaryLayout.removeAllViews();
 
 
+    }
+
+    public class NestedScrollableViewHelper extends ScrollableViewHelper {
+        public int getScrollableViewScrollPosition(View scrollableView, boolean isSlidingUp) {
+            if (nestedScrollView instanceof NestedScrollView) {
+                if(isSlidingUp){
+                    return nestedScrollView.getScrollY();
+                } else {
+                    NestedScrollView nsv = ((NestedScrollView) nestedScrollView);
+                    View child = nsv.getChildAt(0);
+                    return (child.getBottom() - (nsv.getHeight() + nsv.getScrollY()));
+                }
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    public class MyAdapter extends BaseAdapter {
+
+        List<Data> menuListAdapter;
+        int[] menuIdListAdapter;
+
+        @Override
+        public int getCount() {
+            return menuListAdapter.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return menuListAdapter.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View orderSummaryView = getLayoutInflater().inflate(R.layout.row_ordersummary, null);
+
+            TextView orderSummaryMenuName = (TextView) findViewById(R.id.orderSummaryMenuName);
+            NetworkImageView orderSummaryMenuImage = (NetworkImageView) findViewById(R.id.orderSummaryMenuImage);
+
+            orderSummaryMenuName.setText(menuListAdapter.get(position).getMenu_name());
+            orderSummaryMenuImage.setImageUrl(menuListAdapter.get(position).getMenuUrl().replace("menu_id", String.valueOf(menuIdListAdapter[position])),
+                    ConnectionManager.getImageLoader(MainActivity.this));
+
+            return orderSummaryView;
+        }
     }
 
 }

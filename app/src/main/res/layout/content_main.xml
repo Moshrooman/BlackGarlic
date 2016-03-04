@@ -67,14 +67,26 @@
                     android:layout_marginLeft="20dp"
                     />
 
+                <TextView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:visibility="gone"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/orderQuantityTextView"
+                    />
+
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/orderBoxImageView"
-                    android:src="@drawable/orderboxone"
                     android:layout_alignParentRight="true"
+                    android:src="@drawable/orderboxone"
                     android:layout_marginTop="5dp"
                     />
+
 
                 <Button
                     android:layout_width="wrap_content"
@@ -92,16 +104,22 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
+            <android.support.v4.widget.NestedScrollView
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_below="@+id/tabRelativeLayout"
-                android:id="@+id/orderSummaryRelativeLayout"
-                android:paddingRight="35dp"
+                android:id="@+id/nestedScrollView"
                 >
 
+                <ListView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_below="@+id/tabRelativeLayout"
+                    android:id="@+id/orderSummaryListView"
+                    >
 
-                </RelativeLayout>
+                </ListView>
+
+            </android.support.v4.widget.NestedScrollView>
 
             </RelativeLayout>
 

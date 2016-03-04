@@ -1,6 +1,7 @@
 package id.blackgarlic.blackgarlic;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,6 +19,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import java.util.ArrayList;
 import java.util.List;
 
+import id.blackgarlic.blackgarlic.model.Data;
 import id.blackgarlic.blackgarlic.model.Menu;
 
 /**
@@ -31,17 +33,22 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
 
     Context mContext;
 
-    Menu[] mmenuList = new Menu[9];
+    List<Data> mmenuList = new ArrayList<Data>();
+
+    List<Integer> mmenuIdList;
 
     MyListItemClickListener mListener;
 
-    List<Menu> currentSelectedMenus = new ArrayList<Menu>();
+    List<Data> currentSelectedMenus = new ArrayList<Data>();
+
+    List<Integer> currentSelectedMenuIds = new ArrayList<Integer>();
 
 
-    public BlackGarlicAdapter(Menu[] menuList, Context context, MyListItemClickListener listener) {
+    public BlackGarlicAdapter(List<Data> menuList, List<Integer> menuIdList, Context context, MyListItemClickListener listener) {
         mmenuList = menuList;
         mContext = context;
         mListener = listener;
+        mmenuIdList = menuIdList;
     }
 
     @Override
@@ -53,9 +60,9 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
 
     @Override
     public void onBindViewHolder(MyViewHolder myViewHolder, int position) {
-        Menu currentMenu = mmenuList[position];
-        myViewHolder.menuTitleTextView.setText(currentMenu.getMenuName());
-        myViewHolder.menuNetworkImageView.setImageUrl(currentMenu.getMenuImageUrl(),
+        Data currentMenu = mmenuList.get(position);
+        myViewHolder.menuTitleTextView.setText(currentMenu.getMenu_name());
+        myViewHolder.menuNetworkImageView.setImageUrl(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))),
                 ConnectionManager.getImageLoader(mContext));
 
 
@@ -69,7 +76,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
 
     @Override
     public int getItemCount() {
-        return mmenuList.length;
+        return mmenuList.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -88,40 +95,34 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
 
         @Override
         public void onClick(View v) {
-            if ((mmenuList[getPosition()].getIsSelected() == false) && (selectedInteger != 5)) {
-                mmenuList[getPosition()].setIsSelected(true);
+            if (mmenuList.get(getPosition()).getIsSelected() == false) {
+                mmenuList.get(getPosition()).setIsSelected(true);
                 selectedInteger++;
                 notifyDataSetChanged();
-                //This is called if the chosen menus are still under 5 selected
-            } else if ((selectedInteger == 5) && (mmenuList[getPosition()].getIsSelected() == false)) {
-                mmenuList[getPosition()].setIsSelected(false);
-                notifyDataSetChanged();
-                //This if statement is called if user has already chosen 5 menus and they select a NEW menu
-            } else {
-                    mmenuList[getPosition()].setIsSelected(false);
+            }  else if (mmenuList.get(getPosition()).getIsSelected() == true){
+                    mmenuList.get(getPosition()).setIsSelected(false);
                     selectedInteger--;
                     notifyDataSetChanged();
-                //This if statement is called if the user has already chosen 5 menus and they select an already selected Menu
-                //OR Even if they haven't chosen 5 menus, and selects and already selected menu
             }
 
             currentSelectedMenus.clear();
 
-            for (int i = 0; i < mmenuList.length; i++) {
-                if (mmenuList[i].getIsSelected() == true) {
-                    currentSelectedMenus.add(mmenuList[i]);
+            currentSelectedMenuIds.clear();
+
+            for (int i = 0; i < mmenuList.size(); i++) {
+                if (mmenuList.get(i).getIsSelected() == true) {
+                    currentSelectedMenus.add(mmenuList.get(i));
+                    currentSelectedMenuIds.add(Integer.valueOf(mmenuIdList.get(i)));
                 }
             }
 
-            Log.e("Selected Menus : ", String.valueOf(currentSelectedMenus.size()));
-
-            mListener.OnItemClick(mmenuList[getPosition()], v, currentSelectedMenus);
+            mListener.OnItemClick(mmenuList.get(getPosition()), v, currentSelectedMenus, currentSelectedMenuIds);
 
         }
     }
 
     public static interface MyListItemClickListener{
-        public void OnItemClick(Menu onItemClicked, View view, List<Menu> menuList);
+        public void OnItemClick(Data onItemClicked, View view, List<Data> menuList, List<Integer> menuIdList);
     }
 
 }

@@ -10,6 +10,8 @@ import java.util.List;
  */
 public class Data {
 
+    public final String BLACKGARLIC_PICTURES = "http://blackgarlic.id/inc/images/menu/menu_id.jpg";
+
     @SerializedName("menu_name")
     private String menu_name;
 
@@ -21,6 +23,20 @@ public class Data {
 
     @SerializedName("menu_type")
     private String menu_type;
+
+    private boolean IsSelected = false;
+
+    public boolean getIsSelected() {
+        return IsSelected;
+    }
+
+    public void setIsSelected(boolean isSelected) {
+        IsSelected = isSelected;
+    }
+
+    public String getMenuUrl() {
+        return BLACKGARLIC_PICTURES;
+    }
 
     public String getMenu_name() {
         return menu_name;

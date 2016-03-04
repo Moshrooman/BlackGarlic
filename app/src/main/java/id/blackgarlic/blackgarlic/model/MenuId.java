@@ -4,20 +4,23 @@ import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Justin Kwik on 03/03/2016.
  */
 public class MenuId {
 
     @SerializedName("menu_ids")
-    private int[] menuIds;
+    private List<Integer> menuIds;
 
-    public int[] getMenuIds() {
-        int[] menuIdList = new int[menuIds.length];
+    public List<Integer> getMenuIds() {
+        List<Integer> menuIdList = new ArrayList<Integer>();
 
-        for (int i = 0; i < menuIds.length; i++) {
+        for (int i = 0; i < menuIds.size(); i++) {
 
-            menuIdList[i] = menuIds[i];
+            menuIdList.add(menuIds.get(i));
 
         }
 

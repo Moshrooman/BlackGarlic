@@ -31,6 +31,7 @@ dependencies {
     compile 'com.sothree.slidinguppanel:library:3.2.1'
     compile files('libs/commons-codec-1.9.jar')
     compile 'org.apache.directory.studio:org.apache.commons.io:2.4'
+    compile 'joda-time:joda-time:2.9.2'
 }
 
 android {
