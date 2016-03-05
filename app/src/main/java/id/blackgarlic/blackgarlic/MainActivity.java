@@ -25,14 +25,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
-import com.sothree.slidinguppanel.ScrollableViewHelper;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,7 +37,6 @@ import java.util.TimeZone;
 
 import id.blackgarlic.blackgarlic.model.Data;
 import id.blackgarlic.blackgarlic.model.MenuId;
-import id.blackgarlic.blackgarlic.model.Menu;
 import id.blackgarlic.blackgarlic.model.Menus;
 import id.blackgarlic.blackgarlic.model.UserCredentials;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -54,13 +49,10 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
     //take away that menu from the selectedMenuList in BlackGarlicAdapter
     //set that particular menu's boolean to true
 
-    public final String BLACKGARLIC_MENUS_URL = "http://api.blackgarlic.id:7000/bo/menu/ordering/2015-12-22";
-
     private RecyclerView recyclerView;
 
     int selectedInteger;
 
-    private static Menu[] firstMenuList = new Menu[9];
     private static View specificView;
     private static UserCredentials userCredentials;
     private static List<Data> menuList;
@@ -86,9 +78,8 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         orderQuantityTextView = (TextView) findViewById(R.id.orderQuantityTextView);
         sliding_layout = (com.sothree.slidinguppanel.SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         listViewOrderSummary = (ListView) findViewById(R.id.orderSummaryListView);
-        nestedScrollView = (NestedScrollView) findViewById(R.id.nestedScrollView);
 
-        sliding_layout.setScrollableViewHelper(new NestedScrollableViewHelper());
+        sliding_layout.setDragView(findViewById(R.id.tabRelativeLayout));
 
         //Getting Current date and time:
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
@@ -261,19 +252,19 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 //        }
 
         //Create private static variable to get all firstMenuList
-        for (int i = 0; i < firstMenuList.length; i++) {
-
-            if (firstMenuList[i].getIsSelected() == true) {
-                firstMenuList[i].setIsSelected(false);
-            }
-
-            if (specificView.findViewById(R.id.selectedImageView).getVisibility() == View.VISIBLE) {
-                specificView.findViewById(R.id.selectedImageView).setVisibility(View.GONE);
-            }
-
-            Log.e("Menu Selected: ", String.valueOf(firstMenuList[i].getIsSelected()));
-
-        }
+//        for (int i = 0; i < firstMenuList.length; i++) {
+//
+//            if (firstMenuList[i].getIsSelected() == true) {
+//                firstMenuList[i].setIsSelected(false);
+//            }
+//
+//            if (specificView.findViewById(R.id.selectedImageView).getVisibility() == View.VISIBLE) {
+//                specificView.findViewById(R.id.selectedImageView).setVisibility(View.GONE);
+//            }
+//
+//            Log.e("Menu Selected: ", String.valueOf(firstMenuList[i].getIsSelected()));
+//
+//        }
 
         BlackGarlicAdapter newBlackGarlicAdapter = new BlackGarlicAdapter(menuList, menuIdList, MainActivity.this, MainActivity.this);
 
@@ -288,22 +279,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 //        mainOrderSummaryLayout.removeAllViews();
 
 
-    }
-
-    public class NestedScrollableViewHelper extends ScrollableViewHelper {
-        public int getScrollableViewScrollPosition(View scrollableView, boolean isSlidingUp) {
-            if (nestedScrollView instanceof NestedScrollView) {
-                if(isSlidingUp){
-                    return nestedScrollView.getScrollY();
-                } else {
-                    NestedScrollView nsv = ((NestedScrollView) nestedScrollView);
-                    View child = nsv.getChildAt(0);
-                    return (child.getBottom() - (nsv.getHeight() + nsv.getScrollY()));
-                }
-            } else {
-                return 0;
-            }
-        }
     }
 
     public class MyAdapter extends BaseAdapter {

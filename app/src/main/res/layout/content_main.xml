@@ -45,12 +45,14 @@
 
         </RelativeLayout>
 
+        <!-- Start of slide layout -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center|top"
             >
 
+            <!-- Start of visible clickable tab layout -->
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="67dp"
@@ -101,27 +103,28 @@
                     android:onClick="clearAll"
                     />
 
-
+            <!-- End of visible clickable tab layout -->
             </RelativeLayout>
 
-            <android.support.v4.widget.NestedScrollView
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/nestedScrollView"
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginTop="70dp"
                 >
 
-                <ListView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/tabRelativeLayout"
-                    android:id="@+id/orderSummaryListView"
-                    >
+                    <ListView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
 
-                </ListView>
+                        android:id="@+id/orderSummaryListView"
+                        >
 
-            </android.support.v4.widget.NestedScrollView>
+                    </ListView>
 
+
+            </RelativeLayout>
+
+            <!-- End of overall sliding layout -->
             </RelativeLayout>
 
 
