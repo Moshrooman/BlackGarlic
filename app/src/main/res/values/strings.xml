@@ -9,4 +9,5 @@
     <string name="title_activity_pop_up_you_tube">PopUpYouTube</string>
     <string name="title_activity_log_in_screen">LogInScreen</string>
     <string name="title_activity_my_account">MyAccount</string>
+    <string name="title_activity_create_account">CreateAccount</string>
 </resources>

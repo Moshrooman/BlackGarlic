@@ -66,6 +66,10 @@ public class LogInScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in_screen);
 
+        if (this.getIntent().getExtras() != null) {
+            Toast.makeText(LogInScreen.this, this.getIntent().getExtras().getString("successful"), Toast.LENGTH_LONG).show();
+        }
+
         final EditText usernameEditText = (EditText)findViewById(R.id.userNameEditText);
         final EditText passwordEditText = (EditText) findViewById(R.id.passwordEditText);
 
@@ -90,8 +94,6 @@ public class LogInScreen extends AppCompatActivity {
                 usernameEditText.setText("");
                 passwordEditText.setText("");
 
-                //Run the httpget method for the login, save all of the things that it returns, and if it gets it, go to mainActivity
-
                 String url = "http://api.blackgarlic.id:7000/app/login";
 
                 final JSONObject body = new JSONObject();
@@ -106,14 +108,21 @@ public class LogInScreen extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
 
-                        userCredentials = new Gson().fromJson(response, UserCredentials.class);
+                        if (response.contains("No address found!")) {
+                            userCredentials = new UserCredentials("", "", "", "", "", "", "");
+                            Intent mainActivityIntent = new Intent(LogInScreen.this, MainActivity.class);
+                            startActivity(mainActivityIntent);
+                            finish();
+                        } else {
+                            userCredentials = new Gson().fromJson(response, UserCredentials.class);
 
-                        progressBar.setVisibility(View.GONE);
-                        loggingYouInTextView.setVisibility(View.GONE);
+                            progressBar.setVisibility(View.GONE);
+                            loggingYouInTextView.setVisibility(View.GONE);
 
-                        Intent mainActivityIntent = new Intent(LogInScreen.this, MainActivity.class);
-                        startActivity(mainActivityIntent);
-                        finish();
+                            Intent mainActivityIntent = new Intent(LogInScreen.this, MainActivity.class);
+                            startActivity(mainActivityIntent);
+                            finish();
+                        }
 
                     }
                 }, new Response.ErrorListener() {
@@ -142,6 +151,16 @@ public class LogInScreen extends AppCompatActivity {
 
                 ConnectionManager.getInstance(LogInScreen.this).add(request);
 
+            }
+        });
+
+        Button createAccountButton = (Button) findViewById(R.id.createAccountButton);
+
+        createAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent createAccountIntent = new Intent(LogInScreen.this, CreateAccount.class);
+                startActivity(createAccountIntent);
             }
         });
 

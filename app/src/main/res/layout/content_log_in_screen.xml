@@ -66,5 +66,14 @@
         android:id="@+id/progressBar"
         />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Account"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="450dp"
+        android:id="@+id/createAccountButton"
+        />
+
 
 </RelativeLayout>
