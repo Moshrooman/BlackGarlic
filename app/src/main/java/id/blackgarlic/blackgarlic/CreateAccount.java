@@ -67,7 +67,7 @@ public class CreateAccount extends AppCompatActivity {
                 editTextList.add(createAccountEmail);
                 editTextList.add(createAccountPassword);
 
-                //Then set the hint to red color
+                //Then set the hint to red color if there is no entry
                 for (int i = 0; i < editTextList.size(); i++) {
 
                     if (String.valueOf(editTextList.get(i).getText()).equals("")) {
@@ -81,13 +81,16 @@ public class CreateAccount extends AppCompatActivity {
                     }
                 }
 
+                //Creating the toast
                 if (emptyFields == true) {
                     Toast.makeText(CreateAccount.this, "Fields In Red Are Required!", Toast.LENGTH_LONG).show();
                     return;
                 }
 
+                //Checking if the email is valid
                 if (!emailValidator.isValid(String.valueOf(createAccountEmail.getText()))) {
                     Toast.makeText(CreateAccount.this, "Has To Be A Valid Email!", Toast.LENGTH_LONG).show();
+                    createAccountEmail.setTextColor(getResources().getColor(R.color.red));
                     return;
                 }
 
@@ -156,12 +159,6 @@ public class CreateAccount extends AppCompatActivity {
 
             }
         });
-
-
-
-        //Check if all fields are filled, if not then tell em to fill it in!
-        //Have option to show password as they type
-        //Email field should be a valid email
 
     }
 }

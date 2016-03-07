@@ -62,7 +62,7 @@
         android:text="Sign Up"
         android:layout_centerHorizontal="true"
         android:textSize="25dp"
-        android:layout_marginTop="450dp"
+        android:layout_marginTop="470dp"
         android:id="@+id/signUpButton"
         />
 
