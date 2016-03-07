@@ -10,10 +10,18 @@
         tools:context="id.blackgarlic.blackgarlic.welcome.PopUpYouTube"
         android:id="@+id/youtubePopUp">
 
+    <Button
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="X"
+        android:layout_alignParentRight="true"
+        android:id="@+id/closeButton"
+        />
+
         <VideoView
             android:layout_width="fill_parent"
             android:layout_height="300dp"
-            android:layout_centerInParent="true"
+            android:layout_alignParentBottom="true"
             android:id="@+id/welcomeVideoView"
 
             />

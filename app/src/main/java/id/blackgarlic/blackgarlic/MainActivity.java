@@ -309,15 +309,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             }
 
         }
-        
 
-        //TODO: CLEAR BUTTON
-        //If clear button is clicked, set selected integer to 0
-        //Clear the menulist
-        //Loop through all menus and set all to false, use a for each true inside menulist
-        //And clear the sliding layout of all of its children views
-
-        //But main thing that needs to be done is that a new blackgarlic adapter needs to be set
 
         //TODO: X BUTTON NEXT TO EACH MENU
         //When clicked, i have to remove 1 from selected integer in mainActivity, and Blackgarlicadapter

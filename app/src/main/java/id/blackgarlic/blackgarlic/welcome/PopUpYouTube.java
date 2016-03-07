@@ -2,6 +2,7 @@ package id.blackgarlic.blackgarlic.welcome;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,6 +12,7 @@ import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +30,6 @@ public class PopUpYouTube extends AppCompatActivity {
 
     private static int currentTimeVideo = 0;
     private static RelativeLayout youtubeLayout;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +64,28 @@ public class PopUpYouTube extends AppCompatActivity {
             }
         });
 
-        youtubeLayout.performClick();
+        Button closeButton = (Button) findViewById(R.id.closeButton);
+        closeButton.bringToFront();
 
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                youtubeLayout.performClick();
+                finish();
+            }
+        });
 
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
 
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            youtubeLayout.performClick();
+        }
+
+        return super.onKeyDown(keyCode, event);
+
+    }
 }
 

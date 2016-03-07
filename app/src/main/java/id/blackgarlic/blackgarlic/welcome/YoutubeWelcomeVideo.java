@@ -12,6 +12,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -46,6 +49,17 @@ public class YoutubeWelcomeVideo extends Fragment {
 
         View youTubeWelcomeVideoFragment = inflater.inflate(R.layout.fragment_youtube_welcome_video, container, false);
 
+        final ImageView playImageView = (ImageView) youTubeWelcomeVideoFragment.findViewById(R.id.playBlackGarlicVideo);
+        final Animation animScale = AnimationUtils.loadAnimation(getContext(), R.anim.anim_scale);
+
+        playImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), PopUpYouTube.class);
+                playImageView.startAnimation(animScale);
+                startActivity(intent);
+            }
+        });
 
         return youTubeWelcomeVideoFragment;
 
