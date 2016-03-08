@@ -91,9 +91,6 @@ public class LogInScreen extends AppCompatActivity {
 
                 final String sha1Password = new String(Hex.encodeHex(DigestUtils.sha1(password)));
 
-                usernameEditText.setText("");
-                passwordEditText.setText("");
-
                 String url = "http://api.blackgarlic.id:7000/app/login";
 
                 final JSONObject body = new JSONObject();

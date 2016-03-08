@@ -7,8 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import com.android.volley.toolbox.NetworkImageView;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +22,7 @@ import id.blackgarlic.blackgarlic.model.Data;
 /**
  * Created by JustinKwik on 1/19/16.
  */
-public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.MyViewHolder> {
+public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.MyViewHolder> implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
 
     int selectedInteger;
 
@@ -57,6 +61,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         myViewHolder.menuTitleTextView.setText(currentMenu.getMenu_name());
         myViewHolder.menuNetworkImageView.setImageUrl(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))),
                 ConnectionManager.getImageLoader(mContext));
+        myViewHolder.menuDescriptionTextView.setText(currentMenu.getMenu_description());
 
 
         if (currentMenu.getIsSelected() == true) {
@@ -65,6 +70,36 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
             myViewHolder.selectedImageView.setVisibility(View.GONE);
         }
 
+    }
+
+    @Override
+    public long getHeaderId(int position) {
+
+        if (position <= 2) {
+            return 1;
+        } else {
+            return 2;
+        }
+
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.header, parent, false);
+        return new RecyclerView.ViewHolder(view) {
+        };
+    }
+
+    @Override
+    public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+        TextView headerTextView = (TextView) holder.itemView.findViewById(R.id.headerTextView);
+
+        if (position <= 2) {
+            headerTextView.setText("Breakfast");
+        } else {
+            headerTextView.setText("Original");
+        }
     }
 
     @Override
@@ -77,6 +112,10 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         public TextView menuTitleTextView;
         public NetworkImageView menuNetworkImageView;
         public ImageView selectedImageView;
+        public TextView switchToDescription;
+        public ViewFlipper viewFlipper;
+        public TextView menuDescriptionTextView;
+        public TextView backToMenu;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -84,6 +123,26 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
             menuNetworkImageView = (NetworkImageView) itemView.findViewById(R.id.menuNetworkImageView);
             selectedImageView = (ImageView) itemView.findViewById(R.id.selectedImageView);
             itemView.setOnClickListener(this);
+            switchToDescription = (TextView) itemView.findViewById(R.id.switchToDescription);
+            viewFlipper = (ViewFlipper) itemView.findViewById(R.id.viewFlipper);
+            menuDescriptionTextView = (TextView) itemView.findViewById(R.id.menuDescriptionTextView);
+            backToMenu = (TextView) itemView.findViewById(R.id.backToMenu);
+
+            switchToDescription.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AnimationFactory.flipTransition(viewFlipper, AnimationFactory.FlipDirection.LEFT_RIGHT);
+                }
+            });
+
+            backToMenu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AnimationFactory.flipTransition(viewFlipper, AnimationFactory.FlipDirection.LEFT_RIGHT);
+                }
+            });
+
+
         }
 
         @Override
@@ -117,5 +176,6 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
     public static interface MyListItemClickListener{
         public void OnItemClick(Data onItemClicked, View view, List<Data> menuList, List<Integer> menuIdList);
     }
+
 
 }

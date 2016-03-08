@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -25,6 +27,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
+import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import org.joda.time.LocalDate;
 
@@ -166,11 +170,27 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                     }
                 }
 
+                for (int i = 0; i < menuList.size(); i++) {
+
+                    if (menuList.get(i).getMenu_type().equals("4")) {
+                        Data currentBreakfastMenu = menuList.get(i);
+                        Integer currentBreakfastMenuIntenger = menuIdList.get(i);
+
+                        menuList.remove(i);
+                        menuIdList.remove(i);
+
+                        menuList.add(0, currentBreakfastMenu);
+                        menuIdList.add(0, currentBreakfastMenuIntenger);
+                    }
+
+                }
+
                 BlackGarlicAdapter blackGarlicAdapter = new BlackGarlicAdapter(menuList, menuIdList, MainActivity.this, MainActivity.this);
 
 //              BlackGarlicDAO.getInstance().storeMenus(MainActivity.this, firstMenuList);
 
                 recyclerView.setAdapter(blackGarlicAdapter);
+                recyclerView.addItemDecoration(new StickyRecyclerHeadersDecoration(blackGarlicAdapter));
 
             }
         }, new Response.ErrorListener() {
