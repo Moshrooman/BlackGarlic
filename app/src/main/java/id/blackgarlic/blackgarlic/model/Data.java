@@ -24,16 +24,6 @@ public class Data {
     @SerializedName("menu_type")
     private String menu_type;
 
-    private boolean IsSelected = false;
-
-    public boolean getIsSelected() {
-        return IsSelected;
-    }
-
-    public void setIsSelected(boolean isSelected) {
-        IsSelected = isSelected;
-    }
-
     public String getMenuUrl() {
         return BLACKGARLIC_PICTURES;
     }

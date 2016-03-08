@@ -5,10 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+import com.andexert.library.RippleView;
 import com.android.volley.toolbox.NetworkImageView;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
@@ -56,19 +58,23 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder myViewHolder, int position) {
+    public void onBindViewHolder(final MyViewHolder myViewHolder, final int position) {
         Data currentMenu = mmenuList.get(position);
         myViewHolder.menuTitleTextView.setText(currentMenu.getMenu_name());
         myViewHolder.menuNetworkImageView.setImageUrl(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))),
                 ConnectionManager.getImageLoader(mContext));
         myViewHolder.menuDescriptionTextView.setText(currentMenu.getMenu_description());
 
+        myViewHolder.rippleViewButton.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
 
-        if (currentMenu.getIsSelected() == true) {
-            myViewHolder.selectedImageView.setVisibility(View.VISIBLE);
-        } else {
-            myViewHolder.selectedImageView.setVisibility(View.GONE);
-        }
+                currentSelectedMenus.add(mmenuList.get(position));
+                currentSelectedMenuIds.add(mmenuIdList.get(position));
+
+                mListener.OnItemClick(myViewHolder.rippleViewButton, currentSelectedMenus, currentSelectedMenuIds);
+            }
+        });
 
     }
 
@@ -107,7 +113,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         return mmenuList.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MyViewHolder extends RecyclerView.ViewHolder{
 
         public TextView menuTitleTextView;
         public NetworkImageView menuNetworkImageView;
@@ -116,17 +122,17 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         public ViewFlipper viewFlipper;
         public TextView menuDescriptionTextView;
         public TextView backToMenu;
+        public RippleView rippleViewButton;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             menuTitleTextView = (TextView) itemView.findViewById(R.id.menuTitleTextView);
             menuNetworkImageView = (NetworkImageView) itemView.findViewById(R.id.menuNetworkImageView);
-            selectedImageView = (ImageView) itemView.findViewById(R.id.selectedImageView);
-            itemView.setOnClickListener(this);
             switchToDescription = (TextView) itemView.findViewById(R.id.switchToDescription);
             viewFlipper = (ViewFlipper) itemView.findViewById(R.id.viewFlipper);
             menuDescriptionTextView = (TextView) itemView.findViewById(R.id.menuDescriptionTextView);
             backToMenu = (TextView) itemView.findViewById(R.id.backToMenu);
+            rippleViewButton = (RippleView) itemView.findViewById(R.id.rippleView);
 
             switchToDescription.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -145,36 +151,10 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
 
         }
 
-        @Override
-        public void onClick(View v) {
-            if (mmenuList.get(getPosition()).getIsSelected() == false) {
-                mmenuList.get(getPosition()).setIsSelected(true);
-                selectedInteger++;
-                notifyDataSetChanged();
-            }  else if (mmenuList.get(getPosition()).getIsSelected() == true){
-                    mmenuList.get(getPosition()).setIsSelected(false);
-                    selectedInteger--;
-                    notifyDataSetChanged();
-            }
-
-            currentSelectedMenus.clear();
-
-            currentSelectedMenuIds.clear();
-
-            for (int i = 0; i < mmenuList.size(); i++) {
-                if (mmenuList.get(i).getIsSelected() == true) {
-                    currentSelectedMenus.add(mmenuList.get(i));
-                    currentSelectedMenuIds.add(Integer.valueOf(mmenuIdList.get(i)));
-                }
-            }
-
-            mListener.OnItemClick(mmenuList.get(getPosition()), v, currentSelectedMenus, currentSelectedMenuIds);
-
-        }
     }
 
     public static interface MyListItemClickListener{
-        public void OnItemClick(Data onItemClicked, View view, List<Data> menuList, List<Integer> menuIdList);
+        public void OnItemClick(RippleView rippleView, List<Data> menuList, List<Integer> menuIdList);
     }
 
 

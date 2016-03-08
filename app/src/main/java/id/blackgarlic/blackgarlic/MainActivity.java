@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import com.andexert.library.RippleView;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -54,8 +55,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
     //set that particular menu's boolean to true
 
     private RecyclerView recyclerView;
-
-    int selectedInteger;
 
     private static View specificView;
     private static UserCredentials userCredentials;
@@ -226,28 +225,19 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
 
     @Override
-    public void OnItemClick(Data itemClicked, View view, List<Data> selectedMenuList, List<Integer> selectedMenuIdList) {
-
-        specificView = view;
+    public void OnItemClick(RippleView rippleView, List<Data> selectedMenuList, List<Integer> selectedMenuIdList) {
 
         ImageView orderBoxImageView = (ImageView) findViewById(R.id.orderBoxImageView);
 
         orderQuantityTextView.bringToFront();
 
-        if (view.findViewById(R.id.selectedImageView).getVisibility() == View.GONE) {
-            selectedInteger++;
-
-        } else {
-            selectedInteger--;
-        }
-
-        if (selectedInteger == 0) {
+        if (selectedMenuList.size() == 0) {
             orderBoxImageView.setImageResource(R.drawable.orderboxone);
             orderQuantityTextView.setVisibility(View.GONE);
         } else {
             orderBoxImageView.setImageResource(R.drawable.orderboxtwopng);
             orderQuantityTextView.setVisibility(View.VISIBLE);
-            orderQuantityTextView.setText(String.valueOf(selectedInteger));
+            orderQuantityTextView.setText(String.valueOf(selectedMenuList.size()));
         }
 
         for (int i = 0; i < selectedMenuList.size(); i++) {
@@ -294,7 +284,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
         orderBoxImageView.setImageResource(R.drawable.orderboxone);
 
-        this.selectedInteger = 0;
+        //this.selectedInteger = 0;
 
 //        mainOrderSummaryLayout.removeAllViews();
 

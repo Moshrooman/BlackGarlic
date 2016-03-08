@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    >
+    android:layout_margin="5dp">
 
     <ViewFlipper
         android:layout_width="fill_parent"
@@ -61,23 +61,28 @@
 
                 />
 
-            <ImageView
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:id="@+id/selectedImageView"
-                android:src="@drawable/selected"
-                android:visibility="gone"
-                />
-
-            <Button
+            <com.andexert.library.RippleView
+                android:id="@+id/rippleView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add To Box"
-                android:textSize="20dp"
-                android:background="@drawable/addtobox"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="265dp"
-                />
+                app:rv_rippleDuration= "5000"
+                app:rv_centered="false"
+                app:rv_color="#006d67"
+                >
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add To Box"
+                    android:textSize="20dp"
+                    android:background="@drawable/addtobox"
+                    />
+
+
+            </com.andexert.library.RippleView>
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -87,7 +92,6 @@
                 android:layout_gravity="bottom|right"
                 android:id="@+id/switchToDescription"
                 />
-
 
         </android.support.v7.widget.CardView>
 
