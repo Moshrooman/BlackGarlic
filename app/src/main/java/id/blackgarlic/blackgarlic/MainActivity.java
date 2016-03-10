@@ -261,17 +261,12 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         } else {
             currentMenuList.clear();
             currentMenuIdList.clear();
+            ImageView orderBoxImageView = (ImageView) findViewById(R.id.orderBoxImageView);
+            orderBoxImageView.setImageResource(R.drawable.orderboxone);
+            orderQuantityTextView.setText("");
+            orderQuantityTextView.setVisibility(View.GONE);
+            listViewOrderSummary.setAdapter(new MyAdapter(currentMenuList, currentMenuIdList));
         }
-
-        ImageView orderBoxImageView = (ImageView) findViewById(R.id.orderBoxImageView);
-
-        orderBoxImageView.setImageResource(R.drawable.orderboxone);
-
-        orderQuantityTextView.setText("");
-
-        orderQuantityTextView.setVisibility(View.GONE);
-
-        listViewOrderSummary.setAdapter(new MyAdapter(currentMenuList, currentMenuIdList));
 
     }
 
