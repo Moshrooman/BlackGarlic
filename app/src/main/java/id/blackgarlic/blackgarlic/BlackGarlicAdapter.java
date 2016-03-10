@@ -72,7 +72,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
                 currentSelectedMenus.add(mmenuList.get(position));
                 currentSelectedMenuIds.add(mmenuIdList.get(position));
 
-                mListener.OnItemClick(myViewHolder.rippleViewButton, currentSelectedMenus, currentSelectedMenuIds);
+                mListener.OnItemClick(myViewHolder.rippleViewButton, currentSelectedMenus, currentSelectedMenuIds, mmenuList.get(position).getMenu_name());
             }
         });
 
@@ -144,7 +144,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
             backToMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AnimationFactory.flipTransition(viewFlipper, AnimationFactory.FlipDirection.LEFT_RIGHT);
+                    AnimationFactory.flipTransition(viewFlipper, AnimationFactory.FlipDirection.RIGHT_LEFT);
                 }
             });
 
@@ -154,7 +154,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
     }
 
     public static interface MyListItemClickListener{
-        public void OnItemClick(RippleView rippleView, List<Data> menuList, List<Integer> menuIdList);
+        public void OnItemClick(RippleView rippleView, List<Data> menuList, List<Integer> menuIdList, String menuAdded);
     }
 
 

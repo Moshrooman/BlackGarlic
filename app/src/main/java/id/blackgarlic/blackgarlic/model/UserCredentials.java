@@ -28,7 +28,10 @@ public class UserCredentials {
     @SerializedName("address_notes")
     private String address_notes;
 
-    public UserCredentials(String customer_name, String customer_id, String address_content, String city, String mobile, String zipcode, String address_notes) {
+    @SerializedName("address_id")
+    private String address_id;
+
+    public UserCredentials(String customer_name, String customer_id, String address_content, String city, String mobile, String zipcode, String address_notes, String address_id) {
         this.customer_name = customer_name;
         this.customer_id = customer_id;
         this.address_content = address_content;
@@ -36,10 +39,15 @@ public class UserCredentials {
         this.mobile = mobile;
         this.zipcode = zipcode;
         this.address_notes = address_notes;
+        this.address_id = address_id;
     }
 
     public String getCustomer_name() {
         return customer_name;
+    }
+
+    public String getAddress_id() {
+        return address_id;
     }
 
     public String getCustomer_id() {
@@ -64,5 +72,31 @@ public class UserCredentials {
 
     public String getAddress_notes() {
         return address_notes;
+    }
+
+    public String setCity() {
+
+        if (this.city.equals("1")) {
+            this.city = "Jakarta Pusat";
+        } else if (this.city.equals("2")) {
+            this.city = "Jakarta Selatan";
+        } else if (this.city.equals("3")) {
+            this.city = "Jakarta Barat";
+        } else if (this.city.equals("4")) {
+            this.city = "Jakarta Utara";
+        } else if (this.city.equals("5")) {
+            this.city = "Jakarta Timur";
+        } else if (this.city.equals("6")) {
+            this.city = "Tangerang";
+        } else if (this.city.equals("7")) {
+            this.city = "Bekasi";
+        } else if (this.city.equals("8")) {
+            this.city = "Tangerang Selatan";
+        } else if (this.city.equals("9")) {
+            this.city = "Depok";
+        }
+
+        return this.city;
+
     }
 }

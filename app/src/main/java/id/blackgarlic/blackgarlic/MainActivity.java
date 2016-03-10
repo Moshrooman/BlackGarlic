@@ -65,13 +65,8 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
     private static ListView listViewOrderSummary;
     private static NestedScrollView nestedScrollView;
 
-    public static List<Data> getMenuList() {
-        return menuList;
-    }
-
-    public static List<Integer> getMenuIdList() {
-        return menuIdList;
-    }
+    private static List<Data> currentMenuList;
+    private static List<Integer> currentMenuIdList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -114,9 +109,10 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         localDate = localDate.plusDays(2);
 
         //Check if sunday or monday, if it is, skip to tuesday
-        if ((localDate.getDayOfWeek() == 7) || (localDate.getDayOfWeek() == 1)) {
-            localDate = localDate.dayOfWeek().setCopy(2);
-
+        if (localDate.getDayOfWeek() == 7) {
+            localDate = localDate.plusDays(2);
+        } else if (localDate.getDayOfWeek() == 1) {
+            localDate = localDate.plusDays(1);
         }
 
         Log.e("After Date: ", String.valueOf(localDate));
@@ -225,7 +221,10 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
 
     @Override
-    public void OnItemClick(RippleView rippleView, List<Data> selectedMenuList, List<Integer> selectedMenuIdList) {
+    public void OnItemClick(RippleView rippleView, List<Data> selectedMenuList, List<Integer> selectedMenuIdList, String menuAdded) {
+
+        currentMenuList = selectedMenuList;
+        currentMenuIdList = selectedMenuIdList;
 
         ImageView orderBoxImageView = (ImageView) findViewById(R.id.orderBoxImageView);
 
@@ -244,6 +243,8 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             Log.e("Selected Menu: ", selectedMenuList.get(i).getMenu_name() + ": " + String.valueOf(selectedMenuIdList.get(i)));
         }
 
+        Toast.makeText(MainActivity.this, "Added: " + menuAdded, Toast.LENGTH_SHORT).show();
+
         listViewOrderSummary.setAdapter(new MyAdapter(selectedMenuList, selectedMenuIdList));
 
     }
@@ -255,39 +256,22 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
         view.startAnimation(animScale);
 
-//        RelativeLayout mainOrderSummaryLayout = (RelativeLayout) findViewById(R.id.orderSummaryRelativeLayout);
-
-//        if (mainOrderSummaryLayout.getChildCount() == 0) {
-//            return;
-//        }
-
-        //Create private static variable to get all firstMenuList
-//        for (int i = 0; i < firstMenuList.length; i++) {
-//
-//            if (firstMenuList[i].getIsSelected() == true) {
-//                firstMenuList[i].setIsSelected(false);
-//            }
-//
-//            if (specificView.findViewById(R.id.selectedImageView).getVisibility() == View.VISIBLE) {
-//                specificView.findViewById(R.id.selectedImageView).setVisibility(View.GONE);
-//            }
-//
-//            Log.e("Menu Selected: ", String.valueOf(firstMenuList[i].getIsSelected()));
-//
-//        }
-
-        BlackGarlicAdapter newBlackGarlicAdapter = new BlackGarlicAdapter(menuList, menuIdList, MainActivity.this, MainActivity.this);
-
-        recyclerView.setAdapter(newBlackGarlicAdapter);
+        if (currentMenuList.size() == 0) {
+            return;
+        } else {
+            currentMenuList.clear();
+            currentMenuIdList.clear();
+        }
 
         ImageView orderBoxImageView = (ImageView) findViewById(R.id.orderBoxImageView);
 
         orderBoxImageView.setImageResource(R.drawable.orderboxone);
 
-        //this.selectedInteger = 0;
+        orderQuantityTextView.setText("");
 
-//        mainOrderSummaryLayout.removeAllViews();
+        orderQuantityTextView.setVisibility(View.GONE);
 
+        listViewOrderSummary.setAdapter(new MyAdapter(currentMenuList, currentMenuIdList));
 
     }
 

@@ -106,12 +106,21 @@ public class LogInScreen extends AppCompatActivity {
                     public void onResponse(String response) {
 
                         if (response.contains("No address found!")) {
-                            userCredentials = new UserCredentials("", "", "", "", "", "", "");
+                            //Take away the no address found and the <br><br> and then
+                            Log.e("Response: ", response);
+
+                            String jsonResponse = response.replace("<br><br>No address found!", "");
+
+                            userCredentials = new Gson().fromJson(jsonResponse, UserCredentials.class);
+
                             Intent mainActivityIntent = new Intent(LogInScreen.this, MainActivity.class);
                             startActivity(mainActivityIntent);
                             finish();
                         } else {
+                            Log.e("Response: ", response);
                             userCredentials = new Gson().fromJson(response, UserCredentials.class);
+
+                            userCredentials.setCity();
 
                             progressBar.setVisibility(View.GONE);
                             loggingYouInTextView.setVisibility(View.GONE);
