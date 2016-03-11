@@ -1,12 +1,16 @@
 package id.blackgarlic.blackgarlic;
 
 import android.content.Context;
+import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -26,8 +30,6 @@ import id.blackgarlic.blackgarlic.model.Data;
  */
 public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.MyViewHolder> implements StickyRecyclerHeadersAdapter<RecyclerView.ViewHolder> {
 
-    int selectedInteger;
-
     public final String BLACKGARLIC_PICTURES = "http://blackgarlic.id/inc/images/menu/menu_id.jpg";
 
     Context mContext;
@@ -42,12 +44,15 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
 
     List<Integer> currentSelectedMenuIds = new ArrayList<Integer>();
 
+    RadioButtonClickListener mRadioListener;
 
-    public BlackGarlicAdapter(List<Data> menuList, List<Integer> menuIdList, Context context, MyListItemClickListener listener) {
+    public BlackGarlicAdapter(List<Data> menuList, List<Integer> menuIdList, Context context, MyListItemClickListener listener,
+                              RadioButtonClickListener radioListener) {
         mmenuList = menuList;
         mContext = context;
         mListener = listener;
         mmenuIdList = menuIdList;
+        mRadioListener = radioListener;
     }
 
     @Override
@@ -59,7 +64,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
 
     @Override
     public void onBindViewHolder(final MyViewHolder myViewHolder, final int position) {
-        Data currentMenu = mmenuList.get(position);
+        final Data currentMenu = mmenuList.get(position);
         myViewHolder.menuTitleTextView.setText(currentMenu.getMenu_name());
         myViewHolder.menuNetworkImageView.setImageUrl(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))),
                 ConnectionManager.getImageLoader(mContext));
@@ -72,9 +77,11 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
                 currentSelectedMenus.add(mmenuList.get(position));
                 currentSelectedMenuIds.add(mmenuIdList.get(position));
 
-                mListener.OnItemClick(myViewHolder.rippleViewButton, currentSelectedMenus, currentSelectedMenuIds, mmenuList.get(position).getMenu_name());
+                mListener.OnItemClick(myViewHolder.rippleViewButton, currentSelectedMenus, currentSelectedMenuIds, currentMenu.getMenu_name());
             }
         });
+
+        myViewHolder.twoPersonRadioButton.setChecked(true);
 
     }
 
@@ -113,7 +120,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         return mmenuList.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         public TextView menuTitleTextView;
         public NetworkImageView menuNetworkImageView;
@@ -124,6 +131,14 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         public TextView backToMenu;
         public RippleView rippleViewButton;
 
+        public LinearLayout twoPersonLinearLayout;
+        public LinearLayout fourPersonLinearLayout;
+
+        public RadioButton twoPersonRadioButton;
+        public RadioButton fourPersonRadioButton;
+
+        public TextView priceTextView;
+
         public MyViewHolder(View itemView) {
             super(itemView);
             menuTitleTextView = (TextView) itemView.findViewById(R.id.menuTitleTextView);
@@ -133,6 +148,14 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
             menuDescriptionTextView = (TextView) itemView.findViewById(R.id.menuDescriptionTextView);
             backToMenu = (TextView) itemView.findViewById(R.id.backToMenu);
             rippleViewButton = (RippleView) itemView.findViewById(R.id.rippleView);
+
+            twoPersonLinearLayout = (LinearLayout) itemView.findViewById(R.id.twoPersonLinearLayout);
+            fourPersonLinearLayout = (LinearLayout) itemView.findViewById(R.id.fourPersonLinearLayout);
+
+            twoPersonRadioButton = (RadioButton) itemView.findViewById(R.id.radioButtonTwoPerson);
+            fourPersonRadioButton = (RadioButton) itemView.findViewById(R.id.radioButtonFourPerson);
+
+            priceTextView = (TextView) itemView.findViewById(R.id.priceTextView);
 
             switchToDescription.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -148,7 +171,17 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
                 }
             });
 
+            twoPersonLinearLayout.setOnClickListener(this);
+            fourPersonLinearLayout.setOnClickListener(this);
+            twoPersonRadioButton.setOnClickListener(this);
+            fourPersonRadioButton.setOnClickListener(this);
+            priceTextView.setOnClickListener(this);
 
+        }
+
+        @Override
+        public void onClick(View v) {
+            mRadioListener.OnRadioButtonClick(itemView, mmenuList.get(getPosition()));
         }
 
     }
@@ -157,5 +190,8 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         public void OnItemClick(RippleView rippleView, List<Data> menuList, List<Integer> menuIdList, String menuAdded);
     }
 
+    public static interface RadioButtonClickListener {
+        public void OnRadioButtonClick(View view, Data currentMenu);
+    }
 
 }

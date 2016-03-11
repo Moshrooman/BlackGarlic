@@ -16,7 +16,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -46,7 +48,7 @@ import id.blackgarlic.blackgarlic.model.Menus;
 import id.blackgarlic.blackgarlic.model.UserCredentials;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MainActivity extends AppCompatActivity implements BlackGarlicAdapter.MyListItemClickListener {
+public class MainActivity extends AppCompatActivity implements BlackGarlicAdapter.MyListItemClickListener, BlackGarlicAdapter.RadioButtonClickListener {
 
     //TODO: X BUTTON NEXT TO EACH MENU
     //When clicked, i have to remove 1 from selected integer in mainActivity, and Blackgarlicadapter
@@ -180,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
                 }
 
-                BlackGarlicAdapter blackGarlicAdapter = new BlackGarlicAdapter(menuList, menuIdList, MainActivity.this, MainActivity.this);
+                BlackGarlicAdapter blackGarlicAdapter = new BlackGarlicAdapter(menuList, menuIdList, MainActivity.this, MainActivity.this, MainActivity.this);
 
 //              BlackGarlicDAO.getInstance().storeMenus(MainActivity.this, firstMenuList);
 
@@ -268,6 +270,62 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             listViewOrderSummary.setAdapter(new MyAdapter(currentMenuList, currentMenuIdList));
         }
 
+    }
+
+    @Override
+    public void OnRadioButtonClick(View v, Data currentMenuListener) {
+        //Copy paste all of this shit in main activity
+
+        LinearLayout twoPersonLinearLayout = (LinearLayout) v.findViewById(R.id.twoPersonLinearLayout);
+        final RadioButton twoPersonRadioButton = (RadioButton) v.findViewById(R.id.radioButtonTwoPerson);
+        final RadioButton fourPersonRadioButton = (RadioButton) v.findViewById(R.id.radioButtonFourPerson);
+
+        LinearLayout fourPersonLinearLayout = (LinearLayout) v.findViewById(R.id.fourPersonLinearLayout);
+        TextView priceTextView = (TextView) v.findViewById(R.id.priceTextView);
+
+        twoPersonLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                twoPersonRadioButton.setChecked(true);
+                fourPersonRadioButton.setChecked(false);
+                Log.e("2 Person: ", String.valueOf(twoPersonRadioButton.isChecked()));
+                Log.e("4 Person: ", String.valueOf(fourPersonRadioButton.isChecked()));
+
+            }
+        });
+
+        fourPersonLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                fourPersonRadioButton.setChecked(true);
+                twoPersonRadioButton.setChecked(false);
+                Log.e("2 Person: ", String.valueOf(twoPersonRadioButton.isChecked()));
+                Log.e("4 Person: ", String.valueOf(fourPersonRadioButton.isChecked()));
+
+            }
+        });
+
+        if (currentMenuListener.getMenu_type().equals("3")) {
+
+            if (twoPersonRadioButton.isChecked()) {
+                fourPersonRadioButton.setChecked(false);
+                priceTextView.setText("IDR 100.000");
+            } else {
+                twoPersonRadioButton.setChecked(false);
+                priceTextView.setText("IDR 150.000");
+            }
+
+        } else {
+            if (twoPersonRadioButton.isChecked()) {
+                fourPersonRadioButton.setChecked(false);
+                priceTextView.setText("IDR 80.000");
+            } else {
+                twoPersonRadioButton.setChecked(false);
+                priceTextView.setText("IDR 140.000");
+            }
+        }
     }
 
     public class MyAdapter extends BaseAdapter {

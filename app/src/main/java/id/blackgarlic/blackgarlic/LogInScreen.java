@@ -1,6 +1,7 @@
 package id.blackgarlic.blackgarlic;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,9 +58,26 @@ public class LogInScreen extends AppCompatActivity {
     private static String username;
     private static String password;
     private static UserCredentials userCredentials;
+    private static String myAccountSha1Password;
+
+    public static String getMyAccountSha1Password() {
+        return myAccountSha1Password;
+    }
+
+    public static String getUsername() {
+        return username;
+    }
+
+    public static String getPassword() {
+        return password;
+    }
 
     public static UserCredentials getUserCredentials() {
         return userCredentials;
+    }
+
+    public static void setUserCredentials(UserCredentials newUserCredentials) {
+        userCredentials = newUserCredentials;
     }
 
     @Override
@@ -90,6 +109,8 @@ public class LogInScreen extends AppCompatActivity {
                 password = String.valueOf(passwordEditText.getText());
 
                 final String sha1Password = new String(Hex.encodeHex(DigestUtils.sha1(password)));
+
+                myAccountSha1Password = sha1Password;
 
                 String url = "http://api.blackgarlic.id:7000/app/login";
 

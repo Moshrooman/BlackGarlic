@@ -6,7 +6,38 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="id.blackgarlic.blackgarlic.MyAccount"
-    tools:showIn="@layout/activity_my_account">
+    tools:showIn="@layout/activity_my_account"
+    android:id="@+id/myAccountRootLayout"
+    >
+
+    <ProgressBar
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:id="@+id/myAccountProgressBar"
+        android:visibility="invisible"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:layout_below="@+id/myAccountProgressBar"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/textViewLoading"
+        android:visibility="invisible"
+        android:gravity="center"
+        />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.7"
+        android:background="@drawable/greyedoutloading"
+        android:visibility="invisible"
+        android:id="@+id/loadingGreyScreen"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -17,12 +48,14 @@
         android:layout_marginTop="10dp"
         />
 
-    <EditText
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="20dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="35dp"
-        android:id="@+id/nameEditText"
+        android:id="@+id/nameTextView"
+        fontPath="fonts/Roboto-Bold.ttf"
         />
 
     <TextView
@@ -51,13 +84,15 @@
         android:layout_centerHorizontal="true"
         />
 
-
-    <EditText
+    <Spinner
+        android:id="@+id/cityDropDown"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="230dp"
-        android:id="@+id/cityEditText"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown"
+        android:gravity="center"
         />
 
     <TextView
@@ -109,6 +144,28 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="465dp"
         android:id="@+id/addressnotesEditText"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/addtobox"
+        android:text="Save"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="330dp"
+        android:id="@+id/saveInformationButton"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/addtobox"
+        android:text="Update"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="400dp"
+        android:id="@+id/updateUserCredentials"
+        android:visibility="gone"
+        android:clickable="false"
         />
 
 </RelativeLayout>
