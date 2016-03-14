@@ -289,8 +289,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
     //Created subtotal int by parsing all strings in individual price list and adding together
     //Created a subtotal text view, setting it the to the subtotal price variable.
 
-
-
     public void clearAll(View view) {
 
         Animation animScale = AnimationUtils.loadAnimation(this, R.anim.anim_scale);

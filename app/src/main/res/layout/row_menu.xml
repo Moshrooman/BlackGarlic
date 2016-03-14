@@ -168,12 +168,9 @@
                         android:layout_gravity="center_horizontal"
                         />
 
-
                 </LinearLayout>
 
-
             </RadioGroup>
-
 
             <TextView
                 android:layout_width="wrap_content"
