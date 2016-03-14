@@ -8,25 +8,59 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="fill_parent"
-        android:layout_height="100dp">
+        android:layout_height="125dp"
+        >
 
-        <com.android.volley.toolbox.NetworkImageView
+        <LinearLayout
             android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:id="@+id/orderSummaryMenuImage"
-            android:layout_gravity="center_vertical"
-            />
+            android:layout_height="120dp"
+            android:orientation="vertical"
+            android:layout_marginLeft="8dp"
+            >
 
-        <TextView
-            android:layout_width="225dp"
-            android:layout_height="80dp"
+            <com.android.volley.toolbox.NetworkImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:id="@+id/orderSummaryMenuImage"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TEST"
+                android:textColor="@color/green"
+                android:layout_gravity="center"
+                android:id="@+id/portionSizeTextView"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_marginLeft="110dp"
-            android:text="Menu Name"
-            android:textSize="15dp"
-            android:layout_gravity="center_vertical"
-            android:gravity="center"
-            android:id="@+id/orderSummaryMenuName"
-            />
+            >
+
+            <TextView
+                android:layout_width="225dp"
+                android:layout_height="100dp"
+                android:text="Menu Name"
+                android:textSize="15dp"
+                android:gravity="center"
+                android:id="@+id/orderSummaryMenuName"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/individualPriceTextView"
+                android:textColor="@color/green"
+                />
+
+        </LinearLayout>
+
 
     </android.support.v7.widget.CardView>
 

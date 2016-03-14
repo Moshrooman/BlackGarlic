@@ -34,6 +34,7 @@ import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import org.joda.time.LocalDate;
+import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -48,7 +49,7 @@ import id.blackgarlic.blackgarlic.model.Menus;
 import id.blackgarlic.blackgarlic.model.UserCredentials;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MainActivity extends AppCompatActivity implements BlackGarlicAdapter.MyListItemClickListener, BlackGarlicAdapter.RadioButtonClickListener {
+public class MainActivity extends AppCompatActivity implements BlackGarlicAdapter.MyListItemClickListener {
 
     //TODO: X BUTTON NEXT TO EACH MENU
     //When clicked, i have to remove 1 from selected integer in mainActivity, and Blackgarlicadapter
@@ -69,6 +70,11 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     private static List<Data> currentMenuList;
     private static List<Integer> currentMenuIdList;
+    private static List<String> currentSelectedMenuListUrls;
+    private static List<String> portionSizes;
+    private static List<String> individualPrices;
+
+    private static int subTotalCost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -182,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
                 }
 
-                BlackGarlicAdapter blackGarlicAdapter = new BlackGarlicAdapter(menuList, menuIdList, MainActivity.this, MainActivity.this, MainActivity.this);
+                BlackGarlicAdapter blackGarlicAdapter = new BlackGarlicAdapter(menuList, menuIdList, MainActivity.this, MainActivity.this);
 
 //              BlackGarlicDAO.getInstance().storeMenus(MainActivity.this, firstMenuList);
 
@@ -223,10 +229,31 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
 
     @Override
-    public void OnItemClick(RippleView rippleView, List<Data> selectedMenuList, List<Integer> selectedMenuIdList, String menuAdded) {
+    public void OnItemClick(RippleView rippleView, List<Data> selectedMenuList, List<Integer> selectedMenuIdList, String menuAdded, List<String> currentMenuListUrls, List<String> portionSizeList, List<String> individualPricesAdapter) {
+
+        subTotalCost = subTotalCost - subTotalCost;
 
         currentMenuList = selectedMenuList;
         currentMenuIdList = selectedMenuIdList;
+        currentSelectedMenuListUrls = currentMenuListUrls;
+        portionSizes = portionSizeList;
+        individualPrices = individualPricesAdapter;
+
+        TextView subTotalPriceTextView = (TextView) findViewById(R.id.subtotalTextView);
+
+        for (int i = 0; i < individualPrices.size(); i++) {
+
+            String cost = individualPrices.get(i).replace("IDR", "");
+            cost = cost.replace(".", "");
+            cost = cost.replace(" ", "");
+
+            int intcost = Integer.parseInt(cost);
+
+            subTotalCost = subTotalCost + intcost;
+
+        }
+
+        Log.e("SubTotalCost: ", String.valueOf(subTotalCost));
 
         ImageView orderBoxImageView = (ImageView) findViewById(R.id.orderBoxImageView);
 
@@ -245,16 +272,29 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             Log.e("Selected Menu: ", selectedMenuList.get(i).getMenu_name() + ": " + String.valueOf(selectedMenuIdList.get(i)));
         }
 
+        subTotalPriceTextView.setText("SUBTOTAL: " + String.valueOf(subTotalCost));
+
+        Log.e("---------------", "-----------------");
+
         Toast.makeText(MainActivity.this, "Added: " + menuAdded, Toast.LENGTH_SHORT).show();
 
-        listViewOrderSummary.setAdapter(new MyAdapter(selectedMenuList, selectedMenuIdList));
+        listViewOrderSummary.setAdapter(new MyAdapter(selectedMenuList, selectedMenuIdList, currentMenuListUrls, portionSizeList, individualPricesAdapter));
 
     }
+
+    //Finished radio buttons through all in blackgarlic adapter using android onclick, creating new list of strings adding menu urls
+    //only concatenating _4 if the menutype is 3.
+    //Finished the 4 person and 2 person (in a separate list of strings)
+    //Finished the individual prices in each list view item (in a separate list of strings)
+    //Created subtotal int by parsing all strings in individual price list and adding together
+    //Created a subtotal text view, setting it the to the subtotal price variable.
+
 
 
     public void clearAll(View view) {
 
         Animation animScale = AnimationUtils.loadAnimation(this, R.anim.anim_scale);
+        TextView subTotalPriceTextView = (TextView) findViewById(R.id.subtotalTextView);
 
         view.startAnimation(animScale);
 
@@ -263,79 +303,34 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         } else {
             currentMenuList.clear();
             currentMenuIdList.clear();
+            currentSelectedMenuListUrls.clear();
+            individualPrices.clear();
+            portionSizes.clear();
+            subTotalCost = subTotalCost - subTotalCost;
+            subTotalPriceTextView.setText("SUBTOTAL: ");
             ImageView orderBoxImageView = (ImageView) findViewById(R.id.orderBoxImageView);
             orderBoxImageView.setImageResource(R.drawable.orderboxone);
             orderQuantityTextView.setText("");
             orderQuantityTextView.setVisibility(View.GONE);
-            listViewOrderSummary.setAdapter(new MyAdapter(currentMenuList, currentMenuIdList));
+            listViewOrderSummary.setAdapter(new MyAdapter(currentMenuList, currentMenuIdList, currentSelectedMenuListUrls, portionSizes, individualPrices));
         }
 
-    }
-
-    @Override
-    public void OnRadioButtonClick(View v, Data currentMenuListener) {
-        //Copy paste all of this shit in main activity
-
-        LinearLayout twoPersonLinearLayout = (LinearLayout) v.findViewById(R.id.twoPersonLinearLayout);
-        final RadioButton twoPersonRadioButton = (RadioButton) v.findViewById(R.id.radioButtonTwoPerson);
-        final RadioButton fourPersonRadioButton = (RadioButton) v.findViewById(R.id.radioButtonFourPerson);
-
-        LinearLayout fourPersonLinearLayout = (LinearLayout) v.findViewById(R.id.fourPersonLinearLayout);
-        TextView priceTextView = (TextView) v.findViewById(R.id.priceTextView);
-
-        twoPersonLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                twoPersonRadioButton.setChecked(true);
-                fourPersonRadioButton.setChecked(false);
-                Log.e("2 Person: ", String.valueOf(twoPersonRadioButton.isChecked()));
-                Log.e("4 Person: ", String.valueOf(fourPersonRadioButton.isChecked()));
-
-            }
-        });
-
-        fourPersonLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                fourPersonRadioButton.setChecked(true);
-                twoPersonRadioButton.setChecked(false);
-                Log.e("2 Person: ", String.valueOf(twoPersonRadioButton.isChecked()));
-                Log.e("4 Person: ", String.valueOf(fourPersonRadioButton.isChecked()));
-
-            }
-        });
-
-        if (currentMenuListener.getMenu_type().equals("3")) {
-
-            if (twoPersonRadioButton.isChecked()) {
-                fourPersonRadioButton.setChecked(false);
-                priceTextView.setText("IDR 100.000");
-            } else {
-                twoPersonRadioButton.setChecked(false);
-                priceTextView.setText("IDR 150.000");
-            }
-
-        } else {
-            if (twoPersonRadioButton.isChecked()) {
-                fourPersonRadioButton.setChecked(false);
-                priceTextView.setText("IDR 80.000");
-            } else {
-                twoPersonRadioButton.setChecked(false);
-                priceTextView.setText("IDR 140.000");
-            }
-        }
     }
 
     public class MyAdapter extends BaseAdapter {
 
         private List<Data> currentMenuList;
         private List<Integer> currentMenuIdList;
+        private List<String> currentMenuListUrls;
+        private List<String> portionSizeList;
+        private List<String> individualPrices;
 
-        public MyAdapter(List<Data> currentSelectedMenuList, List<Integer> currentSelectedMenuIdList){
+        public MyAdapter(List<Data> currentSelectedMenuList, List<Integer> currentSelectedMenuIdList, List<String> currentSelectedMenuListUrls, List<String> portionSize, List<String> individualPrices){
             this.currentMenuList = currentSelectedMenuList;
             this.currentMenuIdList = currentSelectedMenuIdList;
+            this.currentMenuListUrls = currentSelectedMenuListUrls;
+            this.portionSizeList = portionSize;
+            this.individualPrices = individualPrices;
         }
 
         @Override
@@ -359,10 +354,16 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
             TextView orderSummaryMenuName = (TextView) orderSummaryView.findViewById(R.id.orderSummaryMenuName);
             NetworkImageView orderSummaryMenuImage = (NetworkImageView) orderSummaryView.findViewById(R.id.orderSummaryMenuImage);
+            TextView orderPortionSize = (TextView) orderSummaryView.findViewById(R.id.portionSizeTextView);
+            TextView price = (TextView) orderSummaryView.findViewById(R.id.individualPriceTextView);
 
             orderSummaryMenuName.setText(currentMenuList.get(position).getMenu_name());
-            orderSummaryMenuImage.setImageUrl(currentMenuList.get(position).getMenuUrl().replace("menu_id", String.valueOf(currentMenuIdList.get(position))),
-                    ConnectionManager.getImageLoader(MainActivity.this));
+
+            orderSummaryMenuImage.setImageUrl(currentMenuListUrls.get(position).toString(), ConnectionManager.getImageLoader(MainActivity.this));
+
+            orderPortionSize.setText(portionSizeList.get(position).toString());
+
+            price.setText(individualPrices.get(position).toString());
 
             return orderSummaryView;
         }

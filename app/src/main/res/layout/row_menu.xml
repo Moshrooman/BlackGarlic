@@ -102,67 +102,77 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:id="@+id/twoPersonLinearLayout"
-                android:layout_marginTop="260dp"
-                android:background="@drawable/border"
+                android:orientation="vertical"
+                android:layout_marginTop="275dp"
+                android:id="@+id/radioGroupMenu"
                 >
 
-                <RadioButton
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:id="@+id/radioButtonTwoPerson"
-                    android:layout_gravity="center_horizontal"
-                    android:text="2 Person"
-                    android:clickable="false"
-                    />
-
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2 Person"
-                    android:textSize="15dp"
-                    android:layout_marginLeft="10dp"
-                    android:id="@+id/twopersonTextView"
-                    android:layout_gravity="center_horizontal"
-                    />
+                    android:orientation="horizontal"
+                    android:id="@+id/twoPersonLinearLayout"
+                    android:background="@drawable/border"
+                    >
+
+                    <RadioButton
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:id="@+id/radioButtonTwoPerson"
+                        android:layout_gravity="center_horizontal"
+                        android:text="2 Person"
+                        android:clickable="false"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2 Person"
+                        android:textSize="15dp"
+                        android:layout_marginLeft="10dp"
+                        android:id="@+id/twopersonTextView"
+                        android:layout_gravity="center_horizontal"
+                        />
 
 
-            </LinearLayout>
+                </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:id="@+id/fourPersonLinearLayout"
-                android:layout_marginTop="310dp"
-                android:background="@drawable/border"
-                >
-
-                <RadioButton
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:id="@+id/radioButtonFourPerson"
-                    android:layout_gravity="center_horizontal"
-                    android:clickable="false"
-                    />
-
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="4 Person"
-                    android:textSize="15dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginLeft="10dp"
-                    android:id="@+id/fourpersonTextView"
-                    android:layout_gravity="center_horizontal"
-                    />
+                    android:orientation="horizontal"
+                    android:id="@+id/fourPersonLinearLayout"
+                    android:background="@drawable/border"
+                    android:layout_marginTop="10dp"
+                    >
+
+                    <RadioButton
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:id="@+id/radioButtonFourPerson"
+                        android:layout_gravity="center_horizontal"
+                        android:clickable="false"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4 Person"
+                        android:textSize="15dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="10dp"
+                        android:id="@+id/fourpersonTextView"
+                        android:layout_gravity="center_horizontal"
+                        />
 
 
-            </LinearLayout>
+                </LinearLayout>
+
+
+            </RadioGroup>
 
 
             <TextView

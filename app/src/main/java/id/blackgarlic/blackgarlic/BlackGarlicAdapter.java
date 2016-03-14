@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -44,15 +45,17 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
 
     List<Integer> currentSelectedMenuIds = new ArrayList<Integer>();
 
-    RadioButtonClickListener mRadioListener;
+    List<String> currentSelectedMenusImageUrl = new ArrayList<String>();
 
-    public BlackGarlicAdapter(List<Data> menuList, List<Integer> menuIdList, Context context, MyListItemClickListener listener,
-                              RadioButtonClickListener radioListener) {
+    List<String> portionSizes = new ArrayList<String>();
+
+    List<String> individualPrices = new ArrayList<String>();
+
+    public BlackGarlicAdapter(List<Data> menuList, List<Integer> menuIdList, Context context, MyListItemClickListener listener) {
         mmenuList = menuList;
         mContext = context;
         mListener = listener;
         mmenuIdList = menuIdList;
-        mRadioListener = radioListener;
     }
 
     @Override
@@ -66,9 +69,13 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
     public void onBindViewHolder(final MyViewHolder myViewHolder, final int position) {
         final Data currentMenu = mmenuList.get(position);
         myViewHolder.menuTitleTextView.setText(currentMenu.getMenu_name());
-        myViewHolder.menuNetworkImageView.setImageUrl(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))),
-                ConnectionManager.getImageLoader(mContext));
         myViewHolder.menuDescriptionTextView.setText(currentMenu.getMenu_description());
+
+        if (currentMenu.getMenu_type().equals("4")) {
+            myViewHolder.priceTextView.setText("IDR 80.000");
+        } else {
+            myViewHolder.priceTextView.setText("IDR 100.000");
+        }
 
         myViewHolder.rippleViewButton.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
@@ -77,11 +84,55 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
                 currentSelectedMenus.add(mmenuList.get(position));
                 currentSelectedMenuIds.add(mmenuIdList.get(position));
 
-                mListener.OnItemClick(myViewHolder.rippleViewButton, currentSelectedMenus, currentSelectedMenuIds, currentMenu.getMenu_name());
+                if ((mmenuList.get(position).getMenu_type().equals("3"))&& (mmenuList.get(position).getFourPersonEnabled() == true)) {
+                    currentSelectedMenusImageUrl.add(mmenuList.get(position).getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position)) + "_4"));
+                } else {
+                    currentSelectedMenusImageUrl.add(mmenuList.get(position).getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))));
+                }
+
+                if (mmenuList.get(position).getFourPersonEnabled() == true) {
+                    portionSizes.add("4P");
+                } else {
+                    portionSizes.add("2P");
+                }
+
+                individualPrices.add(String.valueOf(myViewHolder.priceTextView.getText()));
+
+                mListener.OnItemClick(myViewHolder.rippleViewButton, currentSelectedMenus, currentSelectedMenuIds, currentMenu.getMenu_name(), currentSelectedMenusImageUrl, portionSizes, individualPrices);
             }
         });
 
-        myViewHolder.twoPersonRadioButton.setChecked(true);
+        if (currentMenu.getFourPersonEnabled() == true) {
+            myViewHolder.radioGroupMenu.check(R.id.radioButtonFourPerson);
+
+            //Here is Breakfast and fourperson enabled, so just keep the same image
+            if (currentMenu.getMenu_type().equals("4")) {
+                myViewHolder.menuNetworkImageView.setImageUrl(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))),
+                        ConnectionManager.getImageLoader(mContext));
+                myViewHolder.priceTextView.setText("IDR 140.000");
+
+                //Here is original (3) and four person enabled, so change the image to + _4
+            } else {
+                myViewHolder.menuNetworkImageView.setImageUrl(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position)) + "_4"),
+                        ConnectionManager.getImageLoader(mContext));
+                myViewHolder.priceTextView.setText("IDR 150.000");
+            }
+        } else {
+            myViewHolder.radioGroupMenu.check(R.id.radioButtonTwoPerson);
+
+            //Here is Breakfast and two person enabled, so just keep the same image
+            if (currentMenu.getMenu_type().equals("4")) {
+                myViewHolder.menuNetworkImageView.setImageUrl(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))),
+                        ConnectionManager.getImageLoader(mContext));
+                myViewHolder.priceTextView.setText("IDR 80.000");
+
+                //Here is Original and two enabled, so just keep the same image
+            } else {
+                myViewHolder.menuNetworkImageView.setImageUrl(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))),
+                        ConnectionManager.getImageLoader(mContext));
+                myViewHolder.priceTextView.setText("IDR 100.000");
+            }
+        }
 
     }
 
@@ -134,6 +185,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         public LinearLayout twoPersonLinearLayout;
         public LinearLayout fourPersonLinearLayout;
 
+        public RadioGroup radioGroupMenu;
         public RadioButton twoPersonRadioButton;
         public RadioButton fourPersonRadioButton;
 
@@ -152,8 +204,10 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
             twoPersonLinearLayout = (LinearLayout) itemView.findViewById(R.id.twoPersonLinearLayout);
             fourPersonLinearLayout = (LinearLayout) itemView.findViewById(R.id.fourPersonLinearLayout);
 
+            radioGroupMenu = (RadioGroup) itemView.findViewById(R.id.radioGroupMenu);
             twoPersonRadioButton = (RadioButton) itemView.findViewById(R.id.radioButtonTwoPerson);
             fourPersonRadioButton = (RadioButton) itemView.findViewById(R.id.radioButtonFourPerson);
+            radioGroupMenu.setOnClickListener(this);
 
             priceTextView = (TextView) itemView.findViewById(R.id.priceTextView);
 
@@ -171,27 +225,23 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
                 }
             });
 
-            twoPersonLinearLayout.setOnClickListener(this);
-            fourPersonLinearLayout.setOnClickListener(this);
-            twoPersonRadioButton.setOnClickListener(this);
-            fourPersonRadioButton.setOnClickListener(this);
-            priceTextView.setOnClickListener(this);
-
         }
 
         @Override
         public void onClick(View v) {
-            mRadioListener.OnRadioButtonClick(itemView, mmenuList.get(getPosition()));
-        }
+            if (mmenuList.get(getPosition()).getFourPersonEnabled() == false) {
+                mmenuList.get(getPosition()).setFourPersonEnabled(true);
+                notifyDataSetChanged();
+            } else {
+                mmenuList.get(getPosition()).setFourPersonEnabled(false);
+                notifyDataSetChanged();
+            }
 
+        }
     }
 
     public static interface MyListItemClickListener{
-        public void OnItemClick(RippleView rippleView, List<Data> menuList, List<Integer> menuIdList, String menuAdded);
-    }
-
-    public static interface RadioButtonClickListener {
-        public void OnRadioButtonClick(View view, Data currentMenu);
+        public void OnItemClick(RippleView rippleView, List<Data> menuList, List<Integer> menuIdList, String menuAdded, List<String> currentSelectedMenusUrl, List<String> portionSizes, List<String> individualPrices);
     }
 
 }

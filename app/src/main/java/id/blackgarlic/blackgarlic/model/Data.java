@@ -24,6 +24,16 @@ public class Data {
     @SerializedName("menu_type")
     private String menu_type;
 
+    private boolean fourPersonEnabled = false;
+
+    public boolean getFourPersonEnabled() {
+        return this.fourPersonEnabled;
+    }
+
+    public void setFourPersonEnabled(boolean input) {
+        this.fourPersonEnabled = input;
+    }
+
     public String getMenuUrl() {
         return BLACKGARLIC_PICTURES;
     }
