@@ -10,6 +10,17 @@
     android:id="@+id/myAccountRootLayout"
     >
 
+    <TextView
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|right"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:text="Back To This Weeks Menus"
+        android:textColor="#03C9A9"
+        android:id="@+id/backToMenuTextView"
+        />
+
     <ProgressBar
         android:layout_width="100dp"
         android:layout_height="100dp"

@@ -165,6 +165,7 @@
             <!-- End of visible clickable tab layout -->
             </RelativeLayout>
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -172,10 +173,84 @@
                 android:orientation="vertical"
                 >
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:id="@+id/orderDateLinearLayout"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="17dp"
+                    android:background="@drawable/border_dates"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TEST"
+                        android:textSize="20dp"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TEST2"
+                        android:textSize="20dp"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TEST2"
+                        android:textSize="20dp"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TEST2"
+                        android:textSize="20dp"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TEST2"
+                        android:textSize="20dp"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="TEST2"
+                        android:textSize="20dp"
+                        android:layout_marginRight="5dp"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        />
+
+
+                </LinearLayout>
+
                     <ListView
                         android:layout_width="match_parent"
-                        android:layout_height="420dp"
+                        android:layout_height="360dp"
                         android:id="@+id/orderSummaryListView"
+                        android:layout_marginTop="17dp"
                         >
 
                     </ListView>
@@ -184,10 +259,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/orderSummaryListView"
-                    android:layout_marginTop="10dp"
                     android:layout_gravity="center_horizontal"
                     android:textSize="30dp"
                     android:text="SUBTOTAL: "
+                    android:layout_marginTop="5dp"
                     android:id="@+id/subtotalTextView"
                     android:textColor="@color/green"
                     />

@@ -99,9 +99,9 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         drawerEntries = getResources().getStringArray(R.array.navBarEntires);
 
         drawerListView.setAdapter(new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, drawerEntries));
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         drawerListView.setOnItemClickListener(this);
 
-        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {

@@ -81,6 +81,17 @@ public class MyAccount extends AppCompatActivity {
         final String updateUrl = "http://api.blackgarlic.id:7000/app/updateaccount";
         final String getUserCredentialsUrl = "http://api.blackgarlic.id:7000/app/login";
 
+        TextView backToMenusTextView = (TextView) findViewById(R.id.backToMenuTextView);
+        backToMenusTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mainActivityIntent = new Intent(MyAccount.this, MainActivity.class);
+                mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(mainActivityIntent);
+                finish();
+            }
+        });
+
         updateUserCredentials.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
