@@ -419,6 +419,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         if (position == 0) {
             drawerListView.setItemChecked(position, true);
             Intent myAccountIntent = new Intent(MainActivity.this, MyAccount.class);
+            drawerLayout.closeDrawer(Gravity.LEFT);
             startActivity(myAccountIntent);
         }
     }
