@@ -3,25 +3,25 @@ package id.blackgarlic.blackgarlic;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.NestedScrollView;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ViewFlipper;
 
 import com.andexert.library.RippleView;
 import com.android.volley.Request;
@@ -30,11 +30,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
-import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import org.joda.time.LocalDate;
-import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -49,7 +47,7 @@ import id.blackgarlic.blackgarlic.model.Menus;
 import id.blackgarlic.blackgarlic.model.UserCredentials;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MainActivity extends AppCompatActivity implements BlackGarlicAdapter.MyListItemClickListener {
+public class MainActivity extends AppCompatActivity implements BlackGarlicAdapter.MyListItemClickListener, AdapterView.OnItemClickListener {
 
     //TODO: X BUTTON NEXT TO EACH MENU
     //When clicked, i have to remove 1 from selected integer in mainActivity, and Blackgarlicadapter
@@ -59,14 +57,12 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     private RecyclerView recyclerView;
 
-    private static View specificView;
     private static UserCredentials userCredentials;
     private static List<Data> menuList;
     private static List<Integer> menuIdList;
     private static TextView orderQuantityTextView;
     private static com.sothree.slidinguppanel.SlidingUpPanelLayout sliding_layout;
     private static ListView listViewOrderSummary;
-    private static NestedScrollView nestedScrollView;
 
     private static List<Data> currentMenuList;
     private static List<Integer> currentMenuIdList;
@@ -76,16 +72,89 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     private static int subTotalCost;
 
+    private static DrawerLayout drawerLayout;
+    private static ListView drawerListView;
+    private static String[] drawerEntries;
+
+    private static ImageView navBarToggleImageView;
+    private static int numberOfTimesClicked = 0;
+    private static int currentRotation = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        numberOfTimesClicked = numberOfTimesClicked - numberOfTimesClicked;
+        currentRotation = currentRotation - currentRotation;
 
         orderQuantityTextView = (TextView) findViewById(R.id.orderQuantityTextView);
         sliding_layout = (com.sothree.slidinguppanel.SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
         listViewOrderSummary = (ListView) findViewById(R.id.orderSummaryListView);
 
         sliding_layout.setDragView(findViewById(R.id.tabRelativeLayout));
+
+        drawerListView = (ListView) findViewById(R.id.drawerListView);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        drawerEntries = getResources().getStringArray(R.array.navBarEntires);
+
+        drawerListView.setAdapter(new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, drawerEntries));
+        drawerListView.setOnItemClickListener(this);
+
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+
+                numberOfTimesClicked++;
+
+                //Do Nothing Here Because it only runs these things after it has been opened.
+                //So we want to set the visibility to View.VISIBLE when we call to open it which is in the onclicklistener for the
+                //navBarToggleImageView
+                //Add to number of times clicked
+
+                Log.e("Own Rotation", String.valueOf(currentRotation));
+
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+
+                if (currentRotation == 90) {
+
+                    Animation ani = new RotateAnimation(
+                            90, /* from degree*/
+                            0, /* to degree */
+                            Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                    ani.setDuration(400);
+
+                    ani.setFillAfter(true);
+                    navBarToggleImageView.startAnimation(ani);
+                    currentRotation = 0;
+
+                }
+
+                numberOfTimesClicked++;
+
+                //After we call drawerLayout.closeDrawer, after it finishes we want to set the view to View.GONE
+                //So that we can click the stuff underneath it
+                //Add to number of times clicked
+                drawerLayout.setVisibility(View.GONE);
+
+                Log.e("Own Rotation", String.valueOf(currentRotation));
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
 
         //Getting Current date and time:
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
@@ -138,11 +207,43 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         welcomeTextViewString = welcomeTextViewString.replace("Name", userCredentials.getCustomer_name());
         welcomeTextView.setText(welcomeTextViewString);
 
-        welcomeTextView.setOnClickListener(new View.OnClickListener() {
+        navBarToggleImageView = (ImageView) findViewById(R.id.navBarToggleImageView);
+
+        navBarToggleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myAccountIntent = new Intent(MainActivity.this, MyAccount.class);
-                startActivity(myAccountIntent);
+
+                if ((numberOfTimesClicked == 0) || (numberOfTimesClicked % 2 == 0)) {
+
+                    Animation ani = new RotateAnimation(
+                            0, /* from degree*/
+                            90, /* to degree */
+                            Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                    ani.setDuration(400);
+
+                    ani.setFillAfter(true);
+                    navBarToggleImageView.startAnimation(ani);
+                    currentRotation = 90;
+
+                    drawerLayout.setVisibility(View.VISIBLE);
+                    drawerLayout.openDrawer(Gravity.LEFT);
+                    drawerLayout.bringToFront();
+
+                } else {
+
+                    Animation ani = new RotateAnimation(
+                            90, /* from degree*/
+                            0, /* to degree */
+                            Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                    ani.setDuration(400);
+
+                    ani.setFillAfter(true);
+                    navBarToggleImageView.startAnimation(ani);
+                    currentRotation = 0;
+
+                    drawerLayout.closeDrawer(Gravity.LEFT);
+
+                }
             }
         });
 
@@ -219,8 +320,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         ConnectionManager.getInstance(MainActivity.this).add(request);
 
     }
-
-
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -313,6 +412,15 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             listViewOrderSummary.setAdapter(new MyAdapter(currentMenuList, currentMenuIdList, currentSelectedMenuListUrls, portionSizes, individualPrices));
         }
 
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (position == 0) {
+            drawerListView.setItemChecked(position, true);
+            Intent myAccountIntent = new Intent(MainActivity.this, MyAccount.class);
+            startActivity(myAccountIntent);
+        }
     }
 
     public class MyAdapter extends BaseAdapter {
