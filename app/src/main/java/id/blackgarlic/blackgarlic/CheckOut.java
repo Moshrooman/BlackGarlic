@@ -154,10 +154,4 @@ public class CheckOut extends AppCompatActivity {
 
     }
 
-    public void setAllDates() {
-
-
-
-    }
-
 }
