@@ -18,6 +18,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -80,13 +81,15 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
     private static int numberOfTimesClicked = 0;
     private static int currentRotation = 0;
 
+    private static Button proceedToCheckoutButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        numberOfTimesClicked = numberOfTimesClicked - numberOfTimesClicked;
-        currentRotation = currentRotation - currentRotation;
+        numberOfTimesClicked = 0;
+        currentRotation = 0;
 
         orderQuantityTextView = (TextView) findViewById(R.id.orderQuantityTextView);
         sliding_layout = (com.sothree.slidinguppanel.SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
@@ -247,6 +250,19 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             }
         });
 
+        proceedToCheckoutButton = (Button) findViewById(R.id.proceedToCheckOutButton);
+        proceedToCheckoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null == currentMenuList || currentMenuList.size() == 0) {
+                    Toast.makeText(MainActivity.this, "You Have Nothing In Your Box!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent proceedToCheckOutIntent = new Intent(MainActivity.this, CheckOut.class);
+                    startActivity(proceedToCheckOutIntent);
+                }
+            }
+        });
+
         StringRequest request = new StringRequest(Request.Method.GET, BlackGarlicMenusNew, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -395,7 +411,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
         view.startAnimation(animScale);
 
-        if (currentMenuList.size() == 0) {
+        if (null == currentMenuList || currentMenuList.size() == 0) {
             return;
         } else {
             currentMenuList.clear();

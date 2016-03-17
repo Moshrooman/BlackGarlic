@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="2dp"
+    android:paddingLeft="2dp"
+    android:paddingRight="2dp"
+    tools:context="id.blackgarlic.blackgarlic.CheckOut"
+    tools:showIn="@layout/activity_check_out">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <!-- Start of root linear layout -->
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <!-- Start of first Order Date Layout -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/border_dates"
+                >
+
+                <!-- Start of title -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/datesTitleLinearLayout"
+                    >
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/calendar"
+                        />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1. Choose Your Delivery Date"
+                        android:layout_gravity="center"
+                        />
+
+                </LinearLayout>
+
+                <!-- End of Title -->
+
+                <!-- Start of First Three Dates -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/datesTitleLinearLayout"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:id="@+id/firstDatesLinearLayout"
+                    >
+
+                    <Button
+                        android:layout_width="115dp"
+                        android:layout_height="50dp"
+                        android:text="Date 1"
+                        android:textSize="12dp"
+                        android:id="@+id/firstDate"
+                        android:textAlignment="center"
+                        />
+
+                    <Button
+                        android:layout_width="115dp"
+                        android:layout_height="50dp"
+                        android:text="Date 2"
+                        android:textSize="12dp"
+                        android:layout_toRightOf="@+id/firstDate"
+                        android:id="@+id/secondDate"
+                        android:layout_alignWithParentIfMissing="true"
+                        />
+
+                    <Button
+                        android:layout_width="115dp"
+                        android:layout_height="50dp"
+                        android:text="Date 3"
+                        android:textSize="12dp"
+                        android:layout_toRightOf="@+id/secondDate"
+                        android:id="@+id/thirdDate"
+                        android:layout_alignWithParentIfMissing="true"
+                        />
+
+
+                </LinearLayout>
+                <!-- End of first Three Dates -->
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/firstDatesLinearLayout"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="40dp"
+                    >
+
+                    <Button
+                        android:layout_width="115dp"
+                        android:layout_height="50dp"
+                        android:text="Date 4"
+                        android:textSize="12dp"
+                        android:id="@+id/fourthDate"
+                        android:layout_alignWithParentIfMissing="true"
+                        />
+
+                    <Button
+                        android:layout_width="115dp"
+                        android:layout_height="50dp"
+                        android:text="Date 5"
+                        android:textSize="12dp"
+                        android:layout_toRightOf="@+id/fourthDate"
+                        android:id="@+id/fifthDate"
+                        />
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+            <!-- End of first Order Date Layout -->
+
+
+        </LinearLayout>
+        <!-- End of root linear layout -->
+
+
+    </ScrollView>
+
+</RelativeLayout>

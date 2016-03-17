@@ -126,6 +126,7 @@
                     android:textSize="40dp"
                     android:textColor="#e74c3c"
                     android:layout_marginLeft="20dp"
+                    android:id="@+id/checkOutTextView"
                     />
 
                 <TextView
@@ -154,11 +155,12 @@
                     android:layout_height="wrap_content"
                     android:text="Clear All"
                     android:textSize="10dp"
-                    android:background="#FFF"
+                    android:background="@drawable/clearallbutton"
                     android:textColor="#000"
                     android:id="@+id/clearAllButton"
-                    android:layout_marginLeft="200dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_toRightOf="@+id/checkOutTextView"
+                    android:layout_marginLeft="25dp"
                     android:onClick="clearAll"
                     />
 
@@ -169,86 +171,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="70dp"
+                android:layout_marginTop="50dp"
                 android:orientation="vertical"
                 >
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="60dp"
-                    android:id="@+id/orderDateLinearLayout"
-                    android:layout_gravity="center_horizontal"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="17dp"
-                    android:background="@drawable/border_dates"
-                    >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TEST"
-                        android:textSize="20dp"
-                        android:layout_marginRight="5dp"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TEST2"
-                        android:textSize="20dp"
-                        android:layout_marginRight="5dp"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TEST2"
-                        android:textSize="20dp"
-                        android:layout_marginRight="5dp"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TEST2"
-                        android:textSize="20dp"
-                        android:layout_marginRight="5dp"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TEST2"
-                        android:textSize="20dp"
-                        android:layout_marginRight="5dp"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="TEST2"
-                        android:textSize="20dp"
-                        android:layout_marginRight="5dp"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-                        />
-
-
-                </LinearLayout>
-
                     <ListView
                         android:layout_width="match_parent"
-                        android:layout_height="360dp"
+                        android:layout_height="420dp"
                         android:id="@+id/orderSummaryListView"
                         android:layout_marginTop="17dp"
                         >
@@ -262,11 +191,19 @@
                     android:layout_gravity="center_horizontal"
                     android:textSize="30dp"
                     android:text="SUBTOTAL: "
-                    android:layout_marginTop="5dp"
                     android:id="@+id/subtotalTextView"
                     android:textColor="@color/green"
                     />
 
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:text="Send Me This Box"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/clearallbutton"
+                    android:id="@+id/proceedToCheckOutButton"
+                    />
 
             </LinearLayout>
 

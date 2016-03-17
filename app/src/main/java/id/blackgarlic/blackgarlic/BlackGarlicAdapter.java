@@ -16,11 +16,16 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.andexert.library.RippleView;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.NetworkImageView;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
 import org.w3c.dom.Text;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -113,9 +118,11 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
 
                 //Here is original (3) and four person enabled, so change the image to + _4
             } else {
+
                 myViewHolder.menuNetworkImageView.setImageUrl(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position)) + "_4"),
                         ConnectionManager.getImageLoader(mContext));
                 myViewHolder.priceTextView.setText("IDR 150.000");
+
             }
         } else {
             myViewHolder.radioGroupMenu.check(R.id.radioButtonTwoPerson);

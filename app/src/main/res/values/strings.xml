@@ -10,8 +10,9 @@
     <string name="title_activity_log_in_screen">LogInScreen</string>
     <string name="title_activity_my_account">MyAccount</string>
     <string name="title_activity_create_account">CreateAccount</string>
-    
+
     <string-array name="navBarEntires">
-        <item >My Account</item>
+        <item>My Account</item>
     </string-array>
+    <string name="title_activity_check_out">CheckOut</string>
 </resources>
