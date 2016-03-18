@@ -78,6 +78,8 @@
                         android:textSize="12dp"
                         android:id="@+id/firstDate"
                         android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:background="@android:drawable/btn_default"
                         />
 
                     <Button
@@ -88,6 +90,8 @@
                         android:layout_toRightOf="@+id/firstDate"
                         android:id="@+id/secondDate"
                         android:layout_alignWithParentIfMissing="true"
+                        android:textColor="@color/black"
+                        android:background="@android:drawable/btn_default"
                         />
 
                     <Button
@@ -98,6 +102,8 @@
                         android:layout_toRightOf="@+id/secondDate"
                         android:id="@+id/thirdDate"
                         android:layout_alignWithParentIfMissing="true"
+                        android:textColor="@color/black"
+                        android:background="@android:drawable/btn_default"
                         />
 
 
@@ -119,6 +125,8 @@
                         android:textSize="12dp"
                         android:id="@+id/fourthDate"
                         android:layout_alignWithParentIfMissing="true"
+                        android:textColor="@color/black"
+                        android:background="@android:drawable/btn_default"
                         />
 
                     <Button
@@ -128,6 +136,8 @@
                         android:textSize="12dp"
                         android:layout_toRightOf="@+id/fourthDate"
                         android:id="@+id/fifthDate"
+                        android:textColor="@color/black"
+                        android:background="@android:drawable/btn_default"
                         />
 
                 </LinearLayout>

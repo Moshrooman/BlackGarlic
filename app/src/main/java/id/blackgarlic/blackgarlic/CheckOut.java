@@ -125,7 +125,6 @@ public class CheckOut extends AppCompatActivity {
         dateBooleanList.add(fourthDateBoolean);
         dateBooleanList.add(fifthDateBoolean);
 
-
         //Getting Current date and time:
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         Date currentLocalTime = cal.getTime();
@@ -191,7 +190,7 @@ public class CheckOut extends AppCompatActivity {
                     localDateList.remove(0);
                 }
 
-                //This else will only be called if it is still thursday and after 3pm
+                //This else will only be called if it is still thursday and after 3pm, but before friday
             } else {
                 Log.e("Else: ", "First");
                 LocalDate localDate3 = new LocalDate(localDate.plusDays(5));
@@ -242,11 +241,16 @@ public class CheckOut extends AppCompatActivity {
             dateButtonList.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     for (int i = 0; i < dateBooleanList.size(); i++) {
 
                         dateBooleanList.set(i, false);
 
                     }
+
+                    //When I set the position at j to true, i was looking at the dateButtonList.get(i)
+                    //I wanted to set the position in the dateBooleanList that matched the position of the dateButtonList clicked
+                    //So if I invoked the dateButtonList at position 3's OnClickListener I want to set the dateBooleanList at position 3
                     dateBooleanList.set(j, true);
 
                     for (int i = 0; i < dateBooleanList.size(); i++) {
@@ -254,7 +258,7 @@ public class CheckOut extends AppCompatActivity {
                         if (dateBooleanList.get(i).booleanValue() == true) {
                             dateButtonList.get(i).setBackgroundResource(R.drawable.greydateselection);
                             dateButtonList.get(i).setTextColor(getResources().getColor(R.color.white));
-                        } else {
+                        } else if (   !(dateButtonList.get(i).getBackground().equals(android.R.drawable.btn_default) ) && !(dateButtonList.get(i).getTextColors().equals(getResources().getColor(R.color.black)))   ){
                             dateButtonList.get(i).setBackgroundResource(android.R.drawable.btn_default);
                             dateButtonList.get(i).setTextColor(getResources().getColor(R.color.black));
                         }
