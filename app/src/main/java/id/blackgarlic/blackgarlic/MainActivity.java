@@ -83,6 +83,30 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     private static Button proceedToCheckoutButton;
 
+    public static List<Data> getCurrentMenuList() {
+        return currentMenuList;
+    }
+
+    public static List<Integer> getCurrentMenuIdList() {
+        return currentMenuIdList;
+    }
+
+    public static List<String> getCurrentSelectedMenuListUrls() {
+        return currentSelectedMenuListUrls;
+    }
+
+    public static List<String> getPortionSizes() {
+        return portionSizes;
+    }
+
+    public static int getSubTotalCost() {
+        return subTotalCost;
+    }
+
+    public static List<String> getIndividualPrices() {
+        return individualPrices;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);

@@ -19,12 +19,13 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:focusableInTouchMode="true"
             >
 
             <!-- Start of first Order Date Layout -->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/border_dates"
                 >
 
@@ -36,6 +37,8 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:id="@+id/datesTitleLinearLayout"
+                    android:background="@drawable/bottomsiderectangle"
+                    android:paddingBottom="8dp"
                     >
 
                     <ImageView
@@ -50,6 +53,7 @@
                         android:layout_height="wrap_content"
                         android:text="1. Choose Your Delivery Date"
                         android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
                         />
 
                 </LinearLayout>
@@ -62,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/datesTitleLinearLayout"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal"
                     android:id="@+id/firstDatesLinearLayout"
                     >
@@ -104,8 +108,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/firstDatesLinearLayout"
+                    android:layout_marginTop="17dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="40dp"
                     >
 
                     <Button
@@ -131,6 +135,247 @@
 
             </RelativeLayout>
             <!-- End of first Order Date Layout -->
+
+
+            <!-- Start of second Order Details Root Layout -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:background="@drawable/border_dates"
+                android:orientation="vertical"
+                android:padding="10dp"
+                >
+
+                <!-- Start of title layout -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/orderSummaryLinearLayout"
+                    android:background="@drawable/bottomsiderectangle"
+                    android:paddingBottom="8dp"
+                    >
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/shoppingcart"
+                        />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2. Order Summary"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        />
+
+                </LinearLayout>
+                <!-- End of title layout -->
+
+                <!-- Start of Columns for ListView -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/bottomsiderectangle"
+                    android:paddingBottom="8dp"
+                    >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Item"
+                        android:textSize="20dp"
+                        android:layout_weight="1"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Menu Type"
+                        android:textSize="20dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Price"
+                        android:textSize="20dp"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        />
+
+                </LinearLayout>
+                <!-- End of Columns for ListView -->
+
+                <!-- Start of ListView -->
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/orderSummaryListView"
+                    android:layout_marginTop="20dp"
+                    >
+
+
+                </ListView>
+                <!-- End of ListView -->
+
+
+            </LinearLayout>
+            <!-- End of second Order Details Root Layout -->
+
+            <!-- Start of Third Delivery Address Root Layout -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:background="@drawable/border_dates"
+                android:orientation="vertical"
+                android:padding="10dp"
+                >
+
+                <!-- Start of title layout -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/deliveryAddressLinearLayout"
+                    android:background="@drawable/bottomsiderectangle"
+                    android:paddingBottom="8dp"
+                    >
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/deliverytruck"
+                        />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="3. Delivery Address"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        />
+
+                </LinearLayout>
+                <!-- End of title layout -->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Full Name"
+                    android:textSize="20dp"
+                    android:layout_marginTop="20dp"
+                    />
+
+                <TextView
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:text="Customer Name"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bordercheckoutaddress"
+                    android:id="@+id/customerNameTextView"
+                    android:textAlignment="center"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Postal Code / City"
+                    android:textSize="20dp"
+                    android:layout_marginTop="20dp"
+                    />
+
+                <EditText
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bordercheckoutaddress"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/checkOutZidCodeEditText"
+                    android:textAlignment="center"
+                    android:textSize="15dp"
+                    />
+
+                <Spinner
+                    android:layout_width="300dp"
+                    android:layout_height="45dp"
+                    android:id="@+id/checkOutCityDropDown"
+                    android:spinnerMode="dropdown"
+                    android:background="@android:drawable/btn_dropdown"
+                    android:layout_marginTop="10dp"
+                    android:textAlignment="center"
+                    >
+
+                </Spinner>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Address"
+                    android:textSize="20dp"
+                    android:layout_marginTop="20dp"
+                    />
+
+                <EditText
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bordercheckoutaddress"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/checkOutAddressContent"
+                    android:textAlignment="center"
+                    android:textSize="15dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mobile"
+                    android:textSize="20dp"
+                    android:layout_marginTop="20dp"
+                    />
+
+                <EditText
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bordercheckoutaddress"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/checkOutMobile"
+                    android:textAlignment="center"
+                    android:textSize="15dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Delivery Notes / Info"
+                    android:textSize="20dp"
+                    android:layout_marginTop="20dp"
+                    />
+
+                <EditText
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bordercheckoutaddress"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/checkOutAddressNotes"
+                    android:textAlignment="center"
+                    android:textSize="15dp"
+                    />
+
+            </LinearLayout>
+
+            <!-- End of Third Delivery Address Root Layout -->
 
 
         </LinearLayout>
