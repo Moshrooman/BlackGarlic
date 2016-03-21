@@ -336,7 +336,6 @@ public class CheckOut extends AppCompatActivity {
                     dateButtonList.remove(i);
                 }
 
-
                 //Then separate to check if 3 o clock, if it is delete the first one.
 
                 if ((checkIfAfter3Integer.intValue() >= 15)) {
