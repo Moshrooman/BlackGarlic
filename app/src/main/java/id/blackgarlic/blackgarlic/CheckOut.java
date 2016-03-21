@@ -1,5 +1,6 @@
 package id.blackgarlic.blackgarlic;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,10 +9,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -56,10 +59,21 @@ public class CheckOut extends AppCompatActivity {
 
     private static UserCredentials userCredentials;
 
+    private static Boolean gojekButtonBoolean;
+
+    private static Boolean etobeeButtonBoolean;
+
+    private static String deliveryFee;
+
+    private static String deliveryTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_out);
+
+        deliveryFee = "";
+        deliveryTime = "";
 
         userCredentials = LogInScreen.getUserCredentials();
 
@@ -69,7 +83,7 @@ public class CheckOut extends AppCompatActivity {
         EditText checkOutZidCodeEditText = (EditText) findViewById(R.id.checkOutZidCodeEditText);
         checkOutZidCodeEditText.setText(userCredentials.getZipcode());
 
-        Spinner checkOutCityDropDown = (Spinner) findViewById(R.id.checkOutCityDropDown);
+        final Spinner checkOutCityDropDown = (Spinner) findViewById(R.id.checkOutCityDropDown);
         String[] cities = new String[]{"Jakarta Pusat", "Jakarta Selatan", "Jakarta Barat", "Jakarta Utara", "Jakarta Timur", "Tangerang", "Bekasi", "Tangerang Selatan", "Depok"};
         ArrayAdapter<String> cityadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, cities);
         checkOutCityDropDown.setAdapter(cityadapter);
@@ -83,6 +97,145 @@ public class CheckOut extends AppCompatActivity {
 
         EditText checkOutAddressNotes = (EditText) findViewById(R.id.checkOutAddressNotes);
         checkOutAddressNotes.setText(userCredentials.getAddress_notes());
+
+        gojekButtonBoolean = false;
+        etobeeButtonBoolean = false;
+
+        final Button gojekButton = (Button) findViewById(R.id.gojekButton);
+
+        final Button etobeeButton = (Button) findViewById(R.id.etobeeButton);
+
+        final TextView deliveryTypeTextView = (TextView) findViewById(R.id.deliveryTypeTextView);
+
+        final TextView deliveryFeeTextView = (TextView) findViewById(R.id.deliveryFeeTextView);
+
+        final TextView gojekCircumstanceTextView = (TextView) findViewById(R.id.gojekCircumstanceTextView);
+
+        final ImageView etobeedeliverytimeImageView = (ImageView) findViewById(R.id.etobeedeliverytimeImageView);
+
+        final TextView selectDeliveryTimeTextView = (TextView) findViewById(R.id.selectDeliveryTimeTextView);
+
+        final Spinner deliveryTimeDropDown = (Spinner) findViewById(R.id.deliveryTimeDropDown);
+        String[] deliveryTimes = new String[]{"12:00 - 13:00", "13:00 - 14:00", "14:00 - 15:00", "15:00 - 16:00", "16:00 - 17:00", "17:00 - 18:00", "18:00 - 19:00"};
+        ArrayAdapter<String> deliveryAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, deliveryTimes);
+        deliveryTimeDropDown.setAdapter(deliveryAdapter);
+
+        checkOutCityDropDown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (   ((position) >= 0 && (position <= 4)) || (position == 7)  ){
+                    gojekButton.setVisibility(View.VISIBLE);
+                    etobeeButton.setBackgroundResource(R.drawable.activatedetobee);
+                    gojekButton.setBackgroundResource(R.drawable.deactivatedgojek);
+                    etobeeButtonBoolean = true;
+                    gojekButtonBoolean = false;
+                    deliveryFee = "FREE!!!";
+                    deliveryTypeTextView.setText("ETOBEE");
+                    deliveryFeeTextView.setText("Delivery Fee : " + deliveryFee);
+                    etobeedeliverytimeImageView.setVisibility(View.VISIBLE);
+                    selectDeliveryTimeTextView.setText("Your Box will arrive between");
+                    deliveryTimeDropDown.setVisibility(View.GONE);
+                    deliveryTime = "12";
+
+                    Log.e("Delivery Time: ", deliveryTime);
+                    Log.e("Delivery Fee: ", deliveryFee);
+                } else {
+                    gojekButton.setVisibility(View.GONE);
+                    etobeeButton.setBackgroundResource(R.drawable.activatedetobee);
+                    etobeeButtonBoolean = true;
+                    gojekButtonBoolean = false;
+                    deliveryFee = "FREE!!!";
+                    deliveryTypeTextView.setText("ETOBEE");
+                    deliveryFeeTextView.setText("Delivery Fee : " + deliveryFee);
+                    etobeedeliverytimeImageView.setVisibility(View.VISIBLE);
+                    selectDeliveryTimeTextView.setText("Your Box will arrive between");
+                    deliveryTimeDropDown.setVisibility(View.GONE);
+                    deliveryTime = "12";
+
+                    Log.e("Delivery Time: ", deliveryTime);
+                    Log.e("Delivery Fee: ", deliveryFee);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        etobeeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (!(etobeeButtonBoolean == true)) {
+                    etobeeButtonBoolean = true;
+                    gojekButtonBoolean = false;
+                    etobeeButton.setBackgroundResource(R.drawable.activatedetobee);
+                    gojekButton.setBackgroundResource(R.drawable.deactivatedgojek);
+                    deliveryFee = "FREE!!!";
+                    deliveryTypeTextView.setText("ETOBEE");
+                    deliveryFeeTextView.setText("Delivery Fee : " + deliveryFee);
+                    gojekCircumstanceTextView.setVisibility(View.GONE);
+                    etobeedeliverytimeImageView.setVisibility(View.VISIBLE);
+                    selectDeliveryTimeTextView.setText("Your Box will arrive between");
+                    deliveryTimeDropDown.setVisibility(View.GONE);
+                    deliveryTime = "12";
+                }
+
+                Log.e("Delivery Time: ", deliveryTime);
+                Log.e("Delivery Fee: ", deliveryFee);
+
+            }
+        });
+
+        gojekButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (!(gojekButtonBoolean == true)) {
+                    gojekButtonBoolean = true;
+                    etobeeButtonBoolean = false;
+                    gojekButton.setBackgroundResource(R.drawable.activatedgojek);
+                    etobeeButton.setBackgroundResource(R.drawable.deactivatedetobee);
+                    deliveryFee = "IDR 20.000";
+                    deliveryTypeTextView.setText("OJEK ONLINE");
+                    deliveryFeeTextView.setText("Delivery Fee : " + deliveryFee);
+                    gojekCircumstanceTextView.setVisibility(View.VISIBLE);
+                    etobeedeliverytimeImageView.setVisibility(View.GONE);
+                    selectDeliveryTimeTextView.setText("Choose your delivery time");
+                    deliveryTimeDropDown.setVisibility(View.VISIBLE);
+                    deliveryTimeDropDown.setSelection(0);
+                    deliveryTime = "12";
+                }
+
+                Log.e("Delivery Time: ", deliveryTime);
+                Log.e("Delivery Fee: ", deliveryFee);
+
+            }
+        });
+
+        deliveryTimeDropDown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                StringBuilder stringBuilder = new StringBuilder(String.valueOf(deliveryTimeDropDown.getItemAtPosition(position)));
+                stringBuilder.delete(2, 13);
+
+                String deliveryTimeFromStringBuilder = stringBuilder.toString();
+
+                if (gojekButton.getBackground().getConstantState().equals(getResources().getDrawable(R.drawable.activatedgojek).getConstantState())) {
+
+                    deliveryTime = deliveryTimeFromStringBuilder;
+                    Log.e("Delivery Time: ", deliveryTime);
+
+                }
+                Log.e("Delivery Fee: ", deliveryFee);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         selectedMenuList = MainActivity.getCurrentMenuList();
         selectedMenuIdList = MainActivity.getCurrentMenuIdList();
@@ -175,17 +328,20 @@ public class CheckOut extends AppCompatActivity {
                 }
 
                 //Separate to make the rest the of the Buttons not visible
+                //Don't need to remove anything from the localdate list because we are already adding it to the specific needs.
 
-                for (int i = incrementingInteger; i < dateButtonList.size(); i++) {
-                    dateButtonList.get(i).setVisibility(View.GONE);
+                for (int i = incrementingInteger; i < 5; i++) {
                     dateBooleanList.remove(i);
-                    localDateList.remove(i);
+                    dateButtonList.get(i).setVisibility(View.GONE);
+                    dateButtonList.remove(i);
                 }
+
 
                 //Then separate to check if 3 o clock, if it is delete the first one.
 
                 if ((checkIfAfter3Integer.intValue() >= 15)) {
                     dateButtonList.get(0).setVisibility(View.GONE);
+                    dateButtonList.remove(0);
                     dateBooleanList.remove(0);
                     localDateList.remove(0);
                 }
@@ -258,7 +414,7 @@ public class CheckOut extends AppCompatActivity {
                         if (dateBooleanList.get(i).booleanValue() == true) {
                             dateButtonList.get(i).setBackgroundResource(R.drawable.greydateselection);
                             dateButtonList.get(i).setTextColor(getResources().getColor(R.color.white));
-                        } else if (   !(dateButtonList.get(i).getBackground().equals(android.R.drawable.btn_default) ) && !(dateButtonList.get(i).getTextColors().equals(getResources().getColor(R.color.black)))   ){
+                        } else if (   !(dateButtonList.get(i).getBackground().getConstantState().equals(getResources().getDrawable(android.R.drawable.btn_default).getConstantState()) ) && !(dateButtonList.get(i).getTextColors().equals(getResources().getColor(R.color.black)))   ){
                             dateButtonList.get(i).setBackgroundResource(android.R.drawable.btn_default);
                             dateButtonList.get(i).setTextColor(getResources().getColor(R.color.black));
                         }

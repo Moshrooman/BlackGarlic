@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -31,6 +32,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import org.joda.time.LocalDate;
@@ -358,6 +360,20 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         });
 
         ConnectionManager.getInstance(MainActivity.this).add(request);
+
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == event.KEYCODE_BACK) {
+            if (sliding_layout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                sliding_layout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            } else {
+                finish();
+            }
+        }
+
+        return false;
 
     }
 

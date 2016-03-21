@@ -110,15 +110,20 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         if (currentMenu.getFourPersonEnabled() == true) {
             myViewHolder.radioGroupMenu.check(R.id.radioButtonFourPerson);
 
-            //Here is Breakfast and fourperson enabled, so just keep the same image
+            //Here is Breakfast and fourperson enabled, so just keep the same image so concatenate menu subname
             if (currentMenu.getMenu_type().equals("4")) {
+                if (  !(currentMenu.getMenu_subname().equals(""))  ) {
+                    myViewHolder.menuTitleTextView.setText(myViewHolder.menuTitleTextView.getText() + " & " + currentMenu.getMenu_subname());
+                }
                 myViewHolder.menuNetworkImageView.setImageUrl(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))),
                         ConnectionManager.getImageLoader(mContext));
                 myViewHolder.priceTextView.setText("IDR 140.000");
 
-                //Here is original (3) and four person enabled, so change the image to + _4
+                //Here is original (3) and four person enabled, so change the image to + _4 so concatenate menu subname
             } else {
-
+                if (  !(currentMenu.getMenu_subname().equals(""))  ) {
+                    myViewHolder.menuTitleTextView.setText(myViewHolder.menuTitleTextView.getText() + " & " + currentMenu.getMenu_subname());
+                }
                 myViewHolder.menuNetworkImageView.setImageUrl(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position)) + "_4"),
                         ConnectionManager.getImageLoader(mContext));
                 myViewHolder.priceTextView.setText("IDR 150.000");
@@ -127,14 +132,16 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         } else {
             myViewHolder.radioGroupMenu.check(R.id.radioButtonTwoPerson);
 
-            //Here is Breakfast and two person enabled, so just keep the same image
+            //Here is Breakfast and two person enabled, so just keep the same image and change to original menu title
             if (currentMenu.getMenu_type().equals("4")) {
+                myViewHolder.menuTitleTextView.setText(currentMenu.getMenu_name());
                 myViewHolder.menuNetworkImageView.setImageUrl(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))),
                         ConnectionManager.getImageLoader(mContext));
                 myViewHolder.priceTextView.setText("IDR 80.000");
 
-                //Here is Original and two enabled, so just keep the same image
+                //Here is Original and two enabled, so just keep the same image and change to original menu title
             } else {
+                myViewHolder.menuTitleTextView.setText(currentMenu.getMenu_name());
                 myViewHolder.menuNetworkImageView.setImageUrl(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))),
                         ConnectionManager.getImageLoader(mContext));
                 myViewHolder.priceTextView.setText("IDR 100.000");
