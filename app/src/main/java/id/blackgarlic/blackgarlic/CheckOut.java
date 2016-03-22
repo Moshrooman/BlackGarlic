@@ -329,6 +329,7 @@ public class CheckOut extends AppCompatActivity {
 
                 if (position == 0) {
                     methodInfoTextView.setText("Please Select A Payment Method!");
+                    selectedPaymentMethod = "";
                 } else if (position == 1) {
 
                     if (!(selectedDate.equals(""))){
