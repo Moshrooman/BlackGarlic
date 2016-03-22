@@ -16,6 +16,7 @@
         android:smoothScrollbar="true"
         android:scrollingCache="false"
         android:animationCache="false"
+        android:id="@+id/checkOutScrollView"
         >
 
         <!-- Start of root linear layout -->
@@ -384,7 +385,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_dates">
+                android:background="@drawable/border_dates"
+                android:id="@+id/shippingOptionsRelativeLayout"
+                >
 
                 <!-- Start of title -->
 
@@ -518,11 +521,232 @@
 
                 </Spinner>
 
-                <!-- Align with parent if missing -->
-
             </RelativeLayout>
 
             <!-- End Of Fourth Shipping Options Root Layout -->
+
+            <!-- Start of fifth payment method root layout -->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_dates"
+                android:id="@+id/paymentMethodRelativeLayout"
+                >
+
+                <!-- Start of title -->
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/paymentMethodTitleLinearLayout"
+                    android:background="@drawable/bottomsiderectangle"
+                    android:paddingBottom="8dp"
+                    >
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/creditcard"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5. Choose Your Payment Method"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        />
+
+                </LinearLayout>
+
+                <!-- End of Title -->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/paymentMethodTitleLinearLayout"
+                    android:textSize="20dp"
+                    android:layout_centerHorizontal="true"
+                    android:text="Payment Methods"
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/paymentMethodTextView"
+                    android:background="@drawable/bottomsiderectangle"
+                    />
+
+
+                <Spinner
+                    android:layout_width="300dp"
+                    android:layout_height="45dp"
+                    android:id="@+id/paymentMethodDropDown"
+                    android:spinnerMode="dropdown"
+                    android:background="@android:drawable/btn_dropdown"
+                    android:layout_marginTop="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/paymentMethodTextView"
+                    android:textAlignment="center"
+                    >
+
+                </Spinner>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@+id/paymentMethodDropDown"
+                    android:text="Method Info"
+                    android:id="@+id/methodInfoTitleTextView"
+                    android:background="@drawable/bottomsiderectangle"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="15dp"
+                    android:layout_below="@+id/methodInfoTitleTextView"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/methodInfoTextView"
+                    android:gravity="center"
+                    />
+
+
+            </RelativeLayout>
+
+            <!-- End of fifth payment method root layout -->
+            
+            <!-- Start of sixth your order root layout -->
+            
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_dates">
+
+                <!-- Start of title -->
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/yourOrderTitleLinearLayout"
+                    android:background="@drawable/bottomsiderectangle"
+                    android:paddingBottom="8dp"
+                    >
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/finalshoppingcart"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="6. Your Order"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        />
+
+                </LinearLayout>
+
+                <!-- End of Title -->
+                
+                <org.apmem.tools.layouts.FlowLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/yourOrderTitleLinearLayout"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
+                    >
+
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="10dp"
+                        android:gravity="left"
+                        android:id="@+id/boxForTextView"
+                        android:layout_weight="1"
+                        android:text="Please Select Date!"
+                        android:background="@drawable/bordercheckoutaddress"
+                        />
+
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="10dp"
+                        android:gravity="right"
+                        android:id="@+id/subTotalPriceTextView"
+                        android:layout_weight="1"
+                        android:background="@drawable/bordercheckoutaddress"
+                        />
+
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="10dp"
+                        android:gravity="left"
+                        android:text="Delivery Fee"
+                        android:layout_weight="1"
+                        android:background="@drawable/bordercheckoutaddress"
+                        />
+
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="10dp"
+                        android:gravity="right"
+                        android:id="@+id/deliveryFeeAnswerTextView"
+                        android:layout_weight="1"
+                        android:background="@drawable/bordercheckoutaddress"
+                        />
+
+                    <org.apmem.tools.layouts.FlowLayout
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:background="@drawable/greygrandtotal"
+                        android:layout_marginTop="10dp"
+                        >
+
+                        <TextView
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:textSize="10dp"
+                            android:gravity="left"
+                            android:text="Total"
+                            android:layout_weight="1"
+                            />
+
+                        <TextView
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:textSize="10dp"
+                            android:id="@+id/grandTotalTextView"
+                            android:gravity="right"
+                            android:layout_weight="1"
+                            />
+
+
+                    </org.apmem.tools.layouts.FlowLayout>
+
+                </org.apmem.tools.layouts.FlowLayout>
+
+
+            </RelativeLayout>
+            
+            <!-- End of sixth your order root layout -->
 
 
         </LinearLayout>

@@ -1,12 +1,8 @@
 package id.blackgarlic.blackgarlic;
-
-import android.media.Image;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -15,9 +11,10 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,15 +64,30 @@ public class CheckOut extends AppCompatActivity {
 
     private static String deliveryTime;
 
+    private static String selectedPaymentMethod;
+
+    private static int grandTotal;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_out);
 
+        grandTotal = 0;
         deliveryFee = "";
         deliveryTime = "";
+        selectedPaymentMethod = "";
 
         userCredentials = LogInScreen.getUserCredentials();
+
+        final TextView boxForTextView = (TextView) findViewById(R.id.boxForTextView);
+
+        final TextView grandTotalTextView = (TextView) findViewById(R.id.grandTotalTextView);
+
+        final TextView deliveryFeeAnswerTextView = (TextView) findViewById(R.id.deliveryFeeAnswerTextView);
+
+        final ScrollView checkOutScrollView = (ScrollView) findViewById(R.id.checkOutScrollView);
+        final RelativeLayout shippingOptionsRelativeLayout = (RelativeLayout) findViewById(R.id.shippingOptionsRelativeLayout);
 
         TextView customerNameTextView = (TextView) findViewById(R.id.customerNameTextView);
         customerNameTextView.setText(userCredentials.getCustomer_name());
@@ -120,10 +132,17 @@ public class CheckOut extends AppCompatActivity {
         ArrayAdapter<String> deliveryAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, deliveryTimes);
         deliveryTimeDropDown.setAdapter(deliveryAdapter);
 
+        selectedMenuList = MainActivity.getCurrentMenuList();
+        selectedMenuIdList = MainActivity.getCurrentMenuIdList();
+        selectedMenuListUrls = MainActivity.getCurrentSelectedMenuListUrls();
+        selectedPortionSizes = MainActivity.getPortionSizes();
+        subTotalCost = MainActivity.getSubTotalCost();
+        selectedIndividualPrices = MainActivity.getIndividualPrices();
+
         checkOutCityDropDown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (   ((position) >= 0 && (position <= 4)) || (position == 7)  ){
+                if (((position) >= 0 && (position <= 4)) || (position == 7)) {
                     gojekButton.setVisibility(View.VISIBLE);
                     etobeeButton.setBackgroundResource(R.drawable.activatedetobee);
                     gojekButton.setBackgroundResource(R.drawable.deactivatedgojek);
@@ -136,9 +155,23 @@ public class CheckOut extends AppCompatActivity {
                     selectDeliveryTimeTextView.setText("Your Box will arrive between");
                     deliveryTimeDropDown.setVisibility(View.GONE);
                     deliveryTime = "12";
+                    deliveryFeeAnswerTextView.setText(deliveryFee);
+                    grandTotal = subTotalCost;
+
+                    String grandTotalString = String.valueOf(grandTotal);
+
+                    if (grandTotalString.length() == 5) {
+                        grandTotalTextView.setText("IDR " + grandTotalString.substring(0,2) + "." + grandTotalString.substring(2,grandTotalString.length()));
+                    } else if (grandTotalString.length() == 6) {
+                        grandTotalTextView.setText("IDR " + grandTotalString.substring(0, 3) + "." + grandTotalString.substring(3, grandTotalString.length()));
+                    } else {
+                        grandTotalTextView.setText("IDR " + grandTotalString.substring(0, 1) + "." + grandTotalString.substring(1, 4) + "." + grandTotalString.substring(4, grandTotalString.length()));
+                    }
 
                     Log.e("Delivery Time: ", deliveryTime);
                     Log.e("Delivery Fee: ", deliveryFee);
+                    Log.e("Grand Total: ", String.valueOf(grandTotal));
+
                 } else {
                     gojekButton.setVisibility(View.GONE);
                     etobeeButton.setBackgroundResource(R.drawable.activatedetobee);
@@ -151,9 +184,22 @@ public class CheckOut extends AppCompatActivity {
                     selectDeliveryTimeTextView.setText("Your Box will arrive between");
                     deliveryTimeDropDown.setVisibility(View.GONE);
                     deliveryTime = "12";
+                    deliveryFeeAnswerTextView.setText(deliveryFee);
+                    grandTotal = subTotalCost;
+
+                    String grandTotalString = String.valueOf(grandTotal);
+
+                    if (grandTotalString.length() == 5) {
+                        grandTotalTextView.setText("IDR " + grandTotalString.substring(0,2) + "." + grandTotalString.substring(2,grandTotalString.length()));
+                    } else if (grandTotalString.length() == 6) {
+                        grandTotalTextView.setText("IDR " + grandTotalString.substring(0, 3) + "." + grandTotalString.substring(3, grandTotalString.length()));
+                    } else {
+                        grandTotalTextView.setText("IDR " + grandTotalString.substring(0, 1) + "." + grandTotalString.substring(1, 4) + "." + grandTotalString.substring(4, grandTotalString.length()));
+                    }
 
                     Log.e("Delivery Time: ", deliveryTime);
                     Log.e("Delivery Fee: ", deliveryFee);
+                    Log.e("Grand Total: ", String.valueOf(grandTotal));
                 }
             }
 
@@ -180,10 +226,23 @@ public class CheckOut extends AppCompatActivity {
                     selectDeliveryTimeTextView.setText("Your Box will arrive between");
                     deliveryTimeDropDown.setVisibility(View.GONE);
                     deliveryTime = "12";
+                    deliveryFeeAnswerTextView.setText(deliveryFee);
+                    grandTotal = subTotalCost;
+
+                    String grandTotalString = String.valueOf(grandTotal);
+
+                    if (grandTotalString.length() == 5) {
+                        grandTotalTextView.setText("IDR " + grandTotalString.substring(0,2) + "." + grandTotalString.substring(2,grandTotalString.length()));
+                    } else if (grandTotalString.length() == 6) {
+                        grandTotalTextView.setText("IDR " + grandTotalString.substring(0, 3) + "." + grandTotalString.substring(3, grandTotalString.length()));
+                    } else {
+                        grandTotalTextView.setText("IDR " + grandTotalString.substring(0, 1) + "." + grandTotalString.substring(1, 4) + "." + grandTotalString.substring(4, grandTotalString.length()));
+                    }
                 }
 
                 Log.e("Delivery Time: ", deliveryTime);
                 Log.e("Delivery Fee: ", deliveryFee);
+                Log.e("Grand Total: ", String.valueOf(grandTotal));
 
             }
         });
@@ -206,10 +265,30 @@ public class CheckOut extends AppCompatActivity {
                     deliveryTimeDropDown.setVisibility(View.VISIBLE);
                     deliveryTimeDropDown.setSelection(0);
                     deliveryTime = "12";
+                    deliveryFeeAnswerTextView.setText(deliveryFee);
+                    grandTotal = subTotalCost + 20000;
+
+                    String grandTotalString = String.valueOf(grandTotal);
+
+                    if (grandTotalString.length() == 5) {
+                        grandTotalTextView.setText("IDR " + grandTotalString.substring(0,2) + "." + grandTotalString.substring(2,grandTotalString.length()));
+                    } else if (grandTotalString.length() == 6) {
+                        grandTotalTextView.setText("IDR " + grandTotalString.substring(0, 3) + "." + grandTotalString.substring(3, grandTotalString.length()));
+                    } else {
+                        grandTotalTextView.setText("IDR " + grandTotalString.substring(0, 1) + "." + grandTotalString.substring(1, 4) + "." + grandTotalString.substring(4, grandTotalString.length()));
+                    }
                 }
+
+                checkOutScrollView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        checkOutScrollView.smoothScrollTo(0, shippingOptionsRelativeLayout.getTop());
+                    }
+                });
 
                 Log.e("Delivery Time: ", deliveryTime);
                 Log.e("Delivery Fee: ", deliveryFee);
+                Log.e("Grand Total: ", String.valueOf(grandTotal));
 
             }
         });
@@ -237,12 +316,68 @@ public class CheckOut extends AppCompatActivity {
             }
         });
 
-        selectedMenuList = MainActivity.getCurrentMenuList();
-        selectedMenuIdList = MainActivity.getCurrentMenuIdList();
-        selectedMenuListUrls = MainActivity.getCurrentSelectedMenuListUrls();
-        selectedPortionSizes = MainActivity.getPortionSizes();
-        subTotalCost = MainActivity.getSubTotalCost();
-        selectedIndividualPrices = MainActivity.getIndividualPrices();
+        final TextView methodInfoTextView = (TextView) findViewById(R.id.methodInfoTextView);
+        final Spinner paymentMethodDropDown = (Spinner) findViewById(R.id.paymentMethodDropDown);
+        String[] paymentMethods = new String[] {"Select A Payment Method", "TRANSFER" /*KARTU KREDIT ONLINE", "DOKU WALLET"*/};
+        ArrayAdapter<String> paymentAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, paymentMethods);
+        paymentMethodDropDown.setAdapter(paymentAdapter);
+        paymentMethodDropDown.setSelection(0);
+
+        paymentMethodDropDown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (position == 0) {
+                    methodInfoTextView.setText("Please Select A Payment Method!");
+                } else if (position == 1) {
+
+                    if (!(selectedDate.equals(""))){
+                        LocalDate deliveryTimeBankTransfer = new LocalDate(selectedDate).minusDays(2);
+                        String deliveryTimeBankTransferString = deliveryTimeBankTransfer.dayOfMonth().getAsText() + " " + deliveryTimeBankTransfer.monthOfYear().getAsText() + " " + deliveryTimeBankTransfer.year().getAsText() + " " + "15:00";
+                        methodInfoTextView.setText("BANK TRANSFER\n\nBCA BANK\nAcc. No.: 537 532 0255\nBranch: Sudirman Mansion\nAcc. Name: BGI Jaya Indonesia PT" +
+                                "\n\nOnce you have made the transfer, please confirm your transfer so we can verify your purchase\n\n" +
+                                "Please complete the transfer before" + " " + deliveryTimeBankTransferString +
+                                " or your order will be cancelled automatically\n\n1x24 Hours Verification");
+                        selectedPaymentMethod = "bank_transfer";
+                        checkOutScrollView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                checkOutScrollView.scrollTo(0, shippingOptionsRelativeLayout.getBottom());
+                            }
+                        });
+                    } else {
+                        paymentMethodDropDown.setSelection(0);
+                        checkOutScrollView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                checkOutScrollView.smoothScrollTo(0, checkOutScrollView.getTop());
+                            }
+                        });
+                        Toast.makeText(CheckOut.this, "Please Select A Delivery Date!", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+
+//                else if (position == 2) {
+//                    methodInfoTextView.setText("ONLINE CREDIT CARD\n\nAvailable for credit card with Visa / MasterCard\n\n" +
+//                            "Once you have completed the ordering process, you will be redirected to DOKU's website to finalize the payment" +
+//                            "\n\n\nDOKU is our official payment gateway partner\n\nReal-Time Verification");
+//
+//                } else {
+//                    methodInfoTextView.setText("DOKU Wallet\n\nAvailable for DOKU Wallet account holder\n\nOnce you have completed the ordering process, you will be redirected to DOKU webiste to finalize the payment" +
+//                            "\n\n\nDon't have a DOKU Wallet? Create here\n\nReal-Time Verification");
+//
+//                }
+
+                Log.e("Payment_Method: ", selectedPaymentMethod);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         dateBooleanList.clear();
         dateButtonList.clear();
@@ -328,12 +463,30 @@ public class CheckOut extends AppCompatActivity {
                 }
 
                 //Separate to make the rest the of the Buttons not visible
+                //So make not button at index not visible first, then delete, then delete from boolean list.
                 //Don't need to remove anything from the localdate list because we are already adding it to the specific needs.
 
-                for (int i = incrementingInteger; i < 5; i++) {
-                    dateBooleanList.remove(i);
+                //i = 3
+                //limit is 5, still within limit so goes through with iteration
+                // [] [] [] [x] []
+
+                //Deletes at index 3 but i stays 3 because of if statement comparing size before and after
+                //limit is now 4, still within limit so goes through with iteration
+                //[] [] [] [x]
+
+                //Deletes at index 3 again, but i stays 3
+                //[] [] [] x
+                //Outside of array but index is 3, and limit 3 so it stops.
+                for (int i = incrementingInteger; i < dateBooleanList.size(); i++) {
+                    int initialSize = dateBooleanList.size();
+
                     dateButtonList.get(i).setVisibility(View.GONE);
                     dateButtonList.remove(i);
+                    dateBooleanList.remove(i);
+
+                    if (initialSize != dateBooleanList.size()) {
+                        i = i - 1;
+                    }
                 }
 
                 //Then separate to check if 3 o clock, if it is delete the first one.
@@ -428,6 +581,10 @@ public class CheckOut extends AppCompatActivity {
 
                     }
 
+                    LocalDate finalDeliveryDate = new LocalDate(selectedDate);
+
+                    boxForTextView.setText("Box for " + finalDeliveryDate.dayOfWeek().getAsText() + ", " + finalDeliveryDate.dayOfMonth().getAsText() + " " + finalDeliveryDate.monthOfYear().getAsText());
+
                     Log.e("Selected Date: ", selectedDate);
 
                 }
@@ -437,6 +594,22 @@ public class CheckOut extends AppCompatActivity {
 
         orderSummaryListView.setAdapter(new MyAdapter(selectedMenuList, selectedMenuIdList, selectedMenuListUrls, selectedPortionSizes, selectedIndividualPrices));
         setListViewHeightBasedOnItems(orderSummaryListView);
+
+        TextView subTotalPriceTextView = (TextView) findViewById(R.id.subTotalPriceTextView);
+
+        String subTotalCostString = String.valueOf(subTotalCost);
+
+        if (subTotalCostString.length() == 5) {
+            subTotalPriceTextView.setText("IDR " + subTotalCostString.substring(0,2) + "." + subTotalCostString.substring(2,subTotalCostString.length()));
+            grandTotalTextView.setText("IDR " + subTotalCostString.substring(0,2) + "." + subTotalCostString.substring(2,subTotalCostString.length()));
+        } else if (subTotalCostString.length() == 6) {
+            subTotalPriceTextView.setText("IDR " + subTotalCostString.substring(0, 3) + "." + subTotalCostString.substring(3, subTotalCostString.length()));
+            grandTotalTextView.setText("IDR " + subTotalCostString.substring(0, 3) + "." + subTotalCostString.substring(3, subTotalCostString.length()));
+        } else {
+            subTotalPriceTextView.setText("IDR " + subTotalCostString.substring(0, 1) + "." + subTotalCostString.substring(1, 4) + "." + subTotalCostString.substring(4, subTotalCostString.length()));
+            grandTotalTextView.setText("IDR " + subTotalCostString.substring(0, 1) + "." + subTotalCostString.substring(1, 4) + "." + subTotalCostString.substring(4, subTotalCostString.length()));
+        }
+
     }
 
     public class MyAdapter extends BaseAdapter{
