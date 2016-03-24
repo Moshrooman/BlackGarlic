@@ -660,7 +660,7 @@
                 
                 <org.apmem.tools.layouts.FlowLayout
                     xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="fill_parent"
+                    android:layout_width="320dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/yourOrderTitleLinearLayout"
                     android:layout_marginTop="20dp"
@@ -716,6 +716,7 @@
                         android:gravity="center"
                         android:background="@drawable/greygrandtotal"
                         android:layout_marginTop="10dp"
+                        android:id="@+id/grandTotalFlowLayout"
                         >
 
                         <TextView
@@ -740,6 +741,32 @@
 
 
                     </org.apmem.tools.layouts.FlowLayout>
+
+                    <CheckBox
+                        android:layout_width="30dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:id="@+id/checkOutCheckBox"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10dp"
+                        android:text="The order and information displayed is correct"
+                        android:gravity="center"
+                        android:layout_marginTop="20dp"
+                        />
+
+                    <Button
+                        android:layout_width="300dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/greyedoutloading"
+                        android:text="Place Order"
+                        android:gravity="center"
+                        android:clickable="false"
+                        android:id="@+id/placeOrderButton"
+                        />
 
                 </org.apmem.tools.layouts.FlowLayout>
 

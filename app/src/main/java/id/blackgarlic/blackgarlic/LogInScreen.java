@@ -126,17 +126,21 @@ public class LogInScreen extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
 
-                        if (response.contains("No address found!")) {
-                            //Take away the no address found and the <br><br> and then
+                        if (response.contains("\"address_id\":\"-1\"")) {
+
                             Log.e("Response: ", response);
 
-                            String jsonResponse = response.replace("<br><br>No address found!", "");
-
-                            userCredentials = new Gson().fromJson(jsonResponse, UserCredentials.class);
+                            userCredentials = new Gson().fromJson(response, UserCredentials.class);
 
                             Intent mainActivityIntent = new Intent(LogInScreen.this, MainActivity.class);
                             startActivity(mainActivityIntent);
                             finish();
+                        } else if (response.contains("Invalid")){
+
+                            progressBar.setVisibility(View.GONE);
+                            loggingYouInTextView.setVisibility(View.GONE);
+                            Toast.makeText(LogInScreen.this, "Invalid Username/Password!", Toast.LENGTH_SHORT).show();
+
                         } else {
                             Log.e("Response: ", response);
                             userCredentials = new Gson().fromJson(response, UserCredentials.class);
@@ -158,7 +162,7 @@ public class LogInScreen extends AppCompatActivity {
 
                         progressBar.setVisibility(View.GONE);
                         loggingYouInTextView.setVisibility(View.GONE);
-                        Toast.makeText(LogInScreen.this, "Invalid Username/Password!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LogInScreen.this, "No Internet Connection!", Toast.LENGTH_LONG).show();
 
                     }
                 }) {

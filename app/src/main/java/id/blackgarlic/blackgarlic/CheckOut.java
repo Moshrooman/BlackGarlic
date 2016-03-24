@@ -9,6 +9,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
@@ -24,6 +26,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import org.joda.time.LocalDate;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -88,6 +91,9 @@ public class CheckOut extends AppCompatActivity {
 
         final ScrollView checkOutScrollView = (ScrollView) findViewById(R.id.checkOutScrollView);
         final RelativeLayout shippingOptionsRelativeLayout = (RelativeLayout) findViewById(R.id.shippingOptionsRelativeLayout);
+
+        final CheckBox checkOutCheckBox = (CheckBox) findViewById(R.id.checkOutCheckBox);
+        final Button placeOrderButton = (Button) findViewById(R.id.placeOrderButton);
 
         TextView customerNameTextView = (TextView) findViewById(R.id.customerNameTextView);
         customerNameTextView.setText(userCredentials.getCustomer_name());
@@ -158,15 +164,7 @@ public class CheckOut extends AppCompatActivity {
                     deliveryFeeAnswerTextView.setText(deliveryFee);
                     grandTotal = subTotalCost;
 
-                    String grandTotalString = String.valueOf(grandTotal);
-
-                    if (grandTotalString.length() == 5) {
-                        grandTotalTextView.setText("IDR " + grandTotalString.substring(0,2) + "." + grandTotalString.substring(2,grandTotalString.length()));
-                    } else if (grandTotalString.length() == 6) {
-                        grandTotalTextView.setText("IDR " + grandTotalString.substring(0, 3) + "." + grandTotalString.substring(3, grandTotalString.length()));
-                    } else {
-                        grandTotalTextView.setText("IDR " + grandTotalString.substring(0, 1) + "." + grandTotalString.substring(1, 4) + "." + grandTotalString.substring(4, grandTotalString.length()));
-                    }
+                    grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
 
                     Log.e("Delivery Time: ", deliveryTime);
                     Log.e("Delivery Fee: ", deliveryFee);
@@ -187,15 +185,7 @@ public class CheckOut extends AppCompatActivity {
                     deliveryFeeAnswerTextView.setText(deliveryFee);
                     grandTotal = subTotalCost;
 
-                    String grandTotalString = String.valueOf(grandTotal);
-
-                    if (grandTotalString.length() == 5) {
-                        grandTotalTextView.setText("IDR " + grandTotalString.substring(0,2) + "." + grandTotalString.substring(2,grandTotalString.length()));
-                    } else if (grandTotalString.length() == 6) {
-                        grandTotalTextView.setText("IDR " + grandTotalString.substring(0, 3) + "." + grandTotalString.substring(3, grandTotalString.length()));
-                    } else {
-                        grandTotalTextView.setText("IDR " + grandTotalString.substring(0, 1) + "." + grandTotalString.substring(1, 4) + "." + grandTotalString.substring(4, grandTotalString.length()));
-                    }
+                    grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
 
                     Log.e("Delivery Time: ", deliveryTime);
                     Log.e("Delivery Fee: ", deliveryFee);
@@ -229,15 +219,7 @@ public class CheckOut extends AppCompatActivity {
                     deliveryFeeAnswerTextView.setText(deliveryFee);
                     grandTotal = subTotalCost;
 
-                    String grandTotalString = String.valueOf(grandTotal);
-
-                    if (grandTotalString.length() == 5) {
-                        grandTotalTextView.setText("IDR " + grandTotalString.substring(0,2) + "." + grandTotalString.substring(2,grandTotalString.length()));
-                    } else if (grandTotalString.length() == 6) {
-                        grandTotalTextView.setText("IDR " + grandTotalString.substring(0, 3) + "." + grandTotalString.substring(3, grandTotalString.length()));
-                    } else {
-                        grandTotalTextView.setText("IDR " + grandTotalString.substring(0, 1) + "." + grandTotalString.substring(1, 4) + "." + grandTotalString.substring(4, grandTotalString.length()));
-                    }
+                    grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
                 }
 
                 Log.e("Delivery Time: ", deliveryTime);
@@ -268,15 +250,8 @@ public class CheckOut extends AppCompatActivity {
                     deliveryFeeAnswerTextView.setText(deliveryFee);
                     grandTotal = subTotalCost + 20000;
 
-                    String grandTotalString = String.valueOf(grandTotal);
+                    grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
 
-                    if (grandTotalString.length() == 5) {
-                        grandTotalTextView.setText("IDR " + grandTotalString.substring(0,2) + "." + grandTotalString.substring(2,grandTotalString.length()));
-                    } else if (grandTotalString.length() == 6) {
-                        grandTotalTextView.setText("IDR " + grandTotalString.substring(0, 3) + "." + grandTotalString.substring(3, grandTotalString.length()));
-                    } else {
-                        grandTotalTextView.setText("IDR " + grandTotalString.substring(0, 1) + "." + grandTotalString.substring(1, 4) + "." + grandTotalString.substring(4, grandTotalString.length()));
-                    }
                 }
 
                 checkOutScrollView.post(new Runnable() {
@@ -376,6 +351,36 @@ public class CheckOut extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+//        final CheckBox checkOutCheckBox = (CheckBox) findViewById(R.id.checkOutCheckBox);
+//        final Button placeOrderButton = (Button) findViewById(R.id.placeOrderButton);
+
+        checkOutCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    placeOrderButton.setClickable(true);
+                    placeOrderButton.setBackgroundResource(R.drawable.checkoutbutton);
+                } else {
+                    placeOrderButton.setClickable(false);
+                    placeOrderButton.setBackgroundResource(R.drawable.greyedoutloading);
+                }
+            }
+        });
+        
+        placeOrderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectedDate == "") {
+                    Toast.makeText(CheckOut.this, "Please Select A Delivery Date!", Toast.LENGTH_SHORT).show();
+                } else if (selectedPaymentMethod == "") {
+                    Toast.makeText(CheckOut.this, "Please Select A Payment Method!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(CheckOut.this, "Placing Order", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -598,18 +603,7 @@ public class CheckOut extends AppCompatActivity {
 
         TextView subTotalPriceTextView = (TextView) findViewById(R.id.subTotalPriceTextView);
 
-        String subTotalCostString = String.valueOf(subTotalCost);
-
-        if (subTotalCostString.length() == 5) {
-            subTotalPriceTextView.setText("IDR " + subTotalCostString.substring(0,2) + "." + subTotalCostString.substring(2,subTotalCostString.length()));
-            grandTotalTextView.setText("IDR " + subTotalCostString.substring(0,2) + "." + subTotalCostString.substring(2,subTotalCostString.length()));
-        } else if (subTotalCostString.length() == 6) {
-            subTotalPriceTextView.setText("IDR " + subTotalCostString.substring(0, 3) + "." + subTotalCostString.substring(3, subTotalCostString.length()));
-            grandTotalTextView.setText("IDR " + subTotalCostString.substring(0, 3) + "." + subTotalCostString.substring(3, subTotalCostString.length()));
-        } else {
-            subTotalPriceTextView.setText("IDR " + subTotalCostString.substring(0, 1) + "." + subTotalCostString.substring(1, 4) + "." + subTotalCostString.substring(4, subTotalCostString.length()));
-            grandTotalTextView.setText("IDR " + subTotalCostString.substring(0, 1) + "." + subTotalCostString.substring(1, 4) + "." + subTotalCostString.substring(4, subTotalCostString.length()));
-        }
+        subTotalPriceTextView.setText("IDR " + new DecimalFormat().format(subTotalCost));
 
     }
 

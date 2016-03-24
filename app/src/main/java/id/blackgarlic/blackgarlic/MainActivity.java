@@ -231,6 +231,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         userCredentials = LogInScreen.getUserCredentials();
+
         TextView welcomeTextView = (TextView) findViewById(R.id.welcomeTextView);
         String welcomeTextViewString = (String) welcomeTextView.getText();
         welcomeTextViewString = welcomeTextViewString.replace("Name", userCredentials.getCustomer_name());
