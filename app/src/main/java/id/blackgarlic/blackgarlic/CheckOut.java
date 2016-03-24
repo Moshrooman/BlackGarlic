@@ -21,10 +21,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.StringRequest;
 
 import org.joda.time.LocalDate;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -70,6 +78,10 @@ public class CheckOut extends AppCompatActivity {
     private static String selectedPaymentMethod;
 
     private static int grandTotal;
+
+    private static String orderApiLink = "http://api.blackgarlic.id:7000/app/order";
+
+    private static List<Integer> boxIdList = MainActivity.getBoxIdList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -380,6 +392,63 @@ public class CheckOut extends AppCompatActivity {
                     Toast.makeText(CheckOut.this, "Please Select A Payment Method!", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(CheckOut.this, "Placing Order", Toast.LENGTH_SHORT).show();
+
+                    final JSONObject body = new JSONObject();
+                    try {
+                        body.put("email", LogInScreen.getUsername());
+                        body.put("order_source", "app");
+                        body.put("customer_id", userCredentials.getCustomer_id());
+                        body.put("box_id", boxIdList.get(0));
+                        body.put("order_date", selectedDate);
+                        body.put("payment_method", selectedPaymentMethod);
+                        body.put("balance_discount", "0");
+                        body.put("voucher_discount", "0");
+                        body.put("delivery_fee", deliveryFee);
+                        body.put("grandtotal", grandTotal);
+
+                                //
+//                        "email": "justinkwik@blackgarlic.id",
+//                                "order_source": "app",
+//                                "customer_id": "568",
+//                                "box_id": "54",
+//                                "order_date": "2016-03-15",
+//                                "payment_method": "bank_transfer",
+//                                "balance_discount": "0",
+//                                "voucher_discount": "0",
+//                                "delivery_fee": "12000",
+//                                "grandtotal": "13987",
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    StringRequest request = new StringRequest(Request.Method.POST, orderApiLink, new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    }) {
+
+                        @Override
+                        public byte[] getBody() throws AuthFailureError {
+                            return body.toString().getBytes();
+                        }
+
+                        @Override
+                        public String getBodyContentType() {
+                            return "application/json";
+                        }
+
+
+                    };
+
+                    ConnectionManager.getInstance(CheckOut.this).add(request);
                 }
 
             }

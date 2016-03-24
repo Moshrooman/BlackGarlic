@@ -15,6 +15,9 @@ public class MenuId {
     @SerializedName("menu_ids")
     private List<Integer> menuIds;
 
+    @SerializedName("box_ids")
+    private List<Integer> boxIds;
+
     public List<Integer> getMenuIds() {
         List<Integer> menuIdList = new ArrayList<Integer>();
 
@@ -25,6 +28,14 @@ public class MenuId {
         }
 
         return menuIdList;
+    }
+
+    public List<Integer> getBoxIds() {
+        List<Integer> boxIdList = new ArrayList<Integer>();
+
+        boxIdList.add(boxIds.get(1));
+
+        return boxIdList;
     }
 
 }
