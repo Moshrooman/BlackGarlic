@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
     private static UserCredentials userCredentials;
     private static List<Data> menuList;
     private static List<Integer> menuIdList;
-    private static List<Integer> boxIdList;
+    private static Integer boxId;
     private static TextView orderQuantityTextView;
     private static com.sothree.slidinguppanel.SlidingUpPanelLayout sliding_layout;
     private static ListView listViewOrderSummary;
@@ -110,8 +110,8 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         return individualPrices;
     }
 
-    public static List<Integer> getBoxIdList() {
-        return boxIdList;
+    public static Integer getBoxId() {
+        return boxId;
     }
 
     @Override
@@ -308,7 +308,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
                 menuList = menus.getDataList();
                 menuIdList = menuId.getMenuIds();
-                boxIdList = menuId.getBoxIds();
+                boxId = menuId.getBoxId();
 
                 for (int i = 0; i < menuList.size(); i++) {
                     int currentsize = menuList.size();

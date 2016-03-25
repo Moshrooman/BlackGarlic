@@ -81,7 +81,7 @@ public class CheckOut extends AppCompatActivity {
 
     private static String orderApiLink = "http://api.blackgarlic.id:7000/app/order";
 
-    private static List<Integer> boxIdList = MainActivity.getBoxIdList();
+    private static Integer boxId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +92,8 @@ public class CheckOut extends AppCompatActivity {
         deliveryFee = "";
         deliveryTime = "";
         selectedPaymentMethod = "";
+
+        boxId = MainActivity.getBoxId();
 
         userCredentials = LogInScreen.getUserCredentials();
 
@@ -367,9 +369,6 @@ public class CheckOut extends AppCompatActivity {
             }
         });
 
-//        final CheckBox checkOutCheckBox = (CheckBox) findViewById(R.id.checkOutCheckBox);
-//        final Button placeOrderButton = (Button) findViewById(R.id.placeOrderButton);
-
         checkOutCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -398,25 +397,13 @@ public class CheckOut extends AppCompatActivity {
                         body.put("email", LogInScreen.getUsername());
                         body.put("order_source", "app");
                         body.put("customer_id", userCredentials.getCustomer_id());
-                        body.put("box_id", boxIdList.get(0));
+                        body.put("box_id", String.valueOf(boxId));
                         body.put("order_date", selectedDate);
                         body.put("payment_method", selectedPaymentMethod);
                         body.put("balance_discount", "0");
                         body.put("voucher_discount", "0");
                         body.put("delivery_fee", deliveryFee);
                         body.put("grandtotal", grandTotal);
-
-                                //
-//                        "email": "justinkwik@blackgarlic.id",
-//                                "order_source": "app",
-//                                "customer_id": "568",
-//                                "box_id": "54",
-//                                "order_date": "2016-03-15",
-//                                "payment_method": "bank_transfer",
-//                                "balance_discount": "0",
-//                                "voucher_discount": "0",
-//                                "delivery_fee": "12000",
-//                                "grandtotal": "13987",
 
                     } catch (JSONException e) {
                         e.printStackTrace();

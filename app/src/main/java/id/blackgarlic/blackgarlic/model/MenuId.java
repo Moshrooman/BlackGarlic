@@ -30,12 +30,13 @@ public class MenuId {
         return menuIdList;
     }
 
-    public List<Integer> getBoxIds() {
-        List<Integer> boxIdList = new ArrayList<Integer>();
+    public Integer getBoxId() {
 
-        boxIdList.add(boxIds.get(1));
+        Integer boxId = 0;
 
-        return boxIdList;
+        boxId = boxIds.get(1);
+
+        return boxId;
     }
 
 }
