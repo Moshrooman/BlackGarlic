@@ -419,7 +419,7 @@ public class CheckOut extends AppCompatActivity {
 //
 //                } else {
 //                    methodInfoTextView.setText("DOKU Wallet\n\nAvailable for DOKU Wallet account holder\n\nOnce you have completed the ordering process, you will be redirected to DOKU webiste to finalize the payment" +
-//                            "\n\n\nDon't have a DOKU Wallet? Create here\n\nReal-Time Verification");
+//                            "\n\n\nDon't have whitesignupbutton DOKU Wallet? Create here\n\nReal-Time Verification");
 //
 //                }
 
@@ -647,7 +647,7 @@ public class CheckOut extends AppCompatActivity {
         date.setTimeZone(TimeZone.getTimeZone("Asia/Bangkok"));
         String localTime = date.format(currentLocalTime);
 
-        //Joda-Time Library, parsing it into a jodatime object, easier to add dates and time now.
+        //Joda-Time Library, parsing it into whitesignupbutton jodatime object, easier to add dates and time now.
         LocalDate localDate = new LocalDate(localTime);
         Integer checkIfAfter3Integer = Integer.valueOf(checkIfAfter3);
 

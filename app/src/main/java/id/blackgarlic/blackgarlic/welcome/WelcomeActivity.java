@@ -2,16 +2,21 @@ package id.blackgarlic.blackgarlic.welcome;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.RadioGroup;
 
 import id.blackgarlic.blackgarlic.LogInScreen;
+import id.blackgarlic.blackgarlic.MainActivity;
 import id.blackgarlic.blackgarlic.R;
+import id.blackgarlic.blackgarlic.SplashActivity;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -23,6 +28,8 @@ public class WelcomeActivity extends AppCompatActivity {
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
         final RadioGroup radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+
+        final SharedPreferences sharedPreferences = SplashActivity.getSharedPreferences();
 
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -51,12 +58,30 @@ public class WelcomeActivity extends AppCompatActivity {
 
                         break;
                     case 4:
-                        radioGroup.check(R.id.radioButton4);
-                        Intent switchToLogInActivity = new Intent(WelcomeActivity.this, LogInScreen.class);
-                        startActivity(switchToLogInActivity);
-                        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                        finish();
-                        return;
+
+                        if (!sharedPreferences.contains("firsttime")) {
+                            SharedPreferences.Editor editor =  sharedPreferences.edit();
+                            editor.putBoolean("firsttime", false);
+                            editor.commit();
+
+                            radioGroup.check(R.id.radioButton4);
+                            Intent switchToLogInActivity = new Intent(WelcomeActivity.this, LogInScreen.class);
+                            startActivity(switchToLogInActivity);
+                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                            finish();
+                            return;
+
+                        } else {
+
+                            radioGroup.check(R.id.radioButton4);
+                            Intent mainActivityIntent = new Intent(WelcomeActivity.this, MainActivity.class);
+                            mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                            startActivity(mainActivityIntent);
+                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                            finish();
+                            return;
+
+                        }
                 }
 
             }

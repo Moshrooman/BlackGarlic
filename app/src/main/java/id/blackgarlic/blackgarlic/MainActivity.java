@@ -2,6 +2,7 @@ package id.blackgarlic.blackgarlic;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -48,6 +49,7 @@ import id.blackgarlic.blackgarlic.model.Data;
 import id.blackgarlic.blackgarlic.model.MenuId;
 import id.blackgarlic.blackgarlic.model.Menus;
 import id.blackgarlic.blackgarlic.model.UserCredentials;
+import id.blackgarlic.blackgarlic.welcome.WelcomeActivity;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity implements BlackGarlicAdapter.MyListItemClickListener, AdapterView.OnItemClickListener {
@@ -86,6 +88,8 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     private static Button proceedToCheckoutButton;
 
+    private static boolean isLoggedIn = false;
+
     public static List<Data> getCurrentMenuList() {
         return currentMenuList;
     }
@@ -114,11 +118,21 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         return boxId;
     }
 
+    public static void setIsLoggedIn(boolean isLoggedIn) {
+        MainActivity.isLoggedIn = isLoggedIn;
+    }
+
+    public static boolean getIsLoggedIn() {
+        return isLoggedIn;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final SharedPreferences sharedPreferences = SplashActivity.getSharedPreferences();
+        userCredentials = LogInScreen.getUserCredentials();
         numberOfTimesClicked = 0;
         currentRotation = 0;
 
@@ -131,6 +145,48 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         drawerListView = (ListView) findViewById(R.id.drawerListView);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         drawerEntries = getResources().getStringArray(R.array.navBarEntires);
+
+        TextView welcomeTextView = (TextView) findViewById(R.id.welcomeTextView);
+
+        if (isLoggedIn == false) {
+            Button mainActivityLogInButton = (Button) findViewById(R.id.mainActivityLogInButton);
+            Button mainActivitySignUpButton = (Button) findViewById(R.id.mainActivitySignUpButton);
+
+            mainActivityLogInButton.setVisibility(View.VISIBLE);
+            mainActivitySignUpButton.setVisibility(View.VISIBLE);
+            welcomeTextView.setVisibility(View.GONE);
+            drawerEntries = new String[3];
+            drawerEntries[0] = "Home";
+            drawerEntries[1] = "Log In";
+            drawerEntries[2] = "Create Account";
+
+            mainActivityLogInButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent loginIntent = new Intent(MainActivity.this, LogInScreen.class);
+                    SharedPreferences.Editor editor =  sharedPreferences.edit();
+                    editor.putBoolean("nonlogin", false);
+                    editor.commit();
+                    startActivity(loginIntent);
+                }
+            });
+
+            mainActivitySignUpButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent signupIntent = new Intent(MainActivity.this, CreateAccount.class);
+                    SharedPreferences.Editor editor =  sharedPreferences.edit();
+                    editor.putBoolean("nonlogin", false);
+                    editor.commit();
+                    startActivity(signupIntent);
+                }
+            });
+        } else {
+            welcomeTextView.setVisibility(View.VISIBLE);
+            String welcomeTextViewString = (String) welcomeTextView.getText();
+            welcomeTextViewString = welcomeTextViewString.replace("Name", userCredentials.getCustomer_name());
+            welcomeTextView.setText(welcomeTextViewString);
+        }
 
         drawerListView.setAdapter(new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, drawerEntries));
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
@@ -204,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         date.setTimeZone(TimeZone.getTimeZone("Asia/Bangkok"));
         String localTime = date.format(currentLocalTime);
 
-        //Joda-Time Library, parsing it into a jodatime object, easier to add dates.
+        //Joda-Time Library, parsing it into whitesignupbutton jodatime object, easier to add dates.
         LocalDate localDate = new LocalDate(localTime);
 
         Log.e("Before Date: ", String.valueOf(localDate));
@@ -234,13 +290,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        userCredentials = LogInScreen.getUserCredentials();
-
-        TextView welcomeTextView = (TextView) findViewById(R.id.welcomeTextView);
-        String welcomeTextViewString = (String) welcomeTextView.getText();
-        welcomeTextViewString = welcomeTextViewString.replace("Name", userCredentials.getCustomer_name());
-        welcomeTextView.setText(welcomeTextViewString);
 
         navBarToggleImageView = (ImageView) findViewById(R.id.navBarToggleImageView);
 
@@ -286,11 +335,17 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         proceedToCheckoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null == currentMenuList || currentMenuList.size() == 0) {
-                    Toast.makeText(MainActivity.this, "You Have Nothing In Your Box!", Toast.LENGTH_SHORT).show();
+
+                if (isLoggedIn == true) {
+                    if (null == currentMenuList || currentMenuList.size() == 0) {
+                        Toast.makeText(MainActivity.this, "You Have Nothing In Your Box!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent proceedToCheckOutIntent = new Intent(MainActivity.this, CheckOut.class);
+                        startActivity(proceedToCheckOutIntent);
+                    }
                 } else {
-                    Intent proceedToCheckOutIntent = new Intent(MainActivity.this, CheckOut.class);
-                    startActivity(proceedToCheckOutIntent);
+                    Intent logInIntent = new Intent(MainActivity.this, LogInScreen.class);
+                    startActivity(logInIntent);
                 }
             }
         });
@@ -446,10 +501,10 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     //Finished radio buttons through all in blackgarlic adapter using android onclick, creating new list of strings adding menu urls
     //only concatenating _4 if the menutype is 3.
-    //Finished the 4 person and 2 person (in a separate list of strings)
-    //Finished the individual prices in each list view item (in a separate list of strings)
+    //Finished the 4 person and 2 person (in whitesignupbutton separate list of strings)
+    //Finished the individual prices in each list view item (in whitesignupbutton separate list of strings)
     //Created subtotal int by parsing all strings in individual price list and adding together
-    //Created a subtotal text view, setting it the to the subtotal price variable.
+    //Created whitesignupbutton subtotal text view, setting it the to the subtotal price variable.
 
     public void clearAll(View view) {
 
@@ -479,12 +534,40 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (position == 0) {
-            drawerListView.setItemChecked(position, true);
-            Intent myAccountIntent = new Intent(MainActivity.this, MyAccount.class);
-            drawerLayout.closeDrawer(Gravity.LEFT);
-            startActivity(myAccountIntent);
+
+        final SharedPreferences sharedPreferences = SplashActivity.getSharedPreferences();
+
+        if (isLoggedIn == true) {
+            if (position == 0) {
+                Intent welcomeIntent = new Intent(MainActivity.this, WelcomeActivity.class);
+                startActivity(welcomeIntent);
+
+            }else if (position == 1) {
+                drawerListView.setItemChecked(position, true);
+                Intent myAccountIntent = new Intent(MainActivity.this, MyAccount.class);
+                drawerLayout.closeDrawer(Gravity.LEFT);
+                startActivity(myAccountIntent);
+            }
+        } else {
+            if (position == 0) {
+                Intent welcomeIntent = new Intent(MainActivity.this, WelcomeActivity.class);
+                startActivity(welcomeIntent);
+
+            } else if (position == 1) {
+                Intent logInIntent = new Intent(MainActivity.this, LogInScreen.class);
+                SharedPreferences.Editor editor =  sharedPreferences.edit();
+                editor.putBoolean("nonlogin", false);
+                editor.commit();
+                startActivity(logInIntent);
+            } else {
+                Intent createAccountIntent = new Intent(MainActivity.this, CreateAccount.class);
+                SharedPreferences.Editor editor =  sharedPreferences.edit();
+                editor.putBoolean("nonlogin", false);
+                editor.commit();
+                startActivity(createAccountIntent);
+            }
         }
+
     }
 
     public class MyAdapter extends BaseAdapter {

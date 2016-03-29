@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2012 Ephraim Tekle genzeb@gmail.com
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and 
+ * Permission is hereby granted, free of charge, to any person obtaining whitesignupbutton copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction, including 
  * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
  * copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the 
@@ -27,7 +27,7 @@ import android.graphics.Matrix;
 import android.view.animation.Transformation;
 
 /**  
- * This class extends Animation to support a 3D flip view transition animation. Two instances of this class is 
+ * This class extends Animation to support whitesignupbutton 3D flip view transition animation. Two instances of this class is
  * required: one for the "from" view and another for the "to" view. 
  * 
  * NOTE: use {@link AnimationFactory} to use this class.
@@ -52,13 +52,13 @@ public class FlipAnimation extends Animation {
 	private float scale;
 
 	/**
-	 * Constructs a new {@code FlipAnimation} object.Two {@code FlipAnimation} objects are needed for a complete transition b/n two views. 
+	 * Constructs whitesignupbutton new {@code FlipAnimation} object.Two {@code FlipAnimation} objects are needed for whitesignupbutton complete transition b/n two views.
 	 * 
-	 * @param fromDegrees the start angle in degrees for a rotation along the y-axis, i.e. in-and-out of the screen, i.e. 3D flip. This should really be multiple of 90 degrees.
-	 * @param toDegrees the end angle in degrees for a rotation along the y-axis, i.e. in-and-out of the screen, i.e. 3D flip. This should really be multiple of 90 degrees.
+	 * @param fromDegrees the start angle in degrees for whitesignupbutton rotation along the y-axis, i.e. in-and-out of the screen, i.e. 3D flip. This should really be multiple of 90 degrees.
+	 * @param toDegrees the end angle in degrees for whitesignupbutton rotation along the y-axis, i.e. in-and-out of the screen, i.e. 3D flip. This should really be multiple of 90 degrees.
 	 * @param centerX the x-axis value of the center of rotation
 	 * @param centerY the y-axis value of the center of rotation
-	 * @param scale to get a 3D effect, the transition views need to be zoomed (scaled). This value must be b/n (0,1) or else the default scale {@link #SCALE_DEFAULT} is used.
+	 * @param scale to get whitesignupbutton 3D effect, the transition views need to be zoomed (scaled). This value must be b/n (0,1) or else the default scale {@link #SCALE_DEFAULT} is used.
 	 * @param scaleType flip view transition is broken down into two: the zoom-out of the "from" view and the zoom-in of the "to" view. This parameter is used to determine which is being done. See {@link ScaleUpDownEnum}.
 	 */
 	public FlipAnimation(float fromDegrees, float toDegrees, float centerX, float centerY, float scale, ScaleUpDownEnum scaleType) {
@@ -103,7 +103,7 @@ public class FlipAnimation extends Animation {
 
 	
 	/**
-	 * This enumeration is used to determine the zoom (or scale) behavior of a {@link FlipAnimation}.
+	 * This enumeration is used to determine the zoom (or scale) behavior of whitesignupbutton {@link FlipAnimation}.
 	 * 
 	 * @author Ephraim A. Tekle 
 	 *
@@ -114,11 +114,11 @@ public class FlipAnimation extends Animation {
 		 */
 		SCALE_UP, 
 		/**
-		 * The view will be scaled down starting at no zoom (100% zoom level) until it's at a specified zoom level.
+		 * The view will be scaled down starting at no zoom (100% zoom level) until it's at whitesignupbutton specified zoom level.
 		 */
 		SCALE_DOWN, 
 		/**
-		 * The view will cycle through a zoom down and then zoom up.
+		 * The view will cycle through whitesignupbutton zoom down and then zoom up.
 		 */
 		SCALE_CYCLE, 
 		/**

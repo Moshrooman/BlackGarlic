@@ -12,6 +12,7 @@
     <string name="title_activity_create_account">CreateAccount</string>
 
     <string-array name="navBarEntires">
+        <item>Home</item>
         <item>My Account</item>
     </string-array>
     <string name="title_activity_check_out">CheckOut</string>

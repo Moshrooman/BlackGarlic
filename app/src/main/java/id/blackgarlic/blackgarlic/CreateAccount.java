@@ -1,6 +1,7 @@
 package id.blackgarlic.blackgarlic;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -160,6 +162,27 @@ public class CreateAccount extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        final SharedPreferences sharedPreferences = SplashActivity.getSharedPreferences();
+
+        if (sharedPreferences.contains("nonlogin")) {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                SharedPreferences.Editor editor =  sharedPreferences.edit();
+                editor.remove("nonlogin");
+                editor.commit();
+                Intent mainActivityIntent = new Intent(CreateAccount.this, MainActivity.class);
+                mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(mainActivityIntent);
+                finish();
+            }
+            return super.onKeyDown(keyCode, event);
+        } else {
+            return super.onKeyDown(keyCode, event);
+        }
     }
 }
 

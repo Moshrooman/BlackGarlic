@@ -88,6 +88,35 @@
                     android:id="@+id/welcomeTextView"
                     />
 
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:background="@drawable/blackloginbutton"
+                    android:layout_gravity="center_vertical"
+                    android:text="LOGIN"
+                    android:textColor="#FFFFFF"
+                    android:visibility="gone"
+                    android:id="@+id/mainActivityLogInButton"
+                    />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:textColor="#2f2f2f"
+                    android:background="@drawable/whitesignupbutton"
+                    android:text="SIGN UP"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:visibility="gone"
+                    android:id="@+id/mainActivitySignUpButton"
+                    />
+
 
             </LinearLayout>
 

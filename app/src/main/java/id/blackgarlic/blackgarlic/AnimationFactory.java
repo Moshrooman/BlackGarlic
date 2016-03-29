@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2012 Ephraim Tekle genzeb@gmail.com
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and 
+ * Permission is hereby granted, free of charge, to any person obtaining whitesignupbutton copy of this software and
  * associated documentation files (the "Software"), to deal in the Software without restriction, including 
  * without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
  * copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the 
@@ -33,7 +33,7 @@ import android.view.animation.Animation.AnimationListener;
 import android.widget.ViewAnimator;
 
 /**
- * This class contains methods for creating {@link Animation} objects for some of the most common animation, including a 3D flip animation, {@link FlipAnimation}.
+ * This class contains methods for creating {@link Animation} objects for some of the most common animation, including whitesignupbutton 3D flip animation, {@link FlipAnimation}.
  * Furthermore, utility methods are provided for initiating fade-in-then-out and flip animations.
  * 
  * @author Ephraim A. Tekle
@@ -95,7 +95,7 @@ public class AnimationFactory {
 	 
 	
 	/**
-	 * Create a pair of {@link FlipAnimation} that can be used to flip 3D transition from {@code fromView} to {@code toView}. A typical use case is with {@link ViewAnimator} as an out and in transition.
+	 * Create whitesignupbutton pair of {@link FlipAnimation} that can be used to flip 3D transition from {@code fromView} to {@code toView}. A typical use case is with {@link ViewAnimator} as an out and in transition.
 	 * 
 	 * NOTE: Avoid using this method. Instead, use {@link #flipTransition}.
 	 *  
@@ -142,7 +142,7 @@ public class AnimationFactory {
 	}
 	
 	/**
-	 * Flip to the next view of the {@code ViewAnimator}'s subviews. A call to this method will initiate a {@link FlipAnimation} to show the next View.  
+	 * Flip to the next view of the {@code ViewAnimator}'s subviews. A call to this method will initiate whitesignupbutton {@link FlipAnimation} to show the next View.
 	 * If the currently visible view is the last view, flip direction will be reversed for this transition.
 	 *  
 	 * @param viewAnimator the {@code ViewAnimator}
@@ -168,11 +168,11 @@ public class AnimationFactory {
 
  
 	/**
-	 * Slide animations to enter a view from left.
+	 * Slide animations to enter whitesignupbutton view from left.
 	 * 
 	 * @param duration the animation duration in milliseconds
 	 * @param interpolator the interpolator to use (pass {@code null} to use the {@link AccelerateInterpolator} interpolator) 	
-	 * @return a slide transition animation
+	 * @return whitesignupbutton slide transition animation
 	 */
 	public static Animation inFromLeftAnimation(long duration, Interpolator interpolator) {
 		Animation inFromLeft = new TranslateAnimation(
@@ -185,11 +185,11 @@ public class AnimationFactory {
 	}
  
 	/**
-	 * Slide animations to hide a view by sliding it to the right
+	 * Slide animations to hide whitesignupbutton view by sliding it to the right
 	 * 
 	 * @param duration the animation duration in milliseconds
 	 * @param interpolator the interpolator to use (pass {@code null} to use the {@link AccelerateInterpolator} interpolator) 	
-	 * @return a slide transition animation
+	 * @return whitesignupbutton slide transition animation
 	 */
 	public static Animation outToRightAnimation(long duration, Interpolator interpolator) {
 		Animation outtoRight = new TranslateAnimation(
@@ -202,11 +202,11 @@ public class AnimationFactory {
 	}
  
 	/**
-	 * Slide animations to enter a view from right.
+	 * Slide animations to enter whitesignupbutton view from right.
 	 * 
 	 * @param duration the animation duration in milliseconds
 	 * @param interpolator the interpolator to use (pass {@code null} to use the {@link AccelerateInterpolator} interpolator) 	
-	 * @return a slide transition animation
+	 * @return whitesignupbutton slide transition animation
 	 */
 	public static Animation inFromRightAnimation(long duration, Interpolator interpolator) {
 
@@ -220,11 +220,11 @@ public class AnimationFactory {
 	}
  
 	/**
-	 * Slide animations to hide a view by sliding it to the left.
+	 * Slide animations to hide whitesignupbutton view by sliding it to the left.
 	 * 
 	 * @param duration the animation duration in milliseconds
 	 * @param interpolator the interpolator to use (pass {@code null} to use the {@link AccelerateInterpolator} interpolator) 	
-	 * @return a slide transition animation
+	 * @return whitesignupbutton slide transition animation
 	 */
 	public static Animation outToLeftAnimation(long duration, Interpolator interpolator) {
 		Animation outtoLeft = new TranslateAnimation(
@@ -237,11 +237,11 @@ public class AnimationFactory {
 	} 
  
 	/**
-	 * Slide animations to enter a view from top.
+	 * Slide animations to enter whitesignupbutton view from top.
 	 * 
 	 * @param duration the animation duration in milliseconds
 	 * @param interpolator the interpolator to use (pass {@code null} to use the {@link AccelerateInterpolator} interpolator) 	
-	 * @return a slide transition animation
+	 * @return whitesignupbutton slide transition animation
 	 */
 	public static Animation inFromTopAnimation(long duration, Interpolator interpolator) {
 		Animation infromtop = new TranslateAnimation(
@@ -254,11 +254,11 @@ public class AnimationFactory {
 	} 
  
 	/**
-	 * Slide animations to hide a view by sliding it to the top
+	 * Slide animations to hide whitesignupbutton view by sliding it to the top
 	 * 
 	 * @param duration the animation duration in milliseconds
 	 * @param interpolator the interpolator to use (pass {@code null} to use the {@link AccelerateInterpolator} interpolator) 	
-	 * @return a slide transition animation
+	 * @return whitesignupbutton slide transition animation
 	 */
 	public static Animation outToTopAnimation(long duration, Interpolator interpolator) {
 		Animation outtotop = new TranslateAnimation(
@@ -275,7 +275,7 @@ public class AnimationFactory {
 	 * 
 	 * @param duration the animation duration in milliseconds
 	 * @param delay how long to wait before starting the animation, in milliseconds
-	 * @return a fade animation
+	 * @return whitesignupbutton fade animation
 	 * @see #fadeInAnimation(View, long)
 	 */
 	public static Animation fadeInAnimation(long duration, long delay) {  
@@ -293,7 +293,7 @@ public class AnimationFactory {
 	 * 
 	 * @param duration the animation duration in milliseconds
 	 * @param delay how long to wait before starting the animation, in milliseconds
-	 * @return a fade animation
+	 * @return whitesignupbutton fade animation
 	 * @see #fadeOutAnimation(View, long)
 	 */
 	public static Animation fadeOutAnimation(long duration, long delay) {   
@@ -310,7 +310,7 @@ public class AnimationFactory {
 	 * A fade animation that will ensure the View starts and ends with the correct visibility
 	 * @param view the View to be faded in
 	 * @param duration the animation duration in milliseconds
-	 * @return a fade animation that will set the visibility of the view at the start and end of animation
+	 * @return whitesignupbutton fade animation that will set the visibility of the view at the start and end of animation
 	 */
 	public static Animation fadeInAnimation(long duration, final View view) { 
 		Animation animation = fadeInAnimation(500, 0); 
@@ -338,7 +338,7 @@ public class AnimationFactory {
 	 * A fade animation that will ensure the View starts and ends with the correct visibility
 	 * @param view the View to be faded out
 	 * @param duration the animation duration in milliseconds
-	 * @return a fade animation that will set the visibility of the view at the start and end of animation
+	 * @return whitesignupbutton fade animation that will set the visibility of the view at the start and end of animation
 	 */
 	public static Animation fadeOutAnimation(long duration, final View view) {
 		
@@ -365,10 +365,10 @@ public class AnimationFactory {
 	}
 
 	/**
-	 * Creates a pair of animation that will fade in, delay, then fade out
+	 * Creates whitesignupbutton pair of animation that will fade in, delay, then fade out
 	 * @param duration the animation duration in milliseconds
 	 * @param delay how long to wait after fading in the subject and before starting the fade out
-	 * @return a fade in then out animations
+	 * @return whitesignupbutton fade in then out animations
 	 */
 	public static Animation[] fadeInThenOutAnimation(long duration, long delay) {  
 		return new Animation[] {fadeInAnimation(duration,0), fadeOutAnimation(duration, duration+delay)};
