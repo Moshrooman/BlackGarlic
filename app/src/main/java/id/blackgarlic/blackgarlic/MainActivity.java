@@ -54,12 +54,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity implements BlackGarlicAdapter.MyListItemClickListener, AdapterView.OnItemClickListener {
 
-    //TODO: X BUTTON NEXT TO EACH MENU
-    //When clicked, i have to remove 1 from selected integer in mainActivity, and Blackgarlicadapter
-    //Also have to remove the view at at position
-    //take away that menu from the selectedMenuList in BlackGarlicAdapter
-    //set that particular menu's boolean to true
-
     private RecyclerView recyclerView;
 
     private static UserCredentials userCredentials;
