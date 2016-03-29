@@ -116,8 +116,6 @@ public class LogInScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                MainActivity.setIsLoggedIn(true);
-
                 progressBar.setVisibility(View.VISIBLE);
                 loggingYouInTextView.setVisibility(View.VISIBLE);
 
@@ -144,6 +142,8 @@ public class LogInScreen extends AppCompatActivity {
 
                         if (response.contains("\"address_id\":\"-1\"")) {
 
+                            MainActivity.setIsLoggedIn(true);
+
                             Log.e("Response: ", response);
 
                             userCredentials = new Gson().fromJson(response, UserCredentials.class);
@@ -159,6 +159,7 @@ public class LogInScreen extends AppCompatActivity {
                             Toast.makeText(LogInScreen.this, "Invalid Username/Password!", Toast.LENGTH_SHORT).show();
 
                         } else {
+                            MainActivity.setIsLoggedIn(true);
                             Log.e("Response: ", response);
                             userCredentials = new Gson().fromJson(response, UserCredentials.class);
 

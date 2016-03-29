@@ -1,5 +1,7 @@
 package id.blackgarlic.blackgarlic.model;
 
+import android.util.Log;
+
 import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONObject;
@@ -32,11 +34,29 @@ public class MenuId {
 
     public Integer getBoxId() {
 
-        Integer boxId = 0;
+        if (boxIds.size() != 1) {
 
-        boxId = boxIds.get(1);
+            Log.e("More than 1: ", "True");
 
-        return boxId;
+            Integer boxId = boxIds.get(0);
+
+            for (int i = 1; i < boxIds.size(); i++) {
+
+                if (boxIds.get(i) > boxId) {
+                    boxId = boxIds.get(i);
+                }
+
+                return boxId;
+
+            }
+
+        } else {
+            Log.e("More than 1: ", "False");
+            Integer boxId = boxIds.get(0);
+            return boxId;
+        }
+
+        return -1;
     }
 
 }
