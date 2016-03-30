@@ -29,6 +29,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 
 import org.joda.time.LocalDate;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -83,11 +84,21 @@ public class CheckOut extends AppCompatActivity {
 
     private static Integer boxId;
 
+    private static int twoPersonBreakfast = 0;
+    private static int fourPersonBreakfast = 0;
+
+    private static int twoPersonOriginal = 0;
+    private static int fourPersonOriginal = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_out);
 
+        twoPersonBreakfast = 0;
+        fourPersonBreakfast = 0;
+        twoPersonOriginal = 0;
+        fourPersonOriginal = 0;
         grandTotal = 0;
         deliveryFee = "";
         deliveryTime = "";
@@ -112,8 +123,8 @@ public class CheckOut extends AppCompatActivity {
         TextView customerNameTextView = (TextView) findViewById(R.id.customerNameTextView);
         customerNameTextView.setText(userCredentials.getCustomer_name());
 
-        EditText checkOutZidCodeEditText = (EditText) findViewById(R.id.checkOutZidCodeEditText);
-        checkOutZidCodeEditText.setText(userCredentials.getZipcode());
+        final EditText checkOutZipCodeEditText = (EditText) findViewById(R.id.checkOutZidCodeEditText);
+        checkOutZipCodeEditText.setText(userCredentials.getZipcode());
 
         final Spinner checkOutCityDropDown = (Spinner) findViewById(R.id.checkOutCityDropDown);
         String[] cities = new String[]{"Jakarta Pusat", "Jakarta Selatan", "Jakarta Barat", "Jakarta Utara", "Jakarta Timur", "Tangerang", "Bekasi", "Tangerang Selatan", "Depok"};
@@ -121,13 +132,13 @@ public class CheckOut extends AppCompatActivity {
         checkOutCityDropDown.setAdapter(cityadapter);
         checkOutCityDropDown.setSelection(cityadapter.getPosition(userCredentials.getCity()));
 
-        EditText checkOutAddressContent = (EditText) findViewById(R.id.checkOutAddressContent);
+        final EditText checkOutAddressContent = (EditText) findViewById(R.id.checkOutAddressContent);
         checkOutAddressContent.setText(userCredentials.getAddress_content());
 
-        EditText checkOutMobile = (EditText) findViewById(R.id.checkOutMobile);
+        final EditText checkOutMobile = (EditText) findViewById(R.id.checkOutMobile);
         checkOutMobile.setText(userCredentials.getMobile());
 
-        EditText checkOutAddressNotes = (EditText) findViewById(R.id.checkOutAddressNotes);
+        final EditText checkOutAddressNotes = (EditText) findViewById(R.id.checkOutAddressNotes);
         checkOutAddressNotes.setText(userCredentials.getAddress_notes());
 
         gojekButtonBoolean = false;
@@ -392,6 +403,68 @@ public class CheckOut extends AppCompatActivity {
                 } else {
                     Toast.makeText(CheckOut.this, "Placing Order", Toast.LENGTH_SHORT).show();
 
+                    for (int i = 0; i < selectedMenuList.size(); i++) {
+                        if ((selectedMenuList.get(i).getMenu_type().equals("4") ) && (selectedPortionSizes.get(i).equals("2P"))) {
+                            twoPersonBreakfast++;
+                        } else if ((selectedMenuList.get(i).getMenu_type().equals("4")) && (selectedPortionSizes.get(i).equals("4P"))) {
+                            fourPersonBreakfast ++;
+                        } else if ((selectedMenuList.get(i).getMenu_type().equals("3")) && (selectedPortionSizes.get(i).equals("2P"))) {
+                            twoPersonOriginal++;
+                        } else {
+                            fourPersonOriginal++;
+                        }
+                    }
+
+                    Log.e("Two Person Breakfast: ", String.valueOf(twoPersonBreakfast));
+                    Log.e("Four Person Breakfast: ", String.valueOf(fourPersonBreakfast));
+                    Log.e("Two Person Original: ", String.valueOf(twoPersonOriginal));
+                    Log.e("Four Person Original: ", String.valueOf(fourPersonOriginal));
+
+                    final JSONObject breakFastObject = new JSONObject();
+                    try {
+                        breakFastObject.put("two_person", String.valueOf(twoPersonBreakfast));
+                        breakFastObject.put("four_person", String.valueOf(fourPersonBreakfast));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    final JSONObject originalObject = new JSONObject();
+                    try {
+                        originalObject.put("two_person", String.valueOf(twoPersonOriginal));
+                        originalObject.put("four_person", String.valueOf(fourPersonOriginal));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    final JSONObject addressObject = new JSONObject();
+                    try {
+                        addressObject.put("customer_name", userCredentials.getCustomer_name());
+                        addressObject.put("mobile", String.valueOf(checkOutMobile.getText()));
+                        addressObject.put("address_content", String.valueOf(checkOutAddressContent.getText()));
+                        addressObject.put("city", String.valueOf(checkOutCityDropDown.getSelectedItemPosition() + 1));
+                        addressObject.put("zipcode", String.valueOf(checkOutZipCodeEditText.getText()));
+                        addressObject.put("address_notes", String.valueOf(checkOutAddressNotes.getText()));
+                        addressObject.put("delivery_time", String.valueOf(deliveryTime));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    final JSONArray menuJsonArray = new JSONArray();
+                    try {
+
+                        for (int i = 0; i < selectedMenuIdList.size(); i++) {
+                            JSONObject object = new JSONObject();
+                            object.put("menu_id", String.valueOf(selectedMenuIdList.get(i)));
+                            object.put("portion", String.valueOf(selectedPortionSizes.get(i).replace("P", "")));
+
+                            menuJsonArray.put(object);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                     final JSONObject body = new JSONObject();
                     try {
                         body.put("email", LogInScreen.getUsername());
@@ -402,12 +475,28 @@ public class CheckOut extends AppCompatActivity {
                         body.put("payment_method", selectedPaymentMethod);
                         body.put("balance_discount", "0");
                         body.put("voucher_discount", "0");
-                        body.put("delivery_fee", deliveryFee);
-                        body.put("grandtotal", grandTotal);
+
+                        if (deliveryFee.equals("FREE!!!")) {
+                            body.put("delivery_fee", "0");
+                        } else {
+                            String df = String.valueOf(deliveryFee);
+                            df = df.replace("IDR ", "");
+                            df = df.replace(".", "");
+                            body.put("delivery_fee", df);
+                        }
+
+                        body.put("grandtotal", String.valueOf(grandTotal));
+
+                        body.put("breakfast", breakFastObject);
+                        body.put("original", originalObject);
+                        body.put("address", addressObject);
+                        body.put("menu", menuJsonArray);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+
+                    Log.e("Body", String.valueOf(body) );
 
 
                     StringRequest request = new StringRequest(Request.Method.POST, orderApiLink, new Response.Listener<String>() {
