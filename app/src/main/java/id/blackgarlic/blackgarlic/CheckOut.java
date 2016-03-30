@@ -567,10 +567,15 @@ public class CheckOut extends AppCompatActivity {
                         @Override
                         public void onResponse(String response) {
 
+                            Log.e("Status: ", "Successful");
+                            Log.e("Order ID: ", response);
+
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
+
+                            Log.e("Status", "Unsuccessful");
 
                         }
                     }) {
