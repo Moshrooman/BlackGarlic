@@ -709,6 +709,29 @@
                         android:background="@drawable/bordercheckoutaddress"
                         />
 
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="10dp"
+                        android:gravity="left"
+                        android:text="Employee Discount"
+                        android:layout_weight="1"
+                        android:id="@+id/employeeDiscountTitleTextView"
+                        android:background="@drawable/bordercheckoutaddress"
+                        android:visibility="gone"
+                        />
+
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="10dp"
+                        android:gravity="right"
+                        android:id="@+id/employeeDiscountTextView"
+                        android:layout_weight="1"
+                        android:background="@drawable/bordercheckoutaddress"
+                        android:visibility="gone"
+                        />
+
                     <org.apmem.tools.layouts.FlowLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         android:layout_width="wrap_content"

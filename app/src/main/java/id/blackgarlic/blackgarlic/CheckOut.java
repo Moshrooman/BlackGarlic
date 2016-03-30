@@ -95,10 +95,6 @@ public class CheckOut extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_out);
 
-        twoPersonBreakfast = 0;
-        fourPersonBreakfast = 0;
-        twoPersonOriginal = 0;
-        fourPersonOriginal = 0;
         grandTotal = 0;
         deliveryFee = "";
         deliveryTime = "";
@@ -107,6 +103,9 @@ public class CheckOut extends AppCompatActivity {
         boxId = MainActivity.getBoxId();
 
         userCredentials = LogInScreen.getUserCredentials();
+
+        final TextView employeeDiscountTitleTextView = (TextView) findViewById(R.id.employeeDiscountTitleTextView);
+        final TextView employeeDiscountTextView = (TextView) findViewById(R.id.employeeDiscountTextView);
 
         final TextView boxForTextView = (TextView) findViewById(R.id.boxForTextView);
 
@@ -187,9 +186,22 @@ public class CheckOut extends AppCompatActivity {
                     deliveryTimeDropDown.setVisibility(View.GONE);
                     deliveryTime = "12";
                     deliveryFeeAnswerTextView.setText(deliveryFee);
-                    grandTotal = subTotalCost;
+                    if (userCredentials.getCustomer_status().equals("2")) {
 
-                    grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
+                        employeeDiscountTitleTextView.setVisibility(View.VISIBLE);
+                        employeeDiscountTextView.setVisibility(View.VISIBLE);
+
+                        employeeDiscountTextView.setText("- IDR " + new DecimalFormat().format((subTotalCost / 2)));
+
+                        grandTotal = (subTotalCost / 2);
+                        grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
+
+                        Log.e("grandtotalDiscount: ", String.valueOf(grandTotal));
+                    } else {
+                        grandTotal = subTotalCost;
+                        grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
+                    }
+
 
                     Log.e("Delivery Time: ", deliveryTime);
                     Log.e("Delivery Fee: ", deliveryFee);
@@ -208,9 +220,21 @@ public class CheckOut extends AppCompatActivity {
                     deliveryTimeDropDown.setVisibility(View.GONE);
                     deliveryTime = "12";
                     deliveryFeeAnswerTextView.setText(deliveryFee);
-                    grandTotal = subTotalCost;
+                    if (userCredentials.getCustomer_status().equals("2")) {
 
-                    grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
+                        employeeDiscountTitleTextView.setVisibility(View.VISIBLE);
+                        employeeDiscountTextView.setVisibility(View.VISIBLE);
+
+                        employeeDiscountTextView.setText("- IDR " + new DecimalFormat().format((subTotalCost / 2)));
+
+                        grandTotal = (subTotalCost / 2);
+                        grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
+
+                        Log.e("grandtotalDiscount: ", String.valueOf(grandTotal));
+                    } else {
+                        grandTotal = subTotalCost;
+                        grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
+                    }
 
                     Log.e("Delivery Time: ", deliveryTime);
                     Log.e("Delivery Fee: ", deliveryFee);
@@ -242,9 +266,21 @@ public class CheckOut extends AppCompatActivity {
                     deliveryTimeDropDown.setVisibility(View.GONE);
                     deliveryTime = "12";
                     deliveryFeeAnswerTextView.setText(deliveryFee);
-                    grandTotal = subTotalCost;
+                    if (userCredentials.getCustomer_status().equals("2")) {
 
-                    grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
+                        employeeDiscountTitleTextView.setVisibility(View.VISIBLE);
+                        employeeDiscountTextView.setVisibility(View.VISIBLE);
+
+                        employeeDiscountTextView.setText("- IDR " + new DecimalFormat().format((subTotalCost / 2)));
+
+                        grandTotal = (subTotalCost / 2);
+                        grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
+
+                        Log.e("grandtotalDiscount: ", String.valueOf(grandTotal));
+                    } else {
+                        grandTotal = subTotalCost;
+                        grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
+                    }
                 }
 
                 Log.e("Delivery Time: ", deliveryTime);
@@ -273,9 +309,26 @@ public class CheckOut extends AppCompatActivity {
                     deliveryTimeDropDown.setSelection(0);
                     deliveryTime = "12";
                     deliveryFeeAnswerTextView.setText(deliveryFee);
-                    grandTotal = subTotalCost + 20000;
 
-                    grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
+                    if (userCredentials.getCustomer_status().equals("2")) {
+
+                        int discountedSubTotalCost = (subTotalCost / 2);
+
+                        employeeDiscountTitleTextView.setVisibility(View.VISIBLE);
+                        employeeDiscountTextView.setVisibility(View.VISIBLE);
+
+                        employeeDiscountTextView.setText("- IDR " + new DecimalFormat().format(discountedSubTotalCost));
+
+                        grandTotal = (subTotalCost / 2) + 20000;
+                        grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
+
+                        Log.e("grandtotalDiscount: ", String.valueOf(grandTotal));
+                    } else {
+                        grandTotal = subTotalCost + 20000;
+                        grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
+                    }
+
+
 
                 }
 
@@ -403,6 +456,11 @@ public class CheckOut extends AppCompatActivity {
                 } else {
                     Toast.makeText(CheckOut.this, "Placing Order", Toast.LENGTH_SHORT).show();
 
+                    twoPersonBreakfast = 0;
+                    fourPersonBreakfast = 0;
+                    twoPersonOriginal = 0;
+                    fourPersonOriginal = 0;
+
                     for (int i = 0; i < selectedMenuList.size(); i++) {
                         if ((selectedMenuList.get(i).getMenu_type().equals("4") ) && (selectedPortionSizes.get(i).equals("2P"))) {
                             twoPersonBreakfast++;
@@ -473,7 +531,13 @@ public class CheckOut extends AppCompatActivity {
                         body.put("box_id", String.valueOf(boxId));
                         body.put("order_date", selectedDate);
                         body.put("payment_method", selectedPaymentMethod);
-                        body.put("balance_discount", "0");
+
+                        if (userCredentials.getCustomer_status().equals("2")) {
+                            body.put("balance_discount", String.valueOf((subTotalCost / 2)));
+                        } else {
+                            body.put("balance_discount", "0");
+                        }
+
                         body.put("voucher_discount", "0");
 
                         if (deliveryFee.equals("FREE!!!")) {
