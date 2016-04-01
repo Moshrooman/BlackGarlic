@@ -1,4 +1,6 @@
 package id.blackgarlic.blackgarlic;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -94,6 +96,8 @@ public class CheckOut extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_out);
+
+        retrieveBitmapFromCache();
 
         grandTotal = 0;
         deliveryFee = "";
@@ -449,10 +453,13 @@ public class CheckOut extends AppCompatActivity {
         placeOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                placeOrderButton.setEnabled(false);
                 if (selectedDate == "") {
                     Toast.makeText(CheckOut.this, "Please Select A Delivery Date!", Toast.LENGTH_SHORT).show();
+                    placeOrderButton.setEnabled(true);
                 } else if (selectedPaymentMethod == "") {
                     Toast.makeText(CheckOut.this, "Please Select A Payment Method!", Toast.LENGTH_SHORT).show();
+                    placeOrderButton.setEnabled(true);
                 } else {
                     Toast.makeText(CheckOut.this, "Placing Order", Toast.LENGTH_SHORT).show();
 
@@ -462,11 +469,11 @@ public class CheckOut extends AppCompatActivity {
                     fourPersonOriginal = 0;
 
                     for (int i = 0; i < selectedMenuList.size(); i++) {
-                        if ((selectedMenuList.get(i).getMenu_type().equals("4") ) && (selectedPortionSizes.get(i).equals("2P"))) {
+                        if (  ((selectedMenuList.get(i).getMenu_type().equals("4")) || (selectedMenuList.get(i).getMenu_type().equals("6")) ) && (selectedPortionSizes.get(i).equals("2P"))) {
                             twoPersonBreakfast++;
-                        } else if ((selectedMenuList.get(i).getMenu_type().equals("4")) && (selectedPortionSizes.get(i).equals("4P"))) {
+                        } else if (  ((selectedMenuList.get(i).getMenu_type().equals("4")) || (selectedMenuList.get(i).getMenu_type().equals("6"))) && (selectedPortionSizes.get(i).equals("4P"))) {
                             fourPersonBreakfast ++;
-                        } else if ((selectedMenuList.get(i).getMenu_type().equals("3")) && (selectedPortionSizes.get(i).equals("2P"))) {
+                        } else if (  ((selectedMenuList.get(i).getMenu_type().equals("3")) || (selectedMenuList.get(i).getMenu_type().equals("5"))) && (selectedPortionSizes.get(i).equals("2P"))) {
                             twoPersonOriginal++;
                         } else {
                             fourPersonOriginal++;
@@ -575,6 +582,7 @@ public class CheckOut extends AppCompatActivity {
                         @Override
                         public void onErrorResponse(VolleyError error) {
 
+                            placeOrderButton.setEnabled(true);
                             Log.e("Status", "Unsuccessful");
 
                         }
@@ -821,6 +829,15 @@ public class CheckOut extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Button placeOrderButton = (Button) findViewById(R.id.placeOrderButton);
+        placeOrderButton.setEnabled(true);
+
+    }
+
     public class MyAdapter extends BaseAdapter{
 
         private List<Data> selectedMenuList;
@@ -871,7 +888,7 @@ public class CheckOut extends AppCompatActivity {
             String finalPortion = initialPortion.substring(0,1) + " " + initialPortion.substring(1, initialPortion.length());
             orderCheckOutPortion.setText(finalPortion);
 
-            if (selectedMenuList.get(position).getMenu_type().equals("3")) {
+            if ((selectedMenuList.get(position).getMenu_type().equals("3")) || (selectedMenuList.get(position).getMenu_type().equals("5"))) {
                 orderCheckOutMenuType.setText("Original");
             } else {
                 orderCheckOutMenuType.setText("Breakfast");
@@ -913,6 +930,35 @@ public class CheckOut extends AppCompatActivity {
         } else {
             return false;
         }
+
+    }
+
+
+    public void retrieveBitmapFromCache(){
+
+        //The imageView that you want to set to the retrieved bitmap
+        ImageView deliveryDateImageView = (ImageView) findViewById(R.id.deliveryDateImageView);
+        ImageView orderSummaryImageView = (ImageView) findViewById(R.id.orderSummaryImageView);
+        ImageView deliveryAddressImageView = (ImageView) findViewById(R.id.deliveryAddressImageView);
+        ImageView shippingOptionsImageView = (ImageView) findViewById(R.id.shippingOptionsImageView);
+        ImageView paymentMethodImageView = (ImageView) findViewById(R.id.paymentOptionImageView);
+        ImageView yourOrderImageView = (ImageView) findViewById(R.id.yourOrderImageView);
+
+        //To get bitmap from cache using the key. Must cast retrieved cache Object to Bitmap
+        Bitmap bitmap1 = (Bitmap)Cache.getInstance().getLru().get("bitmap_image1");
+        Bitmap bitmap2 = (Bitmap)Cache.getInstance().getLru().get("bitmap_image2");
+        Bitmap bitmap3 = (Bitmap)Cache.getInstance().getLru().get("bitmap_image3");
+        Bitmap bitmap4 = (Bitmap)Cache.getInstance().getLru().get("bitmap_image4");
+        Bitmap bitmap5 = (Bitmap)Cache.getInstance().getLru().get("bitmap_image5");
+        Bitmap bitmap6 = (Bitmap)Cache.getInstance().getLru().get("bitmap_image6");
+
+        //Setting imageView to retrieved bitmap from cache
+        deliveryDateImageView.setImageBitmap(bitmap1);
+        orderSummaryImageView.setImageBitmap(bitmap2);
+        deliveryAddressImageView.setImageBitmap(bitmap3);
+        shippingOptionsImageView.setImageBitmap(bitmap4);
+        paymentMethodImageView.setImageBitmap(bitmap5);
+        yourOrderImageView.setImageBitmap(bitmap6);
 
     }
 

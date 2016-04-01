@@ -3,6 +3,8 @@ package id.blackgarlic.blackgarlic;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -330,6 +332,8 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             @Override
             public void onClick(View v) {
 
+                proceedToCheckoutButton.setEnabled(false);
+
                 if (isLoggedIn == true) {
                     if (null == currentMenuList || currentMenuList.size() == 0) {
                         Toast.makeText(MainActivity.this, "You Have Nothing In Your Box!", Toast.LENGTH_SHORT).show();
@@ -374,7 +378,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
                 for (int i = 0; i < menuList.size(); i++) {
 
-                    if (menuList.get(i).getMenu_type().equals("4")) {
+                    if ((menuList.get(i).getMenu_type().equals("4")) || (menuList.get(i).getMenu_type().equals("6"))) {
                         Data currentBreakfastMenu = menuList.get(i);
                         Integer currentBreakfastMenuIntenger = menuIdList.get(i);
 
@@ -416,6 +420,14 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         });
 
         ConnectionManager.getInstance(MainActivity.this).add(request);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        proceedToCheckoutButton.setEnabled(true);
 
     }
 
@@ -533,7 +545,9 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
         if (isLoggedIn == true) {
             if (position == 0) {
+                drawerListView.setItemChecked(position, true);
                 Intent welcomeIntent = new Intent(MainActivity.this, WelcomeActivity.class);
+                drawerLayout.closeDrawer(Gravity.LEFT);
                 startActivity(welcomeIntent);
 
             }else if (position == 1) {
@@ -544,17 +558,23 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             }
         } else {
             if (position == 0) {
+                drawerListView.setItemChecked(position, true);
                 Intent welcomeIntent = new Intent(MainActivity.this, WelcomeActivity.class);
+                drawerLayout.closeDrawer(Gravity.LEFT);
                 startActivity(welcomeIntent);
 
             } else if (position == 1) {
+                drawerListView.setItemChecked(position, true);
                 Intent logInIntent = new Intent(MainActivity.this, LogInScreen.class);
+                drawerLayout.closeDrawer(Gravity.LEFT);
                 SharedPreferences.Editor editor =  sharedPreferences.edit();
                 editor.putBoolean("nonlogin", false);
                 editor.commit();
                 startActivity(logInIntent);
             } else {
+                drawerListView.setItemChecked(position, true);
                 Intent createAccountIntent = new Intent(MainActivity.this, CreateAccount.class);
+                drawerLayout.closeDrawer(Gravity.LEFT);
                 SharedPreferences.Editor editor =  sharedPreferences.edit();
                 editor.putBoolean("nonlogin", false);
                 editor.commit();
@@ -615,5 +635,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             return orderSummaryView;
         }
     }
+
 
 }

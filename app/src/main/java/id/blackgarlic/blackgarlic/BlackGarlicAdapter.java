@@ -76,7 +76,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         myViewHolder.menuTitleTextView.setText(currentMenu.getMenu_name());
         myViewHolder.menuDescriptionTextView.setText(currentMenu.getMenu_description());
 
-        if (currentMenu.getMenu_type().equals("4")) {
+        if ((currentMenu.getMenu_type().equals("4")) || (currentMenu.getMenu_type().equals("6"))) {
             myViewHolder.priceTextView.setText("IDR 80.000");
         } else {
             myViewHolder.priceTextView.setText("IDR 100.000");
@@ -89,7 +89,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
                 currentSelectedMenus.add(mmenuList.get(position));
                 currentSelectedMenuIds.add(mmenuIdList.get(position));
 
-                if ((mmenuList.get(position).getMenu_type().equals("3"))&& (mmenuList.get(position).getFourPersonEnabled() == true)) {
+                if ( (  (mmenuList.get(position).getMenu_type().equals("3")) || (mmenuList.get(position).getMenu_type().equals("5"))  )&& (mmenuList.get(position).getFourPersonEnabled() == true)) {
                     currentSelectedMenusImageUrl.add(mmenuList.get(position).getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position)) + "_4"));
                 } else {
                     currentSelectedMenusImageUrl.add(mmenuList.get(position).getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))));
@@ -111,7 +111,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
             myViewHolder.radioGroupMenu.check(R.id.radioButtonFourPerson);
 
             //Here is Breakfast and fourperson enabled, so just keep the same image so concatenate menu subname
-            if (currentMenu.getMenu_type().equals("4")) {
+            if ((currentMenu.getMenu_type().equals("4")) || (currentMenu.getMenu_type().equals("6"))) {
                 if (  !(currentMenu.getMenu_subname().equals(""))  ) {
                     myViewHolder.menuTitleTextView.setText(myViewHolder.menuTitleTextView.getText() + " & " + currentMenu.getMenu_subname());
                 }
@@ -133,7 +133,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
             myViewHolder.radioGroupMenu.check(R.id.radioButtonTwoPerson);
 
             //Here is Breakfast and two person enabled, so just keep the same image and change to original menu title
-            if (currentMenu.getMenu_type().equals("4")) {
+            if ((currentMenu.getMenu_type().equals("4"))  || (currentMenu.getMenu_type().equals("6"))) {
                 myViewHolder.menuTitleTextView.setText(currentMenu.getMenu_name());
                 myViewHolder.menuNetworkImageView.setImageUrl(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))),
                         ConnectionManager.getImageLoader(mContext));
@@ -173,7 +173,15 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
 
         TextView headerTextView = (TextView) holder.itemView.findViewById(R.id.headerTextView);
 
-        if (position <= 2) {
+        int breakfastHeaderCount = 0;
+
+        for (int i = 0; i < mmenuList.size(); i++) {
+            if ((mmenuList.get(i).getMenu_type().equals("4")) || (mmenuList.get(i).getMenu_type().equals("6"))) {
+                breakfastHeaderCount++;
+            }
+        }
+
+        if (position <= breakfastHeaderCount - 1) {
             headerTextView.setText("Breakfast");
         } else {
             headerTextView.setText("Original");

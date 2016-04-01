@@ -36,7 +36,7 @@ public class MenuId {
 
         if (boxIds.size() != 1) {
 
-            Log.e("More than 1: ", "True");
+            Log.e("More than 1 Box Id: ", "True");
 
             Integer boxId = boxIds.get(0);
 
@@ -51,7 +51,7 @@ public class MenuId {
             }
 
         } else {
-            Log.e("More than 1: ", "False");
+            Log.e("More than 1 Box Id: ", "False");
             Integer boxId = boxIds.get(0);
             return boxId;
         }

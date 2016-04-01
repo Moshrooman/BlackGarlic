@@ -97,14 +97,15 @@ public class LogInScreen extends AppCompatActivity {
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         final TextView loggingYouInTextView = (TextView) findViewById(R.id.loggingYouInTextView);
 
-        Button loginButton = (Button) findViewById(R.id.loginButton);
+        final Button loginButton = (Button) findViewById(R.id.loginButton);
         passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
-        Button seeThisWeeksMenuButton = (Button) findViewById(R.id.seeThisWeeksMenuButton);
+        final Button seeThisWeeksMenuButton = (Button) findViewById(R.id.seeThisWeeksMenuButton);
 
         seeThisWeeksMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                seeThisWeeksMenuButton.setEnabled(false);
                 MainActivity.setIsLoggedIn(false);
                 Intent mainActivityIntent = new Intent(LogInScreen.this, MainActivity.class);
                 startActivity(mainActivityIntent);
@@ -116,6 +117,7 @@ public class LogInScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                loginButton.setEnabled(false);
                 progressBar.setVisibility(View.VISIBLE);
                 loggingYouInTextView.setVisibility(View.VISIBLE);
 
@@ -154,6 +156,7 @@ public class LogInScreen extends AppCompatActivity {
                             finish();
                         } else if (response.contains("Invalid")){
 
+                            loginButton.setEnabled(true);
                             progressBar.setVisibility(View.GONE);
                             loggingYouInTextView.setVisibility(View.GONE);
                             Toast.makeText(LogInScreen.this, "Invalid Username/Password!", Toast.LENGTH_SHORT).show();
@@ -179,6 +182,7 @@ public class LogInScreen extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
+                        loginButton.setEnabled(true);
                         progressBar.setVisibility(View.GONE);
                         loggingYouInTextView.setVisibility(View.GONE);
                         Toast.makeText(LogInScreen.this, "No Internet Connection!", Toast.LENGTH_LONG).show();
@@ -204,15 +208,30 @@ public class LogInScreen extends AppCompatActivity {
             }
         });
 
-        Button createAccountButton = (Button) findViewById(R.id.createAccountButton);
+        final Button createAccountButton = (Button) findViewById(R.id.createAccountButton);
 
         createAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                createAccountButton.setEnabled(false);
                 Intent createAccountIntent = new Intent(LogInScreen.this, CreateAccount.class);
                 startActivity(createAccountIntent);
             }
         });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Button loginButton = (Button) findViewById(R.id.loginButton);
+        Button createAccountButton = (Button) findViewById(R.id.createAccountButton);
+        Button seeThisWeeksMenuButton = (Button) findViewById(R.id.seeThisWeeksMenuButton);
+
+        loginButton.setEnabled(true);
+        createAccountButton.setEnabled(true);
+        seeThisWeeksMenuButton.setEnabled(true);
 
     }
 

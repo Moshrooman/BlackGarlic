@@ -36,21 +36,13 @@
 
                 <!-- Start of title -->
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/datesTitleLinearLayout"
-                    android:background="@drawable/bottomsiderectangle"
-                    android:paddingBottom="8dp"
-                    >
-
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/calendar"
+
+                        android:layout_toLeftOf="@+id/firstTitle"
+                        android:layout_alignBottom="@+id/firstTitle"
+                        android:id="@+id/deliveryDateImageView"
                         />
 
 
@@ -58,11 +50,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="1. Choose Your Delivery Date"
-                        android:layout_gravity="center"
+                        android:paddingBottom="8dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_centerHorizontal="true"
                         android:layout_marginLeft="10dp"
+                        android:background="@drawable/bottomsiderectangle"
+                        android:id="@+id/firstTitle"
                         />
 
-                </LinearLayout>
 
                 <!-- End of Title -->
 
@@ -71,7 +66,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:layout_below="@+id/datesTitleLinearLayout"
+                    android:layout_below="@+id/firstTitle"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     >
@@ -140,42 +135,39 @@
 
 
             <!-- Start of second Order Details Root Layout -->
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:background="@drawable/border_dates"
-                android:orientation="vertical"
                 android:padding="10dp"
                 >
 
                 <!-- Start of title layout -->
-                <LinearLayout
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+
+                    android:layout_toLeftOf="@+id/secondTitle"
+                    android:layout_alignBottom="@+id/secondTitle"
+                    android:id="@+id/orderSummaryImageView"
+                    />
+
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_centerHorizontal="true"
-                    android:id="@+id/orderSummaryLinearLayout"
-                    android:background="@drawable/bottomsiderectangle"
+                    android:text="2. Order Summary"
                     android:paddingBottom="8dp"
-                    >
+                    android:layout_marginTop="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/bottomsiderectangle"
+                    android:id="@+id/secondTitle"
+                    />
 
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/shoppingcart"
-                        />
 
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="2. Order Summary"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="10dp"
-                        />
-
-                </LinearLayout>
                 <!-- End of title layout -->
 
                 <!-- Start of Columns for ListView -->
@@ -183,9 +175,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:layout_below="@+id/secondTitle"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/bottomsiderectangle"
                     android:paddingBottom="8dp"
+                    android:id="@+id/listViewColumns"
                     >
 
                     <TextView
@@ -223,6 +217,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/orderSummaryListView"
                     android:layout_marginTop="20dp"
+                    android:layout_below="@+id/listViewColumns"
                     >
 
 
@@ -230,47 +225,44 @@
                 <!-- End of ListView -->
 
 
-            </LinearLayout>
+            </RelativeLayout>
             <!-- End of second Order Details Root Layout -->
 
             <!-- Start of Third Delivery Address Root Layout -->
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:background="@drawable/border_dates"
-                android:orientation="vertical"
                 android:padding="10dp"
                 >
 
                 <!-- Start of title layout -->
-                <LinearLayout
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+
+                    android:layout_toLeftOf="@+id/thirdTitle"
+                    android:layout_alignBottom="@+id/thirdTitle"
+                    android:id="@+id/deliveryAddressImageView"
+                    />
+
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_centerHorizontal="true"
-                    android:id="@+id/deliveryAddressLinearLayout"
-                    android:background="@drawable/bottomsiderectangle"
+                    android:text="3. Delivery Address"
                     android:paddingBottom="8dp"
-                    >
+                    android:layout_marginTop="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/bottomsiderectangle"
+                    android:id="@+id/thirdTitle"
+                    />
 
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/deliverytruck"
-                        />
 
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="3. Delivery Address"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="10dp"
-                        />
-
-                </LinearLayout>
                 <!-- End of title layout -->
 
                 <TextView
@@ -279,6 +271,9 @@
                     android:text="Full Name"
                     android:textSize="20dp"
                     android:layout_marginTop="20dp"
+                    android:layout_below="@+id/thirdTitle"
+                    android:id="@+id/fullNameTextView"
+                    android:layout_centerHorizontal="true"
                     />
 
                 <TextView
@@ -289,6 +284,8 @@
                     android:background="@drawable/bordercheckoutaddress"
                     android:id="@+id/customerNameTextView"
                     android:textAlignment="center"
+                    android:layout_below="@+id/fullNameTextView"
+                    android:layout_centerHorizontal="true"
                     />
 
                 <TextView
@@ -297,6 +294,9 @@
                     android:text="Postal Code / City"
                     android:textSize="20dp"
                     android:layout_marginTop="20dp"
+                    android:layout_below="@+id/customerNameTextView"
+                    android:id="@+id/postalCodeTextView"
+                    android:layout_centerHorizontal="true"
                     />
 
                 <EditText
@@ -307,6 +307,8 @@
                     android:id="@+id/checkOutZidCodeEditText"
                     android:textAlignment="center"
                     android:textSize="15dp"
+                    android:layout_below="@+id/postalCodeTextView"
+                    android:layout_centerHorizontal="true"
                     />
 
                 <Spinner
@@ -317,6 +319,8 @@
                     android:background="@android:drawable/btn_dropdown"
                     android:layout_marginTop="10dp"
                     android:textAlignment="center"
+                    android:layout_below="@+id/checkOutZidCodeEditText"
+                    android:layout_centerHorizontal="true"
                     >
 
                 </Spinner>
@@ -327,6 +331,9 @@
                     android:text="Address"
                     android:textSize="20dp"
                     android:layout_marginTop="20dp"
+                    android:layout_below="@+id/checkOutCityDropDown"
+                    android:id="@+id/addressTextView"
+                    android:layout_centerHorizontal="true"
                     />
 
                 <EditText
@@ -337,6 +344,8 @@
                     android:id="@+id/checkOutAddressContent"
                     android:textAlignment="center"
                     android:textSize="15dp"
+                    android:layout_below="@+id/addressTextView"
+                    android:layout_centerHorizontal="true"
                     />
 
                 <TextView
@@ -345,6 +354,9 @@
                     android:text="Mobile"
                     android:textSize="20dp"
                     android:layout_marginTop="20dp"
+                    android:layout_below="@+id/checkOutAddressContent"
+                    android:id="@+id/mobileTextView"
+                    android:layout_centerHorizontal="true"
                     />
 
                 <EditText
@@ -355,6 +367,8 @@
                     android:id="@+id/checkOutMobile"
                     android:textAlignment="center"
                     android:textSize="15dp"
+                    android:layout_below="@+id/mobileTextView"
+                    android:layout_centerHorizontal="true"
                     />
 
                 <TextView
@@ -363,6 +377,9 @@
                     android:text="Delivery Notes / Info"
                     android:textSize="20dp"
                     android:layout_marginTop="20dp"
+                    android:layout_below="@+id/checkOutMobile"
+                    android:id="@+id/deliveryNotesTextView"
+                    android:layout_centerHorizontal="true"
                     />
 
                 <EditText
@@ -373,9 +390,11 @@
                     android:id="@+id/checkOutAddressNotes"
                     android:textAlignment="center"
                     android:textSize="15dp"
+                    android:layout_below="@+id/deliveryNotesTextView"
+                    android:layout_centerHorizontal="true"
                     />
 
-            </LinearLayout>
+            </RelativeLayout>
 
             <!-- End of Third Delivery Address Root Layout -->
 
@@ -391,32 +410,28 @@
 
                 <!-- Start of title -->
 
-                <LinearLayout
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+
+                    android:layout_toLeftOf="@+id/fourthTitle"
+                    android:layout_alignBottom="@+id/fourthTitle"
+                    android:id="@+id/shippingOptionsImageView"
+
+                    />
+
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/shippingOptionsTitleLinearLayout"
-                    android:background="@drawable/bottomsiderectangle"
+                    android:text="4. Shipping Options"
                     android:paddingBottom="8dp"
-                    >
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/delivery"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="4. Shipping Options"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="10dp"
-                        />
-
-                </LinearLayout>
+                    android:layout_marginTop="15dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/bottomsiderectangle"
+                    android:id="@+id/fourthTitle"
+                    />
 
                 <!-- End of Title -->
 
@@ -425,9 +440,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:layout_below="@+id/shippingOptionsTitleLinearLayout"
+                    android:layout_below="@+id/fourthTitle"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="20dp"
                     android:id="@+id/deliveryOptionFlowLayout"
                     >
 
@@ -536,39 +551,34 @@
 
                 <!-- Start of title -->
 
-                <LinearLayout
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+
+                    android:layout_toLeftOf="@+id/fifthTitle"
+                    android:layout_alignBottom="@+id/fifthTitle"
+                    android:id="@+id/paymentOptionImageView"
+                    />
+
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/paymentMethodTitleLinearLayout"
-                    android:background="@drawable/bottomsiderectangle"
+                    android:text="5. Choose Your Payment Method"
                     android:paddingBottom="8dp"
-                    >
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/creditcard"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="5. Choose Your Payment Method"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="10dp"
-                        />
-
-                </LinearLayout>
+                    android:layout_marginTop="15dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/bottomsiderectangle"
+                    android:id="@+id/fifthTitle"
+                    />
 
                 <!-- End of Title -->
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/paymentMethodTitleLinearLayout"
+                    android:layout_below="@+id/fifthTitle"
                     android:textSize="20dp"
                     android:layout_centerHorizontal="true"
                     android:text="Payment Methods"
@@ -629,32 +639,28 @@
 
                 <!-- Start of title -->
 
-                <LinearLayout
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+
+                    android:layout_toLeftOf="@+id/sixthTitle"
+                    android:layout_alignBottom="@+id/sixthTitle"
+                    android:id="@+id/yourOrderImageView"
+                    />
+
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/yourOrderTitleLinearLayout"
-                    android:background="@drawable/bottomsiderectangle"
+                    android:text="6. Your Order"
                     android:paddingBottom="8dp"
-                    >
+                    android:layout_marginTop="15dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/bottomsiderectangle"
+                    android:id="@+id/sixthTitle"
+                    />
 
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/finalshoppingcart"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="6. Your Order"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="10dp"
-                        />
-
-                </LinearLayout>
 
                 <!-- End of Title -->
                 
@@ -662,7 +668,7 @@
                     xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="320dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/yourOrderTitleLinearLayout"
+                    android:layout_below="@+id/sixthTitle"
                     android:layout_marginTop="20dp"
                     android:gravity="center"
                     android:layout_centerHorizontal="true"
