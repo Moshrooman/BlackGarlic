@@ -65,8 +65,8 @@ public class WelcomeActivity extends AppCompatActivity {
                             editor.commit();
 
                             radioGroup.check(R.id.radioButton4);
-                            Intent switchToLogInActivity = new Intent(WelcomeActivity.this, LogInScreen.class);
-                            startActivity(switchToLogInActivity);
+                            Intent switchToMainActivity = new Intent(WelcomeActivity.this, MainActivity.class);
+                            startActivity(switchToMainActivity);
                             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                             finish();
                             return;

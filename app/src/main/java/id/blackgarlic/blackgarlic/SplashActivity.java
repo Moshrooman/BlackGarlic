@@ -39,7 +39,7 @@ public class SplashActivity extends AppCompatActivity {
                     nextWelcomeActivity();
                 } else {
 
-                    goToLoginActivity();
+                    goToMainActivity();
                 }
 
             }
@@ -56,9 +56,9 @@ public class SplashActivity extends AppCompatActivity {
         finish();
     }
 
-    public void goToLoginActivity() {
-        Intent loginActivityIntent = new Intent(SplashActivity.this, LogInScreen.class);
-        startActivity(loginActivityIntent);
+    public void goToMainActivity() {
+        Intent mainActivityIntent = new Intent(SplashActivity.this, MainActivity.class);
+        startActivity(mainActivityIntent);
         finish();
     }
 

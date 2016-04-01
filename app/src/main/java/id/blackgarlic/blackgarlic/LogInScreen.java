@@ -87,6 +87,8 @@ public class LogInScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in_screen);
 
+        final SharedPreferences sharedPreferences = SplashActivity.getSharedPreferences();
+
         if (this.getIntent().getExtras() != null) {
             Toast.makeText(LogInScreen.this, this.getIntent().getExtras().getString("successful"), Toast.LENGTH_LONG).show();
         }
@@ -150,6 +152,12 @@ public class LogInScreen extends AppCompatActivity {
 
                             userCredentials = new Gson().fromJson(response, UserCredentials.class);
 
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("Credentials", new Gson().toJson(userCredentials));
+                            editor.commit();
+
+                            Log.e("Credentials: ", sharedPreferences.getString("Credentials", ""));
+
                             Intent mainActivityIntent = new Intent(LogInScreen.this, MainActivity.class);
                             mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(mainActivityIntent);
@@ -167,6 +175,12 @@ public class LogInScreen extends AppCompatActivity {
                             userCredentials = new Gson().fromJson(response, UserCredentials.class);
 
                             userCredentials.setCity();
+
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("Credentials", new Gson().toJson(userCredentials));
+                            editor.commit();
+
+                            Log.e("Credentials: ", sharedPreferences.getString("Credentials", ""));
 
                             progressBar.setVisibility(View.GONE);
                             loggingYouInTextView.setVisibility(View.GONE);

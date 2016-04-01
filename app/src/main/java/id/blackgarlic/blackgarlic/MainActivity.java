@@ -128,7 +128,16 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         setContentView(R.layout.activity_main);
 
         final SharedPreferences sharedPreferences = SplashActivity.getSharedPreferences();
-        userCredentials = LogInScreen.getUserCredentials();
+
+        if (sharedPreferences.contains("Credentials")) {
+            String json = sharedPreferences.getString("Credentials", "");
+            userCredentials = new Gson().fromJson(json, UserCredentials.class);
+            isLoggedIn = true;
+        } else {
+            userCredentials = LogInScreen.getUserCredentials();
+            isLoggedIn = false;
+        }
+
         numberOfTimesClicked = 0;
         currentRotation = 0;
 
@@ -182,6 +191,11 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             String welcomeTextViewString = (String) welcomeTextView.getText();
             welcomeTextViewString = welcomeTextViewString.replace("Name", userCredentials.getCustomer_name());
             welcomeTextView.setText(welcomeTextViewString);
+
+            drawerEntries = new String[3];
+            drawerEntries[0] = "Home";
+            drawerEntries[1] = "My Account";
+            drawerEntries[2] = "Log Out";
         }
 
         drawerListView.setAdapter(new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, drawerEntries));
@@ -555,6 +569,13 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                 Intent myAccountIntent = new Intent(MainActivity.this, MyAccount.class);
                 drawerLayout.closeDrawer(Gravity.LEFT);
                 startActivity(myAccountIntent);
+            } else if (position == 2) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.remove("Credentials");
+                editor.commit();
+                finish();
+                startActivity(getIntent());
+
             }
         } else {
             if (position == 0) {
