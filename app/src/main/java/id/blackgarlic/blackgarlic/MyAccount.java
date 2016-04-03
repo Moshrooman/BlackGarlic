@@ -2,6 +2,7 @@ package id.blackgarlic.blackgarlic;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -45,7 +46,9 @@ public class MyAccount extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_account);
 
-        userCredentials = LogInScreen.getUserCredentials();
+        final SharedPreferences sharedPreferences = SplashActivity.getSharedPreferences();
+
+        userCredentials = new Gson().fromJson(sharedPreferences.getString("Credentials", ""), UserCredentials.class);
 
         //All EditTexts:
 
@@ -110,9 +113,16 @@ public class MyAccount extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
 
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+
                         UserCredentials newUserCredentials = new Gson().fromJson(response, UserCredentials.class);
                         newUserCredentials.setCity();
                         LogInScreen.setUserCredentials(newUserCredentials);
+
+                        editor.remove("Credentials");
+                        editor.putString("Credentials", new Gson().toJson(newUserCredentials));
+
+                        editor.commit();
 
                         loadingTextView.setText("Successfully Updated User Credentials!");
 

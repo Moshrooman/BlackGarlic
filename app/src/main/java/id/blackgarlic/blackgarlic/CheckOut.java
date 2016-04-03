@@ -1,4 +1,6 @@
 package id.blackgarlic.blackgarlic;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -29,6 +31,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
+import com.google.gson.Gson;
 
 import org.joda.time.LocalDate;
 import org.json.JSONArray;
@@ -106,7 +109,9 @@ public class CheckOut extends AppCompatActivity {
 
         boxId = MainActivity.getBoxId();
 
-        userCredentials = LogInScreen.getUserCredentials();
+        SharedPreferences sharedPreferences = SplashActivity.getSharedPreferences();
+
+        userCredentials = new Gson().fromJson(sharedPreferences.getString("Credentials", ""), UserCredentials.class);
 
         final TextView employeeDiscountTitleTextView = (TextView) findViewById(R.id.employeeDiscountTitleTextView);
         final TextView employeeDiscountTextView = (TextView) findViewById(R.id.employeeDiscountTextView);
@@ -453,14 +458,16 @@ public class CheckOut extends AppCompatActivity {
         placeOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                placeOrderButton.setEnabled(false);
+
                 if (selectedDate == "") {
                     Toast.makeText(CheckOut.this, "Please Select A Delivery Date!", Toast.LENGTH_SHORT).show();
-                    placeOrderButton.setEnabled(true);
+
                 } else if (selectedPaymentMethod == "") {
                     Toast.makeText(CheckOut.this, "Please Select A Payment Method!", Toast.LENGTH_SHORT).show();
-                    placeOrderButton.setEnabled(true);
+
                 } else {
+                    placeOrderButton.setEnabled(false);
+
                     Toast.makeText(CheckOut.this, "Placing Order", Toast.LENGTH_SHORT).show();
 
                     twoPersonBreakfast = 0;
@@ -827,6 +834,19 @@ public class CheckOut extends AppCompatActivity {
 
         subTotalPriceTextView.setText("IDR " + new DecimalFormat().format(subTotalCost));
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent mainActivityIntent = new Intent(CheckOut.this, MainActivity.class);
+            mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(mainActivityIntent);
+            finish();
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override

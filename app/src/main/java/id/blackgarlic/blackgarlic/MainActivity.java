@@ -573,6 +573,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.remove("Credentials");
                 editor.commit();
+                LogInScreen.setUserCredentials(null);
                 finish();
                 startActivity(getIntent());
 
