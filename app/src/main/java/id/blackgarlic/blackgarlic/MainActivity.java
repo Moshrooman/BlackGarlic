@@ -124,6 +124,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 //Where we created the blackgarlicadapter so i set the og blackgarlicadapter to the blackgarlicadapter2
 //3. Then in the clear all button method I called this blackgarlicadapter2.clearAllLists.
 
+//Made sure that where it checks for the usercredentials is on top of the other one, because it banks off of the isloggedin.
+
 public class MainActivity extends AppCompatActivity implements BlackGarlicAdapter.MyListItemClickListener, AdapterView.OnItemClickListener {
 
     private RecyclerView recyclerView;
@@ -217,6 +219,15 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
         final SharedPreferences sharedPreferences = SplashActivity.getSharedPreferences();
 
+        if (sharedPreferences.contains("Credentials")) {
+            String json = sharedPreferences.getString("Credentials", "");
+            userCredentials = new Gson().fromJson(json, UserCredentials.class);
+            isLoggedIn = true;
+        } else {
+            userCredentials = LogInScreen.getUserCredentials();
+            isLoggedIn = false;
+        }
+
         //Start of Doing work to add the boxes they selected before logging in to after they logged in
 
         if ((isLoggedIn == true) && (sharedPreferences.contains("currentMenuList"))) {
@@ -253,15 +264,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         }
 
         //End of doing work to add the boxes they selected before logging in to after they logged in.
-
-        if (sharedPreferences.contains("Credentials")) {
-            String json = sharedPreferences.getString("Credentials", "");
-            userCredentials = new Gson().fromJson(json, UserCredentials.class);
-            isLoggedIn = true;
-        } else {
-            userCredentials = LogInScreen.getUserCredentials();
-            isLoggedIn = false;
-        }
 
         numberOfTimesClicked = 0;
         currentRotation = 0;
@@ -582,7 +584,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
         SharedPreferences.Editor editor = SplashActivity.getSharedPreferences().edit();
 
-        if (keyCode == event.KEYCODE_BACK) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (sliding_layout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
                 sliding_layout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
             } else {
@@ -597,12 +599,16 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                     editor.remove("currentSubtotalCost");
                     editor.commit();
 
-                    currentMenuList.clear();
-                    currentMenuIdList.clear();
-                    currentSelectedMenuListUrls.clear();
-                    portionSizes.clear();
-                    individualPrices.clear();
-                    subTotalCost = 0;
+                    if (!(null == currentMenuList)) {
+
+                        currentMenuList.clear();
+                        currentMenuIdList.clear();
+                        currentSelectedMenuListUrls.clear();
+                        portionSizes.clear();
+                        individualPrices.clear();
+                        subTotalCost = 0;
+
+                    }
 
                 }
 
@@ -739,14 +745,20 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
                 editor.commit();
 
-                currentMenuList.clear();
-                currentMenuIdList.clear();
-                currentSelectedMenuListUrls.clear();
-                portionSizes.clear();
-                individualPrices.clear();
-                subTotalCost = 0;
+                if (!(null == currentMenuList)) {
+
+                    currentMenuList.clear();
+                    currentMenuIdList.clear();
+                    currentSelectedMenuListUrls.clear();
+                    portionSizes.clear();
+                    individualPrices.clear();
+                    subTotalCost = 0;
+
+                }
+
 
                 LogInScreen.setUserCredentials(null);
+                isLoggedIn = false;
                 finish();
                 startActivity(getIntent());
 
