@@ -45,6 +45,7 @@ import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -56,6 +57,8 @@ import id.blackgarlic.blackgarlic.model.Menus;
 import id.blackgarlic.blackgarlic.model.UserCredentials;
 import id.blackgarlic.blackgarlic.welcome.WelcomeActivity;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
+//1. In main activity, in the rippleviews onitemclick, I concatenate the subtotalpricetextview to concatenate the subtotalcost in decimal format.
 
 //Implementation for the adding the menus to box when logged out needs to be applied to:
 
@@ -106,6 +109,21 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 //2. Click back when in mainactivity, closing the application. Same as above.
 //3. When they click placeorder and have a successful response. Gonna do this later.
 
+//THen when they click the clear all button, I should clear all of the lists inside of the BlackGarlicAdapter class:
+
+//1. So in the BlackGarlicAdapter, at the top, I have to create a public method:
+//public void clearAllLists() {
+//        currentSelectedMenus.clear();
+//        currentSelectedMenuIds.clear();
+//        currentSelectedMenusImageUrl.clear();
+//        portionSizes.clear();
+//        individualPrices.clear();
+//        }
+
+//2. Then in mainactivity I had to create a privatestatic variable called blackgarlicAdapter2 that I give value in stringrequest
+//Where we created the blackgarlicadapter so i set the og blackgarlicadapter to the blackgarlicadapter2
+//3. Then in the clear all button method I called this blackgarlicadapter2.clearAllLists.
+
 public class MainActivity extends AppCompatActivity implements BlackGarlicAdapter.MyListItemClickListener, AdapterView.OnItemClickListener {
 
     private RecyclerView recyclerView;
@@ -140,6 +158,10 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
     private static boolean isLoggedIn = false;
 
     private static TextView subTotalPriceTextView;
+
+    private static Button clearAllButton;
+
+    private static BlackGarlicAdapter blackGarlicAdapter2;
 
     public static List<Data> getCurrentMenuList() {
         return currentMenuList;
@@ -177,10 +199,16 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         return isLoggedIn;
     }
 
+    public static Button getClearAllButton() {
+        return clearAllButton;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        clearAllButton = (Button) findViewById(R.id.clearAllButton);
 
         subTotalPriceTextView = (TextView) findViewById(R.id.subtotalTextView);
         listViewOrderSummary = (ListView) findViewById(R.id.orderSummaryListView);
@@ -509,6 +537,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                 }
 
                 BlackGarlicAdapter blackGarlicAdapter = new BlackGarlicAdapter(menuList, menuIdList, MainActivity.this, MainActivity.this);
+                blackGarlicAdapter2 = blackGarlicAdapter;
 
 //              BlackGarlicDAO.getInstance().storeMenus(MainActivity.this, firstMenuList);
 
@@ -659,11 +688,17 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         if (null == currentMenuList || currentMenuList.size() == 0) {
             return;
         } else {
+
+            SharedPreferences.Editor editor = SplashActivity.getSharedPreferences().edit();
+
             currentMenuList.clear();
             currentMenuIdList.clear();
             currentSelectedMenuListUrls.clear();
             individualPrices.clear();
             portionSizes.clear();
+
+            blackGarlicAdapter2.clearAllLists();
+
             subTotalCost = subTotalCost - subTotalCost;
             subTotalPriceTextView.setText("SUBTOTAL: ");
             ImageView orderBoxImageView = (ImageView) findViewById(R.id.orderBoxImageView);
