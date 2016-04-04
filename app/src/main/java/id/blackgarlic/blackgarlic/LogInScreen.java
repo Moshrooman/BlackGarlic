@@ -114,14 +114,18 @@ public class LogInScreen extends AppCompatActivity {
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
 
-                editor.putString("currentMenuList", currentMenuList);
-                editor.putString("currentMenuIdList", currentMenuIdList);
-                editor.putString("currentSelectedMenuListUrls", currentSelectedMenuListUrls);
-                editor.putString("currentPortionSizes", currentPortionSizes);
-                editor.putString("currentIndividualPrices", currentIndividualPrices);
-                editor.putInt("currentSubtotalCost", currentSubtotalCost);
+                if (! (null == MainActivity.getCurrentMenuList())) {
 
-                editor.commit();
+                    editor.putString("currentMenuList", currentMenuList);
+                    editor.putString("currentMenuIdList", currentMenuIdList);
+                    editor.putString("currentSelectedMenuListUrls", currentSelectedMenuListUrls);
+                    editor.putString("currentPortionSizes", currentPortionSizes);
+                    editor.putString("currentIndividualPrices", currentIndividualPrices);
+                    editor.putInt("currentSubtotalCost", currentSubtotalCost);
+
+                    editor.commit();
+
+                }
 
 
                 loginButton.setEnabled(false);

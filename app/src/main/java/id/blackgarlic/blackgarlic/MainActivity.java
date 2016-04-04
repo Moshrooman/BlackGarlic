@@ -124,7 +124,10 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 //Where we created the blackgarlicadapter so i set the og blackgarlicadapter to the blackgarlicadapter2
 //3. Then in the clear all button method I called this blackgarlicadapter2.clearAllLists.
 
-//Made sure that where it checks for the usercredentials is on top of the other one, because it banks off of the isloggedin.
+//Made sure that where it checks for the usercredentials is on top of the other one, because it banks off of the isloggedin, also in the
+//position = 3 in the onitemclick where they clcked log out, i made is logged in = to false, just to make sure.
+
+//Then in the loginscreen, I only want to add the things into the sharedpreference if the currentmenulist is not null.
 
 public class MainActivity extends AppCompatActivity implements BlackGarlicAdapter.MyListItemClickListener, AdapterView.OnItemClickListener {
 
