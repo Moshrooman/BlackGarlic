@@ -107,6 +107,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 //1. Log out, first had to check if currentMenuslist == null, if not then delete all shared preference, and clear all lists.
 //2. When they click placeorder and have a successful response. Gonna do this later.
+//On the clear all button I want to remove it all from shared preference.
 
 //The reason why I am not putting in the onkeydown and checking if they clicked back is because we are just going to call
 //moveTaskToBack so that when they reopen they can leave off from where they started and call super onkeydown
@@ -134,6 +135,11 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 //Added return super.onkeydown in the mainactivities onkeydown in the else, so if the user is not logged in or logged in, it returns the super.
 //Also, if the keycode isn't back it returns super.onkeydown.
 //In the first if statement inside if the button pressed is back, if the drawer is opened up, i want to return false so it stops.
+
+//TODO:
+
+//When adding something to the box on offline, logging in, it will have what it had before offline, but when adding 1 more, and terminating app
+//And reopen, the added menu won't be in there: I just want to delete all shared preference when it is terminated.
 
 public class MainActivity extends AppCompatActivity implements BlackGarlicAdapter.MyListItemClickListener, AdapterView.OnItemClickListener {
 
@@ -236,6 +242,8 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             userCredentials = LogInScreen.getUserCredentials();
             isLoggedIn = false;
         }
+
+        Log.e("After Clear All: ", String.valueOf(sharedPreferences.contains("currentMenuList")));
 
         //Start of Doing work to add the boxes they selected before logging in to after they logged in
 
@@ -591,8 +599,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
-        SharedPreferences.Editor editor = SplashActivity.getSharedPreferences().edit();
-
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (sliding_layout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
                 sliding_layout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
@@ -683,7 +689,9 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             return;
         } else {
 
-            SharedPreferences.Editor editor = SplashActivity.getSharedPreferences().edit();
+            SharedPreferences sharedPreferences = SplashActivity.getSharedPreferences();
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
 
             currentMenuList.clear();
             currentMenuIdList.clear();
@@ -692,6 +700,17 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             portionSizes.clear();
 
             blackGarlicAdapter2.clearAllLists();
+
+            editor.remove("currentMenuList");
+            editor.remove("currentMenuIdList");
+            editor.remove("currentSelectedMenuListUrls");
+            editor.remove("currentPortionSizes");
+            editor.remove("currentIndividualPrices");
+            editor.remove("currentSubtotalCost");
+
+            editor.commit();
+
+            Log.e("Before Clear All: ", String.valueOf(sharedPreferences.contains("currentMenuList")));
 
             subTotalCost = subTotalCost - subTotalCost;
             subTotalPriceTextView.setText("SUBTOTAL: ");
