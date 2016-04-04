@@ -106,8 +106,10 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 //Then, after I have set all of these, then I delete all of the keys inside of the sharedpreference,and also clear all lists when they:
 
 //1. Log out, first had to check if currentMenuslist == null, if not then delete all shared preference, and clear all lists.
-//2. Click back when in mainactivity, closing the application. Same as above.
-//3. When they click placeorder and have a successful response. Gonna do this later.
+//2. When they click placeorder and have a successful response. Gonna do this later.
+
+//The reason why I am not putting in the onkeydown and checking if they clicked back is because we are just going to call
+//moveTaskToBack so that when they reopen they can leave off from where they started and call super onkeydown
 
 //THen when they click the clear all button, I should clear all of the lists inside of the BlackGarlicAdapter class:
 
@@ -131,6 +133,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 //Added return super.onkeydown in the mainactivities onkeydown in the else, so if the user is not logged in or logged in, it returns the super.
 //Also, if the keycode isn't back it returns super.onkeydown.
+//In the first if statement inside if the button pressed is back, if the drawer is opened up, i want to return false so it stops.
 
 public class MainActivity extends AppCompatActivity implements BlackGarlicAdapter.MyListItemClickListener, AdapterView.OnItemClickListener {
 
@@ -596,35 +599,13 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                 return false;
             } else {
 
-                if (isLoggedIn == true) {
-
-                    editor.remove("currentMenuList");
-                    editor.remove("currentMenuIdList");
-                    editor.remove("currentSelectedMenuListUrls");
-                    editor.remove("currentPortionSizes");
-                    editor.remove("currentIndividualPrices");
-                    editor.remove("currentSubtotalCost");
-                    editor.commit();
-
-                    if (!(null == currentMenuList)) {
-
-                        currentMenuList.clear();
-                        currentMenuIdList.clear();
-                        currentSelectedMenuListUrls.clear();
-                        portionSizes.clear();
-                        individualPrices.clear();
-                        subTotalCost = 0;
-
-                    }
-
-                }
-
-                finish();
+                moveTaskToBack(true);
                 return super.onKeyDown(keyCode, event);
             }
         }
 
         return super.onKeyDown(keyCode, event);
+
 
     }
 
