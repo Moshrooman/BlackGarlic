@@ -615,12 +615,12 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
                 }
 
-
                 finish();
+                return super.onKeyDown(keyCode, event);
             }
         }
 
-        return false;
+        return super.onKeyDown(keyCode, event);
 
     }
 
