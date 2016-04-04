@@ -2,20 +2,14 @@ package id.blackgarlic.blackgarlic;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
 import android.os.Bundle;
-import android.os.Message;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,30 +23,13 @@ import com.google.gson.Gson;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.charset.Charset;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.HashSet;
+import java.util.Set;
 
-import id.blackgarlic.blackgarlic.database.DatabaseContract;
+import id.blackgarlic.blackgarlic.model.Data;
 import id.blackgarlic.blackgarlic.model.UserCredentials;
 
 public class LogInScreen extends AppCompatActivity {
@@ -118,6 +95,34 @@ public class LogInScreen extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //Converting all lists to json string using gson
+
+                Gson gson = new Gson();
+
+                String currentMenuList = gson.toJson(MainActivity.getCurrentMenuList());
+                String currentMenuIdList = gson.toJson(MainActivity.getCurrentMenuIdList());
+                String currentSelectedMenuListUrls = gson.toJson(MainActivity.getCurrentSelectedMenuListUrls());
+                String currentPortionSizes = gson.toJson(MainActivity.getPortionSizes());
+                String currentIndividualPrices = gson.toJson(MainActivity.getIndividualPrices());
+
+                //The subtotal cost is an int anyways, so can add that separately
+
+                int currentSubtotalCost = MainActivity.getSubTotalCost();
+
+                //Then we put it all inside the shared preference:
+
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                editor.putString("currentMenuList", currentMenuList);
+                editor.putString("currentMenuIdList", currentMenuIdList);
+                editor.putString("currentSelectedMenuListUrls", currentSelectedMenuListUrls);
+                editor.putString("currentPortionSizes", currentPortionSizes);
+                editor.putString("currentIndividualPrices", currentIndividualPrices);
+                editor.putInt("currentSubtotalCost", currentSubtotalCost);
+
+                editor.commit();
+
 
                 loginButton.setEnabled(false);
                 progressBar.setVisibility(View.VISIBLE);

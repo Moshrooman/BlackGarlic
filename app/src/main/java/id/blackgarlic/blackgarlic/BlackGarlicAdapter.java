@@ -1,6 +1,7 @@
 package id.blackgarlic.blackgarlic;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,10 +21,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.NetworkImageView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
 import org.w3c.dom.Text;
 
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -72,6 +76,8 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
 
     @Override
     public void onBindViewHolder(final MyViewHolder myViewHolder, final int position) {
+        SharedPreferences sharedPreferences = SplashActivity.getSharedPreferences();
+
         final Data currentMenu = mmenuList.get(position);
         myViewHolder.menuTitleTextView.setText(currentMenu.getMenu_name());
         myViewHolder.menuDescriptionTextView.setText(currentMenu.getMenu_description());
@@ -80,6 +86,21 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
             myViewHolder.priceTextView.setText("IDR 80.000");
         } else {
             myViewHolder.priceTextView.setText("IDR 100.000");
+        }
+
+        if ((MainActivity.getIsLoggedIn() == true) && (sharedPreferences.contains("currentMenuList"))) {
+            Gson gson = new Gson();
+
+            Type dataType = new TypeToken<List<Data>>(){}.getType();
+            Type integerType = new TypeToken<List<Integer>>(){}.getType();
+            Type stringType = new TypeToken<List<String>>(){}.getType();
+
+            currentSelectedMenus = gson.fromJson(sharedPreferences.getString("currentMenuList", ""), dataType);
+            currentSelectedMenuIds = gson.fromJson(sharedPreferences.getString("currentMenuIdList", ""), integerType);
+            currentSelectedMenusImageUrl = gson.fromJson(sharedPreferences.getString("currentSelectedMenuListUrls", ""), stringType);
+            portionSizes = gson.fromJson(sharedPreferences.getString("currentPortionSizes", ""), stringType);
+            individualPrices = gson.fromJson(sharedPreferences.getString("currentIndividualPrices", ""), stringType);
+
         }
 
         myViewHolder.rippleViewButton.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {

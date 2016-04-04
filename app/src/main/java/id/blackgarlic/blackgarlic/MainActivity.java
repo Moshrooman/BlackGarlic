@@ -35,12 +35,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import org.joda.time.LocalDate;
 
+import java.lang.reflect.Type;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -54,6 +57,55 @@ import id.blackgarlic.blackgarlic.model.UserCredentials;
 import id.blackgarlic.blackgarlic.welcome.WelcomeActivity;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+//Implementation for the adding the menus to box when logged out needs to be applied to:
+
+//1. When they click log in when logged out.
+
+//These are the things that MainActivity has to start with when they have menu's in box and log in.
+
+//1. Change currentMenuList;
+//2. Change currentMenuIdList;
+//3. Change currentSelectedMenuListUrls;
+//4. Change portionSizes;
+//5. Change individualPrices;
+//6. Subtotal cost
+
+//And I need to set the new adapter with these things
+
+//1. listViewOrderSummary.setAdapter(new MyAdapter(selectedMenuList, selectedMenuIdList, currentMenuListUrls, portionSizeList, individualPricesAdapter));
+
+//And finally, I need to set the subtotalpricetextview.
+
+//subTotalPriceTextView.setText("SUBTOTAL: IDR " + new DecimalFormat().format(subTotalCost));
+
+//Then I moved these 2 instantiations up above checking if is logged in is true.
+
+//subTotalPriceTextView = (TextView) findViewById(R.id.subtotalTextView);
+//listViewOrderSummary = (ListView) findViewById(R.id.orderSummaryListView);
+//orderBoxImageView = (ImageView) findViewById(R.id.orderBoxImageView);
+//orderQuantityTextView = (TextView) findViewById(R.id.orderQuantityTextView);
+
+//Then I have to go into blackgarlicadapter and set all of those to the ones in the sharedpreference.
+
+//Then I have to set the selectedBoxImageView by first doing above, moving instantiations to the top and also adding this into the if:
+
+//orderQuantityTextView.bringToFront();
+//
+// if (currentMenuList.size() == 0) {
+//     orderBoxImageView.setImageResource(R.drawable.orderboxone);
+//     orderQuantityTextView.setVisibility(View.GONE);
+// } else {
+//     orderBoxImageView.setImageResource(R.drawable.orderboxtwopng);
+//     orderQuantityTextView.setVisibility(View.VISIBLE);
+//     orderQuantityTextView.setText(String.valueOf(currentMenuList.size()));
+// }
+
+//Then, after I have set all of these, then I delete all of the keys inside of the sharedpreference,and also clear all lists when they:
+
+//1. Log out, first had to check if currentMenuslist == null, if not then delete all shared preference, and clear all lists.
+//2. Click back when in mainactivity, closing the application. Same as above.
+//3. When they click placeorder and have a successful response. Gonna do this later.
+
 public class MainActivity extends AppCompatActivity implements BlackGarlicAdapter.MyListItemClickListener, AdapterView.OnItemClickListener {
 
     private RecyclerView recyclerView;
@@ -63,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
     private static List<Integer> menuIdList;
     private static Integer boxId;
     private static TextView orderQuantityTextView;
+    private static ImageView orderBoxImageView;
     private static com.sothree.slidinguppanel.SlidingUpPanelLayout sliding_layout;
     private static ListView listViewOrderSummary;
 
@@ -85,6 +138,8 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
     private static Button proceedToCheckoutButton;
 
     private static boolean isLoggedIn = false;
+
+    private static TextView subTotalPriceTextView;
 
     public static List<Data> getCurrentMenuList() {
         return currentMenuList;
@@ -127,7 +182,49 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        subTotalPriceTextView = (TextView) findViewById(R.id.subtotalTextView);
+        listViewOrderSummary = (ListView) findViewById(R.id.orderSummaryListView);
+        orderBoxImageView = (ImageView) findViewById(R.id.orderBoxImageView);
+        orderQuantityTextView = (TextView) findViewById(R.id.orderQuantityTextView);
+
         final SharedPreferences sharedPreferences = SplashActivity.getSharedPreferences();
+
+        //Start of Doing work to add the boxes they selected before logging in to after they logged in
+
+        if ((isLoggedIn == true) && (sharedPreferences.contains("currentMenuList"))) {
+
+            Gson gson = new Gson();
+
+            Type dataType = new TypeToken<List<Data>>(){}.getType();
+            Type integerType = new TypeToken<List<Integer>>(){}.getType();
+            Type stringType = new TypeToken<List<String>>(){}.getType();
+
+            currentMenuList = gson.fromJson(sharedPreferences.getString("currentMenuList", ""), dataType);
+            currentMenuIdList = gson.fromJson(sharedPreferences.getString("currentMenuIdList", ""), integerType);
+            currentSelectedMenuListUrls = gson.fromJson(sharedPreferences.getString("currentSelectedMenuListUrls", ""), stringType);
+            portionSizes = gson.fromJson(sharedPreferences.getString("currentPortionSizes", ""), stringType);
+            individualPrices = gson.fromJson(sharedPreferences.getString("currentIndividualPrices", ""), stringType);
+            subTotalCost = sharedPreferences.getInt("currentSubtotalCost", 0);
+
+            listViewOrderSummary.setAdapter(new MyAdapter(currentMenuList, currentMenuIdList, currentSelectedMenuListUrls, portionSizes, individualPrices));
+
+            subTotalPriceTextView.setText("SUBTOTAL: IDR " + new DecimalFormat().format(subTotalCost));
+
+            orderQuantityTextView.bringToFront();
+
+            if (currentMenuList.size() == 0) {
+                orderBoxImageView.setImageResource(R.drawable.orderboxone);
+                orderQuantityTextView.setVisibility(View.GONE);
+            } else {
+                orderBoxImageView.setImageResource(R.drawable.orderboxtwopng);
+                orderQuantityTextView.setVisibility(View.VISIBLE);
+                orderQuantityTextView.setText(String.valueOf(currentMenuList.size()));
+            }
+
+
+        }
+
+        //End of doing work to add the boxes they selected before logging in to after they logged in.
 
         if (sharedPreferences.contains("Credentials")) {
             String json = sharedPreferences.getString("Credentials", "");
@@ -141,9 +238,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         numberOfTimesClicked = 0;
         currentRotation = 0;
 
-        orderQuantityTextView = (TextView) findViewById(R.id.orderQuantityTextView);
         sliding_layout = (com.sothree.slidinguppanel.SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
-        listViewOrderSummary = (ListView) findViewById(R.id.orderSummaryListView);
 
         sliding_layout.setDragView(findViewById(R.id.tabRelativeLayout));
 
@@ -350,14 +445,22 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
                 if (isLoggedIn == true) {
                     if (null == currentMenuList || currentMenuList.size() == 0) {
+                        proceedToCheckoutButton.setEnabled(true);
                         Toast.makeText(MainActivity.this, "You Have Nothing In Your Box!", Toast.LENGTH_SHORT).show();
                     } else {
                         Intent proceedToCheckOutIntent = new Intent(MainActivity.this, CheckOut.class);
                         startActivity(proceedToCheckOutIntent);
                     }
                 } else {
-                    Intent logInIntent = new Intent(MainActivity.this, LogInScreen.class);
-                    startActivity(logInIntent);
+
+                    if (null == currentMenuList || currentMenuList.size() == 0) {
+                        proceedToCheckoutButton.setEnabled(true);
+                        Toast.makeText(MainActivity.this, "You Have Nothing In Your Box!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent logInIntent = new Intent(MainActivity.this, LogInScreen.class);
+                        startActivity(logInIntent);
+                    }
+
                 }
             }
         });
@@ -447,10 +550,34 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        SharedPreferences.Editor editor = SplashActivity.getSharedPreferences().edit();
+
         if (keyCode == event.KEYCODE_BACK) {
             if (sliding_layout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
                 sliding_layout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
             } else {
+
+                if (isLoggedIn == true) {
+
+                    editor.remove("currentMenuList");
+                    editor.remove("currentMenuIdList");
+                    editor.remove("currentSelectedMenuListUrls");
+                    editor.remove("currentPortionSizes");
+                    editor.remove("currentIndividualPrices");
+                    editor.remove("currentSubtotalCost");
+                    editor.commit();
+
+                    currentMenuList.clear();
+                    currentMenuIdList.clear();
+                    currentSelectedMenuListUrls.clear();
+                    portionSizes.clear();
+                    individualPrices.clear();
+                    subTotalCost = 0;
+
+                }
+
+
                 finish();
             }
         }
@@ -476,8 +603,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         portionSizes = portionSizeList;
         individualPrices = individualPricesAdapter;
 
-        TextView subTotalPriceTextView = (TextView) findViewById(R.id.subtotalTextView);
-
         for (int i = 0; i < individualPrices.size(); i++) {
 
             String cost = individualPrices.get(i).replace("IDR", "");
@@ -491,8 +616,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         }
 
         Log.e("SubTotalCost: ", String.valueOf(subTotalCost));
-
-        ImageView orderBoxImageView = (ImageView) findViewById(R.id.orderBoxImageView);
 
         orderQuantityTextView.bringToFront();
 
@@ -509,7 +632,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             Log.e("Selected Menu: ", selectedMenuList.get(i).getMenu_name() + ": " + String.valueOf(selectedMenuIdList.get(i)));
         }
 
-        subTotalPriceTextView.setText("SUBTOTAL: " + String.valueOf(subTotalCost));
+        subTotalPriceTextView.setText("SUBTOTAL: IDR " + new DecimalFormat().format(subTotalCost));
 
         Log.e("---------------", "-----------------");
 
@@ -572,7 +695,22 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             } else if (position == 2) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.remove("Credentials");
+                editor.remove("currentMenuList");
+                editor.remove("currentMenuIdList");
+                editor.remove("currentSelectedMenuListUrls");
+                editor.remove("currentPortionSizes");
+                editor.remove("currentIndividualPrices");
+                editor.remove("currentSubtotalCost");
+
                 editor.commit();
+
+                currentMenuList.clear();
+                currentMenuIdList.clear();
+                currentSelectedMenuListUrls.clear();
+                portionSizes.clear();
+                individualPrices.clear();
+                subTotalCost = 0;
+
                 LogInScreen.setUserCredentials(null);
                 finish();
                 startActivity(getIntent());
