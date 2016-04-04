@@ -129,6 +129,9 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 //Then in the loginscreen, I only want to add the things into the sharedpreference if the currentmenulist is not null.
 
+//Added return super.onkeydown in the mainactivities onkeydown in the else, so if the user is not logged in or logged in, it returns the super.
+//Also, if the keycode isn't back it returns super.onkeydown.
+
 public class MainActivity extends AppCompatActivity implements BlackGarlicAdapter.MyListItemClickListener, AdapterView.OnItemClickListener {
 
     private RecyclerView recyclerView;
@@ -590,6 +593,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (sliding_layout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
                 sliding_layout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                return false;
             } else {
 
                 if (isLoggedIn == true) {
