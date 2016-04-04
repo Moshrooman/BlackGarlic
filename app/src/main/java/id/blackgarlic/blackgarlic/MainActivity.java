@@ -596,6 +596,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     }
 
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
