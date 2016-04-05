@@ -38,6 +38,9 @@ public class SplashActivity extends AppCompatActivity {
                     editor.commit();
                     nextWelcomeActivity();
                 } else {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean("fromSplash", true);
+                    editor.commit();
 
                     goToMainActivity();
                 }

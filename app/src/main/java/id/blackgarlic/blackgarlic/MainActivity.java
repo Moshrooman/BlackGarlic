@@ -108,13 +108,9 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 //1. Log out, first had to check if currentMenuslist == null, if not then delete all shared preference, and clear all lists.
 //2. When they click placeorder and have a successful response. Gonna do this later.
 //On the clear all button I want to remove it all from shared preference.
+//3. When they click the clear all button:
 
-//The reason why I am not putting in the onkeydown and checking if they clicked back is because we are just going to call
-//moveTaskToBack so that when they reopen they can leave off from where they started and call super onkeydown
-
-//THen when they click the clear all button, I should clear all of the lists inside of the BlackGarlicAdapter class:
-
-//1. So in the BlackGarlicAdapter, at the top, I have to create a public method:
+//So in the BlackGarlicAdapter, at the top, I have to create a public method:
 //public void clearAllLists() {
 //        currentSelectedMenus.clear();
 //        currentSelectedMenuIds.clear();
@@ -127,19 +123,28 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 //Where we created the blackgarlicadapter so i set the og blackgarlicadapter to the blackgarlicadapter2
 //3. Then in the clear all button method I called this blackgarlicadapter2.clearAllLists.
 
-//Made sure that where it checks for the usercredentials is on top of the other one, because it banks off of the isloggedin, also in the
-//position = 3 in the onitemclick where they clcked log out, i made is logged in = to false, just to make sure.
+//ANd also in the clear ALl
 
-//Then in the loginscreen, I only want to add the things into the sharedpreference if the currentmenulist is not null.
+//editor.remove("currentMenuList");
+//editor.remove("currentMenuIdList");
+//editor.remove("currentSelectedMenuListUrls");
+//editor.remove("currentPortionSizes");
+//editor.remove("currentIndividualPrices");
+//editor.remove("currentSubtotalCost");
+
+//The reason why I am not putting in the onkeydown and checking if they clicked back is because we are just going to call
+//moveTaskToBack so that when they reopen they can leave off from where they started and call super onkeydown
+
 
 //Added return super.onkeydown in the mainactivities onkeydown in the else, so if the user is not logged in or logged in, it returns the super.
 //Also, if the keycode isn't back it returns super.onkeydown.
 //In the first if statement inside if the button pressed is back, if the drawer is opened up, i want to return false so it stops.
 
-//TODO:
 
-//When adding something to the box on offline, logging in, it will have what it had before offline, but when adding 1 more, and terminating app
-//And reopen, the added menu won't be in there: I just want to delete all shared preference when it is terminated.
+//When adding something to the box on offline, logging in, it will have what it had before offline. But say they add 1 more,
+//then they close the application and reopen (as in terminate, not just click the back button), the shared preference will still be there
+//  So to fix this in the splash activity when it goes to main activity I added a boolean in sharedpreference called from splash activity.
+//  And in the main activity I check for the shared preference fromSplash and if there is, then I am going to delete from shared preference.
 
 public class MainActivity extends AppCompatActivity implements BlackGarlicAdapter.MyListItemClickListener, AdapterView.OnItemClickListener {
 
@@ -216,9 +221,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         return isLoggedIn;
     }
 
-    public static Button getClearAllButton() {
-        return clearAllButton;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -233,6 +235,21 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         orderQuantityTextView = (TextView) findViewById(R.id.orderQuantityTextView);
 
         final SharedPreferences sharedPreferences = SplashActivity.getSharedPreferences();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        if (sharedPreferences.contains("fromSplash")) {
+            Log.e("In From Splash: ", "True");
+            editor.remove("fromSplash");
+            editor.remove("currentMenuList");
+            editor.remove("currentMenuIdList");
+            editor.remove("currentSelectedMenuListUrls");
+            editor.remove("currentPortionSizes");
+            editor.remove("currentIndividualPrices");
+            editor.remove("currentSubtotalCost");
+
+            editor.commit();
+
+        }
 
         if (sharedPreferences.contains("Credentials")) {
             String json = sharedPreferences.getString("Credentials", "");
