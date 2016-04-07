@@ -3,8 +3,6 @@ package id.blackgarlic.blackgarlic;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -45,12 +43,12 @@ import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import id.blackgarlic.blackgarlic.OrderHistory.OrderHistory;
 import id.blackgarlic.blackgarlic.model.Data;
 import id.blackgarlic.blackgarlic.model.MenuId;
 import id.blackgarlic.blackgarlic.model.Menus;
@@ -264,10 +262,11 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             welcomeTextViewString = welcomeTextViewString.replace("Name", userCredentials.getCustomer_name());
             welcomeTextView.setText(welcomeTextViewString);
 
-            drawerEntries = new String[3];
+            drawerEntries = new String[4];
             drawerEntries[0] = "Home";
             drawerEntries[1] = "My Account";
-            drawerEntries[2] = "Log Out";
+            drawerEntries[2] = "Order History";
+            drawerEntries[3] = "Log Out";
         }
 
         drawerListView.setAdapter(new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, drawerEntries));
@@ -672,6 +671,13 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                 drawerLayout.closeDrawer(Gravity.LEFT);
                 startActivity(myAccountIntent);
             } else if (position == 2) {
+
+                Intent orderHistoryIntent = new Intent(MainActivity.this, OrderHistory.class);
+                drawerListView.setItemChecked(position, true);
+                drawerLayout.closeDrawer(Gravity.LEFT);
+                startActivity(orderHistoryIntent);
+
+            } else if (position == 3) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.remove("Credentials");
                 editor.remove("Email");

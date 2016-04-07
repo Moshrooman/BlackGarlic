@@ -16,4 +16,5 @@
         <item>My Account</item>
     </string-array>
     <string name="title_activity_check_out">CheckOut</string>
+    <string name="title_activity_order_history">OrderHistory</string>
 </resources>
