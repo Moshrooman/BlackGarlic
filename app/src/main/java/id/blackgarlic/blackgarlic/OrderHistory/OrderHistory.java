@@ -31,7 +31,7 @@ import id.blackgarlic.blackgarlic.model.UserCredentials;
 
 public class OrderHistory extends AppCompatActivity {
 
-    private static String orderHistoryLink = "http://api.blackgarlic.id:7000/app/orderhistory";
+    private static String orderHistoryLink = "http://10.0.3.2:3000/app/orderhistory";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +56,13 @@ public class OrderHistory extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
 
+                Log.e("Response: ", response);
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Log.e("Error: ", "True");
             }
         }) {
             @Override

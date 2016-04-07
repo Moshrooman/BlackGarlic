@@ -86,7 +86,7 @@ public class CheckOut extends AppCompatActivity {
 
     private static int grandTotal;
 
-    private static String orderApiLink = "http://api.blackgarlic.id:7000/app/order";
+    private static String orderApiLink = "http://10.0.3.2:3000/app/order";
 
     private static Integer boxId;
 
