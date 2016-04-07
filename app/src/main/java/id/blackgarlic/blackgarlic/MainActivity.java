@@ -58,93 +58,6 @@ import id.blackgarlic.blackgarlic.model.UserCredentials;
 import id.blackgarlic.blackgarlic.welcome.WelcomeActivity;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-//1. In main activity, in the rippleviews onitemclick, I concatenate the subtotalpricetextview to concatenate the subtotalcost in decimal format.
-
-//Implementation for the adding the menus to box when logged out needs to be applied to:
-
-//1. When they click log in when logged out.
-
-//These are the things that MainActivity has to start with when they have menu's in box and log in.
-
-//1. Change currentMenuList;
-//2. Change currentMenuIdList;
-//3. Change currentSelectedMenuListUrls;
-//4. Change portionSizes;
-//5. Change individualPrices;
-//6. Subtotal cost
-
-//And I need to set the new adapter with these things
-
-//1. listViewOrderSummary.setAdapter(new MyAdapter(selectedMenuList, selectedMenuIdList, currentMenuListUrls, portionSizeList, individualPricesAdapter));
-
-//And finally, I need to set the subtotalpricetextview.
-
-//subTotalPriceTextView.setText("SUBTOTAL: IDR " + new DecimalFormat().format(subTotalCost));
-
-//Then I moved these 2 instantiations up above checking if is logged in is true.
-
-//subTotalPriceTextView = (TextView) findViewById(R.id.subtotalTextView);
-//listViewOrderSummary = (ListView) findViewById(R.id.orderSummaryListView);
-//orderBoxImageView = (ImageView) findViewById(R.id.orderBoxImageView);
-//orderQuantityTextView = (TextView) findViewById(R.id.orderQuantityTextView);
-
-//Then I have to go into blackgarlicadapter and set all of those to the ones in the sharedpreference.
-
-//Then I have to set the selectedBoxImageView by first doing above, moving instantiations to the top and also adding this into the if:
-
-//orderQuantityTextView.bringToFront();
-//
-// if (currentMenuList.size() == 0) {
-//     orderBoxImageView.setImageResource(R.drawable.orderboxone);
-//     orderQuantityTextView.setVisibility(View.GONE);
-// } else {
-//     orderBoxImageView.setImageResource(R.drawable.orderboxtwopng);
-//     orderQuantityTextView.setVisibility(View.VISIBLE);
-//     orderQuantityTextView.setText(String.valueOf(currentMenuList.size()));
-// }
-
-//Then, after I have set all of these, then I delete all of the keys inside of the sharedpreference,and also clear all lists when they:
-
-//1. Log out, first had to check if currentMenuslist == null, if not then delete all shared preference, and clear all lists.
-//2. When they click placeorder and have a successful response. Gonna do this later.
-//On the clear all button I want to remove it all from shared preference.
-//3. When they click the clear all button:
-
-//So in the BlackGarlicAdapter, at the top, I have to create a public method:
-//public void clearAllLists() {
-//        currentSelectedMenus.clear();
-//        currentSelectedMenuIds.clear();
-//        currentSelectedMenusImageUrl.clear();
-//        portionSizes.clear();
-//        individualPrices.clear();
-//        }
-
-//2. Then in mainactivity I had to create a privatestatic variable called blackgarlicAdapter2 that I give value in stringrequest
-//Where we created the blackgarlicadapter so i set the og blackgarlicadapter to the blackgarlicadapter2
-//3. Then in the clear all button method I called this blackgarlicadapter2.clearAllLists.
-
-//ANd also in the clear ALl
-
-//editor.remove("currentMenuList");
-//editor.remove("currentMenuIdList");
-//editor.remove("currentSelectedMenuListUrls");
-//editor.remove("currentPortionSizes");
-//editor.remove("currentIndividualPrices");
-//editor.remove("currentSubtotalCost");
-
-//The reason why I am not putting in the onkeydown and checking if they clicked back is because we are just going to call
-//moveTaskToBack so that when they reopen they can leave off from where they started and call super onkeydown
-
-
-//Added return super.onkeydown in the mainactivities onkeydown in the else, so if the user is not logged in or logged in, it returns the super.
-//Also, if the keycode isn't back it returns super.onkeydown.
-//In the first if statement inside if the button pressed is back, if the drawer is opened up, i want to return false so it stops.
-
-
-//When adding something to the box on offline, logging in, it will have what it had before offline. But say they add 1 more,
-//then they close the application and reopen (as in terminate, not just click the back button), the shared preference will still be there
-//  So to fix this in the splash activity when it goes to main activity I added a boolean in sharedpreference called from splash activity.
-//  And in the main activity I check for the shared preference fromSplash and if there is, then I am going to delete from shared preference.
 
 public class MainActivity extends AppCompatActivity implements BlackGarlicAdapter.MyListItemClickListener, AdapterView.OnItemClickListener {
 
@@ -761,6 +674,8 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             } else if (position == 2) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.remove("Credentials");
+                editor.remove("Email");
+                editor.remove("Password");
                 editor.remove("currentMenuList");
                 editor.remove("currentMenuIdList");
                 editor.remove("currentSelectedMenuListUrls");

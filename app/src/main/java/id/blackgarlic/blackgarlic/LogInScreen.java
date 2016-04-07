@@ -163,6 +163,8 @@ public class LogInScreen extends AppCompatActivity {
 
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putString("Credentials", new Gson().toJson(userCredentials));
+                            editor.putString("Email", username);
+                            editor.putString("Password", myAccountSha1Password);
                             editor.commit();
 
                             Log.e("Credentials: ", sharedPreferences.getString("Credentials", ""));
@@ -187,6 +189,8 @@ public class LogInScreen extends AppCompatActivity {
 
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putString("Credentials", new Gson().toJson(userCredentials));
+                            editor.putString("Email", username);
+                            editor.putString("Password", myAccountSha1Password);
                             editor.commit();
 
                             Log.e("Credentials: ", sharedPreferences.getString("Credentials", ""));

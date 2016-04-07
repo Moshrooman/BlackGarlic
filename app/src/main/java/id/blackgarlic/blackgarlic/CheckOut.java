@@ -39,6 +39,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Method;
+import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -89,11 +90,11 @@ public class CheckOut extends AppCompatActivity {
 
     private static Integer boxId;
 
-    private static int twoPersonBreakfast = 0;
-    private static int fourPersonBreakfast = 0;
+    private static final String updateUrl = "http://api.blackgarlic.id:7000/app/updateaccount";
 
-    private static int twoPersonOriginal = 0;
-    private static int fourPersonOriginal = 0;
+    private static final String getUserCredentialsUrl = "http://api.blackgarlic.id:7000/app/login";
+
+    private static Button updateAppCredentialsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +103,8 @@ public class CheckOut extends AppCompatActivity {
 
         retrieveBitmapFromCache();
 
+        updateAppCredentialsButton = (Button) findViewById(R.id.updateAppCredentialsButton);
+
         grandTotal = 0;
         deliveryFee = "";
         deliveryTime = "";
@@ -109,7 +112,7 @@ public class CheckOut extends AppCompatActivity {
 
         boxId = MainActivity.getBoxId();
 
-        SharedPreferences sharedPreferences = SplashActivity.getSharedPreferences();
+        final SharedPreferences sharedPreferences = SplashActivity.getSharedPreferences();
 
         userCredentials = new Gson().fromJson(sharedPreferences.getString("Credentials", ""), UserCredentials.class);
 
@@ -394,7 +397,7 @@ public class CheckOut extends AppCompatActivity {
                     selectedPaymentMethod = "";
                 } else if (position == 1) {
 
-                    if (!(selectedDate.equals(""))){
+                    if (!(selectedDate.equals(""))) {
                         LocalDate deliveryTimeBankTransfer = new LocalDate(selectedDate).minusDays(2);
                         String deliveryTimeBankTransferString = deliveryTimeBankTransfer.dayOfMonth().getAsText() + " " + deliveryTimeBankTransfer.monthOfYear().getAsText() + " " + deliveryTimeBankTransfer.year().getAsText() + " " + "15:00";
                         methodInfoTextView.setText("BANK TRANSFER\n\nBCA BANK\nAcc. No.: 537 532 0255\nBranch: Sudirman Mansion\nAcc. Name: BGI Jaya Indonesia PT" +
@@ -454,6 +457,60 @@ public class CheckOut extends AppCompatActivity {
                 }
             }
         });
+
+        updateAppCredentialsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final JSONObject updateAppCredentialsBody = new JSONObject();
+                try {
+                    updateAppCredentialsBody.put("email", sharedPreferences.getString("Email", ""));
+                    updateAppCredentialsBody.put("password", sharedPreferences.getString("Password", ""));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                StringRequest updateAppCredentialsRequest = new StringRequest(Request.Method.POST, getUserCredentialsUrl, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response2) {
+
+                        Log.e("Update Credentials: ", "APP");
+
+                        Log.e("Response: ", response2);
+
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                        UserCredentials newUserCredentials = new Gson().fromJson(response2, UserCredentials.class);
+                        newUserCredentials.setCity();
+                        LogInScreen.setUserCredentials(newUserCredentials);
+
+                        editor.remove("Credentials");
+                        editor.putString("Credentials", new Gson().toJson(newUserCredentials));
+
+                        editor.commit();
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+                    @Override
+                    public byte[] getBody() throws AuthFailureError {
+                        return updateAppCredentialsBody.toString().getBytes();
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json";
+                    }
+                };
+
+                ConnectionManager.getInstance(CheckOut.this).add(updateAppCredentialsRequest);
+
+            }
+        });
         
         placeOrderButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -466,48 +523,29 @@ public class CheckOut extends AppCompatActivity {
                     Toast.makeText(CheckOut.this, "Please Select A Payment Method!", Toast.LENGTH_SHORT).show();
 
                 } else {
+
+                    //Start of stringrequest to update user credentials
+
+                    final JSONObject updateWebCredentialsBody = new JSONObject();
+                    try {
+                        updateWebCredentialsBody.put("address_id", userCredentials.getAddress_id());
+                        updateWebCredentialsBody.put("customer_id", userCredentials.getCustomer_id());
+                        updateWebCredentialsBody.put("address_content", String.valueOf(checkOutAddressContent.getText()));
+                        updateWebCredentialsBody.put("city", String.valueOf(checkOutCityDropDown.getSelectedItemPosition() + 1));
+                        updateWebCredentialsBody.put("mobile", String.valueOf(checkOutMobile.getText()));
+                        updateWebCredentialsBody.put("zipcode", String.valueOf(checkOutZipCodeEditText.getText()));
+                        updateWebCredentialsBody.put("address_notes", String.valueOf(checkOutAddressNotes.getText()));
+                        updateWebCredentialsBody.put("address_status", "1");
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
                     placeOrderButton.setEnabled(false);
 
                     Toast.makeText(CheckOut.this, "Placing Order", Toast.LENGTH_SHORT).show();
 
-                    twoPersonBreakfast = 0;
-                    fourPersonBreakfast = 0;
-                    twoPersonOriginal = 0;
-                    fourPersonOriginal = 0;
-
-                    for (int i = 0; i < selectedMenuList.size(); i++) {
-                        if (  ((selectedMenuList.get(i).getMenu_type().equals("4")) || (selectedMenuList.get(i).getMenu_type().equals("6")) ) && (selectedPortionSizes.get(i).equals("2P"))) {
-                            twoPersonBreakfast++;
-                        } else if (  ((selectedMenuList.get(i).getMenu_type().equals("4")) || (selectedMenuList.get(i).getMenu_type().equals("6"))) && (selectedPortionSizes.get(i).equals("4P"))) {
-                            fourPersonBreakfast ++;
-                        } else if (  ((selectedMenuList.get(i).getMenu_type().equals("3")) || (selectedMenuList.get(i).getMenu_type().equals("5"))) && (selectedPortionSizes.get(i).equals("2P"))) {
-                            twoPersonOriginal++;
-                        } else {
-                            fourPersonOriginal++;
-                        }
-                    }
-
-                    Log.e("Two Person Breakfast: ", String.valueOf(twoPersonBreakfast));
-                    Log.e("Four Person Breakfast: ", String.valueOf(fourPersonBreakfast));
-                    Log.e("Two Person Original: ", String.valueOf(twoPersonOriginal));
-                    Log.e("Four Person Original: ", String.valueOf(fourPersonOriginal));
-
-                    final JSONObject breakFastObject = new JSONObject();
-                    try {
-                        breakFastObject.put("two_person", String.valueOf(twoPersonBreakfast));
-                        breakFastObject.put("four_person", String.valueOf(fourPersonBreakfast));
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    final JSONObject originalObject = new JSONObject();
-                    try {
-                        originalObject.put("two_person", String.valueOf(twoPersonOriginal));
-                        originalObject.put("four_person", String.valueOf(fourPersonOriginal));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
 
                     final JSONObject addressObject = new JSONObject();
                     try {
@@ -565,8 +603,6 @@ public class CheckOut extends AppCompatActivity {
 
                         body.put("grandtotal", String.valueOf(grandTotal));
 
-                        body.put("breakfast", breakFastObject);
-                        body.put("original", originalObject);
                         body.put("address", addressObject);
                         body.put("menu", menuJsonArray);
 
@@ -584,6 +620,53 @@ public class CheckOut extends AppCompatActivity {
                             Log.e("Status: ", "Successful");
                             Log.e("Order ID: ", response);
 
+                            //When the response is successful then we are going to update the webCredentials
+                            StringRequest updateWebCredentialsRequest = new StringRequest(Request.Method.POST, updateUrl, new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+
+                                    Log.e("Update User: ", "WEB");
+
+                                    Runnable runnable2sec = new Runnable() {
+                                        @Override
+                                        public void run() {
+
+                                            //If the web response is successful we are going to click the buttons on click listener above
+                                            //Which will update the apps credentials
+                                            updateAppCredentialsButton.performClick();
+
+
+                                        }
+                                    };
+
+                                    android.os.Handler myHandler = new android.os.Handler();
+                                    myHandler.postDelayed(runnable2sec, 2000);
+
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                }
+                            }) {
+
+                                @Override
+                                public byte[] getBody() throws AuthFailureError {
+                                    return updateWebCredentialsBody.toString().getBytes();
+                                }
+
+                                @Override
+                                public String getBodyContentType() {
+                                    return "application/json";
+                                }
+
+                            };
+
+                            ConnectionManager.getInstance(CheckOut.this).add(updateWebCredentialsRequest);
+
+                            //End of string request to update user credentials
+
+
                         }
                     }, new Response.ErrorListener() {
                         @Override
@@ -591,6 +674,8 @@ public class CheckOut extends AppCompatActivity {
 
                             placeOrderButton.setEnabled(true);
                             Log.e("Status", "Unsuccessful");
+
+
 
                         }
                     }) {

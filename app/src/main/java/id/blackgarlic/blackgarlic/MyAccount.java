@@ -101,8 +101,8 @@ public class MyAccount extends AppCompatActivity {
 
                 final JSONObject body2 = new JSONObject();
                 try {
-                    body2.put("email", LogInScreen.getUsername());
-                    body2.put("password", LogInScreen.getMyAccountSha1Password());
+                    body2.put("email", sharedPreferences.getString("Email", ""));
+                    body2.put("password", sharedPreferences.getString("Password", ""));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
