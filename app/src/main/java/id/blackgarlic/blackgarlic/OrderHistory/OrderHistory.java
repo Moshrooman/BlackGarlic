@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -23,6 +24,9 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import id.blackgarlic.blackgarlic.ConnectionManager;
 import id.blackgarlic.blackgarlic.MainActivity;
 import id.blackgarlic.blackgarlic.R;
@@ -32,6 +36,10 @@ import id.blackgarlic.blackgarlic.model.UserCredentials;
 public class OrderHistory extends AppCompatActivity {
 
     private static String orderHistoryLink = "http://10.0.3.2:3000/app/orderhistory";
+
+    private static List<List<menuObjects>> menuObjectList;
+
+    private static BaseArrayObjects[] orderHistoryArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +58,33 @@ public class OrderHistory extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Log.e("Order History Body: ", String.valueOf(orderHistoryBody));
 
         StringRequest orderHistoryRequest = new StringRequest(Request.Method.POST, orderHistoryLink, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
-                Log.e("Response: ", response);
+                Log.e("OH Response: ", response);
+
+                BaseArrayObjects[] baseArrayObjects = new Gson().fromJson(response, BaseArrayObjects[].class);
+
+                orderHistoryArray = baseArrayObjects;
+
+                List<List<menuObjects>> menuArrayList = new ArrayList<>();
+
+                for (int i = 0; i < baseArrayObjects.length; i++) {
+
+                    menuArrayList.add(baseArrayObjects[i].getMenuObjectList());
+
+                }
+
+                menuObjectList = menuArrayList;
+
+                ExpandableListViewAdapter adapter = new ExpandableListViewAdapter();
+
+                ExpandableListView expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
+
+                expandableListView.setAdapter(adapter);
+
 
             }
         }, new Response.ErrorListener() {
@@ -78,13 +106,6 @@ public class OrderHistory extends AppCompatActivity {
 
         ConnectionManager.getInstance(OrderHistory.this).add(orderHistoryRequest);
 
-
-        ExpandableListViewAdapter adapter = new ExpandableListViewAdapter();
-
-        ExpandableListView expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
-
-        expandableListView.setAdapter(adapter);
-
     }
 
     @Override
@@ -104,7 +125,7 @@ public class OrderHistory extends AppCompatActivity {
         //How many headers there are gonna be
         @Override
         public int getGroupCount() {
-            return 5;
+            return orderHistoryArray.length;
         }
 
         //How many of the same children are gonna be in each header
@@ -115,12 +136,12 @@ public class OrderHistory extends AppCompatActivity {
 
         @Override
         public Object getGroup(int groupPosition) {
-            return null;
+            return orderHistoryArray[groupPosition];
         }
 
         @Override
         public Object getChild(int groupPosition, int childPosition) {
-            return null;
+            return menuObjectList.get(groupPosition);
         }
 
         @Override
@@ -144,6 +165,18 @@ public class OrderHistory extends AppCompatActivity {
                 LayoutInflater infalInflater = (LayoutInflater) OrderHistory.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = infalInflater.inflate(R.layout.expandablelistviewheader, null);
             }
+
+            TextView orderIdTextView = (TextView) convertView.findViewById(R.id.orderIdTextView);
+            TextView totalTextView = (TextView) convertView.findViewById(R.id.totalTextView);
+            TextView paymentStatusTextView = (TextView) convertView.findViewById(R.id.paymentStatusTextView);
+            TextView orderStatusTextView = (TextView) convertView.findViewById(R.id.orderStatusTextView);
+            TextView deliveryDateTextView = (TextView) convertView.findViewById(R.id.deliveryDateTextView);
+
+            orderIdTextView.setText(String.valueOf(orderHistoryArray[groupPosition].getOrder_id()));
+            totalTextView.setText(String.valueOf(orderHistoryArray[groupPosition].getGrandtotal()));
+            paymentStatusTextView.setText(String.valueOf(orderHistoryArray[groupPosition].getPayment_status()));
+            orderStatusTextView.setText(String.valueOf(orderHistoryArray[groupPosition].getOrder_status()));
+            deliveryDateTextView.setText(String.valueOf(orderHistoryArray[groupPosition].getOrder_date()));
 
             return convertView;
 

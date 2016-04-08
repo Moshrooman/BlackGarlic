@@ -9,56 +9,78 @@
     >
 
     <!-- Header for order history -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="horizontal"
-        android:background="@color/BGGREY"
+
+    <TableLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:shrinkColumns="*"
+        android:stretchColumns="*"
         >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Order Id"
-            android:textSize="20dp"
-            android:textColor="@color/white"
-            android:layout_gravity="center"
-            android:gravity="left|center"
-            android:layout_weight="1"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Order Id"
-            android:textSize="20dp"
-            android:textColor="@color/white"
-            android:layout_gravity="center"
-            android:gravity="left|center"
-            android:layout_weight="1"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Order Id"
-            android:textSize="20dp"
-            android:textColor="@color/white"
-            android:layout_gravity="center"
-            android:gravity="left|center"
-            android:layout_weight="1"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Order Id"
-            android:textSize="20dp"
-            android:textColor="@color/white"
-            android:layout_gravity="center"
-            android:gravity="left|center"
-            android:layout_weight="1"
-            />
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/BGGREY"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Order\nId"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:minLines="2"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Total"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:minLines="2"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Payment\nStatus"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:minLines="2"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Order\nStatus"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:minLines="2"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Delivery\nDate"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:minLines="2"
+                />
 
 
-    </LinearLayout>
+        </TableRow>
+
+
+    </TableLayout>
 
     <!-- End of Header for order history -->
 
