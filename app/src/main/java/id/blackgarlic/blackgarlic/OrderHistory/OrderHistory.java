@@ -172,7 +172,7 @@ public class OrderHistory extends AppCompatActivity {
             TextView orderStatusTextView = (TextView) convertView.findViewById(R.id.orderStatusTextView);
             TextView deliveryDateTextView = (TextView) convertView.findViewById(R.id.deliveryDateTextView);
 
-            orderIdTextView.setText(String.valueOf(orderHistoryArray[groupPosition].getOrder_id()));
+            orderIdTextView.setText(String.valueOf(orderHistoryArray[groupPosition].getUnique_id()));
             totalTextView.setText(String.valueOf(orderHistoryArray[groupPosition].getGrandtotal()));
             paymentStatusTextView.setText(String.valueOf(orderHistoryArray[groupPosition].getPayment_status()));
             orderStatusTextView.setText(String.valueOf(orderHistoryArray[groupPosition].getOrder_status()));

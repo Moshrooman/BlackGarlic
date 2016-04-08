@@ -58,6 +58,9 @@ public class BaseArrayObjects {
     @SerializedName("mobile")
     private String mobile;
 
+    @SerializedName("unique_id")
+    private String unique_id;
+
     @SerializedName("menus")
     private List<menuObjects> menuObjectList;
 
@@ -103,6 +106,10 @@ public class BaseArrayObjects {
 
     public String getMobile() {
         return mobile;
+    }
+
+    public String getUnique_id() {
+        return unique_id;
     }
 
     public List<menuObjects> getMenuObjectList() {
