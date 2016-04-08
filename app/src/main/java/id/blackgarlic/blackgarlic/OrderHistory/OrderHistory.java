@@ -35,7 +35,7 @@ import id.blackgarlic.blackgarlic.model.UserCredentials;
 
 public class OrderHistory extends AppCompatActivity {
 
-    private static String orderHistoryLink = "http://10.0.3.2:3000/app/orderhistory";
+    private static String orderHistoryLink = "http://jdev.blackgarlic.id:7000/app/orderhistory";
 
     private static List<List<menuObjects>> menuObjectList;
 
@@ -57,6 +57,8 @@ public class OrderHistory extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        Log.e("OH BODY", String.valueOf(orderHistoryBody));
 
 
         StringRequest orderHistoryRequest = new StringRequest(Request.Method.POST, orderHistoryLink, new Response.Listener<String>() {
