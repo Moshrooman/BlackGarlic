@@ -86,7 +86,8 @@ public class CheckOut extends AppCompatActivity {
 
     private static int grandTotal;
 
-    private static String orderApiLink = "http://10.0.3.2:3000/app/order";
+    //Connecting to local database doesnt work because it doesnt contain the menu ids retrieved here.
+    private static String orderApiLink = "http://api.blackgarlic.id:7000/app/order";
 
     private static Integer boxId;
 
@@ -577,7 +578,6 @@ public class CheckOut extends AppCompatActivity {
 
                     final JSONObject body = new JSONObject();
                     try {
-                        body.put("email", LogInScreen.getUsername());
                         body.put("order_source", "app");
                         body.put("customer_id", userCredentials.getCustomer_id());
                         body.put("box_id", String.valueOf(boxId));
@@ -612,6 +612,7 @@ public class CheckOut extends AppCompatActivity {
 
                     Log.e("Body", String.valueOf(body) );
 
+                    //Connecting to local database doesnt work because it doesnt contain the menu ids retrieved here.
 
                     StringRequest request = new StringRequest(Request.Method.POST, orderApiLink, new Response.Listener<String>() {
                         @Override
