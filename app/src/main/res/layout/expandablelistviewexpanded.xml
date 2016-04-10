@@ -5,31 +5,103 @@
     android:layout_height="wrap_content"
     >
 
-    <TextView
-        android:layout_width="wrap_content"
+    <TableLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TEST1"
-        android:textSize="40dp"
-        android:gravity="center"
-        android:layout_gravity="center"
-        />
+        android:shrinkColumns="*"
+        android:stretchColumns="*"
+        >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TEST2"
-        android:textSize="40dp"
-        android:gravity="center"
-        android:layout_gravity="center"
-        />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/topbottomborder"
+                >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TEST3"
-        android:textSize="40dp"
-        android:gravity="center"
-        android:layout_gravity="center"
-        />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:text="Details"
+                    android:textSize="15dp"
+                    />
+
+            </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/topbottomborder"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:text="To: "
+                android:textSize="20dp"
+                android:layout_weight="0.5"
+                android:gravity="left|center"
+                />
+
+            <TextView
+                android:layout_width="0dp"
+                android:text="name"
+                android:textSize="20dp"
+                android:layout_weight="0.5"
+                android:gravity="right|center"
+                android:id="@+id/orderhistoryNameTextView"
+                />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/topbottomborder"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:text="Address: "
+                android:textSize="20dp"
+                android:layout_weight="0.5"
+                android:gravity="left|center_horizontal"
+                />
+
+            <TextView
+                android:layout_width="0dp"
+                android:text="address"
+                android:textSize="20dp"
+                android:layout_weight="0.5"
+                android:gravity="right|center_horizontal"
+                android:id="@+id/orderhistoryAddressTextView"
+                />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/topbottomborder"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:text="Phone: "
+                android:textSize="20dp"
+                android:layout_weight="0.5"
+                android:gravity="left|center_horizontal"
+                />
+
+            <TextView
+                android:layout_width="0dp"
+                android:text="phone number"
+                android:textSize="20dp"
+                android:layout_weight="0.5"
+                android:gravity="right|center_horizontal"
+                android:id="@+id/orderhistoryPhoneTextView"
+                />
+
+        </TableRow>
+
+    </TableLayout>
 
 </LinearLayout>

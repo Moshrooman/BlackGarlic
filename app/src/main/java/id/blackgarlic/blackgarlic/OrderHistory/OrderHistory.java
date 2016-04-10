@@ -41,13 +41,18 @@ public class OrderHistory extends AppCompatActivity {
 
     private static BaseArrayObjects[] orderHistoryArray;
 
+    private static UserCredentials userCredentials;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_history);
 
+        userCredentials = null;
+
         SharedPreferences sharedPreferences = SplashActivity.getSharedPreferences();
         UserCredentials credentials = new Gson().fromJson(sharedPreferences.getString("Credentials", ""), UserCredentials.class);
+        userCredentials = credentials;
 
         final JSONObject orderHistoryBody = new JSONObject();
         try {
@@ -198,6 +203,13 @@ public class OrderHistory extends AppCompatActivity {
                 convertView = infalInflater.inflate(R.layout.expandablelistviewexpanded, null);
             }
 
+            TextView orderhistoryNameTextView = (TextView) convertView.findViewById(R.id.orderhistoryNameTextView);
+            TextView orderhistoryAddressTextView = (TextView) convertView.findViewById(R.id.orderhistoryAddressTextView);
+            TextView orderhistoryPhoneTextView = (TextView) convertView.findViewById(R.id.orderhistoryPhoneTextView);
+
+            orderhistoryNameTextView.setText(userCredentials.getCustomer_name());
+            orderhistoryAddressTextView.setText(orderHistoryArray[groupPosition].getAddress_content());
+            orderhistoryPhoneTextView.setText(orderHistoryArray[groupPosition].getMobile());
 
 
             return convertView;
