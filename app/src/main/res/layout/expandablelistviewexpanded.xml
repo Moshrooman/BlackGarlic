@@ -6,6 +6,20 @@
     >
 
     <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ordersTableLayout"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:shrinkColumns="*"
+        android:stretchColumns="*"
+        >
+
+
+    </TableLayout>
+
+    <TableLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,7 +50,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:text="To: "
-                android:textSize="20dp"
+                android:textSize="13dp"
                 android:layout_weight="0.5"
                 android:gravity="left|center"
                 />
@@ -44,7 +58,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:text="name"
-                android:textSize="20dp"
+                android:textSize="13dp"
                 android:layout_weight="0.5"
                 android:gravity="right|center"
                 android:id="@+id/orderhistoryNameTextView"
@@ -61,7 +75,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:text="Address: "
-                android:textSize="20dp"
+                android:textSize="13dp"
                 android:layout_weight="0.5"
                 android:gravity="left|center_horizontal"
                 />
@@ -69,7 +83,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:text="address"
-                android:textSize="20dp"
+                android:textSize="13dp"
                 android:layout_weight="0.5"
                 android:gravity="right|center_horizontal"
                 android:id="@+id/orderhistoryAddressTextView"
@@ -86,7 +100,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:text="Phone: "
-                android:textSize="20dp"
+                android:textSize="13dp"
                 android:layout_weight="0.5"
                 android:gravity="left|center_horizontal"
                 />
@@ -94,7 +108,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:text="phone number"
-                android:textSize="20dp"
+                android:textSize="13dp"
                 android:layout_weight="0.5"
                 android:gravity="right|center_horizontal"
                 android:id="@+id/orderhistoryPhoneTextView"

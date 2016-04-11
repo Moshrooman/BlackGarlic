@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<TableRow
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="@color/BGGREY"
+    android:weightSum="1">
+
+    <com.android.volley.toolbox.NetworkImageView
+        android:layout_height="100dp"
+        android:layout_width="0dp"
+        android:layout_weight="0.2"
+        android:id="@+id/menuImageOrderHistory"
+        />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="0.2"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/menuNameOrderHistory"
+        />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="0.2"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/menuTypeOrderHistory"
+        />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="0.2"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/portionOrderHistory"
+        />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="0.2"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/priceOrderHistory"
+        />
+
+</TableRow>
+
+

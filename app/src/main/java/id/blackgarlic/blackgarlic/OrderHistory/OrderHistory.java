@@ -1,23 +1,30 @@
 package id.blackgarlic.blackgarlic.OrderHistory;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 
@@ -42,6 +49,8 @@ public class OrderHistory extends AppCompatActivity {
     private static BaseArrayObjects[] orderHistoryArray;
 
     private static UserCredentials userCredentials;
+
+    public final String BLACKGARLIC_PICTURES = "http://blackgarlic.id/inc/images/menu/menu_id.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,11 +187,34 @@ public class OrderHistory extends AppCompatActivity {
             TextView paymentStatusTextView = (TextView) convertView.findViewById(R.id.paymentStatusTextView);
             TextView orderStatusTextView = (TextView) convertView.findViewById(R.id.orderStatusTextView);
             TextView deliveryDateTextView = (TextView) convertView.findViewById(R.id.deliveryDateTextView);
+            ImageView expandedIndicatorImageView = (ImageView) convertView.findViewById(R.id.expandedIndicatorImageView);
+
+            if (isExpanded) {
+                expandedIndicatorImageView.setImageResource(R.drawable.arrowdown);
+            } else {
+                expandedIndicatorImageView.setImageResource(R.drawable.arrowright);
+            }
 
             orderIdTextView.setText(String.valueOf(orderHistoryArray[groupPosition].getUnique_id()));
             totalTextView.setText(String.valueOf(orderHistoryArray[groupPosition].getGrandtotal()));
-            paymentStatusTextView.setText(String.valueOf(orderHistoryArray[groupPosition].getPayment_status()));
-            orderStatusTextView.setText(String.valueOf(orderHistoryArray[groupPosition].getOrder_status()));
+
+            if (orderHistoryArray[groupPosition].getPayment_status() == 1) {
+                paymentStatusTextView.setText("Paid");
+            } else {
+                paymentStatusTextView.setText("Unpaid");
+            }
+
+            if(orderHistoryArray[groupPosition].getOrder_status() == 2) {
+                orderStatusTextView.setText("Completed");
+            } else if (orderHistoryArray[groupPosition].getOrder_status() == 1) {
+                orderStatusTextView.setText("Waiting For Delivery");
+            } else if (orderHistoryArray[groupPosition].getOrder_status() == 0) {
+                orderStatusTextView.setText("Waiting For Payment");
+            } else {
+                orderStatusTextView.setText("Cancelled");
+            }
+
+
             deliveryDateTextView.setText(String.valueOf(orderHistoryArray[groupPosition].getOrder_date()));
 
             return convertView;
@@ -203,6 +235,24 @@ public class OrderHistory extends AppCompatActivity {
                 convertView = infalInflater.inflate(R.layout.expandablelistviewexpanded, null);
             }
 
+            //Start of making table rows for the orders
+
+            TableLayout ordersTableLayout = (TableLayout) convertView.findViewById(R.id.ordersTableLayout);
+
+            for (int i = 0; i < menuObjectList.get(groupPosition).size(); i++) {
+
+                //Networkimageview work
+
+                TableRow orderstablelayoutinflate = (TableRow) View.inflate(OrderHistory.this, R.layout.orderstablelayoutinflate, null);
+                orderstablelayoutinflate.setTag(i);
+                NetworkImageView networkImageView = (NetworkImageView) orderstablelayoutinflate.findViewById(R.id.menuImageOrderHistory);
+                networkImageView.setImageUrl(BLACKGARLIC_PICTURES.replace("menu_id", String.valueOf(menuObjectList.get(groupPosition).get(i).getMenu_id())),
+                        ConnectionManager.getImageLoader(OrderHistory.this));
+
+                ordersTableLayout.addView(orderstablelayoutinflate);
+
+            }
+
             TextView orderhistoryNameTextView = (TextView) convertView.findViewById(R.id.orderhistoryNameTextView);
             TextView orderhistoryAddressTextView = (TextView) convertView.findViewById(R.id.orderhistoryAddressTextView);
             TextView orderhistoryPhoneTextView = (TextView) convertView.findViewById(R.id.orderhistoryPhoneTextView);
@@ -211,8 +261,11 @@ public class OrderHistory extends AppCompatActivity {
             orderhistoryAddressTextView.setText(orderHistoryArray[groupPosition].getAddress_content());
             orderhistoryPhoneTextView.setText(orderHistoryArray[groupPosition].getMobile());
 
-
-            return convertView;
+            if (convertView == null) {
+                return convertView;
+            } else {
+                return null;
+            }
 
         }
 

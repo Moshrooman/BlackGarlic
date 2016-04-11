@@ -10,59 +10,71 @@
     <TableRow
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@color/grey"
         >
 
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="0.05"
+            android:layout_gravity="center"
+            android:id="@+id/expandedIndicatorImageView"
+            />
+
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:text="Order\nId"
-            android:textSize="20dp"
+            android:textSize="13dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:minLines="2"
             android:id="@+id/orderIdTextView"
+            android:layout_weight="0.19"
             />
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:text="Total"
-            android:textSize="20dp"
+            android:textSize="13dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:minLines="2"
             android:id="@+id/totalTextView"
+            android:layout_weight="0.19"
             />
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:text="Payment\nStatus"
-            android:textSize="20dp"
+            android:textSize="13dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:minLines="2"
             android:id="@+id/paymentStatusTextView"
+            android:layout_weight="0.19"
             />
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:text="Order\nStatus"
-            android:textSize="20dp"
+            android:textSize="13dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:minLines="2"
             android:id="@+id/orderStatusTextView"
+            android:layout_weight="0.19"
             />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:text="Delivery\nDate"
-            android:textSize="20dp"
+            android:textSize="13dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:minLines="2"
             android:id="@+id/deliveryDateTextView"
+            android:layout_weight="0.19"
             />
 
 
