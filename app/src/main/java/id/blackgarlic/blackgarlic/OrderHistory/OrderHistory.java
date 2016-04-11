@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -138,7 +139,6 @@ public class OrderHistory extends AppCompatActivity {
 
     public class ExpandableListViewAdapter extends BaseExpandableListAdapter {
 
-
         //How many headers there are gonna be
         @Override
         public int getGroupCount() {
@@ -173,15 +173,15 @@ public class OrderHistory extends AppCompatActivity {
 
         @Override
         public boolean hasStableIds() {
-            return false;
+            return true;
         }
 
         @Override
         public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                LayoutInflater infalInflater = (LayoutInflater) OrderHistory.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = infalInflater.inflate(R.layout.expandablelistviewheader, null);
-            }
+
+            LayoutInflater infalInflater = (LayoutInflater) OrderHistory.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = infalInflater.inflate(R.layout.expandablelistviewheader, null);
+
 
             TextView orderIdTextView = (TextView) convertView.findViewById(R.id.orderIdTextView);
             TextView totalTextView = (TextView) convertView.findViewById(R.id.totalTextView);
@@ -192,8 +192,18 @@ public class OrderHistory extends AppCompatActivity {
 
             if (isExpanded) {
                 expandedIndicatorImageView.setImageResource(R.drawable.arrowdown);
+                orderIdTextView.setTextColor(getResources().getColor(R.color.BGGREEN));
+                totalTextView.setTextColor(getResources().getColor(R.color.BGGREEN));
+                paymentStatusTextView.setTextColor(getResources().getColor(R.color.BGGREEN));
+                orderStatusTextView.setTextColor(getResources().getColor(R.color.BGGREEN));
+                deliveryDateTextView.setTextColor(getResources().getColor(R.color.BGGREEN));
             } else {
                 expandedIndicatorImageView.setImageResource(R.drawable.arrowright);
+                orderIdTextView.setTextColor(getResources().getColor(R.color.grey));
+                totalTextView.setTextColor(getResources().getColor(R.color.grey));
+                paymentStatusTextView.setTextColor(getResources().getColor(R.color.grey));
+                orderStatusTextView.setTextColor(getResources().getColor(R.color.grey));
+                deliveryDateTextView.setTextColor(getResources().getColor(R.color.grey));
             }
 
             orderIdTextView.setText(String.valueOf(orderHistoryArray[groupPosition].getUnique_id()));
@@ -231,16 +241,13 @@ public class OrderHistory extends AppCompatActivity {
 
         @Override
         public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                LayoutInflater infalInflater = (LayoutInflater) OrderHistory.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = infalInflater.inflate(R.layout.expandablelistviewexpanded, null);
-            }
+
+            LayoutInflater infalInflater = (LayoutInflater) OrderHistory.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = infalInflater.inflate(R.layout.expandablelistviewexpanded, null);
 
             //Start of making table rows for the orders
 
             TableLayout ordersTableLayout = (TableLayout) convertView.findViewById(R.id.ordersTableLayout);
-
-            List<TableRow> tableRowList = new ArrayList<>();
 
             for (int i = 0; i < menuObjectList.get(groupPosition).size(); i++) {
 
@@ -280,8 +287,6 @@ public class OrderHistory extends AppCompatActivity {
                     portionOrderHistory.setText(menuObjectList.get(groupPosition).get(i).getPortion() + "P");
                 }
 
-                tableRowList.add(orderstablelayoutinflate);
-
                 //Price Text View
                 TextView priceOrderHistory = (TextView) orderstablelayoutinflate.findViewById(R.id.priceOrderHistory);
 
@@ -305,18 +310,11 @@ public class OrderHistory extends AppCompatActivity {
                         priceOrderHistory.setText("150,000");
                     }
 
-
                 }
 
-            }
+                ordersTableLayout.addView(orderstablelayoutinflate);
 
-            if (ordersTableLayout.getChildCount() == 0) {
-                for (int i = 0; i < tableRowList.size(); i++) {
-                    ordersTableLayout.addView(tableRowList.get(i));
-                }
             }
-
-            tableRowList.clear();
 
             TextView orderhistoryNameTextView = (TextView) convertView.findViewById(R.id.orderhistoryNameTextView);
             TextView orderhistoryAddressTextView = (TextView) convertView.findViewById(R.id.orderhistoryAddressTextView);

@@ -9,5 +9,6 @@
     <color name="white">#FFF</color>
     <color name="black">#000</color>
     <color name="BGGREY">#444</color>
+    <color name="BGGREEN">#03c9a9</color>
 
 </resources>

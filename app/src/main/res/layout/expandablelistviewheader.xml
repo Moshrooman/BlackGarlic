@@ -5,6 +5,7 @@
     android:layout_height="60dp"
     android:shrinkColumns="*"
     android:stretchColumns="*"
+    android:background="#ffffff"
     >
 
     <TableRow
