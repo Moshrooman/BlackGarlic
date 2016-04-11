@@ -34,6 +34,8 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import id.blackgarlic.blackgarlic.ConnectionManager;
@@ -48,7 +50,7 @@ public class OrderHistory extends AppCompatActivity {
 
     private static List<List<menuObjects>> menuObjectList;
 
-    private static BaseArrayObjects[] orderHistoryArray;
+    private static List<BaseArrayObjects> orderHistoryArray;
 
     private static UserCredentials userCredentials;
 
@@ -85,7 +87,7 @@ public class OrderHistory extends AppCompatActivity {
 
                 BaseArrayObjects[] baseArrayObjects = new Gson().fromJson(response, BaseArrayObjects[].class);
 
-                orderHistoryArray = baseArrayObjects;
+                orderHistoryArray = new LinkedList<BaseArrayObjects>(Arrays.asList(baseArrayObjects));
 
                 List<List<menuObjects>> menuArrayList = new ArrayList<>();
 
@@ -96,6 +98,15 @@ public class OrderHistory extends AppCompatActivity {
                 }
 
                 menuObjectList = menuArrayList;
+
+                for (int i = 0; i < menuObjectList.size(); i++) {
+
+                    if (menuObjectList.get(i).size() == 0) {
+                        menuObjectList.remove(i);
+                        orderHistoryArray.remove(i);
+                        i = i - 1;
+                    }
+                }
 
                 ExpandableListViewAdapter adapter = new ExpandableListViewAdapter();
 
@@ -142,7 +153,7 @@ public class OrderHistory extends AppCompatActivity {
         //How many headers there are gonna be
         @Override
         public int getGroupCount() {
-            return orderHistoryArray.length;
+            return orderHistoryArray.size();
         }
 
         //How many of the same children are gonna be in each header
@@ -153,7 +164,7 @@ public class OrderHistory extends AppCompatActivity {
 
         @Override
         public Object getGroup(int groupPosition) {
-            return orderHistoryArray[groupPosition];
+            return orderHistoryArray.get(groupPosition);
         }
 
         @Override
@@ -206,27 +217,27 @@ public class OrderHistory extends AppCompatActivity {
                 deliveryDateTextView.setTextColor(getResources().getColor(R.color.grey));
             }
 
-            orderIdTextView.setText(String.valueOf(orderHistoryArray[groupPosition].getUnique_id()));
-            totalTextView.setText(String.valueOf(orderHistoryArray[groupPosition].getGrandtotal()));
+            orderIdTextView.setText(String.valueOf(orderHistoryArray.get(groupPosition).getUnique_id()));
+            totalTextView.setText(String.valueOf(orderHistoryArray.get(groupPosition).getGrandtotal()));
 
-            if (orderHistoryArray[groupPosition].getPayment_status() == 1) {
+            if (orderHistoryArray.get(groupPosition).getPayment_status() == 1) {
                 paymentStatusTextView.setText("Paid");
             } else {
                 paymentStatusTextView.setText("Unpaid");
             }
 
-            if(orderHistoryArray[groupPosition].getOrder_status() == 2) {
+            if(orderHistoryArray.get(groupPosition).getOrder_status() == 2) {
                 orderStatusTextView.setText("Completed");
-            } else if (orderHistoryArray[groupPosition].getOrder_status() == 1) {
+            } else if (orderHistoryArray.get(groupPosition).getOrder_status() == 1) {
                 orderStatusTextView.setText("Waiting For Delivery");
-            } else if (orderHistoryArray[groupPosition].getOrder_status() == 0) {
+            } else if (orderHistoryArray.get(groupPosition).getOrder_status() == 0) {
                 orderStatusTextView.setText("Waiting For Payment");
             } else {
                 orderStatusTextView.setText("Cancelled");
             }
 
 
-            deliveryDateTextView.setText(String.valueOf(orderHistoryArray[groupPosition].getOrder_date()));
+            deliveryDateTextView.setText(String.valueOf(orderHistoryArray.get(groupPosition).getOrder_date()));
 
             return convertView;
 
@@ -321,8 +332,8 @@ public class OrderHistory extends AppCompatActivity {
             TextView orderhistoryPhoneTextView = (TextView) convertView.findViewById(R.id.orderhistoryPhoneTextView);
 
             orderhistoryNameTextView.setText(userCredentials.getCustomer_name());
-            orderhistoryAddressTextView.setText(orderHistoryArray[groupPosition].getAddress_content());
-            orderhistoryPhoneTextView.setText(orderHistoryArray[groupPosition].getMobile());
+            orderhistoryAddressTextView.setText(orderHistoryArray.get(groupPosition).getAddress_content());
+            orderhistoryPhoneTextView.setText(orderHistoryArray.get(groupPosition).getMobile());
 
             return convertView;
 
