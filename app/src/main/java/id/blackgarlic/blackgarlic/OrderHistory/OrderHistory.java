@@ -31,6 +31,7 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -239,6 +240,8 @@ public class OrderHistory extends AppCompatActivity {
 
             TableLayout ordersTableLayout = (TableLayout) convertView.findViewById(R.id.ordersTableLayout);
 
+            List<TableRow> tableRowList = new ArrayList<>();
+
             for (int i = 0; i < menuObjectList.get(groupPosition).size(); i++) {
 
                 //Networkimageview work
@@ -249,9 +252,71 @@ public class OrderHistory extends AppCompatActivity {
                 networkImageView.setImageUrl(BLACKGARLIC_PICTURES.replace("menu_id", String.valueOf(menuObjectList.get(groupPosition).get(i).getMenu_id())),
                         ConnectionManager.getImageLoader(OrderHistory.this));
 
-                ordersTableLayout.addView(orderstablelayoutinflate);
+                //Menu Name TextView
+                TextView menuNameOrderHistory = (TextView) orderstablelayoutinflate.findViewById(R.id.menuNameOrderHistory);
+                menuNameOrderHistory.setText(String.valueOf(menuObjectList.get(groupPosition).get(i).getMenu_name()));
+
+                //Menu Type TextView
+                TextView menuTypeOrderHistory = (TextView) orderstablelayoutinflate.findViewById(R.id.menuTypeOrderHistory);
+
+                if ((menuObjectList.get(groupPosition).get(i).getMenu_type() == 3) || (menuObjectList.get(groupPosition).get(i).getMenu_type() == 5)) {
+                    menuTypeOrderHistory.setText("Original");
+                } else if ((menuObjectList.get(groupPosition).get(i).getMenu_type() == 4) || (menuObjectList.get(groupPosition).get(i).getMenu_type() == 6)){
+                    menuTypeOrderHistory.setText("Breakfast");
+                } else if ((menuObjectList.get(groupPosition).get(i).getMenu_type() == 1)) {
+                    menuTypeOrderHistory.setText("Express");
+                } else {
+                    menuTypeOrderHistory.setText("Family");
+                }
+
+                //Portion Text View
+                TextView portionOrderHistory = (TextView) orderstablelayoutinflate.findViewById(R.id.portionOrderHistory);
+
+                if (menuTypeOrderHistory.getText().equals("Express")) {
+                    portionOrderHistory.setText("2P");
+                } else if (menuTypeOrderHistory.getText().equals("Family")) {
+                    portionOrderHistory.setText("4P");
+                } else {
+                    portionOrderHistory.setText(menuObjectList.get(groupPosition).get(i).getPortion() + "P");
+                }
+
+                tableRowList.add(orderstablelayoutinflate);
+
+                //Price Text View
+                TextView priceOrderHistory = (TextView) orderstablelayoutinflate.findViewById(R.id.priceOrderHistory);
+
+                if (menuTypeOrderHistory.getText().equals("Express")) {
+                    priceOrderHistory.setText("100,000");
+                } else if (menuTypeOrderHistory.getText().equals("Family")) {
+                    priceOrderHistory.setText("150,000");
+                } else {
+
+
+                    if (((menuObjectList.get(groupPosition).get(i).getMenu_type() == 3) || (menuObjectList.get(groupPosition).get(i).getMenu_type() == 5))
+                            && (menuObjectList.get(groupPosition).get(i).getPortion() == 2)){
+                        priceOrderHistory.setText("80,000");
+                    } else if (((menuObjectList.get(groupPosition).get(i).getMenu_type() == 3) || (menuObjectList.get(groupPosition).get(i).getMenu_type() == 5))
+                            && (menuObjectList.get(groupPosition).get(i).getPortion() == 4)) {
+                        priceOrderHistory.setText("140,000");
+                    } else if (((menuObjectList.get(groupPosition).get(i).getMenu_type() == 4) || (menuObjectList.get(groupPosition).get(i).getMenu_type() == 6))
+                            && (menuObjectList.get(groupPosition).get(i).getPortion() == 2)) {
+                        priceOrderHistory.setText("100,000");
+                    } else {
+                        priceOrderHistory.setText("150,000");
+                    }
+
+
+                }
 
             }
+
+            if (ordersTableLayout.getChildCount() == 0) {
+                for (int i = 0; i < tableRowList.size(); i++) {
+                    ordersTableLayout.addView(tableRowList.get(i));
+                }
+            }
+
+            tableRowList.clear();
 
             TextView orderhistoryNameTextView = (TextView) convertView.findViewById(R.id.orderhistoryNameTextView);
             TextView orderhistoryAddressTextView = (TextView) convertView.findViewById(R.id.orderhistoryAddressTextView);
@@ -261,11 +326,7 @@ public class OrderHistory extends AppCompatActivity {
             orderhistoryAddressTextView.setText(orderHistoryArray[groupPosition].getAddress_content());
             orderhistoryPhoneTextView.setText(orderHistoryArray[groupPosition].getMobile());
 
-            if (convertView == null) {
-                return convertView;
-            } else {
-                return null;
-            }
+            return convertView;
 
         }
 

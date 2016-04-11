@@ -4,7 +4,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="300dp"
     android:layout_height="wrap_content"
-    android:background="@color/BGGREY"
     android:weightSum="1">
 
     <com.android.volley.toolbox.NetworkImageView
@@ -12,38 +11,48 @@
         android:layout_width="0dp"
         android:layout_weight="0.2"
         android:id="@+id/menuImageOrderHistory"
+        android:layout_marginRight="10dp"
         />
 
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="0dp"
-        android:layout_weight="0.2"
+        android:layout_weight="0.3"
         android:layout_gravity="center_vertical"
         android:id="@+id/menuNameOrderHistory"
+        android:textSize="11dp"
+        android:gravity="center"
+        android:layout_marginRight="10dp"
         />
 
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="0dp"
-        android:layout_weight="0.2"
+        android:layout_weight="0.1666"
         android:layout_gravity="center_vertical"
         android:id="@+id/menuTypeOrderHistory"
+        android:textSize="11dp"
+        android:gravity="center"
         />
 
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="0dp"
-        android:layout_weight="0.2"
+        android:layout_weight="0.1666"
         android:layout_gravity="center_vertical"
         android:id="@+id/portionOrderHistory"
+        android:textSize="11dp"
+        android:gravity="center"
         />
 
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="0dp"
-        android:layout_weight="0.2"
+        android:layout_weight="0.1666"
         android:layout_gravity="center_vertical"
         android:id="@+id/priceOrderHistory"
+        android:textSize="11dp"
+        android:gravity="center"
         />
 
 </TableRow>
