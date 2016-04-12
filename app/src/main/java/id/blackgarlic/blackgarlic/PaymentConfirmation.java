@@ -39,7 +39,7 @@ public class PaymentConfirmation extends AppCompatActivity {
 
     private static String orderHistoryLink = "http://jdev.blackgarlic.id:7000/app/orderhistory";
 
-    private static String paymentConfirmationLink = "http://10.0.3.2:3000/app/paymentconfirmation";
+    private static String paymentConfirmationLink = "http://jdev.blackgarlic.id:7000/app/paymentconfirmation";
 
     private static UserCredentials userCredentials;
 
@@ -143,7 +143,7 @@ public class PaymentConfirmation extends AppCompatActivity {
                 StringRequest confirmPaymentRequest = new StringRequest(Request.Method.POST, paymentConfirmationLink, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.e("Successful: ", "True!");
+                        Log.e("Response: ", response);
                     }
                 }, new Response.ErrorListener() {
                     @Override
