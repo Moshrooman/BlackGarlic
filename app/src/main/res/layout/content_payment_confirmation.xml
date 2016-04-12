@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="id.blackgarlic.blackgarlic.PaymentConfirmation"
+    tools:showIn="@layout/activity_payment_confirmation"
+    android:orientation="vertical"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PAYMENT CONFIRMATION"
+        android:textColor="#999"
+        android:textSize="35dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@drawable/orderhistoryborders"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TRANSFER PEMBAYARAN ANDA KE"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/orderhistoryborders"
+        android:textSize="18dp"
+        android:textColor="#444"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="BCA\nCabang Sudirman Mansion\n5375 320 255 a/n BGI Jaya Indonesia PT"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        />
+
+    <TableLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:shrinkColumns="*"
+        android:stretchColumns="*"
+        android:layout_marginTop="40dp"
+        >
+
+        <TableRow
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/orderhistoryborders"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Order Number"
+                android:layout_weight="0.2"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:layout_marginRight="5dp"
+                />
+
+            <Spinner
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:spinnerMode="dropdown"
+                android:background="@android:drawable/btn_dropdown"
+                android:textAlignment="center"
+                android:layout_centerHorizontal="true"
+                android:layout_weight="0.3"
+                android:id="@+id/orderNumberPaymentConfirmationSpinner"
+                >
+
+            </Spinner>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Transfered To Bank"
+                android:layout_weight="0.2"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:layout_marginRight="5dp"
+                />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:layout_height="wrap_content"
+                android:text="BCA"
+                android:textAlignment="center"
+                android:layout_marginRight="5dp"
+                android:id="@+id/transferedToBankPaymentConfirmationEditText"
+                />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/orderhistoryborders"
+            android:layout_marginTop="10dp"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Account Number"
+                android:layout_weight="0.2"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:layout_marginRight="5dp"
+                />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:layout_marginRight="5dp"
+                android:id="@+id/accountNumberPaymentConfirmationEditText"
+                />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="From Bank"
+                android:layout_weight="0.2"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:layout_marginRight="5dp"
+                />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:layout_marginRight="5dp"
+                android:id="@+id/fromBankPaymentConfirmationEditText"
+                />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/orderhistoryborders"
+            android:layout_marginTop="10dp"
+            android:weightSum="1"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Owner Of Account"
+                android:layout_weight="0.2"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:layout_marginRight="5dp"
+                />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_weight="0.8"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:layout_marginRight="5dp"
+                android:id="@+id/ownerOfAccountPaymentConfirmationEditText"
+                />
+
+        </TableRow>
+
+    </TableLayout>
+
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:background="@drawable/clearallbutton"
+        android:text="Confirm Payment"
+        android:textColor="#ffffff"
+        android:layout_marginTop="25dp"
+        android:layout_gravity="center"
+        android:id="@+id/buttonConfirmPaymentPaymentConfirmation"
+        />
+
+</LinearLayout>

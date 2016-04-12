@@ -262,11 +262,12 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             welcomeTextViewString = welcomeTextViewString.replace("Name", userCredentials.getCustomer_name());
             welcomeTextView.setText(welcomeTextViewString);
 
-            drawerEntries = new String[4];
+            drawerEntries = new String[5];
             drawerEntries[0] = "Home";
             drawerEntries[1] = "My Account";
             drawerEntries[2] = "Order History";
-            drawerEntries[3] = "Log Out";
+            drawerEntries[3] = "Payment Confirmation";
+            drawerEntries[4] = "Log Out";
         }
 
         drawerListView.setAdapter(new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, drawerEntries));
@@ -677,7 +678,14 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                 drawerLayout.closeDrawer(Gravity.LEFT);
                 startActivity(orderHistoryIntent);
 
-            } else if (position == 3) {
+            } else if(position == 3) {
+
+                Intent paymentConfirmationIntent = new Intent(MainActivity.this, PaymentConfirmation.class);
+                drawerListView.setItemChecked(position, true);
+                drawerLayout.closeDrawer(Gravity.LEFT);
+                startActivity(paymentConfirmationIntent);
+
+            }else if (position == 4) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.remove("Credentials");
                 editor.remove("Email");
