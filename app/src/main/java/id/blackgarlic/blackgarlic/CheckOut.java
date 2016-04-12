@@ -1,4 +1,5 @@
 package id.blackgarlic.blackgarlic;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -49,6 +51,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.zip.Inflater;
 
 import id.blackgarlic.blackgarlic.model.Data;
 import id.blackgarlic.blackgarlic.model.UserCredentials;
@@ -977,13 +980,21 @@ public class CheckOut extends AppCompatActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View orderCheckOutView = getLayoutInflater().inflate(R.layout.row_ordercheckout, null);
 
-            NetworkImageView orderCheckOutNetworkImageView = (NetworkImageView) orderCheckOutView.findViewById(R.id.orderCheckOutNetworkImageView);
-            TextView orderCheckOutMenuTitle = (TextView) orderCheckOutView.findViewById(R.id.orderCheckOutMenuTitle);
-            TextView orderCheckOutPortion = (TextView) orderCheckOutView.findViewById(R.id.orderCheckOutPortion);
-            TextView orderCheckOutMenuType = (TextView) orderCheckOutView.findViewById(R.id.orderCheckOutMenuType);
-            TextView orderCheckOutPrice = (TextView) orderCheckOutView.findViewById(R.id.orderCheckOutPrice);
+            if (convertView == null) {
+                LayoutInflater layoutInflater = (LayoutInflater) CheckOut.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = layoutInflater.inflate(R.layout.row_ordercheckout, null);
+
+            }
+
+//            Used this below but implementing the convertview == null is better for scroll
+//            View orderCheckOutView = getLayoutInflater().inflate(R.layout.row_ordercheckout, null);
+
+            NetworkImageView orderCheckOutNetworkImageView = (NetworkImageView) convertView.findViewById(R.id.orderCheckOutNetworkImageView);
+            TextView orderCheckOutMenuTitle = (TextView) convertView.findViewById(R.id.orderCheckOutMenuTitle);
+            TextView orderCheckOutPortion = (TextView) convertView.findViewById(R.id.orderCheckOutPortion);
+            TextView orderCheckOutMenuType = (TextView) convertView.findViewById(R.id.orderCheckOutMenuType);
+            TextView orderCheckOutPrice = (TextView) convertView.findViewById(R.id.orderCheckOutPrice);
 
             orderCheckOutNetworkImageView.setImageUrl(selectedMenuListUrls.get(position).toString(), ConnectionManager.getImageLoader(CheckOut.this));
             orderCheckOutMenuTitle.setText(selectedMenuList.get(position).getMenu_name());
@@ -1002,7 +1013,7 @@ public class CheckOut extends AppCompatActivity {
 
             orderCheckOutPrice.setText(selectedIndividualPrices.get(position));
 
-            return orderCheckOutView;
+            return convertView;
         }
     }
 
