@@ -127,6 +127,10 @@ public class PaymentConfirmation extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                if (orderNumberSpinner.isEnabled() == false) {
+                    Toast.makeText(PaymentConfirmation.this, "You Have No Unpaid Orders!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 final JSONObject confirmPaymentBody = new JSONObject();
                 try {

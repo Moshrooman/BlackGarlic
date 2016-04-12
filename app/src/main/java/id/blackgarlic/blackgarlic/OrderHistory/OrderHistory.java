@@ -310,15 +310,15 @@ public class OrderHistory extends AppCompatActivity {
 
                     if (((menuObjectList.get(groupPosition).get(i).getMenu_type() == 3) || (menuObjectList.get(groupPosition).get(i).getMenu_type() == 5))
                             && (menuObjectList.get(groupPosition).get(i).getPortion() == 2)){
-                        priceOrderHistory.setText("80,000");
+                        priceOrderHistory.setText("100,000");
                     } else if (((menuObjectList.get(groupPosition).get(i).getMenu_type() == 3) || (menuObjectList.get(groupPosition).get(i).getMenu_type() == 5))
                             && (menuObjectList.get(groupPosition).get(i).getPortion() == 4)) {
-                        priceOrderHistory.setText("140,000");
+                        priceOrderHistory.setText("150,000");
                     } else if (((menuObjectList.get(groupPosition).get(i).getMenu_type() == 4) || (menuObjectList.get(groupPosition).get(i).getMenu_type() == 6))
                             && (menuObjectList.get(groupPosition).get(i).getPortion() == 2)) {
-                        priceOrderHistory.setText("100,000");
+                        priceOrderHistory.setText("80,000");
                     } else {
-                        priceOrderHistory.setText("150,000");
+                        priceOrderHistory.setText("140,000");
                     }
 
                 }
