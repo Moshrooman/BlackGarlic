@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -144,11 +145,13 @@ public class PaymentConfirmation extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Log.e("Response: ", response);
+                        Toast.makeText(PaymentConfirmation.this, "Your Request Has Been Sent!", Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.e("Error: ", "True!");
+                        Toast.makeText(PaymentConfirmation.this, "No Internet!", Toast.LENGTH_SHORT).show();
                     }
                 }) {
                     @Override

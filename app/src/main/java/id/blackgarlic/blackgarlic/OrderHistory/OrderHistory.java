@@ -218,7 +218,7 @@ public class OrderHistory extends AppCompatActivity {
             }
 
             orderIdTextView.setText(String.valueOf(orderHistoryArray.get(groupPosition).getUnique_id()));
-            totalTextView.setText(String.valueOf(orderHistoryArray.get(groupPosition).getGrandtotal()));
+            totalTextView.setText(new DecimalFormat().format(orderHistoryArray.get(groupPosition).getGrandtotal()));
 
             if (orderHistoryArray.get(groupPosition).getPayment_status() == 1) {
                 paymentStatusTextView.setText("Paid");
