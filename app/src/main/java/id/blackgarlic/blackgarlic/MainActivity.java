@@ -432,7 +432,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                 proceedToCheckoutButton.setEnabled(false);
 
                 if (isLoggedIn == true) {
-                    if (currentMenuList.size() != 2) {
+                    if (currentMenuList.size() < 2) {
                         proceedToCheckoutButton.setEnabled(true);
                         Toast.makeText(MainActivity.this, "Please Add A Minimum Of 2 Menus!", Toast.LENGTH_SHORT).show();
                     } else {
@@ -441,7 +441,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                     }
                 } else {
 
-                    if (currentMenuList.size() != 2) {
+                    if (currentMenuList.size() < 2) {
                         proceedToCheckoutButton.setEnabled(true);
                         Toast.makeText(MainActivity.this, "Please Add A Minimum Of 2 Menus!", Toast.LENGTH_SHORT).show();
                     } else {
