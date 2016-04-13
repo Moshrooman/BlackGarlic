@@ -24,6 +24,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -139,6 +140,15 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        final ProgressBar mainActivityProgressBar = (ProgressBar) findViewById(R.id.mainActivityProgressBar);
+        final TextView loadingThisWeeksMenuTextView = (TextView) findViewById(R.id.loadingThisWeeksMenuTextView);
+
+        mainActivityProgressBar.bringToFront();
+        loadingThisWeeksMenuTextView.bringToFront();
+
+        mainActivityProgressBar.setVisibility(View.VISIBLE);
+        loadingThisWeeksMenuTextView.setVisibility(View.VISIBLE);
 
         clearAllButton = (Button) findViewById(R.id.clearAllButton);
 
@@ -496,6 +506,9 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
                 recyclerView.setAdapter(blackGarlicAdapter);
                 recyclerView.addItemDecoration(new StickyRecyclerHeadersDecoration(blackGarlicAdapter));
+
+                mainActivityProgressBar.setVisibility(View.GONE);
+                loadingThisWeeksMenuTextView.setVisibility(View.GONE);
 
             }
         }, new Response.ErrorListener() {

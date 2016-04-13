@@ -25,6 +25,23 @@
             android:id="@+id/drawerLayoutRelativeLayout"
             >
 
+            <ProgressBar
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/mainActivityProgressBar"
+                android:layout_centerInParent="true"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="Loading This Weeks Menu..."
+                android:layout_below="@+id/mainActivityProgressBar"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/loadingThisWeeksMenuTextView"
+                />
+
             <android.support.v4.widget.DrawerLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
