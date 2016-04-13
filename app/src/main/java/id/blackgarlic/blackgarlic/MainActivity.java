@@ -471,8 +471,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
                 Log.e("Response: ", response);
 
-                Toast.makeText(MainActivity.this, "Taking From Internet", Toast.LENGTH_SHORT).show();
-
                 MenuId menuId = new Gson().fromJson(response, MenuId.class);
                 Menus menus = new Gson().fromJson(response, Menus.class);
 
@@ -524,18 +522,12 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             @Override
             public void onErrorResponse(VolleyError error) {
 
-//                if (BlackGarlicDAO.getInstance().getMenusFromDB(MainActivity.this).length != 0) {
-//
-//                    Menu[] menuListDatabase = BlackGarlicDAO.getInstance().getMenusFromDB(MainActivity.this);
-//                    Toast.makeText(MainActivity.this, "Taking From Database", Toast.LENGTH_SHORT).show();
-//                    BlackGarlicAdapter blackGarlicAdapter2 = new BlackGarlicAdapter(menuListDatabase, MainActivity.this, MainActivity.this);
-//                    recyclerView.setAdapter(blackGarlicAdapter2);
-//
-//                } else {
-//
-//                    Toast.makeText(MainActivity.this, "Please Connect To The Internet!", Toast.LENGTH_LONG).show();
-//
-//                }
+                mainActivityProgressBar.setVisibility(View.GONE);
+                loadingThisWeeksMenuTextView.setVisibility(View.GONE);
+
+                SuperToast superToast = SuperToast.create(MainActivity.this, "No Internet!\n\nPlease Connect To The Internet And Restart The Application", SuperToast.Duration.EXTRA_LONG, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
+                superToast.setTextSize(20);
+                superToast.show();
 
             }
         });
