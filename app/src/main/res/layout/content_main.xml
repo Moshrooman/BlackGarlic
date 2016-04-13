@@ -77,6 +77,7 @@
                 android:layout_height="50dp"
                 android:orientation="horizontal"
                 android:background="#2f2f2f"
+                android:weightSum="1"
                 >
 
                 <ImageView
@@ -97,13 +98,28 @@
                     />
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:text="Chef: Name\nThis Weeks Menu"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="Menu"
                     android:textSize="20dp"
                     android:textColor="#FFFFFF"
                     android:gravity="center"
-                    android:id="@+id/welcomeTextView"
+                    android:id="@+id/menuMainActivityTextView"
+                    android:layout_weight="1"
+                    />
+
+                <View
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_gravity="center"
+                    />
+
+                <View
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="8dp"
                     />
 
                 <View

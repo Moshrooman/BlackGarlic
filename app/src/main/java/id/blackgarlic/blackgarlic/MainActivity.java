@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         drawerEntries = getResources().getStringArray(R.array.navBarEntires);
 
-        TextView welcomeTextView = (TextView) findViewById(R.id.welcomeTextView);
+        TextView menuMainActivityTextView = (TextView) findViewById(R.id.menuMainActivityTextView);
 
         if (isLoggedIn == false) {
             Button mainActivityLogInButton = (Button) findViewById(R.id.mainActivityLogInButton);
@@ -241,11 +241,11 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
             mainActivityLogInButton.setVisibility(View.VISIBLE);
             mainActivitySignUpButton.setVisibility(View.VISIBLE);
-            welcomeTextView.setVisibility(View.GONE);
+            menuMainActivityTextView.setVisibility(View.GONE);
             drawerEntries = new String[3];
             drawerEntries[0] = "Home";
             drawerEntries[1] = "Log In";
-            drawerEntries[2] = "Create Account";
+            drawerEntries[2] = "Sign Up";
 
             mainActivityLogInButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -269,10 +269,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                 }
             });
         } else {
-            welcomeTextView.setVisibility(View.VISIBLE);
-            String welcomeTextViewString = (String) welcomeTextView.getText();
-            welcomeTextViewString = welcomeTextViewString.replace("Name", userCredentials.getCustomer_name());
-            welcomeTextView.setText(welcomeTextViewString);
+            menuMainActivityTextView.setVisibility(View.VISIBLE);
 
             drawerEntries = new String[6];
             drawerEntries[0] = "Home";
