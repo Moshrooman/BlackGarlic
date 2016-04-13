@@ -787,6 +787,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
                 if ((isLoggedIn == true) && (position == 0)) {
                     convertView = layoutInflater.inflate(R.layout.welcomechefnavbar, null);
+                    convertView.setEnabled(false);
                 } else {
                     convertView = layoutInflater.inflate(R.layout.rownavbar, null);
                 }
