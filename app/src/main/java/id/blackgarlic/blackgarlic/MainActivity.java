@@ -526,7 +526,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                 loadingThisWeeksMenuTextView.setVisibility(View.GONE);
 
                 SuperToast superToast = SuperToast.create(MainActivity.this, "No Internet!\n\nPlease Connect To The Internet And Restart The Application", SuperToast.Duration.EXTRA_LONG, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
-                superToast.setTextSize(20);
+                superToast.setTextSize(21);
                 superToast.show();
 
             }
