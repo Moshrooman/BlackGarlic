@@ -47,7 +47,7 @@
                     android:layout_width="240dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left"
-                    android:background="#03C9A9"
+                    android:background="#424242"
                     android:id="@+id/drawerListView"
                     >
                 </ListView>

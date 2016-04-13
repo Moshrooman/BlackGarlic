@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -38,6 +39,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import org.joda.time.LocalDate;
+import org.w3c.dom.Text;
 
 import java.lang.reflect.Type;
 import java.text.DateFormat;
@@ -262,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             welcomeTextViewString = welcomeTextViewString.replace("Name", userCredentials.getCustomer_name());
             welcomeTextView.setText(welcomeTextViewString);
 
-            drawerEntries = new String[5];
+            drawerEntries = new String[6];
             drawerEntries[0] = "Home";
             drawerEntries[1] = "My Account";
             drawerEntries[2] = "Order History";
@@ -270,8 +272,10 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             drawerEntries[4] = "Log Out";
         }
 
-        drawerListView.setAdapter(new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_list_item_1, drawerEntries));
+        drawerListView.setAdapter(new MyNavBarAdapter());
+
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
         drawerListView.setOnItemClickListener(this);
 
         drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
@@ -654,38 +658,40 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     }
 
+
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
         final SharedPreferences sharedPreferences = SplashActivity.getSharedPreferences();
 
         if (isLoggedIn == true) {
-            if (position == 0) {
+            if (position == 1) {
                 drawerListView.setItemChecked(position, true);
                 Intent welcomeIntent = new Intent(MainActivity.this, WelcomeActivity.class);
                 drawerLayout.closeDrawer(Gravity.LEFT);
                 startActivity(welcomeIntent);
 
-            }else if (position == 1) {
+            }else if (position == 2) {
                 drawerListView.setItemChecked(position, true);
                 Intent myAccountIntent = new Intent(MainActivity.this, MyAccount.class);
                 drawerLayout.closeDrawer(Gravity.LEFT);
                 startActivity(myAccountIntent);
-            } else if (position == 2) {
+            } else if (position == 3) {
 
                 Intent orderHistoryIntent = new Intent(MainActivity.this, OrderHistory.class);
                 drawerListView.setItemChecked(position, true);
                 drawerLayout.closeDrawer(Gravity.LEFT);
                 startActivity(orderHistoryIntent);
 
-            } else if(position == 3) {
+            } else if(position == 4) {
 
                 Intent paymentConfirmationIntent = new Intent(MainActivity.this, PaymentConfirmation.class);
                 drawerListView.setItemChecked(position, true);
                 drawerLayout.closeDrawer(Gravity.LEFT);
                 startActivity(paymentConfirmationIntent);
 
-            }else if (position == 4) {
+            } else if (position == 5) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.remove("Credentials");
                 editor.remove("Email");
@@ -717,6 +723,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                 startActivity(getIntent());
 
             }
+
         } else {
             if (position == 0) {
                 drawerListView.setItemChecked(position, true);
@@ -743,6 +750,57 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             }
         }
 
+    }
+
+    public class MyNavBarAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+
+            return drawerEntries.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return drawerEntries[position];
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                LayoutInflater layoutInflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                if ((isLoggedIn == true) && (position == 0)) {
+                    convertView = layoutInflater.inflate(R.layout.welcomechefnavbar, null);
+                } else {
+                    convertView = layoutInflater.inflate(R.layout.rownavbar, null);
+                }
+
+            }
+
+            if ((isLoggedIn == true) && (position == 0)) {
+                TextView chefNameTextView = (TextView) convertView.findViewById(R.id.chefNameTextView);
+                chefNameTextView.setText(userCredentials.getCustomer_name());
+            }  else if ((isLoggedIn == true) && (position == 5)) {
+                TextView navBarEntry = (TextView) convertView.findViewById(R.id.navBarEntryImageView);
+                navBarEntry.setText(drawerEntries[position - 1]);
+                navBarEntry.setTextColor(getResources().getColor(R.color.BGRED));
+            }  else if ((isLoggedIn == true) && (position != 0)) {
+                TextView navBarEntry = (TextView) convertView.findViewById(R.id.navBarEntryImageView);
+                navBarEntry.setText(drawerEntries[position - 1]);
+            } else {
+                TextView navBarEntry = (TextView) convertView.findViewById(R.id.navBarEntryImageView);
+                navBarEntry.setText(drawerEntries[position]);
+            }
+
+
+            return convertView;
+        }
     }
 
     public class MyAdapter extends BaseAdapter {
