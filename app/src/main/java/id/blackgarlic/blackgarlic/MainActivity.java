@@ -1,5 +1,6 @@
 package id.blackgarlic.blackgarlic;
 
+import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,6 +26,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +36,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
+import com.github.johnpersano.supertoasts.SuperToast;
+import com.github.johnpersano.supertoasts.util.Style;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -99,6 +103,8 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     private static BlackGarlicAdapter blackGarlicAdapter2;
 
+    private static LayoutInflater layoutInflater;
+
     public static List<Data> getCurrentMenuList() {
         return currentMenuList;
     }
@@ -140,6 +146,8 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        layoutInflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         final ProgressBar mainActivityProgressBar = (ProgressBar) findViewById(R.id.mainActivityProgressBar);
         final TextView loadingThisWeeksMenuTextView = (TextView) findViewById(R.id.loadingThisWeeksMenuTextView);
@@ -610,7 +618,9 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
         Log.e("---------------", "-----------------");
 
-        Toast.makeText(MainActivity.this, "Added: " + menuAdded, Toast.LENGTH_SHORT).show();
+        SuperToast superToast = SuperToast.create(this, "Added To Box:\n\n"+menuAdded+"", SuperToast.Duration.SHORT, Style.getStyle(Style.GREEN, SuperToast.Animations.POPUP));
+
+        superToast.show();
 
         listViewOrderSummary.setAdapter(new MyAdapter(selectedMenuList, selectedMenuIdList, currentMenuListUrls, portionSizeList, individualPricesAdapter));
 
