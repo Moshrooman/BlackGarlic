@@ -435,18 +435,18 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                 proceedToCheckoutButton.setEnabled(false);
 
                 if (isLoggedIn == true) {
-                    if (null == currentMenuList || currentMenuList.size() == 0) {
+                    if (currentMenuList.size() != 2) {
                         proceedToCheckoutButton.setEnabled(true);
-                        Toast.makeText(MainActivity.this, "You Have Nothing In Your Box!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Please Add A Minimum Of 2 Menus!", Toast.LENGTH_SHORT).show();
                     } else {
                         Intent proceedToCheckOutIntent = new Intent(MainActivity.this, CheckOut.class);
                         startActivity(proceedToCheckOutIntent);
                     }
                 } else {
 
-                    if (null == currentMenuList || currentMenuList.size() == 0) {
+                    if (currentMenuList.size() != 2) {
                         proceedToCheckoutButton.setEnabled(true);
-                        Toast.makeText(MainActivity.this, "You Have Nothing In Your Box!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Please Add A Minimum Of 2 Menus!", Toast.LENGTH_SHORT).show();
                     } else {
                         Intent logInIntent = new Intent(MainActivity.this, LogInScreen.class);
                         startActivity(logInIntent);
