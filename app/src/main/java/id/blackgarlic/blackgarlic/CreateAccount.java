@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -54,7 +56,20 @@ public class CreateAccount extends AppCompatActivity {
         final EditText createAccountEmail = (EditText) findViewById(R.id.createAccountEmail);
         final EditText createAccountPassword = (EditText) findViewById(R.id.createAccountPassword);
 
+        CheckBox createAccountShowPasswordCheckBox = (CheckBox) findViewById(R.id.createAccountShowPasswordCheckBox);
+
         createAccountPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+
+        createAccountShowPasswordCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked == true) {
+                    createAccountPassword.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                } else {
+                    createAccountPassword.setInputType(129);
+                }
+            }
+        });
 
         Button signUpButton = (Button) findViewById(R.id.signUpButton);
 
