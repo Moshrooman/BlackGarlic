@@ -33,6 +33,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
+import com.github.johnpersano.supertoasts.SuperToast;
+import com.github.johnpersano.supertoasts.util.Style;
 import com.google.gson.Gson;
 
 import org.joda.time.LocalDate;
@@ -423,7 +425,9 @@ public class CheckOut extends AppCompatActivity {
                                 checkOutScrollView.smoothScrollTo(0, checkOutScrollView.getTop());
                             }
                         });
-                        Toast.makeText(CheckOut.this, "Please Select A Delivery Date!", Toast.LENGTH_SHORT).show();
+
+                        SuperToast superToast = SuperToast.create(CheckOut.this, "Please Select A Delivery Date!", SuperToast.Duration.SHORT, Style.getStyle(Style.GRAY, SuperToast.Animations.POPUP));
+                        superToast.show();
                     }
 
                 }
@@ -521,10 +525,14 @@ public class CheckOut extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (selectedDate == "") {
-                    Toast.makeText(CheckOut.this, "Please Select A Delivery Date!", Toast.LENGTH_SHORT).show();
+
+                    SuperToast superToast = SuperToast.create(CheckOut.this, "Please Select A Delivery Date!", SuperToast.Duration.SHORT, Style.getStyle(Style.GRAY, SuperToast.Animations.POPUP));
+                    superToast.show();
 
                 } else if (selectedPaymentMethod == "") {
-                    Toast.makeText(CheckOut.this, "Please Select A Payment Method!", Toast.LENGTH_SHORT).show();
+
+                    SuperToast superToast = SuperToast.create(CheckOut.this, "Please Select A Payment Method!", SuperToast.Duration.SHORT, Style.getStyle(Style.GRAY, SuperToast.Animations.POPUP));
+                    superToast.show();
 
                 } else {
 
@@ -548,7 +556,8 @@ public class CheckOut extends AppCompatActivity {
 
                     placeOrderButton.setEnabled(false);
 
-                    Toast.makeText(CheckOut.this, "Placing Order", Toast.LENGTH_SHORT).show();
+                    SuperToast superToast = SuperToast.create(CheckOut.this, "Placing Order", SuperToast.Duration.SHORT, Style.getStyle(Style.GREEN, SuperToast.Animations.POPUP));
+                    superToast.show();
 
 
                     final JSONObject addressObject = new JSONObject();
