@@ -58,9 +58,6 @@ public class PopUpYouTube extends AppCompatActivity {
 
                         welcomeVideoView.setMediaController(mediaController);
 
-                        Log.e("Width: ", String.valueOf(width));
-                        Log.e("Height: ", String.valueOf(height));
-
                     }
                 });
 
