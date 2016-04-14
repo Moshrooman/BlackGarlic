@@ -3,30 +3,18 @@ package id.blackgarlic.blackgarlic.welcome;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.MediaController;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.VideoView;
-
-import java.util.Timer;
 
 import id.blackgarlic.blackgarlic.R;
 
@@ -41,10 +29,12 @@ public class PopUpYouTube extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pop_up_you_tube);
 
+        youtubeLayout = (RelativeLayout) findViewById(R.id.youtubePopUp);
+
         final ImageView replayImageView = (ImageView) findViewById(R.id.replayImageView);
         replayImageView.bringToFront();
 
-        String path = "android.resource://" + getPackageName() + "/" + R.raw.blackgarlicvideo;
+        String path = "android.resource://" + getPackageName() + "/" + R.raw.blackgarlicandroid;
 
         Uri uri = Uri.parse(path);
 
@@ -52,15 +42,31 @@ public class PopUpYouTube extends AppCompatActivity {
 
         welcomeVideoView.setVideoURI(uri);
 
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        welcomeVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
 
-        int width = dm.widthPixels;
-        int height = dm.heightPixels;
+                mp.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
+                    @Override
+                    public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
 
-        getWindow().setLayout((int) (width * 0.9), (int) (height * 0.5));
+                        getWindow().setLayout(welcomeVideoView.getWidth(), welcomeVideoView.getHeight());
 
-        youtubeLayout = (RelativeLayout) findViewById(R.id.youtubePopUp);
+                        MediaController mediaController = new MediaController(PopUpYouTube.this);
+
+                        mediaController.setAnchorView(welcomeVideoView);
+
+                        welcomeVideoView.setMediaController(mediaController);
+
+                        Log.e("Width: ", String.valueOf(width));
+                        Log.e("Height: ", String.valueOf(height));
+
+                    }
+                });
+
+            }
+        });
+
 
         youtubeLayout.setClickable(false);
 

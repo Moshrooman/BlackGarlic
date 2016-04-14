@@ -18,4 +18,5 @@
     <string name="title_activity_check_out">CheckOut</string>
     <string name="title_activity_order_history">OrderHistory</string>
     <string name="title_activity_payment_confirmation">PaymentConfirmation</string>
+    <string name="title_activity_black_garlic_youtube_video">BlackGarlicYoutubeVideo</string>
 </resources>

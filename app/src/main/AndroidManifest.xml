@@ -62,11 +62,11 @@
         <activity
             android:name=".OrderHistory.OrderHistory"
             android:label="@string/title_activity_order_history"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".PaymentConfirmation"
             android:label="@string/title_activity_payment_confirmation"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>
