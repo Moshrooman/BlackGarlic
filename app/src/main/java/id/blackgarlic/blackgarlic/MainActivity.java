@@ -657,13 +657,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     }
 
-    //Finished radio buttons through all in blackgarlic adapter using android onclick, creating new list of strings adding menu urls
-    //only concatenating _4 if the menutype is 3.
-    //Finished the 4 person and 2 person (in whitesignupbutton separate list of strings)
-    //Finished the individual prices in each list view item (in whitesignupbutton separate list of strings)
-    //Created subtotal int by parsing all strings in individual price list and adding together
-    //Created whitesignupbutton subtotal text view, setting it the to the subtotal price variable.
-
     public void clearAll(View view) {
 
         Animation animScale = AnimationUtils.loadAnimation(this, R.anim.anim_scale);

@@ -95,6 +95,28 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         myViewHolder.menuTitleTextView.setText(currentMenu.getMenu_name());
         myViewHolder.menuDescriptionTextView.setText(currentMenu.getMenu_description());
 
+        myViewHolder.switchToDescription.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AnimationFactory.flipTransition(myViewHolder.viewFlipper, AnimationFactory.FlipDirection.LEFT_RIGHT);
+                currentMenu.setIsFlipped(true);
+            }
+        });
+
+        myViewHolder.backToMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AnimationFactory.flipTransition(myViewHolder.viewFlipper, AnimationFactory.FlipDirection.RIGHT_LEFT);
+                currentMenu.setIsFlipped(false);
+            }
+        });
+
+        if (currentMenu.getIsFlipped() == true) {
+            myViewHolder.viewFlipper.setDisplayedChild(1);
+        } else {
+            myViewHolder.viewFlipper.setDisplayedChild(0);
+        }
+
         if ((currentMenu.getMenu_type().equals("4")) || (currentMenu.getMenu_type().equals("6"))) {
             myViewHolder.priceTextView.setText("IDR 80.000");
         } else {
@@ -271,21 +293,6 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
             radioGroupMenu.setOnClickListener(this);
 
             priceTextView = (TextView) itemView.findViewById(R.id.priceTextView);
-
-
-            switchToDescription.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AnimationFactory.flipTransition(viewFlipper, AnimationFactory.FlipDirection.LEFT_RIGHT);
-                }
-            });
-
-            backToMenu.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AnimationFactory.flipTransition(viewFlipper, AnimationFactory.FlipDirection.RIGHT_LEFT);
-                }
-            });
 
         }
 

@@ -26,6 +26,8 @@ public class Data {
 
     private boolean fourPersonEnabled = false;
 
+    private boolean isFlipped = false;
+
     public boolean getFourPersonEnabled() {
         return this.fourPersonEnabled;
     }
@@ -52,6 +54,14 @@ public class Data {
 
     public String getMenu_type() {
         return menu_type;
+    }
+
+    public boolean getIsFlipped() {
+        return isFlipped;
+    }
+
+    public void setIsFlipped(boolean isFlipped) {
+        this.isFlipped = isFlipped;
     }
 
     public Data(String menu_name, String menu_subname, String menu_description, String menu_type) {
