@@ -23,8 +23,8 @@
             >
 
             <RelativeLayout
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
                 android:layout_gravity="center_horizontal"
                 >
 
@@ -55,16 +55,17 @@
                         android:layout_height="wrap_content"
                         android:text="MENU TITLE"
                         android:layout_marginTop="10dp"
-                        android:textSize="15dp"
+                        android:textSize="18dp"
                         android:id="@+id/menuTitleTextView"
-                        android:textColor="#000"
+                        android:textColor="#444444"
                         android:layout_centerHorizontal="true"
                         android:gravity="center"
                         android:layout_below="@+id/menuNetworkImageView"
+                        fontPath="fonts/Roboto-Bold.ttf"
                         />
 
                     <com.android.volley.toolbox.NetworkImageView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="250dp"
                         android:id="@+id/menuNetworkImageView"
                         android:layout_centerHorizontal="true"
@@ -114,6 +115,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:id="@+id/twopersonTextView"
                                 android:layout_gravity="center_horizontal"
+                                fontPath="fonts/Roboto-Medium.ttf"
                                 />
 
 
@@ -145,6 +147,7 @@
                                 android:layout_marginLeft="10dp"
                                 android:id="@+id/fourpersonTextView"
                                 android:layout_gravity="center_horizontal"
+                                fontPath="fonts/Roboto-Medium.ttf"
                                 />
 
                         </LinearLayout>
@@ -165,8 +168,9 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/green"
                             android:text="IDR 80.000"
+                            android:textSize="20dp"
                             android:layout_gravity="center_horizontal"
-
+                            fontPath="fonts/Roboto-Bold.ttf"
                             android:id="@+id/priceTextView"
                             />
 
@@ -180,11 +184,13 @@
                             >
 
                             <Button
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Add To Box"
-                                android:textSize="20dp"
+                                android:layout_width="140dp"
+                                android:layout_height="50dp"
+                                android:text="+ Add Menu"
+                                android:textSize="13dp"
                                 android:background="@drawable/addtobox"
+                                fontPath="fonts/Roboto-Bold.ttf"
+                                android:textColor="#00584a"
                                 />
 
                         </com.andexert.library.RippleView>
@@ -194,7 +200,9 @@
                             android:layout_height="wrap_content"
                             android:text="Description ->"
                             android:textSize="12dp"
+                            android:textColor="#000"
                             android:id="@+id/switchToDescription"
+                            fontPath="fonts/Roboto-Thin.ttf"
                             android:layout_marginTop="10dp"
                             />
 
@@ -211,7 +219,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="fill_parent"
-            android:layout_height="370dp"
+            android:layout_height="427dp"
             android:clickable="false"
             >
 
@@ -222,6 +230,7 @@
                 android:gravity="center"
                 android:textSize="15dp"
                 android:id="@+id/menuDescriptionTextView"
+                fontPath="fonts/Roboto-Medium.ttf"
                 />
 
             <TextView
@@ -231,6 +240,8 @@
                 android:textSize="12dp"
                 android:layout_gravity="bottom|right"
                 android:id="@+id/backToMenu"
+                android:textColor="#000"
+                fontPath="fonts/Roboto-Thin.ttf"
                 />
 
         </android.support.v7.widget.CardView>

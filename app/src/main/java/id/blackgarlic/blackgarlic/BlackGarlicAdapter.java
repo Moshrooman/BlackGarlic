@@ -219,9 +219,9 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         }
 
         if (position <= breakfastHeaderCount - 1) {
-            headerTextView.setText("Breakfast");
+            headerTextView.setText("BREAKFAST");
         } else {
-            headerTextView.setText("Original");
+            headerTextView.setText("ORIGINAL");
         }
     }
 
