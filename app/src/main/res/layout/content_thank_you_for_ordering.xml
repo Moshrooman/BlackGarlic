@@ -24,6 +24,7 @@
                 android:layout_centerHorizontal="true"
                 fontPath="fonts/Roboto-Bold.ttf"
                 android:textColor="@color/BGGREY"
+                android:layout_marginTop="5dp"
                 />
 
             <TextView
@@ -46,6 +47,7 @@
                 android:layout_below="@+id/forOrderingTextView"
                 android:layout_centerHorizontal="true"
                 android:id="@+id/blackGarlicBoxImageView"
+                android:layout_marginTop="15dp"
                 />
 
             <TextView
@@ -59,7 +61,7 @@
                 android:textColor="#999"
                 android:gravity="center"
                 android:layout_below="@+id/blackGarlicBoxImageView"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="15dp"
                 />
 
             <TextView

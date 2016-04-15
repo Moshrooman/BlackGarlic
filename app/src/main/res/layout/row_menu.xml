@@ -8,178 +8,204 @@
 
     <ViewFlipper
         android:layout_width="fill_parent"
-        android:layout_height="370dp"
+        android:layout_height="wrap_content"
         android:id="@+id/viewFlipper"
         >
 
         <android.support.v7.widget.CardView
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:layout_width="fill_parent"
-            android:layout_height="370dp"
+            android:layout_height="wrap_content"
             android:id="@+id/card_view"
             android:layout_gravity="center"
             card_view:cardCornerRadius="4dp"
             android:background="#66000000"
             >
 
-
-
             <RelativeLayout
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="65dp"
                 >
 
                 <ProgressBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-
                     />
 
             </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="MENU TITLE"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:textSize="15dp"
-                android:id="@+id/menuTitleTextView"
-                android:textColor="#000"
-                android:textAlignment="center"
-                />
-
-            <com.android.volley.toolbox.NetworkImageView
-                android:layout_width="wrap_content"
-                android:layout_height="200dp"
-                android:layout_marginTop="55dp"
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/menuNetworkImageView"
-
-                />
-
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:id="@+id/buttonAndPriceLinearLayout"
-                android:layout_gravity="right|bottom"
-                android:layout_marginBottom="30dp"
                 >
 
-                <TextView
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/green"
-                    android:text="IDR 80.000"
                     android:layout_gravity="center_horizontal"
-
-                    android:id="@+id/priceTextView"
-                    />
-
-                <com.andexert.library.RippleView
-                    android:id="@+id/rippleView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:rv_rippleDuration= "5000"
-                    app:rv_centered="true"
-                    app:rv_color="#006d67"
+                    android:gravity="center"
+                    android:id="@+id/pictureRelativeLayout"
                     >
 
-                    <Button
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Add To Box"
-                        android:textSize="20dp"
-                        android:background="@drawable/addtobox"
+                        android:text="MENU TITLE"
+                        android:layout_marginTop="10dp"
+                        android:textSize="15dp"
+                        android:id="@+id/menuTitleTextView"
+                        android:textColor="#000"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center"
+                        android:layout_below="@+id/menuNetworkImageView"
                         />
 
+                    <com.android.volley.toolbox.NetworkImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:id="@+id/menuNetworkImageView"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        />
 
-                </com.andexert.library.RippleView>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="20dp"
+                    >
+
+                    <RadioGroup
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="left"
+                        android:id="@+id/radioGroupMenu"
+                        android:layout_weight="1"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:id="@+id/twoPersonLinearLayout"
+                            android:background="@drawable/border"
+                            >
+
+                            <RadioButton
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:id="@+id/radioButtonTwoPerson"
+                                android:layout_gravity="center_horizontal"
+                                android:text="2 Person"
+                                android:clickable="false"
+                                />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="2 Person"
+                                android:textSize="15dp"
+                                android:layout_marginLeft="10dp"
+                                android:id="@+id/twopersonTextView"
+                                android:layout_gravity="center_horizontal"
+                                />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:id="@+id/fourPersonLinearLayout"
+                            android:background="@drawable/border"
+                            android:layout_marginTop="10dp"
+                            >
+
+                            <RadioButton
+                                android:layout_width="26dp"
+                                android:layout_height="26dp"
+                                android:id="@+id/radioButtonFourPerson"
+                                android:layout_gravity="center_horizontal"
+                                android:clickable="false"
+                                />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="4 Person"
+                                android:textSize="15dp"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginLeft="10dp"
+                                android:id="@+id/fourpersonTextView"
+                                android:layout_gravity="center_horizontal"
+                                />
+
+                        </LinearLayout>
+
+                    </RadioGroup>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:id="@+id/buttonAndPriceLinearLayout"
+                        android:layout_gravity="right|bottom"
+                        android:gravity="right"
+                        >
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/green"
+                            android:text="IDR 80.000"
+                            android:layout_gravity="center_horizontal"
+
+                            android:id="@+id/priceTextView"
+                            />
+
+                        <com.andexert.library.RippleView
+                            android:id="@+id/rippleView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:rv_rippleDuration= "5000"
+                            app:rv_centered="true"
+                            app:rv_color="#006d67"
+                            >
+
+                            <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Add To Box"
+                                android:textSize="20dp"
+                                android:background="@drawable/addtobox"
+                                />
+
+                        </com.andexert.library.RippleView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Description ->"
+                            android:textSize="12dp"
+                            android:id="@+id/switchToDescription"
+                            android:layout_marginTop="10dp"
+                            />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
-            <RadioGroup
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="275dp"
-                android:id="@+id/radioGroupMenu"
-                >
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:id="@+id/twoPersonLinearLayout"
-                    android:background="@drawable/border"
-                    >
-
-                    <RadioButton
-                        android:layout_width="26dp"
-                        android:layout_height="26dp"
-                        android:id="@+id/radioButtonTwoPerson"
-                        android:layout_gravity="center_horizontal"
-                        android:text="2 Person"
-                        android:clickable="false"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="2 Person"
-                        android:textSize="15dp"
-                        android:layout_marginLeft="10dp"
-                        android:id="@+id/twopersonTextView"
-                        android:layout_gravity="center_horizontal"
-                        />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:id="@+id/fourPersonLinearLayout"
-                    android:background="@drawable/border"
-                    android:layout_marginTop="10dp"
-                    >
-
-                    <RadioButton
-                        android:layout_width="26dp"
-                        android:layout_height="26dp"
-                        android:id="@+id/radioButtonFourPerson"
-                        android:layout_gravity="center_horizontal"
-                        android:clickable="false"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="4 Person"
-                        android:textSize="15dp"
-                        android:layout_marginTop="2dp"
-                        android:layout_marginLeft="10dp"
-                        android:id="@+id/fourpersonTextView"
-                        android:layout_gravity="center_horizontal"
-                        />
-
-                </LinearLayout>
-
-            </RadioGroup>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Description ->"
-                android:textSize="12dp"
-                android:layout_gravity="bottom|right"
-                android:id="@+id/switchToDescription"
-                />
 
         </android.support.v7.widget.CardView>
 
