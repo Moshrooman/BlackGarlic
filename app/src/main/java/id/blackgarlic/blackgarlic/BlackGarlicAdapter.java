@@ -98,6 +98,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         myViewHolder.switchToDescription.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                myViewHolder.viewFlipper.setFlipInterval(1000);
                 AnimationFactory.flipTransition(myViewHolder.viewFlipper, AnimationFactory.FlipDirection.LEFT_RIGHT);
                 currentMenu.setIsFlipped(true);
             }
@@ -106,15 +107,26 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         myViewHolder.backToMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                myViewHolder.viewFlipper.setFlipInterval(1000);
                 AnimationFactory.flipTransition(myViewHolder.viewFlipper, AnimationFactory.FlipDirection.RIGHT_LEFT);
                 currentMenu.setIsFlipped(false);
             }
         });
 
         if (currentMenu.getIsFlipped() == true) {
-            myViewHolder.viewFlipper.setDisplayedChild(1);
+            myViewHolder.viewFlipper.setFlipInterval(0);
+
+            if (!(myViewHolder.viewFlipper.getDisplayedChild() == 1)) {
+                myViewHolder.viewFlipper.setDisplayedChild(1);
+            }
+
         } else {
-            myViewHolder.viewFlipper.setDisplayedChild(0);
+            myViewHolder.viewFlipper.setFlipInterval(0);
+
+            if (!(myViewHolder.viewFlipper.getDisplayedChild() == 0)) {
+                myViewHolder.viewFlipper.setDisplayedChild(0);
+            }
+
         }
 
         if ((currentMenu.getMenu_type().equals("4")) || (currentMenu.getMenu_type().equals("6"))) {

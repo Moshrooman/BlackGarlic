@@ -106,6 +106,7 @@
                     android:gravity="center"
                     android:id="@+id/menuMainActivityTextView"
                     android:layout_weight="1"
+                    fontPath="fonts/Roboto-Thin.ttf"
                     />
 
                 <View
@@ -190,6 +191,7 @@
                     android:textColor="#e74c3c"
                     android:layout_marginLeft="20dp"
                     android:id="@+id/checkOutTextView"
+                    fontPath="fonts/Roboto-Medium.ttf"
                     />
 
                 <TextView
@@ -219,12 +221,13 @@
                     android:text="Clear All"
                     android:textSize="10dp"
                     android:background="@drawable/clearallbutton"
-                    android:textColor="#000"
                     android:id="@+id/clearAllButton"
                     android:layout_marginTop="8dp"
                     android:layout_toRightOf="@+id/checkOutTextView"
                     android:layout_marginLeft="25dp"
                     android:onClick="clearAll"
+                    fontPath="fonts/Roboto-Bold.ttf"
+                    android:textColor="#00584a"
                     />
 
             <!-- End of visible clickable tab layout -->
