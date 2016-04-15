@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="id.blackgarlic.blackgarlic.ThankYouForOrdering"
+    tools:showIn="@layout/activity_thank_you_for_ordering"
+    >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="THANK YOU"
+                android:textSize="30dp"
+                android:id="@+id/thankYouTextView"
+                android:layout_centerHorizontal="true"
+                fontPath="fonts/Roboto-Bold.ttf"
+                android:textColor="@color/BGGREY"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FOR ORDERING"
+                android:textSize="30dp"
+                android:id="@+id/forOrderingTextView"
+                android:layout_centerHorizontal="true"
+                fontPath="fonts/Roboto-Bold.ttf"
+                android:textColor="#999"
+                android:layout_below="@+id/thankYouTextView"
+                android:layout_marginTop="5dp"
+                />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/confirmationmagicbox"
+                android:layout_below="@+id/forOrderingTextView"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/blackGarlicBoxImageView"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="YOUR MAGIC BOX IS SET TO ARRIVE ON"
+                android:textSize="30dp"
+                android:id="@+id/yourMagicBoxIsSetToArriveOn"
+                android:layout_centerHorizontal="true"
+                fontPath="fonts/Roboto-Thin.ttf"
+                android:textColor="#999"
+                android:gravity="center"
+                android:layout_below="@+id/blackGarlicBoxImageView"
+                android:layout_marginTop="5dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DATE"
+                android:textSize="30dp"
+                android:id="@+id/thankYouForOrderingDateTextView"
+                android:layout_centerHorizontal="true"
+                fontPath="fonts/Roboto-Bold.ttf"
+                android:textColor="@color/BGGREY"
+                android:gravity="center"
+                android:layout_below="@+id/yourMagicBoxIsSetToArriveOn"
+                android:layout_marginTop="5dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="YOUR ORDER CONFIRMATION NUMBER"
+                android:textSize="30dp"
+                android:id="@+id/orderConfirmationTextView"
+                android:layout_centerHorizontal="true"
+                fontPath="fonts/Roboto-Thin.ttf"
+                android:textColor="#999"
+                android:gravity="center"
+                android:layout_below="@+id/thankYouForOrderingDateTextView"
+                android:layout_marginTop="15dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="UNIQUE ID"
+                android:textSize="30dp"
+                android:id="@+id/thankYouForOrderingOrderConfirmationTextView"
+                android:layout_centerHorizontal="true"
+                fontPath="fonts/Roboto-Bold.ttf"
+                android:textColor="@color/BGGREY"
+                android:gravity="center"
+                android:layout_below="@+id/orderConfirmationTextView"
+                android:layout_marginTop="5dp"
+                />
+
+        </RelativeLayout>
+
+
+    </ScrollView>
+
+
+
+</RelativeLayout>

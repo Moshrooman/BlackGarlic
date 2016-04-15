@@ -347,7 +347,6 @@ public class CheckOut extends AppCompatActivity {
                     }
 
 
-
                 }
 
                 checkOutScrollView.post(new Runnable() {
@@ -387,7 +386,9 @@ public class CheckOut extends AppCompatActivity {
             }
         });
 
-        final TextView methodInfoTextView = (TextView) findViewById(R.id.methodInfoTextView);
+        final TextView methodInfoSelectPaymentMethod = (TextView) findViewById(R.id.methodInfoSelectPaymentMethod);
+        final TextView methodInfoBankTransfer = (TextView) findViewById(R.id.methodInfoBankTransfer);
+
         final Spinner paymentMethodDropDown = (Spinner) findViewById(R.id.paymentMethodDropDown);
         String[] paymentMethods = new String[] {"Select A Payment Method", "TRANSFER" /*KARTU KREDIT ONLINE", "DOKU WALLET"*/};
         ArrayAdapter<String> paymentAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, paymentMethods);
@@ -399,17 +400,16 @@ public class CheckOut extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 if (position == 0) {
-                    methodInfoTextView.setText("Please Select A Payment Method!");
+                    methodInfoSelectPaymentMethod.setVisibility(View.VISIBLE);
+                    methodInfoBankTransfer.setVisibility(View.GONE);
                     selectedPaymentMethod = "";
                 } else if (position == 1) {
 
                     if (!(selectedDate.equals(""))) {
-                        LocalDate deliveryTimeBankTransfer = new LocalDate(selectedDate).minusDays(2);
-                        String deliveryTimeBankTransferString = deliveryTimeBankTransfer.dayOfMonth().getAsText() + " " + deliveryTimeBankTransfer.monthOfYear().getAsText() + " " + deliveryTimeBankTransfer.year().getAsText() + " " + "15:00";
-                        methodInfoTextView.setText("BANK TRANSFER\n\nBCA BANK\nAcc. No.: 537 532 0255\nBranch: Sudirman Mansion\nAcc. Name: BGI Jaya Indonesia PT" +
-                                "\n\nOnce you have made the transfer, please confirm your transfer so we can verify your purchase\n\n" +
-                                "Please complete the transfer before" + " " + deliveryTimeBankTransferString +
-                                " or your order will be cancelled automatically\n\n1x24 Hours Verification");
+
+                        methodInfoSelectPaymentMethod.setVisibility(View.GONE);
+                        methodInfoBankTransfer.setVisibility(View.VISIBLE);
+
                         selectedPaymentMethod = "bank_transfer";
                         checkOutScrollView.post(new Runnable() {
                             @Override
@@ -633,6 +633,14 @@ public class CheckOut extends AppCompatActivity {
                             Log.e("Status: ", "Successful");
                             Log.e("Order ID: ", response);
 
+                            LocalDate thankYouForOrderingDate = new LocalDate(selectedDate);
+
+                            Intent thankYouForOrderingIntent = new Intent(CheckOut.this, ThankYouForOrdering.class);
+                            thankYouForOrderingIntent.putExtra("orderDate", thankYouForOrderingDate.dayOfWeek().getAsText() + ", " + thankYouForOrderingDate.dayOfMonth().getAsText() + " " + thankYouForOrderingDate.monthOfYear().getAsText());
+                            thankYouForOrderingIntent.putExtra("uniqueId", response);
+                            startActivity(thankYouForOrderingIntent);
+                            finish();
+
                             //When the response is successful then we are going to update the webCredentials
                             StringRequest updateWebCredentialsRequest = new StringRequest(Request.Method.POST, updateUrl, new Response.Listener<String>() {
                                 @Override
@@ -679,16 +687,16 @@ public class CheckOut extends AppCompatActivity {
 
                             //End of string request to update user credentials
 
+                            finish();
 
                         }
+
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
 
                             placeOrderButton.setEnabled(true);
                             Log.e("Status", "Unsuccessful");
-
-
 
                         }
                     }) {
@@ -919,6 +927,13 @@ public class CheckOut extends AppCompatActivity {
                     boxForTextView.setText("Box for " + finalDeliveryDate.dayOfWeek().getAsText() + ", " + finalDeliveryDate.dayOfMonth().getAsText() + " " + finalDeliveryDate.monthOfYear().getAsText());
 
                     Log.e("Selected Date: ", selectedDate);
+
+                    LocalDate deliveryTimeBankTransfer = new LocalDate(selectedDate).minusDays(2);
+                    String deliveryTimeBankTransferString = deliveryTimeBankTransfer.dayOfMonth().getAsText() + " " + deliveryTimeBankTransfer.monthOfYear().getAsText() + " " + deliveryTimeBankTransfer.year().getAsText() + " " + "15:00";
+                    methodInfoBankTransfer.setText("BANK TRANSFER\n\nBCA BANK\nAcc. No.: 537 532 0255\nBranch: Sudirman Mansion\nAcc. Name: BGI Jaya Indonesia PT" +
+                            "\n\nOnce you have made the transfer, please confirm your transfer so we can verify your purchase\n\n" +
+                            "Please complete the transfer before" + " " + deliveryTimeBankTransferString +
+                            " or your order will be cancelled automatically\n\n1x24 Hours Verification");
 
                 }
             });

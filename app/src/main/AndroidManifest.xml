@@ -67,6 +67,10 @@
             android:name=".PaymentConfirmation"
             android:label="@string/title_activity_payment_confirmation"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ThankYouForOrdering"
+            android:label="@string/title_activity_thank_you_for_ordering"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

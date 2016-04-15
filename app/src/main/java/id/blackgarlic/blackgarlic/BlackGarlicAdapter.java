@@ -61,11 +61,15 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
     List<String> individualPrices = new ArrayList<String>();
 
     public void clearAllLists() {
-        currentSelectedMenus.clear();
-        currentSelectedMenuIds.clear();
-        currentSelectedMenusImageUrl.clear();
-        portionSizes.clear();
-        individualPrices.clear();
+
+        if (currentSelectedMenus != null) {
+            currentSelectedMenus.clear();
+            currentSelectedMenuIds.clear();
+            currentSelectedMenusImageUrl.clear();
+            portionSizes.clear();
+            individualPrices.clear();
+        }
+
     }
 
     public BlackGarlicAdapter(List<Data> menuList, List<Integer> menuIdList, Context context, MyListItemClickListener listener) {

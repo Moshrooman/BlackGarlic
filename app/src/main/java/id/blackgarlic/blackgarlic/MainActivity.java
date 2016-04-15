@@ -141,7 +141,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         return isLoggedIn;
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -166,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         orderQuantityTextView = (TextView) findViewById(R.id.orderQuantityTextView);
 
         final SharedPreferences sharedPreferences = SplashActivity.getSharedPreferences();
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
 
         if (sharedPreferences.contains("fromSplash")) {
             Log.e("In From Splash: ", "True");
@@ -191,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             isLoggedIn = false;
         }
 
-        Log.e("After Clear All: ", String.valueOf(sharedPreferences.contains("currentMenuList")));
+        Log.e("Menus From Log Out: ", String.valueOf(sharedPreferences.contains("currentMenuList")));
 
         //Start of Doing work to add the boxes they selected before logging in to after they logged in
 
@@ -509,7 +508,43 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                 BlackGarlicAdapter blackGarlicAdapter = new BlackGarlicAdapter(menuList, menuIdList, MainActivity.this, MainActivity.this);
                 blackGarlicAdapter2 = blackGarlicAdapter;
 
-//              BlackGarlicDAO.getInstance().storeMenus(MainActivity.this, firstMenuList);
+                if (sharedPreferences.contains("comingFromThankYou")) {
+
+                    Log.e("Coming From Thank You: ", "True");
+
+                    editor.remove("currentMenuList");
+                    editor.remove("currentMenuIdList");
+                    editor.remove("currentSelectedMenuListUrls");
+                    editor.remove("currentPortionSizes");
+                    editor.remove("currentIndividualPrices");
+                    editor.remove("currentSubtotalCost");
+                    editor.remove("comingFromThankYou");
+
+                    editor.commit();
+
+                    if (sharedPreferences.contains("clickedBack")) {
+                        editor.remove("clickedBack");
+                        editor.commit();
+                        currentMenuList.clear();
+                        currentMenuIdList.clear();
+                        currentSelectedMenuListUrls.clear();
+                        portionSizes.clear();
+                        individualPrices.clear();
+                        subTotalCost = 0;
+                    }
+
+
+                    blackGarlicAdapter2.clearAllLists();
+
+                    subTotalPriceTextView.setText("SUBTOTAL: ");
+                    ImageView orderBoxImageView = (ImageView) findViewById(R.id.orderBoxImageView);
+                    orderBoxImageView.setImageResource(R.drawable.orderboxone);
+
+                    TextView orderQuantityTextView2 = (TextView) findViewById(R.id.orderQuantityTextView);
+                    orderQuantityTextView2.setText("");
+                    orderQuantityTextView2.setVisibility(View.GONE);
+
+                }
 
                 recyclerView.setAdapter(blackGarlicAdapter);
                 recyclerView.addItemDecoration(new StickyRecyclerHeadersDecoration(blackGarlicAdapter));

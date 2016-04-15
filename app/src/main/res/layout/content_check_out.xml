@@ -561,7 +561,6 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-
                     android:layout_toLeftOf="@+id/fifthTitle"
                     android:layout_alignBottom="@+id/fifthTitle"
                     android:id="@+id/paymentOptionImageView"
@@ -626,10 +625,23 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:textSize="15dp"
+                    android:text="Please Select A Payment Method!"
                     android:layout_below="@+id/methodInfoTitleTextView"
                     android:layout_marginTop="10dp"
-                    android:id="@+id/methodInfoTextView"
+                    android:id="@+id/methodInfoSelectPaymentMethod"
                     android:gravity="center"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="15dp"
+                    android:layout_below="@+id/methodInfoSelectPaymentMethod"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/methodInfoBankTransfer"
+                    android:gravity="center"
+                    android:visibility="gone"
                     />
 
 
