@@ -1,21 +1,43 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" tools:context="id.blackgarlic.blackgarlic.welcome.WeShop">
 
-    <ImageView
+    <org.apmem.tools.layouts.FlowLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/weprepare"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="220dp"
-        />
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        >
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/wepreparetext"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="360dp"
-        />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/weshop"
+            android:layout_centerInParent="true"
+            android:id="@+id/wePlanImageView"
+            />
 
-</FrameLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="WE SHOP"
+            android:textSize="25dp"
+            fontPath="fonts/Roboto-Medium.ttf"
+            android:layout_marginTop="20dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BlackGarlic handpicks fresh ingredients and prepares everything to exact amounts to prevent any wastage"
+            android:textSize="20dp"
+            fontPath="fonts/Roboto-Medium.ttf"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            />
+
+
+    </org.apmem.tools.layouts.FlowLayout>
+
+</RelativeLayout>

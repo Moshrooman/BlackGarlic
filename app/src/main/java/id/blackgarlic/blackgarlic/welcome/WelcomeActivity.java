@@ -11,7 +11,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.RadioGroup;
+
+import java.security.Key;
 
 import id.blackgarlic.blackgarlic.LogInScreen;
 import id.blackgarlic.blackgarlic.MainActivity;
@@ -94,6 +97,15 @@ public class WelcomeActivity extends AppCompatActivity {
 
         viewPager.setAdapter(new MyAdapter(getSupportFragmentManager()));
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            finish();
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 
     public class MyAdapter extends FragmentPagerAdapter{
