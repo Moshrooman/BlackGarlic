@@ -21,12 +21,6 @@ public class ThankYouForOrdering extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thank_you_for_ordering);
 
-        SharedPreferences sharedPreferences = SplashActivity.getSharedPreferences();
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        editor.putBoolean("comingFromThankYou", true);
-        editor.commit();
-
         TextView thankYouForOrderingDateTextView = (TextView) findViewById(R.id.thankYouForOrderingDateTextView);
         TextView thankYouForOrderingOrderConfirmationTextView = (TextView) findViewById(R.id.thankYouForOrderingOrderConfirmationTextView);
 

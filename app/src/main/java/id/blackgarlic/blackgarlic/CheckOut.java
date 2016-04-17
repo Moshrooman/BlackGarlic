@@ -633,13 +633,13 @@ public class CheckOut extends AppCompatActivity {
                             Log.e("Status: ", "Successful");
                             Log.e("Order ID: ", response);
 
-                            LocalDate thankYouForOrderingDate = new LocalDate(selectedDate);
-
-                            Intent thankYouForOrderingIntent = new Intent(CheckOut.this, ThankYouForOrdering.class);
-                            thankYouForOrderingIntent.putExtra("orderDate", thankYouForOrderingDate.dayOfWeek().getAsText() + ", " + thankYouForOrderingDate.dayOfMonth().getAsText() + " " + thankYouForOrderingDate.monthOfYear().getAsText());
-                            thankYouForOrderingIntent.putExtra("uniqueId", response);
-                            startActivity(thankYouForOrderingIntent);
-                            finish();
+//                            LocalDate thankYouForOrderingDate = new LocalDate(selectedDate);
+//
+//                            Intent thankYouForOrderingIntent = new Intent(CheckOut.this, ThankYouForOrdering.class);
+//                            thankYouForOrderingIntent.putExtra("orderDate", thankYouForOrderingDate.dayOfWeek().getAsText() + ", " + thankYouForOrderingDate.dayOfMonth().getAsText() + " " + thankYouForOrderingDate.monthOfYear().getAsText());
+//                            thankYouForOrderingIntent.putExtra("uniqueId", response);
+//                            startActivity(thankYouForOrderingIntent);
+//                            finish();
 
                             //When the response is successful then we are going to update the webCredentials
                             StringRequest updateWebCredentialsRequest = new StringRequest(Request.Method.POST, updateUrl, new Response.Listener<String>() {
@@ -694,6 +694,14 @@ public class CheckOut extends AppCompatActivity {
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
+
+                            LocalDate thankYouForOrderingDate = new LocalDate(selectedDate);
+
+                            Intent thankYouForOrderingIntent = new Intent(CheckOut.this, ThankYouForOrdering.class);
+                            thankYouForOrderingIntent.putExtra("orderDate", thankYouForOrderingDate.dayOfWeek().getAsText() + ", " + thankYouForOrderingDate.dayOfMonth().getAsText() + " " + thankYouForOrderingDate.monthOfYear().getAsText());
+                            thankYouForOrderingIntent.putExtra("uniqueId", "626262");
+                            startActivity(thankYouForOrderingIntent);
+                            finish();
 
                             placeOrderButton.setEnabled(true);
                             Log.e("Status", "Unsuccessful");

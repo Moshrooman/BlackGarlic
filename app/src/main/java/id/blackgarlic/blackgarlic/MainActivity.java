@@ -167,6 +167,8 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         final SharedPreferences sharedPreferences = SplashActivity.getSharedPreferences();
         final SharedPreferences.Editor editor = sharedPreferences.edit();
 
+        Log.e("Menus In SP: ", String.valueOf(sharedPreferences.contains("currentMenuList")));
+
         if (sharedPreferences.contains("fromSplash")) {
             Log.e("In From Splash: ", "True");
             editor.remove("fromSplash");
@@ -189,8 +191,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             userCredentials = LogInScreen.getUserCredentials();
             isLoggedIn = false;
         }
-
-        Log.e("Menus From Log Out: ", String.valueOf(sharedPreferences.contains("currentMenuList")));
 
         //Start of Doing work to add the boxes they selected before logging in to after they logged in
 
@@ -508,33 +508,25 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                 BlackGarlicAdapter blackGarlicAdapter = new BlackGarlicAdapter(menuList, menuIdList, MainActivity.this, MainActivity.this);
                 blackGarlicAdapter2 = blackGarlicAdapter;
 
-                if (sharedPreferences.contains("comingFromThankYou")) {
-
-                    Log.e("Coming From Thank You: ", "True");
-
+                if (sharedPreferences.contains("clickedBack")) {
+                    Log.e("Contained: ", "clickedBack");
                     editor.remove("currentMenuList");
                     editor.remove("currentMenuIdList");
                     editor.remove("currentSelectedMenuListUrls");
                     editor.remove("currentPortionSizes");
                     editor.remove("currentIndividualPrices");
                     editor.remove("currentSubtotalCost");
-                    editor.remove("comingFromThankYou");
-
+                    editor.remove("clickedBack");
                     editor.commit();
+                    currentMenuList.clear();
+                    currentMenuIdList.clear();
+                    currentSelectedMenuListUrls.clear();
+                    portionSizes.clear();
+                    individualPrices.clear();
+                    subTotalCost = 0;
 
-                    if (sharedPreferences.contains("clickedBack")) {
-                        editor.remove("clickedBack");
-                        editor.commit();
-                        currentMenuList.clear();
-                        currentMenuIdList.clear();
-                        currentSelectedMenuListUrls.clear();
-                        portionSizes.clear();
-                        individualPrices.clear();
-                        subTotalCost = 0;
-                    }
-
-
-                    blackGarlicAdapter2.clearAllLists();
+                    blackGarlicAdapter.clearAllLists();
+                    listViewOrderSummary.setAdapter(new MyAdapter(currentMenuList, currentMenuIdList, currentSelectedMenuListUrls, portionSizes, individualPrices));
 
                     subTotalPriceTextView.setText("SUBTOTAL: ");
                     ImageView orderBoxImageView = (ImageView) findViewById(R.id.orderBoxImageView);
@@ -543,7 +535,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                     TextView orderQuantityTextView2 = (TextView) findViewById(R.id.orderQuantityTextView);
                     orderQuantityTextView2.setText("");
                     orderQuantityTextView2.setVisibility(View.GONE);
-
                 }
 
                 recyclerView.setAdapter(blackGarlicAdapter);
