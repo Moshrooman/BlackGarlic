@@ -99,14 +99,13 @@
                                 android:layout_height="26dp"
                                 android:id="@+id/radioButtonTwoPerson"
                                 android:layout_gravity="center_horizontal"
-                                android:text="2 Person"
                                 android:clickable="false"
                                 />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="2 Person"
+                                android:text="2 Persons"
                                 android:textSize="15dp"
                                 android:layout_marginLeft="10dp"
                                 android:id="@+id/twopersonTextView"
@@ -137,7 +136,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="4 Person"
+                                android:text="4 Persons"
                                 android:textSize="15dp"
                                 android:layout_marginTop="2dp"
                                 android:layout_marginLeft="10dp"
@@ -221,7 +220,7 @@
 
         <android.support.v7.widget.CardView
             android:layout_width="fill_parent"
-            android:layout_height="427dp"
+            android:layout_height="433dp"
             android:clickable="false"
             >
 

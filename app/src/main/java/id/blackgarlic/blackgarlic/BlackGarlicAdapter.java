@@ -2,8 +2,12 @@ package id.blackgarlic.blackgarlic;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +38,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import id.blackgarlic.blackgarlic.model.Data;
+import uk.co.chrisjenx.calligraphy.CalligraphyTypefaceSpan;
+import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 
 /**
  * Created by JustinKwik on 1/19/16.
@@ -94,6 +100,41 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         final Data currentMenu = mmenuList.get(position);
         myViewHolder.menuTitleTextView.setText(currentMenu.getMenu_name());
         myViewHolder.menuDescriptionTextView.setText(currentMenu.getMenu_description());
+        CalligraphyTypefaceSpan robotoMedium = new CalligraphyTypefaceSpan(TypefaceUtils.load(mContext.getAssets(), "fonts/Roboto-Medium.ttf"));
+        CalligraphyTypefaceSpan robotoThin = new CalligraphyTypefaceSpan(TypefaceUtils.load(mContext.getAssets(), "fonts/Roboto-Thin.ttf"));
+
+
+        if ((currentMenu.getMenu_type().equals("3")) || (currentMenu.getMenu_type().equals("5"))) {
+
+            SpannableStringBuilder twoPersonOriginalStringBuilder = new SpannableStringBuilder();
+            twoPersonOriginalStringBuilder.append("2 Persons\n").append("IDR 50.000/Person");
+            twoPersonOriginalStringBuilder.setSpan(robotoMedium, 0, 10, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            twoPersonOriginalStringBuilder.setSpan(robotoThin, 10, 27, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            myViewHolder.twoPersonTextView.setText(twoPersonOriginalStringBuilder, TextView.BufferType.SPANNABLE);
+
+            SpannableStringBuilder fourPersonOriginalStringBuilder = new SpannableStringBuilder();
+            fourPersonOriginalStringBuilder.append("4 Persons\n").append("IDR 37.500/Person");
+            fourPersonOriginalStringBuilder.setSpan(robotoMedium, 0, 10, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            fourPersonOriginalStringBuilder.setSpan(robotoThin, 10, 27, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            myViewHolder.fourPersonTextView.setText(fourPersonOriginalStringBuilder, TextView.BufferType.SPANNABLE);
+
+        } else {
+            SpannableStringBuilder twoPersonBreakfastStringBuilder = new SpannableStringBuilder();
+            twoPersonBreakfastStringBuilder.append("2 Persons\n").append("IDR 40.000/Person");
+            twoPersonBreakfastStringBuilder.setSpan(robotoMedium, 0, 10, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            twoPersonBreakfastStringBuilder.setSpan(robotoThin, 10, 27, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            myViewHolder.twoPersonTextView.setText(twoPersonBreakfastStringBuilder, TextView.BufferType.SPANNABLE);
+
+            SpannableStringBuilder fourPersonBreakfastStringBuilder = new SpannableStringBuilder();
+            fourPersonBreakfastStringBuilder.append("4 Persons\n").append("IDR 35.000/Person");
+            fourPersonBreakfastStringBuilder.setSpan(robotoMedium, 0, 10, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            fourPersonBreakfastStringBuilder.setSpan(robotoThin, 10, 27, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            myViewHolder.fourPersonTextView.setText(fourPersonBreakfastStringBuilder, TextView.BufferType.SPANNABLE);
+        }
 
         myViewHolder.switchToDescription.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -286,6 +327,9 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
 
         public TextView priceTextView;
 
+        public TextView twoPersonTextView;
+        public TextView fourPersonTextView;
+
         public MyViewHolder(View itemView) {
             super(itemView);
             menuTitleTextView = (TextView) itemView.findViewById(R.id.menuTitleTextView);
@@ -305,6 +349,9 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
             radioGroupMenu.setOnClickListener(this);
 
             priceTextView = (TextView) itemView.findViewById(R.id.priceTextView);
+
+            twoPersonTextView = (TextView) itemView.findViewById(R.id.twopersonTextView);
+            fourPersonTextView = (TextView) itemView.findViewById(R.id.fourpersonTextView);
 
         }
 
