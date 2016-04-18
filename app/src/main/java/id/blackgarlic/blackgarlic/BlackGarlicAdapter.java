@@ -103,7 +103,6 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         CalligraphyTypefaceSpan robotoMedium = new CalligraphyTypefaceSpan(TypefaceUtils.load(mContext.getAssets(), "fonts/Roboto-Medium.ttf"));
         CalligraphyTypefaceSpan robotoThin = new CalligraphyTypefaceSpan(TypefaceUtils.load(mContext.getAssets(), "fonts/Roboto-Thin.ttf"));
 
-
         if ((currentMenu.getMenu_type().equals("3")) || (currentMenu.getMenu_type().equals("5"))) {
 
             SpannableStringBuilder twoPersonOriginalStringBuilder = new SpannableStringBuilder();
