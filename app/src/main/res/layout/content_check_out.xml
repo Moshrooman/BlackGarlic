@@ -38,7 +38,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_dates"
+                android:background="@drawable/border_checkout"
+                android:layout_marginBottom="5dp"
                 >
 
                 <!-- Start of title -->
@@ -152,8 +153,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:background="@drawable/border_dates"
+                android:background="@drawable/border_checkout"
                 android:padding="10dp"
+                android:layout_marginBottom="5dp"
                 >
 
                 <!-- Start of title layout -->
@@ -250,8 +252,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:background="@drawable/border_dates"
+                android:layout_marginBottom="5dp"
                 android:padding="10dp"
+                android:background="@drawable/border_checkout"
                 >
 
                 <!-- Start of title layout -->
@@ -433,8 +436,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_dates"
+                android:background="@drawable/border_checkout"
                 android:id="@+id/shippingOptionsRelativeLayout"
+                android:layout_marginBottom="5dp"
                 >
 
                 <!-- Start of title -->
@@ -580,8 +584,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_dates"
+                android:background="@drawable/border_checkout"
                 android:id="@+id/paymentMethodRelativeLayout"
+                android:layout_marginBottom="5dp"
                 >
 
                 <!-- Start of title -->
@@ -688,7 +693,9 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border_dates">
+                android:background="@drawable/border_checkout"
+                android:layout_marginBottom="5dp"
+                >
 
                 <!-- Start of title -->
 
