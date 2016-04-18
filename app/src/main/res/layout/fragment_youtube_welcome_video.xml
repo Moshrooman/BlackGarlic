@@ -12,6 +12,7 @@
        fontPath="fonts/Roboto-Medium.ttf"
        android:layout_marginTop="50dp"
        android:textSize="30dp"
+       android:gravity="center"
        />
 
     <ImageView
