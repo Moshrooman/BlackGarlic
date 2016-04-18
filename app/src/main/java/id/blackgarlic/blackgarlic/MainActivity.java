@@ -146,7 +146,12 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
     }
 
     public static void setSubTotalCostTextViewText(int newSubTotalCost) {
-        MainActivity.subTotalPriceTextView.setText("SUBTOTAL: IDR " + new DecimalFormat().format(newSubTotalCost));
+        if (newSubTotalCost > 0) {
+            MainActivity.subTotalPriceTextView.setText("SUBTOTAL: IDR " + new DecimalFormat().format(newSubTotalCost));
+        } else {
+            MainActivity.subTotalPriceTextView.setText("SUBTOTAL: ");
+        }
+
     }
 
     @Override
@@ -880,7 +885,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            View orderSummaryView = getLayoutInflater().inflate(R.layout.row_ordersummary, null);
+            final View orderSummaryView = getLayoutInflater().inflate(R.layout.row_ordersummary, null);
 
             TextView orderSummaryMenuName = (TextView) orderSummaryView.findViewById(R.id.orderSummaryMenuName);
             NetworkImageView orderSummaryMenuImage = (NetworkImageView) orderSummaryView.findViewById(R.id.orderSummaryMenuImage);
@@ -899,27 +904,54 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             deleteMenuFromBoxTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getCurrentMenuList().remove(position);
-                    getCurrentMenuIdList().remove(position);
-                    getCurrentSelectedMenuListUrls().remove(position);
-                    getPortionSizes().remove(position);
 
-                    String updatedIndividualPrices = getIndividualPrices().get(position).replace("IDR ", "");
-                    updatedIndividualPrices = updatedIndividualPrices.replace(".", "");
-                    setSubTotalCost(getSubTotalCost() - Integer.valueOf(updatedIndividualPrices));
-                    setSubTotalCostTextViewText(getSubTotalCost());
+                    Animation righttoleftanimation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.right_to_left);
+                    righttoleftanimation.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
 
-                    getIndividualPrices().remove(position);
+                        }
 
-//                    if (selectedMenuList.size() == 0) {
-//                        orderBoxImageView.setImageResource(R.drawable.orderboxone);
-//                        orderQuantityTextView.setVisibility(View.GONE);
-//                    } else {
-//                        orderBoxImageView.setImageResource(R.drawable.orderboxtwopng);
-//                        orderQuantityTextView.setVisibility(View.VISIBLE);
-//                        orderQuantityTextView.setText(String.valueOf(selectedMenuList.size()));
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            SuperToast superToast = SuperToast.create(MainActivity.this, "Removed From Box:\n\n " + getCurrentMenuList().get(position).getMenu_name() + "", SuperToast.Duration.SHORT, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
+                            superToast.show();
 
-                    listViewOrderSummary.setAdapter(new MyAdapter(getCurrentMenuList(), getCurrentMenuIdList(), getCurrentSelectedMenuListUrls(), getPortionSizes(), getIndividualPrices()));
+                            getCurrentMenuList().remove(position);
+                            getCurrentMenuIdList().remove(position);
+                            getCurrentSelectedMenuListUrls().remove(position);
+                            getPortionSizes().remove(position);
+
+                            String updatedIndividualPrices = getIndividualPrices().get(position).replace("IDR ", "");
+                            updatedIndividualPrices = updatedIndividualPrices.replace(".", "");
+
+                            setSubTotalCost(getSubTotalCost() - Integer.valueOf(updatedIndividualPrices));
+
+                            setSubTotalCostTextViewText(getSubTotalCost());
+
+                            getIndividualPrices().remove(position);
+
+                            if (getCurrentMenuList().size() == 0) {
+                                orderBoxImageView.setImageResource(R.drawable.orderboxone);
+                                orderQuantityTextView.setVisibility(View.GONE);
+                            } else {
+                                orderBoxImageView.setImageResource(R.drawable.orderboxtwopng);
+                                orderQuantityTextView.setVisibility(View.VISIBLE);
+                                orderQuantityTextView.setText(String.valueOf(getCurrentMenuList().size()));
+                            }
+
+                            listViewOrderSummary.setAdapter(new MyAdapter(getCurrentMenuList(), getCurrentMenuIdList(), getCurrentSelectedMenuListUrls(), getPortionSizes(), getIndividualPrices()));
+
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+
+                    orderSummaryView.startAnimation(righttoleftanimation);
+
                 }
             });
 
