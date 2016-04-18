@@ -31,6 +31,7 @@
                 android:textColor="@color/green"
                 android:layout_gravity="center"
                 android:id="@+id/portionSizeTextView"
+                fontPath="fonts/Roboto-Medium.ttf"
                 />
 
         </LinearLayout>
@@ -49,6 +50,7 @@
                 android:textSize="15dp"
                 android:gravity="center"
                 android:id="@+id/orderSummaryMenuName"
+                fontPath="fonts/Roboto-Medium.ttf"
                 />
 
             <TextView
@@ -57,6 +59,7 @@
                 android:layout_gravity="center_horizontal"
                 android:id="@+id/individualPriceTextView"
                 android:textColor="@color/green"
+                fontPath="fonts/Roboto-Medium.ttf"
                 />
 
         </LinearLayout>
@@ -70,6 +73,7 @@
             android:textColor="@color/red"
             android:layout_gravity="center_vertical|right"
             android:id="@+id/deleteMenuFromBoxTextView"
+            fontPath="fonts/Roboto-Bold.ttf"
             />
 
 

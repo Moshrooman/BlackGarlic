@@ -22,6 +22,7 @@
             android:text="Menu Title"
             android:id="@+id/orderCheckOutMenuTitle"
             android:layout_below="@+id/orderCheckOutNetworkImageView"
+            fontPath="fonts/Roboto-Medium.ttf"
             />
 
         <TextView
@@ -31,6 +32,7 @@
             android:id="@+id/orderCheckOutPortion"
             android:layout_below="@+id/orderCheckOutMenuTitle"
             android:layout_marginTop="10dp"
+            fontPath="fonts/Roboto-Medium.ttf"
             />
 
         <TextView
@@ -40,6 +42,7 @@
             android:id="@+id/orderCheckOutMenuType"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
+            fontPath="fonts/Roboto-Medium.ttf"
         />
 
         <TextView
@@ -49,6 +52,7 @@
             android:id="@+id/orderCheckOutPrice"
             android:layout_alignParentRight="true"
             android:layout_marginTop="20dp"
+            fontPath="fonts/Roboto-Medium.ttf"
             />
 
     </RelativeLayout>

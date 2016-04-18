@@ -261,6 +261,8 @@
                     android:text="SUBTOTAL: "
                     android:id="@+id/subtotalTextView"
                     android:textColor="@color/green"
+                    fontPath="fonts/Roboto-Medium.ttf"
+                    android:gravity="center"
                     />
 
                 <Button
@@ -271,6 +273,8 @@
                     android:layout_gravity="center_horizontal"
                     android:background="@drawable/clearallbutton"
                     android:id="@+id/proceedToCheckOutButton"
+                    fontPath="fonts/Roboto-Bold.ttf"
+                    android:textColor="#00584a"
                     />
 
             </LinearLayout>

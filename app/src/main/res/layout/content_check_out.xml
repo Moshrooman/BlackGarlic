@@ -63,6 +63,7 @@
                         android:layout_marginLeft="10dp"
                         android:background="@drawable/bottomsiderectangle"
                         android:id="@+id/firstTitle"
+                        fontPath="fonts/Roboto-Bold.ttf"
                         />
 
 
@@ -85,8 +86,9 @@
                         android:textSize="12dp"
                         android:id="@+id/firstDate"
                         android:textAlignment="center"
-                        android:textColor="@color/black"
+                        android:textColor="@color/BGGREY"
                         android:background="@android:drawable/btn_default"
+                        fontPath="fonts/Roboto-Medium.ttf"
                         />
 
                     <Button
@@ -96,8 +98,9 @@
                         android:textSize="12dp"
                         android:layout_toRightOf="@+id/firstDate"
                         android:id="@+id/secondDate"
-                        android:textColor="@color/black"
+                        android:textColor="@color/BGGREY"
                         android:background="@android:drawable/btn_default"
+                        fontPath="fonts/Roboto-Medium.ttf"
                         />
 
                     <Button
@@ -107,8 +110,9 @@
                         android:textSize="12dp"
                         android:layout_toRightOf="@+id/secondDate"
                         android:id="@+id/thirdDate"
-                        android:textColor="@color/black"
+                        android:textColor="@color/BGGREY"
                         android:background="@android:drawable/btn_default"
+                        fontPath="fonts/Roboto-Medium.ttf"
                         />
 
                     <Button
@@ -117,8 +121,9 @@
                         android:text="Date 4"
                         android:textSize="12dp"
                         android:id="@+id/fourthDate"
-                        android:textColor="@color/black"
+                        android:textColor="@color/BGGREY"
                         android:background="@android:drawable/btn_default"
+                        fontPath="fonts/Roboto-Medium.ttf"
                         />
 
                     <Button
@@ -128,8 +133,9 @@
                         android:textSize="12dp"
                         android:layout_toRightOf="@+id/fourthDate"
                         android:id="@+id/fifthDate"
-                        android:textColor="@color/black"
+                        android:textColor="@color/BGGREY"
                         android:background="@android:drawable/btn_default"
+                        fontPath="fonts/Roboto-Medium.ttf"
                         />
 
                 </org.apmem.tools.layouts.FlowLayout>
@@ -155,7 +161,6 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-
                     android:layout_toLeftOf="@+id/secondTitle"
                     android:layout_alignBottom="@+id/secondTitle"
                     android:id="@+id/orderSummaryImageView"
@@ -172,6 +177,7 @@
                     android:layout_marginLeft="10dp"
                     android:background="@drawable/bottomsiderectangle"
                     android:id="@+id/secondTitle"
+                    fontPath="fonts/Roboto-Bold.ttf"
                     />
 
 
@@ -195,6 +201,7 @@
                         android:text="Item"
                         android:textSize="20dp"
                         android:layout_weight="1"
+                        fontPath="fonts/Roboto-Regular.ttf"
                         />
 
                     <TextView
@@ -204,6 +211,7 @@
                         android:textSize="20dp"
                         android:layout_weight="1"
                         android:gravity="center"
+                        fontPath="fonts/Roboto-Regular.ttf"
                         />
 
                     <TextView
@@ -213,6 +221,7 @@
                         android:textSize="20dp"
                         android:layout_weight="1"
                         android:gravity="right"
+                        fontPath="fonts/Roboto-Regular.ttf"
                         />
 
                 </LinearLayout>
@@ -250,7 +259,6 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-
                     android:layout_toLeftOf="@+id/thirdTitle"
                     android:layout_alignBottom="@+id/thirdTitle"
                     android:id="@+id/deliveryAddressImageView"
@@ -267,6 +275,7 @@
                     android:layout_marginLeft="10dp"
                     android:background="@drawable/bottomsiderectangle"
                     android:id="@+id/thirdTitle"
+                    fontPath="fonts/Roboto-Bold.ttf"
                     />
 
 
@@ -276,34 +285,38 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Full Name"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     android:layout_marginTop="20dp"
                     android:layout_below="@+id/thirdTitle"
                     android:id="@+id/fullNameTextView"
                     android:layout_centerHorizontal="true"
+                    fontPath="fonts/Roboto-Regular.ttf"
                     />
 
                 <TextView
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:text="Customer Name"
+                    android:textSize="15dp"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/bordercheckoutaddress"
                     android:id="@+id/customerNameTextView"
                     android:textAlignment="center"
                     android:layout_below="@+id/fullNameTextView"
                     android:layout_centerHorizontal="true"
+                    fontPath="fonts/Roboto-Regular.ttf"
                     />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Postal Code / City"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     android:layout_marginTop="20dp"
                     android:layout_below="@+id/customerNameTextView"
                     android:id="@+id/postalCodeTextView"
                     android:layout_centerHorizontal="true"
+                    fontPath="fonts/Roboto-Regular.ttf"
                     />
 
                 <EditText
@@ -316,6 +329,7 @@
                     android:textSize="15dp"
                     android:layout_below="@+id/postalCodeTextView"
                     android:layout_centerHorizontal="true"
+                    fontPath="fonts/Roboto-Regular.ttf"
                     />
 
                 <Spinner
@@ -326,8 +340,10 @@
                     android:background="@android:drawable/btn_dropdown"
                     android:layout_marginTop="10dp"
                     android:textAlignment="center"
+                    android:textSize="15dp"
                     android:layout_below="@+id/checkOutZidCodeEditText"
                     android:layout_centerHorizontal="true"
+                    fontPath="fonts/Roboto-Regular.ttf"
                     >
 
                 </Spinner>
@@ -336,11 +352,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Address"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     android:layout_marginTop="20dp"
                     android:layout_below="@+id/checkOutCityDropDown"
                     android:id="@+id/addressTextView"
                     android:layout_centerHorizontal="true"
+                    fontPath="fonts/Roboto-Regular.ttf"
                     />
 
                 <EditText
@@ -353,17 +370,19 @@
                     android:textSize="15dp"
                     android:layout_below="@+id/addressTextView"
                     android:layout_centerHorizontal="true"
+                    fontPath="fonts/Roboto-Regular.ttf"
                     />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Mobile"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     android:layout_marginTop="20dp"
                     android:layout_below="@+id/checkOutAddressContent"
                     android:id="@+id/mobileTextView"
                     android:layout_centerHorizontal="true"
+                    fontPath="fonts/Roboto-Regular.ttf"
                     />
 
                 <EditText
@@ -376,17 +395,19 @@
                     android:textSize="15dp"
                     android:layout_below="@+id/mobileTextView"
                     android:layout_centerHorizontal="true"
+                    fontPath="fonts/Roboto-Regular.ttf"
                     />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Delivery Notes / Info"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     android:layout_marginTop="20dp"
                     android:layout_below="@+id/checkOutMobile"
                     android:id="@+id/deliveryNotesTextView"
                     android:layout_centerHorizontal="true"
+                    fontPath="fonts/Roboto-Regular.ttf"
                     />
 
                 <EditText
@@ -399,6 +420,7 @@
                     android:textSize="15dp"
                     android:layout_below="@+id/deliveryNotesTextView"
                     android:layout_centerHorizontal="true"
+                    fontPath="fonts/Roboto-Regular.ttf"
                     />
 
             </RelativeLayout>
@@ -420,7 +442,6 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-
                     android:layout_toLeftOf="@+id/fourthTitle"
                     android:layout_alignBottom="@+id/fourthTitle"
                     android:id="@+id/shippingOptionsImageView"
@@ -438,6 +459,7 @@
                     android:layout_marginLeft="10dp"
                     android:background="@drawable/bottomsiderectangle"
                     android:id="@+id/fourthTitle"
+                    fontPath="fonts/Roboto-Bold.ttf"
                     />
 
                 <!-- End of Title -->
@@ -477,8 +499,9 @@
                     android:layout_below="@+id/deliveryOptionFlowLayout"
                     android:gravity="center"
                     android:layout_marginTop="20dp"
-                    android:textSize="25dp"
+                    android:textSize="15dp"
                     android:id="@+id/deliveryTypeTextView"
+                    fontPath="fonts/Roboto-Regular.ttf"
                     />
 
                 <TextView
@@ -487,10 +510,11 @@
                     android:layout_below="@+id/deliveryTypeTextView"
                     android:gravity="center"
                     android:layout_marginTop="20dp"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     android:text="Delivery Fee : "
                     android:layout_centerHorizontal="true"
                     android:id="@+id/deliveryFeeTextView"
+                    fontPath="fonts/Roboto-Regular.ttf"
                     />
 
 
@@ -501,10 +525,11 @@
                     android:layout_centerHorizontal="true"
                     android:gravity="center"
                     android:layout_marginTop="5dp"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     android:text="For Jakarta and Tangerang Selatan Only"
                     android:visibility="gone"
                     android:id="@+id/gojekCircumstanceTextView"
+                    fontPath="fonts/Roboto-Regular.ttf"
                     />
 
                 <TextView
@@ -514,9 +539,10 @@
                     android:layout_centerHorizontal="true"
                     android:gravity="center"
                     android:layout_marginTop="20dp"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     android:text="Your Box will arrive between"
                     android:id="@+id/selectDeliveryTimeTextView"
+                    fontPath="fonts/Roboto-Regular.ttf"
                     />
 
                 <ImageView
@@ -535,10 +561,12 @@
                     android:spinnerMode="dropdown"
                     android:background="@android:drawable/btn_dropdown"
                     android:layout_marginTop="10dp"
+                    android:textSize="15dp"
                     android:textAlignment="center"
                     android:layout_alignWithParentIfMissing="true"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@+id/etobeedeliverytimeImageView"
+                    fontPath="fonts/Roboto-Regular.ttf"
                     >
 
                 </Spinner>
@@ -577,6 +605,7 @@
                     android:layout_marginLeft="10dp"
                     android:background="@drawable/bottomsiderectangle"
                     android:id="@+id/fifthTitle"
+                    fontPath="fonts/Roboto-Bold.ttf"
                     />
 
                 <!-- End of Title -->
@@ -585,9 +614,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/fifthTitle"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     android:layout_centerHorizontal="true"
                     android:text="Payment Methods"
+                    fontPath="fonts/Roboto-Regular.ttf"
                     android:layout_marginTop="20dp"
                     android:id="@+id/paymentMethodTextView"
                     android:background="@drawable/bottomsiderectangle"
@@ -604,6 +634,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_below="@+id/paymentMethodTextView"
                     android:textAlignment="center"
+                    fontPath="fonts/Roboto-Regular.ttf"
                     >
 
                 </Spinner>
@@ -612,12 +643,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:textSize="20dp"
+                    android:textSize="15dp"
                     android:layout_marginTop="10dp"
                     android:layout_below="@+id/paymentMethodDropDown"
                     android:text="Method Info"
                     android:id="@+id/methodInfoTitleTextView"
                     android:background="@drawable/bottomsiderectangle"
+                    fontPath="fonts/Roboto-Regular.ttf"
                     />
 
                 <TextView
@@ -630,6 +662,7 @@
                     android:layout_marginTop="10dp"
                     android:id="@+id/methodInfoSelectPaymentMethod"
                     android:gravity="center"
+                    fontPath="fonts/Roboto-Regular.ttf"
                     />
 
                 <TextView
@@ -642,6 +675,7 @@
                     android:id="@+id/methodInfoBankTransfer"
                     android:gravity="center"
                     android:visibility="gone"
+                    fontPath="fonts/Roboto-Regular.ttf"
                     />
 
 
@@ -661,7 +695,6 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-
                     android:layout_toLeftOf="@+id/sixthTitle"
                     android:layout_alignBottom="@+id/sixthTitle"
                     android:id="@+id/yourOrderImageView"
@@ -678,6 +711,8 @@
                     android:layout_marginLeft="10dp"
                     android:background="@drawable/bottomsiderectangle"
                     android:id="@+id/sixthTitle"
+                    android:layout_marginBottom="20dp"
+                    fontPath="fonts/Roboto-Bold.ttf"
                     />
 
 
@@ -685,12 +720,13 @@
                 
                 <org.apmem.tools.layouts.FlowLayout
                     xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="320dp"
+                    xmlns:f="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/sixthTitle"
-                    android:layout_marginTop="20dp"
-                    android:gravity="center"
+                    android:gravity="fill"
                     android:layout_centerHorizontal="true"
+                    android:layout_margin="5dp"
                     >
 
                     <TextView
@@ -702,6 +738,7 @@
                         android:layout_weight="1"
                         android:text="Please Select Date!"
                         android:background="@drawable/bordercheckoutaddress"
+                        fontPath="fonts/Roboto-Regular.ttf"
                         />
 
                     <TextView
@@ -712,6 +749,7 @@
                         android:id="@+id/subTotalPriceTextView"
                         android:layout_weight="1"
                         android:background="@drawable/bordercheckoutaddress"
+                        fontPath="fonts/Roboto-Regular.ttf"
                         />
 
                     <TextView
@@ -722,6 +760,7 @@
                         android:text="Delivery Fee"
                         android:layout_weight="1"
                         android:background="@drawable/bordercheckoutaddress"
+                        fontPath="fonts/Roboto-Regular.ttf"
                         />
 
                     <TextView
@@ -732,6 +771,7 @@
                         android:id="@+id/deliveryFeeAnswerTextView"
                         android:layout_weight="1"
                         android:background="@drawable/bordercheckoutaddress"
+                        fontPath="fonts/Roboto-Regular.ttf"
                         />
 
                     <TextView
@@ -744,6 +784,7 @@
                         android:id="@+id/employeeDiscountTitleTextView"
                         android:background="@drawable/bordercheckoutaddress"
                         android:visibility="gone"
+                        fontPath="fonts/Roboto-Regular.ttf"
                         />
 
                     <TextView
@@ -755,13 +796,14 @@
                         android:layout_weight="1"
                         android:background="@drawable/bordercheckoutaddress"
                         android:visibility="gone"
+                        fontPath="fonts/Roboto-Regular.ttf"
                         />
 
                     <org.apmem.tools.layouts.FlowLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
+                        android:gravity="fill"
                         android:background="@drawable/greygrandtotal"
                         android:layout_marginTop="10dp"
                         android:id="@+id/grandTotalFlowLayout"
@@ -775,6 +817,7 @@
                             android:gravity="left"
                             android:text="Total"
                             android:layout_weight="1"
+                            fontPath="fonts/Roboto-Regular.ttf"
                             />
 
                         <TextView
@@ -785,15 +828,26 @@
                             android:id="@+id/grandTotalTextView"
                             android:gravity="right"
                             android:layout_weight="1"
+                            fontPath="fonts/Roboto-Regular.ttf"
                             />
 
 
                     </org.apmem.tools.layouts.FlowLayout>
 
+                <org.apmem.tools.layouts.FlowLayout
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:f="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/sixthTitle"
+                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp"
+                    >
+
                     <CheckBox
                         android:layout_width="30dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
                         android:id="@+id/checkOutCheckBox"
                         />
 
@@ -803,8 +857,11 @@
                         android:textSize="10dp"
                         android:text="The order and information displayed is correct"
                         android:gravity="center"
-                        android:layout_marginTop="20dp"
+                        fontPath="fonts/Roboto-Regular.ttf"
                         />
+
+                </org.apmem.tools.layouts.FlowLayout>
+
 
                     <Button
                         android:layout_width="300dp"
@@ -812,8 +869,10 @@
                         android:background="@drawable/greyedoutloading"
                         android:text="Place Order"
                         android:gravity="center"
+                        android:textColor="@color/BGGREY"
                         android:clickable="false"
                         android:id="@+id/placeOrderButton"
+                        fontPath="fonts/Roboto-Bold.ttf"
                         />
 
                 </org.apmem.tools.layouts.FlowLayout>

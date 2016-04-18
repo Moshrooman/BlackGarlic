@@ -57,6 +57,7 @@ import java.util.zip.Inflater;
 
 import id.blackgarlic.blackgarlic.model.Data;
 import id.blackgarlic.blackgarlic.model.UserCredentials;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class CheckOut extends AppCompatActivity {
 
@@ -459,9 +460,11 @@ public class CheckOut extends AppCompatActivity {
                 if (isChecked) {
                     placeOrderButton.setClickable(true);
                     placeOrderButton.setBackgroundResource(R.drawable.checkoutbutton);
+                    placeOrderButton.setTextColor(getResources().getColor(R.color.BGDARKGREEN));
                 } else {
                     placeOrderButton.setClickable(false);
                     placeOrderButton.setBackgroundResource(R.drawable.greyedoutloading);
+                    placeOrderButton.setTextColor(getResources().getColor(R.color.BGGREY));
                 }
             }
         });
@@ -910,7 +913,7 @@ public class CheckOut extends AppCompatActivity {
                             dateButtonList.get(i).setTextColor(getResources().getColor(R.color.white));
                         } else if (   !(dateButtonList.get(i).getBackground().getConstantState().equals(getResources().getDrawable(android.R.drawable.btn_default).getConstantState()) ) && !(dateButtonList.get(i).getTextColors().equals(getResources().getColor(R.color.black)))   ){
                             dateButtonList.get(i).setBackgroundResource(android.R.drawable.btn_default);
-                            dateButtonList.get(i).setTextColor(getResources().getColor(R.color.black));
+                            dateButtonList.get(i).setTextColor(getResources().getColor(R.color.BGGREY));
                         }
 
                     }
@@ -1103,5 +1106,11 @@ public class CheckOut extends AppCompatActivity {
         yourOrderImageView.setImageBitmap(bitmap6);
 
     }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
 
 }
