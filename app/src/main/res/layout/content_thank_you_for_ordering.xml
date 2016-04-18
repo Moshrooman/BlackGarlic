@@ -5,11 +5,16 @@
         tools:context="id.blackgarlic.blackgarlic.ThankYouForOrdering"
         tools:showIn="@layout/activity_thank_you_for_ordering"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:smoothScrollbar="true"
+        android:scrollingCache="false"
+        android:animationCache="false"
+        >
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -101,6 +106,117 @@
                 android:layout_below="@+id/orderConfirmationTextView"
                 android:layout_marginTop="5dp"
                 />
+
+            <!--
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/thankYouForOrderingOrderConfirmationTextView"
+                android:layout_marginTop="30dp"
+                android:id="@+id/bankTransferThankYourForOrderingRelativeLayout"
+                android:visibility="gone"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#03c9a9"
+                    android:text="Bank Transfer"
+                    android:textSize="30dp"
+                    fontPath="fonts/Roboto-Bold.ttf"
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/bankTransferTextViewThankYouForOrdering"
+                    android:gravity="center"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#999"
+                    android:text="Please follow the steps below to confirm your payment"
+                    android:textSize="20dp"
+                    android:gravity="center"
+                    fontPath="fonts/Roboto-Bold.ttf"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/bankTransferTextViewThankYouForOrdering"
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/bankTransferPleaseFollowTheseSteps"
+                    />
+
+                    <ImageView
+                        android:layout_width="150dp"
+                        android:layout_height="200dp"
+                        android:src="@drawable/steponepaymenconfirmation"
+                        android:layout_below="@+id/bankTransferPleaseFollowTheseSteps"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:id="@+id/stepOneThankYouForOrderingImageView"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1. Open up the navigation bar and select payment confirmation after you have sent your payment to blackgarlic"
+                        android:gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:layout_below="@+id/stepOneThankYouForOrderingImageView"
+                        android:layout_centerHorizontal="true"
+                        android:id="@+id/stepOneThankYouForOrderingTextView"
+                        />
+
+                    <ImageView
+                        android:layout_width="150dp"
+                        android:layout_height="200dp"
+                        android:src="@drawable/steptwopaymentconfirmation"
+                        android:layout_marginTop="20dp"
+                        android:layout_below="@+id/stepOneThankYouForOrderingTextView"
+                        android:layout_centerHorizontal="true"
+                        android:id="@+id/stepTwoThankYouForOrderingImageView"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text='2. Fill in the required fields and select "Confirm Payment" '
+                        android:gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:layout_below="@+id/stepTwoThankYouForOrderingImageView"
+                        android:layout_centerHorizontal="true"
+                        android:id="@+id/stepTwoThankYouForOrderingTextView"
+                        />
+
+                    <ImageView
+                        android:layout_width="150dp"
+                        android:layout_height="200dp"
+                        android:src="@drawable/stepthreepaymentconfirmation"
+                        android:layout_marginTop="20dp"
+                        android:layout_below="@+id/stepTwoThankYouForOrderingTextView"
+                        android:layout_centerHorizontal="true"
+                        android:id="@+id/stepThreeThankYouForOrderingImageView"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text='3. Once you have done that, you can go into your order history to view the status of your order and payment, as shown in the next screenshot'
+                        android:gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:layout_below="@+id/stepThreeThankYouForOrderingImageView"
+                        android:layout_centerHorizontal="true"
+                        android:id="@+id/stepThreeThankYouForOrderingTextView"
+                        />
+
+                    <ImageView
+                        android:layout_width="150dp"
+                        android:layout_height="200dp"
+                        android:src="@drawable/stepfourpaymentconfirmation"
+                        android:layout_marginTop="20dp"
+                        android:layout_below="@+id/stepThreeThankYouForOrderingTextView"
+                        android:layout_centerHorizontal="true"
+                        />
+
+            </RelativeLayout>
+            -->
 
         </RelativeLayout>
 

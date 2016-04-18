@@ -141,6 +141,14 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         return isLoggedIn;
     }
 
+    public static void setSubTotalCost(int subTotalCost) {
+        MainActivity.subTotalCost = subTotalCost;
+    }
+
+    public static void setSubTotalCostTextViewText(int newSubTotalCost) {
+        MainActivity.subTotalPriceTextView.setText("SUBTOTAL: IDR " + new DecimalFormat().format(newSubTotalCost));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -871,13 +879,14 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             View orderSummaryView = getLayoutInflater().inflate(R.layout.row_ordersummary, null);
 
             TextView orderSummaryMenuName = (TextView) orderSummaryView.findViewById(R.id.orderSummaryMenuName);
             NetworkImageView orderSummaryMenuImage = (NetworkImageView) orderSummaryView.findViewById(R.id.orderSummaryMenuImage);
             TextView orderPortionSize = (TextView) orderSummaryView.findViewById(R.id.portionSizeTextView);
             TextView price = (TextView) orderSummaryView.findViewById(R.id.individualPriceTextView);
+            TextView deleteMenuFromBoxTextView = (TextView) orderSummaryView.findViewById(R.id.deleteMenuFromBoxTextView);
 
             orderSummaryMenuName.setText(currentMenuList.get(position).getMenu_name());
 
@@ -886,6 +895,33 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             orderPortionSize.setText(portionSizeList.get(position).toString());
 
             price.setText(individualPrices.get(position).toString());
+
+            deleteMenuFromBoxTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getCurrentMenuList().remove(position);
+                    getCurrentMenuIdList().remove(position);
+                    getCurrentSelectedMenuListUrls().remove(position);
+                    getPortionSizes().remove(position);
+
+                    String updatedIndividualPrices = getIndividualPrices().get(position).replace("IDR ", "");
+                    updatedIndividualPrices = updatedIndividualPrices.replace(".", "");
+                    setSubTotalCost(getSubTotalCost() - Integer.valueOf(updatedIndividualPrices));
+                    setSubTotalCostTextViewText(getSubTotalCost());
+
+                    getIndividualPrices().remove(position);
+
+//                    if (selectedMenuList.size() == 0) {
+//                        orderBoxImageView.setImageResource(R.drawable.orderboxone);
+//                        orderQuantityTextView.setVisibility(View.GONE);
+//                    } else {
+//                        orderBoxImageView.setImageResource(R.drawable.orderboxtwopng);
+//                        orderQuantityTextView.setVisibility(View.VISIBLE);
+//                        orderQuantityTextView.setText(String.valueOf(selectedMenuList.size()));
+
+                    listViewOrderSummary.setAdapter(new MyAdapter(getCurrentMenuList(), getCurrentMenuIdList(), getCurrentSelectedMenuListUrls(), getPortionSizes(), getIndividualPrices()));
+                }
+            });
 
             return orderSummaryView;
         }

@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -20,6 +21,11 @@ public class ThankYouForOrdering extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thank_you_for_ordering);
+
+//        if (getIntent().getExtras().getString("paymentMethod").equals("bank_transfer")) {
+//            RelativeLayout bankTransferThankYourForOrderingRelativeLayout = (RelativeLayout) findViewById(R.id.bankTransferThankYourForOrderingRelativeLayout);
+//            bankTransferThankYourForOrderingRelativeLayout.setVisibility(View.VISIBLE);
+//        }
 
         TextView thankYouForOrderingDateTextView = (TextView) findViewById(R.id.thankYouForOrderingDateTextView);
         TextView thankYouForOrderingOrderConfirmationTextView = (TextView) findViewById(R.id.thankYouForOrderingOrderConfirmationTextView);

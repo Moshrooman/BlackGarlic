@@ -638,6 +638,7 @@ public class CheckOut extends AppCompatActivity {
                             Intent thankYouForOrderingIntent = new Intent(CheckOut.this, ThankYouForOrdering.class);
                             thankYouForOrderingIntent.putExtra("orderDate", thankYouForOrderingDate.dayOfWeek().getAsText() + ", " + thankYouForOrderingDate.dayOfMonth().getAsText() + " " + thankYouForOrderingDate.monthOfYear().getAsText());
                             thankYouForOrderingIntent.putExtra("uniqueId", response);
+                            thankYouForOrderingIntent.putExtra("paymentMethod", selectedPaymentMethod);
                             startActivity(thankYouForOrderingIntent);
                             finish();
 

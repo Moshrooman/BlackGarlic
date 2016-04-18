@@ -12,7 +12,9 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:screenOrientation="portrait"
+        >
         <activity
             android:name=".SplashActivity"
             android:label="@string/app_name"
@@ -62,15 +64,22 @@
         <activity
             android:name=".OrderHistory.OrderHistory"
             android:label="@string/title_activity_order_history"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".PaymentConfirmation"
             android:label="@string/title_activity_payment_confirmation"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".ThankYouForOrdering"
             android:label="@string/title_activity_thank_you_for_ordering"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
+            >
+        </activity>
     </application>
 
 </manifest>
