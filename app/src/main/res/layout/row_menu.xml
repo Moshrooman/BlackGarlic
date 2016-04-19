@@ -180,9 +180,6 @@
                             android:id="@+id/rippleView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:rv_rippleDuration= "5000"
-                            app:rv_centered="true"
-                            app:rv_color="#006d67"
                             >
 
                             <Button
