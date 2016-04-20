@@ -182,61 +182,11 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
 
         }
 
-        final float[] from = new float[3],
-                to =   new float[3];
-
-        Color.colorToHSV(Color.parseColor("#03c9a9"), from);   // from light green
-        Color.colorToHSV(Color.parseColor("#00b200"), to);     // to dark green
-
-        final ValueAnimator anim = ValueAnimator.ofFloat(0, 1);   // animate from 0 to 1
-        anim.setDuration(1000);                              // for 1000 ms
-
-        final float[] hsv  = new float[3];                  // transition color
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                // Transition along each axis of HSV (hue, saturation, value)
-                hsv[0] = from[0] + (to[0] - from[0]) * animation.getAnimatedFraction();
-                hsv[1] = from[1] + (to[1] - from[1]) * animation.getAnimatedFraction();
-                hsv[2] = from[2] + (to[2] - from[2]) * animation.getAnimatedFraction();
-
-                myViewHolder.addToMenuButton.setBackgroundColor(Color.HSVToColor(hsv));
-            }
-        });
-
-        anim.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-
-                myViewHolder.addToMenuButton.setBackgroundResource(R.drawable.addtobox);
-
-                currentSelectedMenus.add(mmenuList.get(position));
-                currentSelectedMenuIds.add(mmenuIdList.get(position));
-
-                if (((mmenuList.get(position).getMenu_type().equals("3")) || (mmenuList.get(position).getMenu_type().equals("5"))) && (mmenuList.get(position).getFourPersonEnabled() == true)) {
-                    currentSelectedMenusImageUrl.add(mmenuList.get(position).getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position)) + "_4"));
-                } else {
-                    currentSelectedMenusImageUrl.add(mmenuList.get(position).getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))));
-                }
-
-                if (mmenuList.get(position).getFourPersonEnabled() == true) {
-                    portionSizes.add("4P");
-                } else {
-                    portionSizes.add("2P");
-                }
-
-                individualPrices.add(String.valueOf(myViewHolder.priceTextView.getText()));
-
-                mListener.OnItemClick(currentSelectedMenus, currentSelectedMenuIds, currentMenu.getMenu_name(), currentSelectedMenusImageUrl, portionSizes, individualPrices);
-
-
-            }
-        });
-
         myViewHolder.addToMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                anim.start();
+                myViewHolder.addToMenuButton.setEnabled(false);
+                startAnimation(myViewHolder.addToMenuButton, position, myViewHolder.priceTextView, currentMenu);
             }
         });
 
@@ -393,6 +343,63 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
 
     public static interface MyListItemClickListener{
         public void OnItemClick(List<Data> menuList, List<Integer> menuIdList, String menuAdded, List<String> currentSelectedMenusUrl, List<String> portionSizes, List<String> individualPrices);
+    }
+
+    public void startAnimation(final Button button, final int position, final TextView priceTextView, final Data currentMenu) {
+        final float[] from = new float[3],
+                to =   new float[3];
+
+        Color.colorToHSV(Color.parseColor("#03c9a9"), from);   // from light green
+        Color.colorToHSV(Color.parseColor("#00b200"), to);     // to dark green
+
+        final ValueAnimator anim = ValueAnimator.ofFloat(0, 1);   // animate from 0 to 1
+        anim.setDuration(1000);                              // for 1000 ms
+
+        final float[] hsv  = new float[3];                  // transition color
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                // Transition along each axis of HSV (hue, saturation, value)
+                hsv[0] = from[0] + (to[0] - from[0]) * animation.getAnimatedFraction();
+                hsv[1] = from[1] + (to[1] - from[1]) * animation.getAnimatedFraction();
+                hsv[2] = from[2] + (to[2] - from[2]) * animation.getAnimatedFraction();
+
+                button.setBackgroundColor(Color.HSVToColor(hsv));
+            }
+        });
+
+        anim.start();
+
+        anim.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+                button.setBackgroundResource(R.drawable.addtobox);
+                button.setEnabled(true);
+
+                currentSelectedMenus.add(mmenuList.get(position));
+                currentSelectedMenuIds.add(mmenuIdList.get(position));
+
+                if (((mmenuList.get(position).getMenu_type().equals("3")) || (mmenuList.get(position).getMenu_type().equals("5"))) && (mmenuList.get(position).getFourPersonEnabled() == true)) {
+                    currentSelectedMenusImageUrl.add(mmenuList.get(position).getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position)) + "_4"));
+                } else {
+                    currentSelectedMenusImageUrl.add(mmenuList.get(position).getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))));
+                }
+
+                if (mmenuList.get(position).getFourPersonEnabled() == true) {
+                    portionSizes.add("4P");
+                } else {
+                    portionSizes.add("2P");
+                }
+
+                individualPrices.add(String.valueOf(priceTextView.getText()));
+
+                mListener.OnItemClick(currentSelectedMenus, currentSelectedMenuIds, currentMenu.getMenu_name(), currentSelectedMenusImageUrl, portionSizes, individualPrices);
+
+
+            }
+        });
+
     }
 
 }
