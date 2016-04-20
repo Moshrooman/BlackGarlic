@@ -176,23 +176,16 @@
                             android:id="@+id/priceTextView"
                             />
 
-                        <com.andexert.library.RippleView
-                            android:id="@+id/rippleView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            >
-
-                            <Button
-                                android:layout_width="140dp"
-                                android:layout_height="50dp"
-                                android:text="+ Add Menu"
-                                android:textSize="13dp"
-                                android:background="@drawable/addtobox"
-                                fontPath="fonts/Roboto-Bold.ttf"
-                                android:textColor="#00584a"
-                                />
-
-                        </com.andexert.library.RippleView>
+                        <Button
+                            android:layout_width="140dp"
+                            android:layout_height="50dp"
+                            android:text="+ Add Menu"
+                            android:textSize="13dp"
+                            android:background="@drawable/addtobox"
+                            fontPath="fonts/Roboto-Bold.ttf"
+                            android:textColor="#00584a"
+                            android:id="@+id/addToMenuButton"
+                            />
 
                         <TextView
                             android:layout_width="wrap_content"

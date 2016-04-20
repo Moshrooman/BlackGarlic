@@ -1,14 +1,14 @@
 package id.blackgarlic.blackgarlic;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.AssetManager;
-import android.provider.MediaStore;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,20 +20,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
-import com.andexert.library.RippleView;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.NetworkImageView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
 
-import org.w3c.dom.Text;
-
 import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -190,11 +182,33 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
 
         }
 
+        final float[] from = new float[3],
+                to =   new float[3];
 
+        Color.colorToHSV(Color.parseColor("#03c9a9"), from);   // from light green
+        Color.colorToHSV(Color.parseColor("#00b200"), to);     // to dark green
 
-        myViewHolder.rippleViewButton.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+        final ValueAnimator anim = ValueAnimator.ofFloat(0, 1);   // animate from 0 to 1
+        anim.setDuration(1000);                              // for 1000 ms
+
+        final float[] hsv  = new float[3];                  // transition color
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
-            public void onComplete(RippleView rippleView) {
+            public void onAnimationUpdate(ValueAnimator animation) {
+                // Transition along each axis of HSV (hue, saturation, value)
+                hsv[0] = from[0] + (to[0] - from[0]) * animation.getAnimatedFraction();
+                hsv[1] = from[1] + (to[1] - from[1]) * animation.getAnimatedFraction();
+                hsv[2] = from[2] + (to[2] - from[2]) * animation.getAnimatedFraction();
+
+                myViewHolder.addToMenuButton.setBackgroundColor(Color.HSVToColor(hsv));
+            }
+        });
+
+        anim.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+
+                myViewHolder.addToMenuButton.setBackgroundResource(R.drawable.addtobox);
 
                 currentSelectedMenus.add(mmenuList.get(position));
                 currentSelectedMenuIds.add(mmenuIdList.get(position));
@@ -213,9 +227,19 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
 
                 individualPrices.add(String.valueOf(myViewHolder.priceTextView.getText()));
 
-                mListener.OnItemClick(myViewHolder.rippleViewButton, currentSelectedMenus, currentSelectedMenuIds, currentMenu.getMenu_name(), currentSelectedMenusImageUrl, portionSizes, individualPrices);
+                mListener.OnItemClick(currentSelectedMenus, currentSelectedMenuIds, currentMenu.getMenu_name(), currentSelectedMenusImageUrl, portionSizes, individualPrices);
+
+
             }
         });
+
+        myViewHolder.addToMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                anim.start();
+            }
+        });
+
 
         if (currentMenu.getFourPersonEnabled() == true) {
             myViewHolder.radioGroupMenu.check(R.id.radioButtonFourPerson);
@@ -315,7 +339,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         public ViewFlipper viewFlipper;
         public TextView menuDescriptionTextView;
         public TextView backToMenu;
-        public RippleView rippleViewButton;
+        public Button addToMenuButton;
 
         public LinearLayout twoPersonLinearLayout;
         public LinearLayout fourPersonLinearLayout;
@@ -337,7 +361,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
             viewFlipper = (ViewFlipper) itemView.findViewById(R.id.viewFlipper);
             menuDescriptionTextView = (TextView) itemView.findViewById(R.id.menuDescriptionTextView);
             backToMenu = (TextView) itemView.findViewById(R.id.backToMenu);
-            rippleViewButton = (RippleView) itemView.findViewById(R.id.rippleView);
+            addToMenuButton = (Button) itemView.findViewById(R.id.addToMenuButton);
 
             twoPersonLinearLayout = (LinearLayout) itemView.findViewById(R.id.twoPersonLinearLayout);
             fourPersonLinearLayout = (LinearLayout) itemView.findViewById(R.id.fourPersonLinearLayout);
@@ -368,7 +392,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
     }
 
     public static interface MyListItemClickListener{
-        public void OnItemClick(RippleView rippleView, List<Data> menuList, List<Integer> menuIdList, String menuAdded, List<String> currentSelectedMenusUrl, List<String> portionSizes, List<String> individualPrices);
+        public void OnItemClick(List<Data> menuList, List<Integer> menuIdList, String menuAdded, List<String> currentSelectedMenusUrl, List<String> portionSizes, List<String> individualPrices);
     }
 
 }

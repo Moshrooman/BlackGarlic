@@ -1,8 +1,5 @@
 package id.blackgarlic.blackgarlic;
 
-import android.app.IntentService;
-import android.app.Notification;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,17 +19,13 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.andexert.library.RippleView;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -42,18 +35,13 @@ import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.johnpersano.supertoasts.util.Style;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
-import com.google.android.gms.iid.InstanceIDListenerService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import org.joda.time.LocalDate;
-import org.w3c.dom.Text;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -168,13 +156,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        if (checkPlayServices()) {
-            Log.e("Retrieving Token: ", "True");
-            Intent intent = new Intent(MainActivity.this, RegistrationIntentService.class);
-            startService(intent);
-        }
-
         layoutInflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         final ProgressBar mainActivityProgressBar = (ProgressBar) findViewById(R.id.mainActivityProgressBar);
@@ -195,6 +176,14 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
         final SharedPreferences sharedPreferences = SplashActivity.getSharedPreferences();
         final SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        if ((checkPlayServices()) && !(sharedPreferences.contains("gcmtoken"))) {
+            Log.e("Retrieving New Token: ", "True");
+            Intent intent = new Intent(MainActivity.this, RegistrationIntentService.class);
+            startService(intent);
+        } else {
+            Log.e("Current Token: ", sharedPreferences.getString("gcmtoken", ""));
+        }
 
         Log.e("Menus In SP: ", String.valueOf(sharedPreferences.contains("currentMenuList")));
 
@@ -626,7 +615,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
 
     @Override
-    public void OnItemClick(RippleView rippleView, List<Data> selectedMenuList, List<Integer> selectedMenuIdList, String menuAdded, List<String> currentMenuListUrls, List<String> portionSizeList, List<String> individualPricesAdapter) {
+    public void OnItemClick(List<Data> selectedMenuList, List<Integer> selectedMenuIdList, String menuAdded, List<String> currentMenuListUrls, List<String> portionSizeList, List<String> individualPricesAdapter) {
 
         subTotalCost = subTotalCost - subTotalCost;
 
