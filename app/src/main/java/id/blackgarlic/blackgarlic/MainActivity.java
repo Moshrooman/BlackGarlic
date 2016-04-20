@@ -711,6 +711,13 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        System.gc();
+    }
+
 
 
     @Override
