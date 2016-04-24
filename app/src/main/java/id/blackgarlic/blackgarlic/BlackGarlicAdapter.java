@@ -6,6 +6,8 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -15,12 +17,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.android.volley.toolbox.NetworkImageView;
+import com.facebook.drawee.generic.GenericDraweeHierarchy;
+import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
@@ -90,6 +96,16 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         SharedPreferences sharedPreferences = SplashActivity.getSharedPreferences();
 
         final Data currentMenu = mmenuList.get(position);
+
+        CircleProgressBarDrawable progressBar = new CircleProgressBarDrawable();
+        progressBar.setBackgroundColor(mContext.getResources().getColor(R.color.BGGREY));
+        progressBar.setColor(mContext.getResources().getColor(R.color.BGGREEN));
+
+        GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(mContext.getResources());
+        GenericDraweeHierarchy hierarchy = builder.setFadeDuration(400).setProgressBarImage(progressBar).build();
+
+        myViewHolder.menuNetworkImageView.setHierarchy(hierarchy);
+
         myViewHolder.menuTitleTextView.setText(currentMenu.getMenu_name());
         myViewHolder.menuDescriptionTextView.setText(currentMenu.getMenu_description());
         CalligraphyTypefaceSpan robotoMedium = new CalligraphyTypefaceSpan(TypefaceUtils.load(mContext.getAssets(), "fonts/Roboto-Medium.ttf"));
@@ -199,8 +215,9 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
                 if (  !(currentMenu.getMenu_subname().equals(""))  ) {
                     myViewHolder.menuTitleTextView.setText(myViewHolder.menuTitleTextView.getText() + " & " + currentMenu.getMenu_subname());
                 }
-                myViewHolder.menuNetworkImageView.setImageUrl(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))),
-                        ConnectionManager.getImageLoader(mContext));
+
+                Uri uri = Uri.parse(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))));
+                myViewHolder.menuNetworkImageView.setImageURI(uri);
                 myViewHolder.priceTextView.setText("IDR 140.000");
 
                 //Here is original (3) and four person enabled, so change the image to + _4 so concatenate menu subname
@@ -208,8 +225,8 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
                 if (  !(currentMenu.getMenu_subname().equals(""))  ) {
                     myViewHolder.menuTitleTextView.setText(myViewHolder.menuTitleTextView.getText() + " & " + currentMenu.getMenu_subname());
                 }
-                myViewHolder.menuNetworkImageView.setImageUrl(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position)) + "_4"),
-                        ConnectionManager.getImageLoader(mContext));
+                Uri uri = Uri.parse(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position)) + "_4"));
+                myViewHolder.menuNetworkImageView.setImageURI(uri);
                 myViewHolder.priceTextView.setText("IDR 150.000");
 
             }
@@ -219,15 +236,15 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
             //Here is Breakfast and two person enabled, so just keep the same image and change to original menu title
             if ((currentMenu.getMenu_type().equals("4"))  || (currentMenu.getMenu_type().equals("6"))) {
                 myViewHolder.menuTitleTextView.setText(currentMenu.getMenu_name());
-                myViewHolder.menuNetworkImageView.setImageUrl(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))),
-                        ConnectionManager.getImageLoader(mContext));
+                Uri uri = Uri.parse(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))));
+                myViewHolder.menuNetworkImageView.setImageURI(uri);
                 myViewHolder.priceTextView.setText("IDR 80.000");
 
                 //Here is Original and two enabled, so just keep the same image and change to original menu title
             } else {
                 myViewHolder.menuTitleTextView.setText(currentMenu.getMenu_name());
-                myViewHolder.menuNetworkImageView.setImageUrl(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))),
-                        ConnectionManager.getImageLoader(mContext));
+                Uri uri = Uri.parse(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))));
+                myViewHolder.menuNetworkImageView.setImageURI(uri);
                 myViewHolder.priceTextView.setText("IDR 100.000");
             }
         }
@@ -283,7 +300,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         public TextView menuTitleTextView;
-        public NetworkImageView menuNetworkImageView;
+        public SimpleDraweeView menuNetworkImageView;
         public ImageView selectedImageView;
         public TextView switchToDescription;
         public ViewFlipper viewFlipper;
@@ -306,7 +323,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         public MyViewHolder(View itemView) {
             super(itemView);
             menuTitleTextView = (TextView) itemView.findViewById(R.id.menuTitleTextView);
-            menuNetworkImageView = (NetworkImageView) itemView.findViewById(R.id.menuNetworkImageView);
+            menuNetworkImageView = (SimpleDraweeView) itemView.findViewById(R.id.menuNetworkImageView);
             switchToDescription = (TextView) itemView.findViewById(R.id.switchToDescription);
             viewFlipper = (ViewFlipper) itemView.findViewById(R.id.viewFlipper);
             menuDescriptionTextView = (TextView) itemView.findViewById(R.id.menuDescriptionTextView);

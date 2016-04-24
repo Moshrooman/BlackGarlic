@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -33,6 +34,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.johnpersano.supertoasts.util.Style;
 import com.google.gson.Gson;
@@ -1018,13 +1020,14 @@ public class CheckOut extends AppCompatActivity {
 //            Used this below but implementing the convertview == null is better for scroll
 //            View orderCheckOutView = getLayoutInflater().inflate(R.layout.row_ordercheckout, null);
 
-            NetworkImageView orderCheckOutNetworkImageView = (NetworkImageView) convertView.findViewById(R.id.orderCheckOutNetworkImageView);
+            SimpleDraweeView orderCheckOutNetworkImageView = (SimpleDraweeView) convertView.findViewById(R.id.orderCheckOutNetworkImageView);
             TextView orderCheckOutMenuTitle = (TextView) convertView.findViewById(R.id.orderCheckOutMenuTitle);
             TextView orderCheckOutPortion = (TextView) convertView.findViewById(R.id.orderCheckOutPortion);
             TextView orderCheckOutMenuType = (TextView) convertView.findViewById(R.id.orderCheckOutMenuType);
             TextView orderCheckOutPrice = (TextView) convertView.findViewById(R.id.orderCheckOutPrice);
 
-            orderCheckOutNetworkImageView.setImageUrl(selectedMenuListUrls.get(position).toString(), ConnectionManager.getImageLoader(CheckOut.this));
+            Uri uri = Uri.parse(selectedMenuListUrls.get(position).toString());
+            orderCheckOutNetworkImageView.setImageURI(uri);
             orderCheckOutMenuTitle.setText(selectedMenuList.get(position).getMenu_name());
 
             String initialPortion = selectedPortionSizes.get(position);

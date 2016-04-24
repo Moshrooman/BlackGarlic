@@ -2,6 +2,8 @@ package id.blackgarlic.blackgarlic;
 
 import android.app.Application;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
@@ -17,7 +19,8 @@ public class BlackGarlicApplication extends Application{
                         .setFontAttrId(R.attr.fontPath)
                         .build()
         );
-        //....
+
+        Fresco.initialize(BlackGarlicApplication.this);
     }
 
 }

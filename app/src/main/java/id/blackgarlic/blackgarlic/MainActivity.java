@@ -3,6 +3,7 @@ package id.blackgarlic.blackgarlic;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +32,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
+import com.facebook.drawee.drawable.AutoRotateDrawable;
+import com.facebook.drawee.drawable.ProgressBarDrawable;
+import com.facebook.drawee.generic.GenericDraweeHierarchy;
+import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.johnpersano.supertoasts.util.Style;
 import com.google.android.gms.common.ConnectionResult;
@@ -583,7 +589,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
     @Override
     protected void onResume() {
         super.onResume();
-
+        System.gc();
         proceedToCheckoutButton.setEnabled(true);
 
     }
@@ -900,14 +906,17 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             final View orderSummaryView = getLayoutInflater().inflate(R.layout.row_ordersummary, null);
 
             TextView orderSummaryMenuName = (TextView) orderSummaryView.findViewById(R.id.orderSummaryMenuName);
-            NetworkImageView orderSummaryMenuImage = (NetworkImageView) orderSummaryView.findViewById(R.id.orderSummaryMenuImage);
+            SimpleDraweeView orderSummaryMenuImage = (SimpleDraweeView) orderSummaryView.findViewById(R.id.orderSummaryMenuImage);
+
             TextView orderPortionSize = (TextView) orderSummaryView.findViewById(R.id.portionSizeTextView);
             TextView price = (TextView) orderSummaryView.findViewById(R.id.individualPriceTextView);
             TextView deleteMenuFromBoxTextView = (TextView) orderSummaryView.findViewById(R.id.deleteMenuFromBoxTextView);
 
             orderSummaryMenuName.setText(currentMenuList.get(position).getMenu_name());
 
-            orderSummaryMenuImage.setImageUrl(currentMenuListUrls.get(position).toString(), ConnectionManager.getImageLoader(MainActivity.this));
+            Uri uri = Uri.parse(currentMenuListUrls.get(position).toString());
+            orderSummaryMenuImage.setImageURI(uri);
+            orderSummaryMenuImage.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
             orderPortionSize.setText(portionSizeList.get(position).toString());
 
@@ -986,5 +995,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         }
         return true;
     }
+
+
 
 }

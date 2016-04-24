@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.media.Image;
+import android.net.Network;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -27,6 +29,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -266,9 +269,9 @@ public class OrderHistory extends AppCompatActivity {
 
                 TableRow orderstablelayoutinflate = (TableRow) View.inflate(OrderHistory.this, R.layout.orderstablelayoutinflate, null);
                 orderstablelayoutinflate.setTag(i);
-                NetworkImageView networkImageView = (NetworkImageView) orderstablelayoutinflate.findViewById(R.id.menuImageOrderHistory);
-                networkImageView.setImageUrl(BLACKGARLIC_PICTURES.replace("menu_id", String.valueOf(menuObjectList.get(groupPosition).get(i).getMenu_id())),
-                        ConnectionManager.getImageLoader(OrderHistory.this));
+                SimpleDraweeView networkImageView = (SimpleDraweeView) orderstablelayoutinflate.findViewById(R.id.menuImageOrderHistory);
+                Uri uri = Uri.parse(BLACKGARLIC_PICTURES.replace("menu_id", String.valueOf(menuObjectList.get(groupPosition).get(i).getMenu_id())));
+                networkImageView.setImageURI(uri);
 
                 //Menu Name TextView
                 TextView menuNameOrderHistory = (TextView) orderstablelayoutinflate.findViewById(R.id.menuNameOrderHistory);
@@ -345,4 +348,9 @@ public class OrderHistory extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        System.gc();
+        super.onDestroy();
+    }
 }
