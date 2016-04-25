@@ -89,6 +89,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginTop="20dp"
+                    android:gravity="center"
                     >
 
                     <RadioGroup
@@ -183,10 +184,50 @@
                             android:textColor="@color/green"
                             android:text="IDR 80.000"
                             android:textSize="20dp"
-                            android:layout_gravity="center_horizontal"
+                            android:layout_gravity="center"
                             fontPath="fonts/Roboto-Bold.ttf"
                             android:id="@+id/priceTextView"
                             />
+
+                        <org.apmem.tools.layouts.FlowLayout
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="5dp"
+                            >
+
+                            <Button
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:textSize="20dp"
+                                android:gravity="center"
+                                android:background="@drawable/minus"
+                                android:layout_marginRight="5dp"
+                                android:id="@+id/minusButton"
+                                />
+
+                            <TextView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:gravity="center"
+                                android:background="@drawable/border"
+                                android:id="@+id/quantityTextView"
+                                />
+
+                            <Button
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:gravity="center"
+                                android:background="@drawable/plus"
+                                android:layout_marginLeft="5dp"
+                                android:id="@+id/plusButton"
+                                />
+
+
+                        </org.apmem.tools.layouts.FlowLayout>
 
                         <Button
                             android:layout_width="140dp"
@@ -197,6 +238,7 @@
                             fontPath="fonts/Roboto-Bold.ttf"
                             android:textColor="#00584a"
                             android:id="@+id/addToMenuButton"
+                            android:layout_marginTop="5dp"
                             />
 
                         <TextView

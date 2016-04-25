@@ -14,7 +14,6 @@ import com.android.volley.toolbox.Volley;
 public class ConnectionManager {
 
     private static RequestQueue queue;
-    private static ImageLoader imageLoader;
 
     public static RequestQueue getInstance(Context context) {
 
@@ -23,28 +22,6 @@ public class ConnectionManager {
         }
 
         return queue;
-    }
-
-    public static ImageLoader getImageLoader(Context context) {
-
-        if (imageLoader == null) {
-            imageLoader = new ImageLoader(getInstance(context), new ImageLoader.ImageCache() {
-
-                private final LruCache<String, Bitmap> mCache = new LruCache<String, Bitmap>(10);
-
-                @Override
-                public Bitmap getBitmap(String url) {
-                    return mCache.get(url);
-                }
-
-                @Override
-                public void putBitmap(String url, Bitmap bitmap) {
-                    mCache.put(url, bitmap);
-                }
-            });
-        }
-
-        return imageLoader;
     }
 
 }

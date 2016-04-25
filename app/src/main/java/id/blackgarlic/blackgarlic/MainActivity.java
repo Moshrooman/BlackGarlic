@@ -621,7 +621,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
 
     @Override
-    public void OnItemClick(List<Data> selectedMenuList, List<Integer> selectedMenuIdList, String menuAdded, List<String> currentMenuListUrls, List<String> portionSizeList, List<String> individualPricesAdapter) {
+    public void OnItemClick(List<Data> selectedMenuList, List<Integer> selectedMenuIdList, String menuAdded, List<String> currentMenuListUrls, List<String> portionSizeList, List<String> individualPricesAdapter, Data currentMenu) {
 
         subTotalCost = subTotalCost - subTotalCost;
 
@@ -664,7 +664,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
         Log.e("---------------", "-----------------");
 
-        SuperToast superToast = SuperToast.create(this, "Added To Box:\n\n"+menuAdded+"", SuperToast.Duration.SHORT, Style.getStyle(Style.GREEN, SuperToast.Animations.POPUP));
+        SuperToast superToast = SuperToast.create(this, "Added To Box:\n\n"+String.valueOf(currentMenu.getQuantity())+"x "+menuAdded+"", SuperToast.Duration.SHORT, Style.getStyle(Style.GREEN, SuperToast.Animations.POPUP));
 
         superToast.show();
 

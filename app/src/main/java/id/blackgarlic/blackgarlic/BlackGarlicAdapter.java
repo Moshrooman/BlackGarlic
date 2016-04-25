@@ -11,9 +11,12 @@ import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,6 +33,8 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersAdapter;
+
+import org.w3c.dom.Text;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -96,6 +101,32 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         SharedPreferences sharedPreferences = SplashActivity.getSharedPreferences();
 
         final Data currentMenu = mmenuList.get(position);
+
+        final TextView quantityTextView = (TextView) myViewHolder.quantityTextView;
+        quantityTextView.setText(String.valueOf(currentMenu.getQuantity()));
+        final Animation popUp = AnimationUtils.loadAnimation(mContext, R.anim.anim_scale);
+
+        myViewHolder.plusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myViewHolder.plusButton.startAnimation(popUp);
+                currentMenu.setQuantity(currentMenu.getQuantity() + 1);
+                quantityTextView.setText(String.valueOf(currentMenu.getQuantity()));
+            }
+        });
+
+        myViewHolder.minusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myViewHolder.minusButton.startAnimation(popUp);
+
+                if (currentMenu.getQuantity() != 1) {
+                    currentMenu.setQuantity(currentMenu.getQuantity() - 1);
+                    quantityTextView.setText(String.valueOf(currentMenu.getQuantity()));
+                }
+
+            }
+        });
 
         CircleProgressBarDrawable progressBar = new CircleProgressBarDrawable();
         progressBar.setBackgroundColor(mContext.getResources().getColor(R.color.BGGREY));
@@ -320,6 +351,10 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         public TextView twoPersonTextView;
         public TextView fourPersonTextView;
 
+        public Button minusButton;
+        public Button plusButton;
+        public TextView quantityTextView;
+
         public MyViewHolder(View itemView) {
             super(itemView);
             menuTitleTextView = (TextView) itemView.findViewById(R.id.menuTitleTextView);
@@ -343,6 +378,10 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
             twoPersonTextView = (TextView) itemView.findViewById(R.id.twopersonTextView);
             fourPersonTextView = (TextView) itemView.findViewById(R.id.fourpersonTextView);
 
+            minusButton = (Button) itemView.findViewById(R.id.minusButton);
+            plusButton = (Button) itemView.findViewById(R.id.plusButton);
+            quantityTextView = (TextView) itemView.findViewById(R.id.quantityTextView);
+
         }
 
         @Override
@@ -359,7 +398,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
     }
 
     public static interface MyListItemClickListener{
-        public void OnItemClick(List<Data> menuList, List<Integer> menuIdList, String menuAdded, List<String> currentSelectedMenusUrl, List<String> portionSizes, List<String> individualPrices);
+        public void OnItemClick(List<Data> menuList, List<Integer> menuIdList, String menuAdded, List<String> currentSelectedMenusUrl, List<String> portionSizes, List<String> individualPrices, Data currentMenu);
     }
 
     public void startAnimation(final Button button, final int position, final TextView priceTextView, final Data currentMenu) {
@@ -394,24 +433,45 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
                 button.setBackgroundResource(R.drawable.addtobox);
                 button.setEnabled(true);
 
-                currentSelectedMenus.add(mmenuList.get(position));
-                currentSelectedMenuIds.add(mmenuIdList.get(position));
+                for (int i = 0; i < currentMenu.getQuantity(); i++) {
+                    currentSelectedMenus.add(mmenuList.get(position));
+                    currentSelectedMenuIds.add(mmenuIdList.get(position));
+                }
 
                 if (((mmenuList.get(position).getMenu_type().equals("3")) || (mmenuList.get(position).getMenu_type().equals("5"))) && (mmenuList.get(position).getFourPersonEnabled() == true)) {
-                    currentSelectedMenusImageUrl.add(mmenuList.get(position).getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position)) + "_4"));
+
+                    for (int i = 0; i < currentMenu.getQuantity(); i++) {
+                        currentSelectedMenusImageUrl.add(mmenuList.get(position).getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position)) + "_4"));
+                    }
+
                 } else {
-                    currentSelectedMenusImageUrl.add(mmenuList.get(position).getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))));
+
+                    for (int i = 0; i < currentMenu.getQuantity(); i++) {
+                        currentSelectedMenusImageUrl.add(mmenuList.get(position).getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))));
+                    }
+
                 }
 
                 if (mmenuList.get(position).getFourPersonEnabled() == true) {
-                    portionSizes.add("4P");
+
+                    for (int i = 0; i < currentMenu.getQuantity(); i++) {
+                        portionSizes.add("4P");
+                    }
+
                 } else {
-                    portionSizes.add("2P");
+
+                    for (int i = 0; i < currentMenu.getQuantity(); i++) {
+                        portionSizes.add("2P");
+                    }
+
                 }
 
-                individualPrices.add(String.valueOf(priceTextView.getText()));
+                for (int i = 0; i < currentMenu.getQuantity(); i++) {
+                    individualPrices.add(String.valueOf(priceTextView.getText()));
+                }
 
-                mListener.OnItemClick(currentSelectedMenus, currentSelectedMenuIds, currentMenu.getMenu_name(), currentSelectedMenusImageUrl, portionSizes, individualPrices);
+
+                mListener.OnItemClick(currentSelectedMenus, currentSelectedMenuIds, currentMenu.getMenu_name(), currentSelectedMenusImageUrl, portionSizes, individualPrices, currentMenu);
 
 
             }

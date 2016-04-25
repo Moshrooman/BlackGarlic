@@ -60,6 +60,20 @@ public class Data {
         return isFlipped;
     }
 
+    public int quantity = 1;
+
+    public int getQuantity() {
+        if(this.quantity == 0) {
+            return 1;
+        } else {
+            return this.quantity;
+        }
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     public void setIsFlipped(boolean isFlipped) {
         this.isFlipped = isFlipped;
     }
