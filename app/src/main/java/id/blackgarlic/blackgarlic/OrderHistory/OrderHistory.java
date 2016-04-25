@@ -16,6 +16,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
@@ -58,6 +59,8 @@ public class OrderHistory extends AppCompatActivity {
     private static UserCredentials userCredentials;
 
     public final String BLACKGARLIC_PICTURES = "http://blackgarlic.id/inc/images/menu/menu_id.jpg";
+
+    private static ExpandableListView expandableListViewGlobalScope;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +117,7 @@ public class OrderHistory extends AppCompatActivity {
                 ExpandableListViewAdapter adapter = new ExpandableListViewAdapter();
 
                 ExpandableListView expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
+                expandableListViewGlobalScope = expandableListView;
 
                 expandableListView.setAdapter(adapter);
 
@@ -193,9 +197,10 @@ public class OrderHistory extends AppCompatActivity {
         @Override
         public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 
-            LayoutInflater infalInflater = (LayoutInflater) OrderHistory.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.expandablelistviewheader, null);
-
+            if (convertView == null) {
+                LayoutInflater infalInflater = (LayoutInflater) OrderHistory.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = infalInflater.inflate(R.layout.expandablelistviewheader, null);
+            }
 
             TextView orderIdTextView = (TextView) convertView.findViewById(R.id.orderIdTextView);
             TextView totalTextView = (TextView) convertView.findViewById(R.id.totalTextView);
@@ -256,8 +261,13 @@ public class OrderHistory extends AppCompatActivity {
         @Override
         public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
-            LayoutInflater infalInflater = (LayoutInflater) OrderHistory.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.expandablelistviewexpanded, null);
+            if (convertView == null) {
+                LayoutInflater infalInflater = (LayoutInflater) OrderHistory.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = infalInflater.inflate(R.layout.expandablelistviewexpanded, null);
+            } else {
+                ((TableLayout) convertView.findViewById(R.id.ordersTableLayout)).removeAllViews();
+            }
+
 
             //Start of making table rows for the orders
 

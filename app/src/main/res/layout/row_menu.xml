@@ -202,7 +202,6 @@
                             <Button
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:textSize="20dp"
                                 android:gravity="center"
                                 android:background="@drawable/minus"
                                 android:layout_marginRight="5dp"
@@ -215,6 +214,7 @@
                                 android:gravity="center"
                                 android:background="@drawable/border"
                                 android:id="@+id/quantityTextView"
+                                fontPath="fonts/Roboto-Bold.ttf"
                                 />
 
                             <Button
@@ -232,7 +232,7 @@
                         <Button
                             android:layout_width="140dp"
                             android:layout_height="50dp"
-                            android:text="+ Add Menu"
+                            android:text="+ Add To Cart"
                             android:textSize="13dp"
                             android:background="@drawable/addtobox"
                             fontPath="fonts/Roboto-Bold.ttf"

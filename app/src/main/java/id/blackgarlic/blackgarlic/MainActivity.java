@@ -903,14 +903,18 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
-            final View orderSummaryView = getLayoutInflater().inflate(R.layout.row_ordersummary, null);
 
-            TextView orderSummaryMenuName = (TextView) orderSummaryView.findViewById(R.id.orderSummaryMenuName);
-            SimpleDraweeView orderSummaryMenuImage = (SimpleDraweeView) orderSummaryView.findViewById(R.id.orderSummaryMenuImage);
+            if (convertView == null) {
+                LayoutInflater infalInflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = infalInflater.inflate(R.layout.row_ordersummary, null);
+            }
 
-            TextView orderPortionSize = (TextView) orderSummaryView.findViewById(R.id.portionSizeTextView);
-            TextView price = (TextView) orderSummaryView.findViewById(R.id.individualPriceTextView);
-            TextView deleteMenuFromBoxTextView = (TextView) orderSummaryView.findViewById(R.id.deleteMenuFromBoxTextView);
+            TextView orderSummaryMenuName = (TextView) convertView.findViewById(R.id.orderSummaryMenuName);
+            SimpleDraweeView orderSummaryMenuImage = (SimpleDraweeView) convertView.findViewById(R.id.orderSummaryMenuImage);
+
+            TextView orderPortionSize = (TextView) convertView.findViewById(R.id.portionSizeTextView);
+            TextView price = (TextView) convertView.findViewById(R.id.individualPriceTextView);
+            TextView deleteMenuFromBoxTextView = (TextView) convertView.findViewById(R.id.deleteMenuFromBoxTextView);
 
             orderSummaryMenuName.setText(currentMenuList.get(position).getMenu_name());
 
@@ -922,6 +926,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
             price.setText(individualPrices.get(position).toString());
 
+            final View finalConvertView = convertView;
             deleteMenuFromBoxTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -971,12 +976,12 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                         }
                     });
 
-                    orderSummaryView.startAnimation(righttoleftanimation);
+                    finalConvertView.startAnimation(righttoleftanimation);
 
                 }
             });
 
-            return orderSummaryView;
+            return convertView;
         }
     }
 
