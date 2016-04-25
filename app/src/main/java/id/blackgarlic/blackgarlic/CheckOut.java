@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -109,8 +110,6 @@ public class CheckOut extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_out);
-
-        retrieveBitmapFromCache();
 
         updateAppCredentialsButton = (Button) findViewById(R.id.updateAppCredentialsButton);
 
@@ -959,6 +958,7 @@ public class CheckOut extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            setImageDrawablesNull();
             Intent mainActivityIntent = new Intent(CheckOut.this, MainActivity.class);
             mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(mainActivityIntent);
@@ -1081,8 +1081,7 @@ public class CheckOut extends AppCompatActivity {
 
     }
 
-
-    public void retrieveBitmapFromCache(){
+    public void setImageDrawablesNull(){
 
         //The imageView that you want to set to the retrieved bitmap
         ImageView deliveryDateImageView = (ImageView) findViewById(R.id.deliveryDateImageView);
@@ -1092,21 +1091,12 @@ public class CheckOut extends AppCompatActivity {
         ImageView paymentMethodImageView = (ImageView) findViewById(R.id.paymentOptionImageView);
         ImageView yourOrderImageView = (ImageView) findViewById(R.id.yourOrderImageView);
 
-        //To get bitmap from cache using the key. Must cast retrieved cache Object to Bitmap
-        Bitmap bitmap1 = (Bitmap)Cache.getInstance().getLru().get("bitmap_image1");
-        Bitmap bitmap2 = (Bitmap)Cache.getInstance().getLru().get("bitmap_image2");
-        Bitmap bitmap3 = (Bitmap)Cache.getInstance().getLru().get("bitmap_image3");
-        Bitmap bitmap4 = (Bitmap)Cache.getInstance().getLru().get("bitmap_image4");
-        Bitmap bitmap5 = (Bitmap)Cache.getInstance().getLru().get("bitmap_image5");
-        Bitmap bitmap6 = (Bitmap)Cache.getInstance().getLru().get("bitmap_image6");
-
-        //Setting imageView to retrieved bitmap from cache
-        deliveryDateImageView.setImageBitmap(bitmap1);
-        orderSummaryImageView.setImageBitmap(bitmap2);
-        deliveryAddressImageView.setImageBitmap(bitmap3);
-        shippingOptionsImageView.setImageBitmap(bitmap4);
-        paymentMethodImageView.setImageBitmap(bitmap5);
-        yourOrderImageView.setImageBitmap(bitmap6);
+        deliveryDateImageView.setImageDrawable(null);
+        orderSummaryImageView.setImageDrawable(null);
+        deliveryAddressImageView.setImageDrawable(null);
+        shippingOptionsImageView.setImageDrawable(null);
+        paymentMethodImageView.setImageDrawable(null);
+        yourOrderImageView.setImageDrawable(null);
 
     }
 
