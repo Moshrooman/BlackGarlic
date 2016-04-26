@@ -312,8 +312,10 @@ public class OrderHistory extends AppCompatActivity {
                     menuTypeOrderHistory.setText("Breakfast");
                 } else if ((menuObjectList.get(groupPosition).get(i).getMenu_type() == 1)) {
                     menuTypeOrderHistory.setText("Express");
-                } else {
+                } else if ((menuObjectList.get(groupPosition).get(i).getMenu_type() == 2)){
                     menuTypeOrderHistory.setText("Family");
+                } else if ((menuObjectList.get(groupPosition).get(i).getMenu_type() == 7)) {
+                    menuTypeOrderHistory.setText("Kids");
                 }
 
                 //Portion Text View
@@ -334,7 +336,7 @@ public class OrderHistory extends AppCompatActivity {
                     priceOrderHistory.setText("100,000");
                 } else if (menuTypeOrderHistory.getText().equals("Family")) {
                     priceOrderHistory.setText("150,000");
-                } else {
+                } else if ((menuTypeOrderHistory.getText().equals("Breakfast")) || (menuTypeOrderHistory.getText().equals("Original"))){
 
 
                     if (((menuObjectList.get(groupPosition).get(i).getMenu_type() == 3) || (menuObjectList.get(groupPosition).get(i).getMenu_type() == 5))
@@ -350,6 +352,8 @@ public class OrderHistory extends AppCompatActivity {
                         priceOrderHistory.setText("140,000");
                     }
 
+                } else if (menuTypeOrderHistory.getText().equals("Kids")) {
+                    priceOrderHistory.setText("90,000");
                 }
 
                 ordersTableLayout.addView(orderstablelayoutinflate);

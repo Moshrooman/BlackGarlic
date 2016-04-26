@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v7.widget.CardView;
@@ -14,6 +15,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -28,8 +30,11 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.android.volley.toolbox.NetworkImageView;
+import com.facebook.drawee.controller.ControllerListener;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
+import com.facebook.drawee.interfaces.DraweeController;
+import com.facebook.drawee.interfaces.DraweeHierarchy;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -143,6 +148,12 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         CalligraphyTypefaceSpan robotoMedium = new CalligraphyTypefaceSpan(TypefaceUtils.load(mContext.getAssets(), "fonts/Roboto-Medium.ttf"));
         CalligraphyTypefaceSpan robotoThin = new CalligraphyTypefaceSpan(TypefaceUtils.load(mContext.getAssets(), "fonts/Roboto-Thin.ttf"));
 
+        //Setting false if kids
+        if (currentMenu.getMenu_type().equals("7")) {
+            myViewHolder.fourPersonLinearLayout.setEnabled(false);
+            myViewHolder.radioGroupMenu.setEnabled(false);
+        }
+
         if ((currentMenu.getMenu_type().equals("3")) || (currentMenu.getMenu_type().equals("5"))) {
 
             SpannableStringBuilder twoPersonOriginalStringBuilder = new SpannableStringBuilder();
@@ -159,7 +170,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
 
             myViewHolder.fourPersonTextView.setText(fourPersonOriginalStringBuilder, TextView.BufferType.SPANNABLE);
 
-        } else {
+        } else if ((currentMenu.getMenu_type().equals("5")) || (currentMenu.getMenu_type().equals("6"))){
             SpannableStringBuilder twoPersonBreakfastStringBuilder = new SpannableStringBuilder();
             twoPersonBreakfastStringBuilder.append("2 Persons\n").append("IDR 40.000/Person");
             twoPersonBreakfastStringBuilder.setSpan(robotoMedium, 0, 10, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -173,6 +184,21 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
             fourPersonBreakfastStringBuilder.setSpan(robotoThin, 10, 27, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             myViewHolder.fourPersonTextView.setText(fourPersonBreakfastStringBuilder, TextView.BufferType.SPANNABLE);
+        } else if (currentMenu.getMenu_type().equals("7")) {
+            SpannableStringBuilder twoPersonChildStringBuilder = new SpannableStringBuilder();
+            twoPersonChildStringBuilder.append("2 Children\n").append("IDR 45.000/Child");
+            twoPersonChildStringBuilder.setSpan(robotoMedium, 0, 11, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            twoPersonChildStringBuilder.setSpan(robotoThin, 11, 27, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            myViewHolder.twoPersonTextView.setText(twoPersonChildStringBuilder, TextView.BufferType.SPANNABLE);
+
+            SpannableStringBuilder fourPersonChildStringBuilder = new SpannableStringBuilder();
+            fourPersonChildStringBuilder.append("4 Children\n").append("Unavailable");
+            fourPersonChildStringBuilder.setSpan(robotoMedium, 0, 11, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            fourPersonChildStringBuilder.setSpan(robotoThin, 10, 22, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            myViewHolder.fourPersonTextView.setText(fourPersonChildStringBuilder, TextView.BufferType.SPANNABLE);
+
         }
 
         myViewHolder.switchToDescription.setOnClickListener(new View.OnClickListener() {
@@ -213,8 +239,10 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
 
         if ((currentMenu.getMenu_type().equals("4")) || (currentMenu.getMenu_type().equals("6"))) {
             myViewHolder.priceTextView.setText("IDR 80.000");
-        } else {
+        } else if ((currentMenu.getMenu_type().equals("3")) || (currentMenu.getMenu_type().equals("5"))){
             myViewHolder.priceTextView.setText("IDR 100.000");
+        } else if (currentMenu.getMenu_type().equals("7")) {
+            myViewHolder.priceTextView.setText("IDR 90.000");
         }
 
         if ((MainActivity.getIsLoggedIn() == true) && (sharedPreferences.contains("currentMenuList"))) {
@@ -255,7 +283,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
                 myViewHolder.priceTextView.setText("IDR 140.000");
 
                 //Here is original (3) and four person enabled, so change the image to + _4 so concatenate menu subname
-            } else {
+            } else if ((currentMenu.getMenu_type().equals("3")) || (currentMenu.getMenu_type().equals("5"))){
                 if (  !(currentMenu.getMenu_subname().equals(""))  ) {
                     myViewHolder.menuTitleTextView.setText(myViewHolder.menuTitleTextView.getText() + " & " + currentMenu.getMenu_subname());
                 }
@@ -264,6 +292,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
                 myViewHolder.priceTextView.setText("IDR 150.000");
 
             }
+
         } else {
             myViewHolder.radioGroupMenu.check(R.id.radioButtonTwoPerson);
 
@@ -275,24 +304,31 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
                 myViewHolder.priceTextView.setText("IDR 80.000");
 
                 //Here is Original and two enabled, so just keep the same image and change to original menu title
-            } else {
+            } else if ((currentMenu.getMenu_type().equals("3"))  || (currentMenu.getMenu_type().equals("5"))){
                 myViewHolder.menuTitleTextView.setText(currentMenu.getMenu_name());
                 Uri uri = Uri.parse(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))));
                 myViewHolder.menuNetworkImageView.setImageURI(uri);
                 myViewHolder.priceTextView.setText("IDR 100.000");
+            } else if (currentMenu.getMenu_type().equals("7")) {
+                myViewHolder.menuTitleTextView.setText(currentMenu.getMenu_name());
+                Uri uri = Uri.parse(currentMenu.getMenuUrl().replace("menu_id", String.valueOf(mmenuIdList.get(position))));
+                myViewHolder.menuNetworkImageView.setImageURI(uri);
+                myViewHolder.priceTextView.setText("IDR 90.000");
+
             }
         }
 
     }
-
 
     @Override
     public long getHeaderId(int position) {
 
         if (position <= 2) {
             return 1;
-        } else {
+        } else if ((position >= 3) && (position <= 9)){
             return 2;
+        } else {
+            return 3;
         }
 
     }
@@ -319,8 +355,10 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
 
         if (position <= breakfastHeaderCount - 1) {
             headerTextView.setText("BREAKFAST");
-        } else {
+        } else if ((position >= breakfastHeaderCount) && (position <= mmenuList.size() - 3)){
             headerTextView.setText("ORIGINAL");
+        } else {
+            headerTextView.setText("KIDS");
         }
     }
 

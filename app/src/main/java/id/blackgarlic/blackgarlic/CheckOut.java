@@ -1049,8 +1049,10 @@ public class CheckOut extends AppCompatActivity {
 
             if ((selectedMenuList.get(position).getMenu_type().equals("3")) || (selectedMenuList.get(position).getMenu_type().equals("5"))) {
                 orderCheckOutMenuType.setText("Original");
-            } else {
+            } else if ((selectedMenuList.get(position).getMenu_type().equals("4")) || (selectedMenuList.get(position).getMenu_type().equals("6"))){
                 orderCheckOutMenuType.setText("Breakfast");
+            } else if (selectedMenuList.get(position).getMenu_type().equals("7")) {
+                orderCheckOutMenuType.setText("Kids");
             }
 
             orderCheckOutPrice.setText(selectedIndividualPrices.get(position));
