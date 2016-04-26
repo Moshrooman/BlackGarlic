@@ -108,10 +108,14 @@ public class CheckOut extends AppCompatActivity {
 
     private static Button updateAppCredentialsButton;
 
+    private static RelativeLayout checkOutRootRelativeView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_out);
+
+        checkOutRootRelativeView = (RelativeLayout) findViewById(R.id.checkOutRootRelativeView);
 
         setImagesForTitles();
 
@@ -962,6 +966,8 @@ public class CheckOut extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            orderSummaryListView.setAdapter(null);
+            checkOutRootRelativeView.removeAllViews();
             Intent mainActivityIntent = new Intent(CheckOut.this, MainActivity.class);
             mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(mainActivityIntent);

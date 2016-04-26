@@ -63,6 +63,8 @@ public class OrderHistory extends AppCompatActivity {
 
     public final String BLACKGARLIC_PICTURES = "http://blackgarlic.id/inc/images/menu/menu_id.jpg";
 
+    private static ExpandableListView expandableListViewGlobalScope;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,6 +123,8 @@ public class OrderHistory extends AppCompatActivity {
 
                 expandableListView.setAdapter(adapter);
 
+                expandableListViewGlobalScope = expandableListView;
+
 
             }
         }, new Response.ErrorListener() {
@@ -147,6 +151,8 @@ public class OrderHistory extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            expandableListViewGlobalScope.setAdapter((ExpandableListViewAdapter) null);
 
             Intent mainActivityIntent = new Intent(OrderHistory.this, MainActivity.class);
             mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
