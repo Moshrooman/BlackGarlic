@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -56,6 +57,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.concurrent.Callable;
 
 import id.blackgarlic.blackgarlic.OrderHistory.OrderHistory;
 import id.blackgarlic.blackgarlic.model.Data;
@@ -589,7 +591,17 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
     @Override
     protected void onResume() {
         super.onResume();
-        System.gc();
+
+        Runnable runnableSystemGc = new Runnable() {
+            @Override
+            public void run() {
+                Log.e("Ran Resume GC: ", "True");
+                System.gc();
+            }
+        };
+        Handler handler = new Handler();
+        handler.postDelayed(runnableSystemGc, 2000);
+
         proceedToCheckoutButton.setEnabled(true);
 
     }
@@ -713,6 +725,17 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             orderQuantityTextView.setText("");
             orderQuantityTextView.setVisibility(View.GONE);
             listViewOrderSummary.setAdapter(new MyAdapter(currentMenuList, currentMenuIdList, currentSelectedMenuListUrls, portionSizes, individualPrices));
+
+            Runnable runnableSystemGc = new Runnable() {
+                @Override
+                public void run() {
+                    System.gc();
+                    Log.e("Ran Clear All GC: ", "True");
+                }
+            };
+            Handler handler = new Handler();
+            handler.postDelayed(runnableSystemGc, 2000);
+
         }
 
     }

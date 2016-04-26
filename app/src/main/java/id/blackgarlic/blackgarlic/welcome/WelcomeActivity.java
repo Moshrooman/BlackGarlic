@@ -3,7 +3,9 @@ package id.blackgarlic.blackgarlic.welcome;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +14,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 
 import java.security.Key;
@@ -63,6 +67,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     case 4:
 
                         if (!sharedPreferences.contains("firsttime")) {
+
                             SharedPreferences.Editor editor =  sharedPreferences.edit();
                             editor.putBoolean("firsttime", false);
                             editor.commit();
@@ -139,6 +144,21 @@ public class WelcomeActivity extends AppCompatActivity {
             return 5;
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Runnable runnableGC = new Runnable() {
+            @Override
+            public void run() {
+                System.gc();
+            }
+        };
+
+        Handler handler = new Handler();
+        handler.postDelayed(runnableGC, 2000);
     }
 
     @Override

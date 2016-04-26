@@ -2,7 +2,9 @@ package id.blackgarlic.blackgarlic;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -110,6 +112,8 @@ public class CheckOut extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_out);
+
+        setImagesForTitles();
 
         updateAppCredentialsButton = (Button) findViewById(R.id.updateAppCredentialsButton);
 
@@ -958,7 +962,6 @@ public class CheckOut extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            setImageDrawablesNull();
             Intent mainActivityIntent = new Intent(CheckOut.this, MainActivity.class);
             mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(mainActivityIntent);
@@ -971,6 +974,8 @@ public class CheckOut extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        System.gc();
 
         Button placeOrderButton = (Button) findViewById(R.id.placeOrderButton);
         placeOrderButton.setEnabled(true);
@@ -1081,23 +1086,27 @@ public class CheckOut extends AppCompatActivity {
 
     }
 
-    public void setImageDrawablesNull(){
+    public void setImagesForTitles() {
+        SimpleDraweeView deliveryDateImageView = (SimpleDraweeView) findViewById(R.id.deliveryDateImageView);
+        SimpleDraweeView orderSummaryImageView = (SimpleDraweeView) findViewById(R.id.orderSummaryImageView);
+        SimpleDraweeView deliveryAddressImageView = (SimpleDraweeView) findViewById(R.id.deliveryAddressImageView);
+        SimpleDraweeView shippingOptionsImageView = (SimpleDraweeView) findViewById(R.id.shippingOptionsImageView);
+        SimpleDraweeView paymentOptionImageView = (SimpleDraweeView) findViewById(R.id.paymentOptionImageView);
+        SimpleDraweeView yourOrderImageView = (SimpleDraweeView) findViewById(R.id.yourOrderImageView);
 
-        //The imageView that you want to set to the retrieved bitmap
-        ImageView deliveryDateImageView = (ImageView) findViewById(R.id.deliveryDateImageView);
-        ImageView orderSummaryImageView = (ImageView) findViewById(R.id.orderSummaryImageView);
-        ImageView deliveryAddressImageView = (ImageView) findViewById(R.id.deliveryAddressImageView);
-        ImageView shippingOptionsImageView = (ImageView) findViewById(R.id.shippingOptionsImageView);
-        ImageView paymentMethodImageView = (ImageView) findViewById(R.id.paymentOptionImageView);
-        ImageView yourOrderImageView = (ImageView) findViewById(R.id.yourOrderImageView);
+        Uri uri1 = Uri.parse("http://oldhamsymphonyorchestra.org.uk/static/calendar.png");
+        Uri uri2 = Uri.parse("https://cdn4.iconfinder.com/data/icons/adiante-apps-app-templates-incos-in-grey/512/app_type_shop_512px_GREY.png");
+        Uri uri3 = Uri.parse("https://cdn2.iconfinder.com/data/icons/windows-8-metro-style/512/delivery_food.png");
+        Uri uri4 = Uri.parse("https://d30y9cdsu7xlg0.cloudfront.net/png/26575-200.png");
+        Uri uri5 = Uri.parse("http://icons.iconarchive.com/icons/iconsmind/outline/512/Credit-Card-2-icon.png");
+        Uri uri6 = Uri.parse("http://simpleicon.com/wp-content/uploads/Shopping-Cart-10.png");
 
-        deliveryDateImageView.setImageDrawable(null);
-        orderSummaryImageView.setImageDrawable(null);
-        deliveryAddressImageView.setImageDrawable(null);
-        shippingOptionsImageView.setImageDrawable(null);
-        paymentMethodImageView.setImageDrawable(null);
-        yourOrderImageView.setImageDrawable(null);
-
+        deliveryDateImageView.setImageURI(uri1);
+        orderSummaryImageView.setImageURI(uri2);
+        deliveryAddressImageView.setImageURI(uri3);
+        shippingOptionsImageView.setImageURI(uri4);
+        paymentOptionImageView.setImageURI(uri5);
+        yourOrderImageView.setImageURI(uri6);
     }
 
     @Override

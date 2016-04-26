@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
@@ -58,6 +59,14 @@ public class YoutubeWelcomeVideo extends Fragment {
 
     }
 
+    @Override
+    public void onPause() {
+        super.onDestroy();
+        final FrameLayout firstSlideFrameLayout = (FrameLayout) getView().findViewById(R.id.firstSlideFrameLayout);
+        final ImageView playBlackGarlicVideo = (ImageView) getView().findViewById(R.id.playBlackGarlicVideo);
 
+        firstSlideFrameLayout.setBackgroundDrawable(null);
+        playBlackGarlicVideo.setImageDrawable(null);
 
+    }
 }

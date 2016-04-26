@@ -1,12 +1,14 @@
 package id.blackgarlic.blackgarlic.welcome;
 
 import android.app.Activity;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import id.blackgarlic.blackgarlic.R;
 
@@ -25,6 +27,11 @@ public class WeShop extends Fragment {
         return weShopFragment;
     }
 
+    @Override
+    public void onPause() {
+        super.onDestroy();
 
-
+        final ImageView weShopImageView = (ImageView) getView().findViewById(R.id.weShopImageView);
+        weShopImageView.setImageDrawable(null);
+    }
 }

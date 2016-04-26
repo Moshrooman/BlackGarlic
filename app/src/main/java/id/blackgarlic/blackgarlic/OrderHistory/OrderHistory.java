@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.net.Network;
 import android.net.Uri;
@@ -59,8 +62,6 @@ public class OrderHistory extends AppCompatActivity {
     private static UserCredentials userCredentials;
 
     public final String BLACKGARLIC_PICTURES = "http://blackgarlic.id/inc/images/menu/menu_id.jpg";
-
-    private static TableLayout ordersTableLayoutGlobalScope;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,14 +147,6 @@ public class OrderHistory extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-            if (ordersTableLayoutGlobalScope != null) {
-                Log.e("Count: ", String.valueOf(ordersTableLayoutGlobalScope.getChildCount()));
-                for (int i = 0; i < ordersTableLayoutGlobalScope.getChildCount(); i++) {
-                    SimpleDraweeView draweeView = (SimpleDraweeView) ordersTableLayoutGlobalScope.getChildAt(i).findViewById(R.id.menuImageOrderHistory);
-                    draweeView.setImageURI(null);
-                }
-            }
 
             Intent mainActivityIntent = new Intent(OrderHistory.this, MainActivity.class);
             mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -280,7 +273,6 @@ public class OrderHistory extends AppCompatActivity {
             //Start of making table rows for the orders
 
             TableLayout ordersTableLayout = (TableLayout) convertView.findViewById(R.id.ordersTableLayout);
-            ordersTableLayoutGlobalScope = ordersTableLayout;
 
             for (int i = 0; i < menuObjectList.get(groupPosition).size(); i++) {
 
@@ -367,9 +359,10 @@ public class OrderHistory extends AppCompatActivity {
         }
     }
 
+
     @Override
-    protected void onDestroy() {
+    protected void onResume() {
+        super.onResume();
         System.gc();
-        super.onDestroy();
     }
 }

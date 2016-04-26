@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import id.blackgarlic.blackgarlic.MainActivity;
 import id.blackgarlic.blackgarlic.R;
@@ -26,5 +27,12 @@ public class YouCook extends Fragment {
         return youCookFragment;
     }
 
+    @Override
+    public void onPause() {
+        super.onDestroy();
 
+        final ImageView youCookImageView = (ImageView) getView().findViewById(R.id.youCookImageView);
+        youCookImageView.setImageDrawable(null);
+
+    }
 }

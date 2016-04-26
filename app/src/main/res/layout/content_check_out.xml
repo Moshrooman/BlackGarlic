@@ -8,7 +8,9 @@
     android:paddingLeft="2dp"
     android:paddingRight="2dp"
     tools:context="id.blackgarlic.blackgarlic.CheckOut"
-    tools:showIn="@layout/activity_check_out">
+    tools:showIn="@layout/activity_check_out"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    >
 
     <Button
         android:layout_width="0dp"
@@ -44,13 +46,13 @@
 
                 <!-- Start of title -->
 
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/calendar"
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_toLeftOf="@+id/firstTitle"
-                        android:layout_alignBottom="@+id/firstTitle"
+                        android:layout_alignTop="@+id/firstTitle"
                         android:id="@+id/deliveryDateImageView"
+                        fresco:actualImageScaleType="fitXY"
                         />
 
 
@@ -160,13 +162,13 @@
 
                 <!-- Start of title layout -->
 
-                <ImageView
+                <com.facebook.drawee.view.SimpleDraweeView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_toLeftOf="@+id/secondTitle"
-                    android:layout_alignBottom="@+id/secondTitle"
+                    android:layout_alignTop="@+id/secondTitle"
                     android:id="@+id/orderSummaryImageView"
-                    android:src="@drawable/shoppingcart"
+                    fresco:actualImageScaleType="fitXY"
                     />
 
 
@@ -260,13 +262,13 @@
 
                 <!-- Start of title layout -->
 
-                <ImageView
+                <com.facebook.drawee.view.SimpleDraweeView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_toLeftOf="@+id/thirdTitle"
-                    android:layout_alignBottom="@+id/thirdTitle"
+                    android:layout_alignTop="@+id/thirdTitle"
                     android:id="@+id/deliveryAddressImageView"
-                    android:src="@drawable/deliverytruck"
+                    fresco:actualImageScaleType="fitXY"
                     />
 
 
@@ -445,13 +447,13 @@
 
                 <!-- Start of title -->
 
-                <ImageView
+                <com.facebook.drawee.view.SimpleDraweeView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_toLeftOf="@+id/fourthTitle"
-                    android:layout_alignBottom="@+id/fourthTitle"
+                    android:layout_alignTop="@+id/fourthTitle"
                     android:id="@+id/shippingOptionsImageView"
-                    android:src="@drawable/delivery"
+                    fresco:actualImageScaleType="fitXY"
                     />
 
 
@@ -593,13 +595,13 @@
 
                 <!-- Start of title -->
 
-                <ImageView
+                <com.facebook.drawee.view.SimpleDraweeView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_toLeftOf="@+id/fifthTitle"
-                    android:layout_alignBottom="@+id/fifthTitle"
+                    android:layout_alignTop="@+id/fifthTitle"
                     android:id="@+id/paymentOptionImageView"
-                    android:src="@drawable/creditcard"
+                    fresco:actualImageScaleType="fitXY"
                     />
 
 
@@ -702,13 +704,13 @@
 
                 <!-- Start of title -->
 
-                <ImageView
+                <com.facebook.drawee.view.SimpleDraweeView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_toLeftOf="@+id/sixthTitle"
-                    android:layout_alignBottom="@+id/sixthTitle"
+                    android:layout_alignTop="@+id/sixthTitle"
                     android:id="@+id/yourOrderImageView"
-                    android:src="@drawable/finalshoppingcart"
+                    fresco:actualImageScaleType="fitXY"
                     />
 
 

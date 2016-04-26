@@ -2,7 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="id.blackgarlic.blackgarlic.welcome.YoutubeWelcomeVideo"
-    android:background="@drawable/omwillwithbox">
+    android:background="@drawable/omwillwithbox"
+    android:id="@+id/firstSlideFrameLayout"
+    >
 
    <TextView
        android:layout_width="wrap_content"
