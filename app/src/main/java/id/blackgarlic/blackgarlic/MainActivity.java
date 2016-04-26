@@ -811,7 +811,6 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                 editor.commit();
 
                 if (!(null == currentMenuList)) {
-
                     currentMenuList.clear();
                     currentMenuIdList.clear();
                     currentSelectedMenuListUrls.clear();

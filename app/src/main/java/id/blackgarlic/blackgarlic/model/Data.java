@@ -1,5 +1,7 @@
 package id.blackgarlic.blackgarlic.model;
 
+import android.util.Log;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -27,6 +29,8 @@ public class Data {
     private boolean fourPersonEnabled = false;
 
     private boolean isFlipped = false;
+
+    private boolean isKidsMenu;
 
     public boolean getFourPersonEnabled() {
         return this.fourPersonEnabled;
@@ -61,6 +65,15 @@ public class Data {
     }
 
     public int quantity = 1;
+
+    public boolean isKidsMenu() {
+
+        if (this.getMenu_type().equals("7")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public int getQuantity() {
         if(this.quantity == 0) {

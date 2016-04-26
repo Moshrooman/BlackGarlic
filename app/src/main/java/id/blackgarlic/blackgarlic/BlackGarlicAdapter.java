@@ -148,10 +148,13 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         CalligraphyTypefaceSpan robotoMedium = new CalligraphyTypefaceSpan(TypefaceUtils.load(mContext.getAssets(), "fonts/Roboto-Medium.ttf"));
         CalligraphyTypefaceSpan robotoThin = new CalligraphyTypefaceSpan(TypefaceUtils.load(mContext.getAssets(), "fonts/Roboto-Thin.ttf"));
 
-        //Setting false if kids
-        if (currentMenu.getMenu_type().equals("7")) {
+        if (currentMenu.isKidsMenu() == true) {
+            Log.e("Is Kids Menu: ", String.valueOf(currentMenu.isKidsMenu()));
             myViewHolder.fourPersonLinearLayout.setEnabled(false);
             myViewHolder.radioGroupMenu.setEnabled(false);
+        } else {
+            myViewHolder.fourPersonLinearLayout.setEnabled(true);
+            myViewHolder.radioGroupMenu.setEnabled(true);
         }
 
         if ((currentMenu.getMenu_type().equals("3")) || (currentMenu.getMenu_type().equals("5"))) {
@@ -170,7 +173,7 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
 
             myViewHolder.fourPersonTextView.setText(fourPersonOriginalStringBuilder, TextView.BufferType.SPANNABLE);
 
-        } else if ((currentMenu.getMenu_type().equals("5")) || (currentMenu.getMenu_type().equals("6"))){
+        } else if ((currentMenu.getMenu_type().equals("4")) || (currentMenu.getMenu_type().equals("6"))){
             SpannableStringBuilder twoPersonBreakfastStringBuilder = new SpannableStringBuilder();
             twoPersonBreakfastStringBuilder.append("2 Persons\n").append("IDR 40.000/Person");
             twoPersonBreakfastStringBuilder.setSpan(robotoMedium, 0, 10, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
