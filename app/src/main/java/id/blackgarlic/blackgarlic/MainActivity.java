@@ -24,8 +24,11 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -1023,7 +1026,5 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         }
         return true;
     }
-
-
 
 }

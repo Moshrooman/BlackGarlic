@@ -195,23 +195,27 @@
                     />
 
                 <TextView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:visibility="gone"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="12dp"
-                    android:layout_marginTop="5dp"
                     android:id="@+id/orderQuantityTextView"
+                    fontPath="fonts/Roboto-Medium.ttf"
+                    android:layout_marginTop="5dp"
+                    android:layout_alignRight="@+id/orderBoxImageView"
+                    android:layout_alignLeft="@+id/orderBoxImageView"
+                    android:gravity="center"
                     />
 
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:id="@+id/orderBoxImageView"
                     android:layout_alignParentRight="true"
                     android:src="@drawable/orderboxone"
                     android:layout_marginTop="5dp"
+                    android:layout_centerVertical="true"
+                    android:scaleType="fitXY"
                     />
 
 
