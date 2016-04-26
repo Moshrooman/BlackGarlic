@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -178,6 +179,8 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
             @Override
             public void onClick(View v) {
                 myViewHolder.viewFlipper.setFlipInterval(1000);
+                CardView.LayoutParams params = new CardView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, myViewHolder.viewFlipper.getChildAt(0).getHeight());
+                myViewHolder.viewFlipper.getChildAt(1).setLayoutParams(params);
                 AnimationFactory.flipTransition(myViewHolder.viewFlipper, AnimationFactory.FlipDirection.LEFT_RIGHT);
                 currentMenu.setIsFlipped(true);
             }
