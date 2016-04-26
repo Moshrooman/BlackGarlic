@@ -534,6 +534,19 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
                 }
 
+                for (int i = 0; i < menuList.size(); i++) {
+                    if (menuList.get(i).getMenu_type().equals("7")) {
+                        Data currentKidsMenu = menuList.get(i);
+                        Integer currentKidsMenuInteger = menuIdList.get(i);
+
+                        menuList.remove(i);
+                        menuIdList.remove(i);
+
+                        menuList.add(menuList.size() - 1, currentKidsMenu);
+                        menuIdList.add(menuIdList.size() - 1, currentKidsMenuInteger);
+                    }
+                }
+
                 BlackGarlicAdapter blackGarlicAdapter = new BlackGarlicAdapter(menuList, menuIdList, MainActivity.this, MainActivity.this);
                 blackGarlicAdapter2 = blackGarlicAdapter;
 
