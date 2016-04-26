@@ -60,7 +60,8 @@ public class YoutubeWelcomeVideo extends Fragment {
     }
 
     @Override
-    public void onPause() {
+    public void onStop() {
+        Log.e("Stopped: ", "True");
         super.onDestroy();
         final FrameLayout firstSlideFrameLayout = (FrameLayout) getView().findViewById(R.id.firstSlideFrameLayout);
         final ImageView playBlackGarlicVideo = (ImageView) getView().findViewById(R.id.playBlackGarlicVideo);

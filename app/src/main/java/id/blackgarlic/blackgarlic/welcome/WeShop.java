@@ -28,7 +28,7 @@ public class WeShop extends Fragment {
     }
 
     @Override
-    public void onPause() {
+    public void onStop() {
         super.onDestroy();
 
         final ImageView weShopImageView = (ImageView) getView().findViewById(R.id.weShopImageView);

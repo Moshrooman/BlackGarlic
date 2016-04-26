@@ -28,7 +28,7 @@ public class YouCook extends Fragment {
     }
 
     @Override
-    public void onPause() {
+    public void onStop() {
         super.onDestroy();
 
         final ImageView youCookImageView = (ImageView) getView().findViewById(R.id.youCookImageView);

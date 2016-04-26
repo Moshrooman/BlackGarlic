@@ -603,7 +603,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             }
         };
         Handler handler = new Handler();
-        handler.postDelayed(runnableSystemGc, 2000);
+        handler.postDelayed(runnableSystemGc, 2500);
 
         proceedToCheckoutButton.setEnabled(true);
 
@@ -737,7 +737,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                 }
             };
             Handler handler = new Handler();
-            handler.postDelayed(runnableSystemGc, 2000);
+            handler.postDelayed(runnableSystemGc, 2500);
 
         }
 

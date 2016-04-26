@@ -33,6 +33,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
+import com.facebook.drawee.generic.GenericDraweeHierarchy;
+import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 
@@ -45,6 +47,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import id.blackgarlic.blackgarlic.CircleProgressBarDrawable;
 import id.blackgarlic.blackgarlic.ConnectionManager;
 import id.blackgarlic.blackgarlic.MainActivity;
 import id.blackgarlic.blackgarlic.R;
@@ -152,7 +155,9 @@ public class OrderHistory extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
 
-            expandableListViewGlobalScope.setAdapter((ExpandableListViewAdapter) null);
+            if (expandableListViewGlobalScope != null) {
+                expandableListViewGlobalScope.setAdapter((ExpandableListViewAdapter) null);
+            }
 
             Intent mainActivityIntent = new Intent(OrderHistory.this, MainActivity.class);
             mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -275,6 +280,9 @@ public class OrderHistory extends AppCompatActivity {
                 ((TableLayout) convertView.findViewById(R.id.ordersTableLayout)).removeAllViews();
             }
 
+            CircleProgressBarDrawable progressBar = new CircleProgressBarDrawable();
+            progressBar.setBackgroundColor(OrderHistory.this.getResources().getColor(R.color.BGGREY));
+            progressBar.setColor(OrderHistory.this.getResources().getColor(R.color.BGGREEN));
 
             //Start of making table rows for the orders
 
@@ -289,6 +297,7 @@ public class OrderHistory extends AppCompatActivity {
                 SimpleDraweeView networkImageView = (SimpleDraweeView) orderstablelayoutinflate.findViewById(R.id.menuImageOrderHistory);
                 Uri uri = Uri.parse(BLACKGARLIC_PICTURES.replace("menu_id", String.valueOf(menuObjectList.get(groupPosition).get(i).getMenu_id())));
                 networkImageView.setImageURI(uri);
+                networkImageView.getHierarchy().setProgressBarImage(progressBar);
 
                 //Menu Name TextView
                 TextView menuNameOrderHistory = (TextView) orderstablelayoutinflate.findViewById(R.id.menuNameOrderHistory);

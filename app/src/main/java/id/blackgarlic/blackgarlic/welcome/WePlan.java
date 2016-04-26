@@ -34,7 +34,7 @@ public class WePlan extends Fragment {
     }
 
     @Override
-    public void onPause() {
+    public void onStop() {
         super.onDestroy();
 
         final ImageView wePlanImageView = (ImageView) getView().findViewById(R.id.wePlanImageView);
