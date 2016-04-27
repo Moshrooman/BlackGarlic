@@ -959,7 +959,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
             TextView orderPortionSize = (TextView) convertView.findViewById(R.id.portionSizeTextView);
             TextView price = (TextView) convertView.findViewById(R.id.individualPriceTextView);
-            TextView deleteMenuFromBoxTextView = (TextView) convertView.findViewById(R.id.deleteMenuFromBoxTextView);
+            final TextView deleteMenuFromBoxTextView = (TextView) convertView.findViewById(R.id.deleteMenuFromBoxTextView);
 
             orderSummaryMenuName.setText(currentMenuList.get(position).getMenu_name());
 
@@ -976,6 +976,8 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                 @Override
                 public void onClick(View v) {
 
+                    deleteMenuFromBoxTextView.setEnabled(false);
+
                     Animation righttoleftanimation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.right_to_left);
                     righttoleftanimation.setAnimationListener(new Animation.AnimationListener() {
                         @Override
@@ -985,6 +987,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
                         @Override
                         public void onAnimationEnd(Animation animation) {
+                            deleteMenuFromBoxTextView.setEnabled(true);
                             SuperToast superToast = SuperToast.create(MainActivity.this, "Removed From Box:\n\n " + getCurrentMenuList().get(position).getMenu_name() + "", SuperToast.Duration.SHORT, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
                             superToast.show();
 

@@ -77,7 +77,7 @@ public class PDFWebView extends AppCompatActivity {
 
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                if (newProgress >= 90) {
+                if ((newProgress >= 90) && (loadingEmptyView.getVisibility() != View.GONE)) {
 
                     Animation fadeOutAnimation = AnimationFactory.fadeOutAnimation(1000, 0);
 

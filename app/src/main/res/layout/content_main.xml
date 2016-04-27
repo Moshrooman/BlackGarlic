@@ -40,6 +40,7 @@
                 android:layout_below="@+id/mainActivityProgressBar"
                 android:layout_centerHorizontal="true"
                 android:id="@+id/loadingThisWeeksMenuTextView"
+                fontPath="fonts/Roboto-Bold.ttf"
                 />
 
             <android.support.v4.widget.DrawerLayout
