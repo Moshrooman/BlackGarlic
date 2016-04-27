@@ -700,6 +700,13 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     }
 
+    @Override
+    public void SwitchToPdfActivity(String menuId) {
+        Intent switchToPdfIntent = new Intent(MainActivity.this, PDFWebView.class);
+        switchToPdfIntent.putExtra("menu_id", menuId);
+        startActivity(switchToPdfIntent);
+    }
+
     public void clearAll(View view) {
 
         Animation animScale = AnimationUtils.loadAnimation(this, R.anim.anim_scale);

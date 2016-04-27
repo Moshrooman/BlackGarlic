@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="id.blackgarlic.blackgarlic.PDFWebView"
+    tools:showIn="@layout/activity_pdfweb_view"
+    >
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:id="@+id/loadingEmptyView"
+        />
+
+    <ProgressBar
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:id="@+id/webViewProgressBar"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Loading..."
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/webViewProgressBar"
+        android:textSize="20dp"
+        fontPath="fonts/Roboto-Bold.ttf"
+        android:id="@+id/percentageWebViewLoading"
+        />
+    
+    <WebView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/pdfWebView"
+        >
+    </WebView>
+    
+
+</RelativeLayout>
