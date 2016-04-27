@@ -25,6 +25,9 @@ import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -32,6 +35,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.github.johnpersano.supertoasts.SuperToast;
+import com.github.johnpersano.supertoasts.util.Style;
 
 import org.w3c.dom.Text;
 
@@ -71,7 +77,7 @@ public class PDFWebView extends AppCompatActivity {
 
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                if (newProgress == 90) {
+                if (newProgress >= 90) {
 
                     Animation fadeOutAnimation = AnimationFactory.fadeOutAnimation(1000, 0);
 
@@ -102,6 +108,43 @@ public class PDFWebView extends AppCompatActivity {
 
             }
 
+        });
+
+        pdfWebView.setWebViewClient(new WebViewClient() {
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                SuperToast superToast = SuperToast.create(PDFWebView.this, "Error! Closing Web View", SuperToast.Duration.SHORT, Style.getStyle(Style.GREEN, SuperToast.Animations.POPUP));
+
+                superToast.show();
+
+                superToast.setOnDismissListener(new SuperToast.OnDismissListener() {
+                    @Override
+                    public void onDismiss(View view) {
+                        finish();
+                    }
+                });
+            }
+
+            @Override
+            public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
+                SuperToast superToast = SuperToast.create(PDFWebView.this, "HTTP Error! Closing Web View", SuperToast.Duration.SHORT, Style.getStyle(Style.GREEN, SuperToast.Animations.POPUP));
+
+                superToast.show();
+
+                superToast.setOnDismissListener(new SuperToast.OnDismissListener() {
+                    @Override
+                    public void onDismiss(View view) {
+                        finish();
+                    }
+                });
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
         });
 
 
