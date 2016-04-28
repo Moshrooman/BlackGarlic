@@ -199,7 +199,6 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         CalligraphyTypefaceSpan robotoThin = new CalligraphyTypefaceSpan(TypefaceUtils.load(mContext.getAssets(), "fonts/Roboto-Thin.ttf"));
 
         if (currentMenu.isKidsMenu() == true) {
-            Log.e("Is Kids Menu: ", String.valueOf(currentMenu.isKidsMenu()));
             myViewHolder.fourPersonLinearLayout.setEnabled(false);
             myViewHolder.radioGroupMenu.setEnabled(false);
         } else {
