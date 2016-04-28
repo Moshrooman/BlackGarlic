@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
@@ -118,7 +119,6 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         myViewHolder.viewDetailsTextView.bringToFront();
 
         final Animation leftToRightAnimation = AnimationUtils.loadAnimation(mContext, R.anim.left_to_right);
-        final Animation rightToLeftAnimation = AnimationUtils.loadAnimation(mContext, R.anim.right_to_left_instant);
 
         myViewHolder.switchToPdfWebViewLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,12 +136,21 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
 
                     @Override
                     public void onAnimationEnd(Animation animation) {
-                        myViewHolder.switchToPdfWebViewLinearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.white));
                         myViewHolder.switchToPdfWebViewLinearLayout.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.backgroundpdffile));
                         myViewHolder.viewDetailsTextView.setTextColor(mContext.getResources().getColor(R.color.BGGREEN));
-                        myViewHolder.switchToPdfWebViewLinearLayout.setEnabled(true);
+
+                        Runnable runnableEnabled = new Runnable() {
+                            @Override
+                            public void run() {
+                                myViewHolder.switchToPdfWebViewLinearLayout.setEnabled(true);
+                            }
+                        };
+
+                        Handler setEnabledHandler = new Handler();
+                        setEnabledHandler.postDelayed(runnableEnabled, 1000);
+
                         myViewHolder.transitionGreenViewRowMenu.setVisibility(View.GONE);
-                        myViewHolder.transitionGreenViewRowMenu.startAnimation(rightToLeftAnimation);
+
 
                         if ((currentMenu.getMenu_type().equals("3")) || (currentMenu.getMenu_type().equals("5"))) {
                             mListener.SwitchToPdfActivity(String.valueOf(mmenuIdList.get(position) + "_4"));
