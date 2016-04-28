@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -112,14 +113,48 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
 
         Uri uriPdf = Uri.parse("https://cdn4.iconfinder.com/data/icons/48-bubbles/48/12.File-512.png");
         myViewHolder.viewPdfDraweeView.setImageURI(uriPdf);
+        myViewHolder.viewPdfDraweeView.bringToFront();
+
+        myViewHolder.viewDetailsTextView.bringToFront();
+
+        final Animation leftToRightAnimation = AnimationUtils.loadAnimation(mContext, R.anim.left_to_right);
+        final Animation rightToLeftAnimation = AnimationUtils.loadAnimation(mContext, R.anim.right_to_left_instant);
 
         myViewHolder.switchToPdfWebViewLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                myViewHolder.transitionGreenViewRowMenu.setVisibility(View.VISIBLE);
+                myViewHolder.transitionGreenViewRowMenu.startAnimation(leftToRightAnimation);
                 myViewHolder.viewDetailsTextView.setTextColor(mContext.getResources().getColor(R.color.white));
                 myViewHolder.switchToPdfWebViewLinearLayout.setEnabled(false);
-                startAnimationWebView(myViewHolder.switchToPdfWebViewLinearLayout, currentMenu, position, myViewHolder.viewDetailsTextView);
 
+                leftToRightAnimation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        myViewHolder.switchToPdfWebViewLinearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                        myViewHolder.switchToPdfWebViewLinearLayout.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.backgroundpdffile));
+                        myViewHolder.viewDetailsTextView.setTextColor(mContext.getResources().getColor(R.color.BGGREEN));
+                        myViewHolder.switchToPdfWebViewLinearLayout.setEnabled(true);
+                        myViewHolder.transitionGreenViewRowMenu.setVisibility(View.GONE);
+                        myViewHolder.transitionGreenViewRowMenu.startAnimation(rightToLeftAnimation);
+
+                        if ((currentMenu.getMenu_type().equals("3")) || (currentMenu.getMenu_type().equals("5"))) {
+                            mListener.SwitchToPdfActivity(String.valueOf(mmenuIdList.get(position) + "_4"));
+                        } else {
+                            mListener.SwitchToPdfActivity(String.valueOf(mmenuIdList.get(position)));
+                        }
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
             }
         });
 
@@ -415,8 +450,9 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
         public TextView quantityTextView;
 
         public SimpleDraweeView viewPdfDraweeView;
-        public LinearLayout switchToPdfWebViewLinearLayout;
+        public RelativeLayout switchToPdfWebViewLinearLayout;
         public TextView viewDetailsTextView;
+        public View transitionGreenViewRowMenu;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -446,8 +482,9 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
             quantityTextView = (TextView) itemView.findViewById(R.id.quantityTextView);
 
             viewPdfDraweeView = (SimpleDraweeView) itemView.findViewById(R.id.viewPdfDraweeView);
-            switchToPdfWebViewLinearLayout = (LinearLayout) itemView.findViewById(R.id.switchToPdfWebViewLinearLayout);
+            switchToPdfWebViewLinearLayout = (RelativeLayout) itemView.findViewById(R.id.switchToPdfWebViewLinearLayout);
             viewDetailsTextView = (TextView) itemView.findViewById(R.id.viewDetailsTextView);
+            transitionGreenViewRowMenu = itemView.findViewById(R.id.transitionGreenViewRowMenu);
 
         }
 
@@ -545,50 +582,6 @@ public class BlackGarlicAdapter extends RecyclerView.Adapter<BlackGarlicAdapter.
             }
         });
 
-    }
-
-    public void startAnimationWebView(final LinearLayout linearLayout, final Data currentMenu, final int position, final TextView viewDetailsTextView) {
-        final float[] from = new float[3],
-                to =   new float[3];
-
-        Color.colorToHSV(Color.parseColor("#ffffff"), from);   // from white
-        Color.colorToHSV(Color.parseColor("#03c9a9"), to);     // to BG green
-
-        final ValueAnimator anim = ValueAnimator.ofFloat(0, 1);   // animate from 0 to 1
-        anim.setDuration(700);                              // for 1000 ms
-
-        final float[] hsv  = new float[3];                  // transition color
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                // Transition along each axis of HSV (hue, saturation, value)
-                hsv[0] = from[0] + (to[0] - from[0]) * animation.getAnimatedFraction();
-                hsv[1] = from[1] + (to[1] - from[1]) * animation.getAnimatedFraction();
-                hsv[2] = from[2] + (to[2] - from[2]) * animation.getAnimatedFraction();
-
-                linearLayout.setBackgroundColor(Color.HSVToColor(hsv));
-            }
-        });
-
-        anim.start();
-
-        anim.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-
-                linearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.white));
-                linearLayout.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.backgroundpdffile));
-                viewDetailsTextView.setTextColor(mContext.getResources().getColor(R.color.BGGREEN));
-                linearLayout.setEnabled(true);
-
-                if ((currentMenu.getMenu_type().equals("3")) || (currentMenu.getMenu_type().equals("5"))) {
-                    mListener.SwitchToPdfActivity(String.valueOf(mmenuIdList.get(position) + "_4"));
-                } else {
-                    mListener.SwitchToPdfActivity(String.valueOf(mmenuIdList.get(position)));
-                }
-
-            }
-        });
     }
 
 }
