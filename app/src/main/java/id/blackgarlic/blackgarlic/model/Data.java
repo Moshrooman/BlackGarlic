@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class Data {
 
-    public final String BLACKGARLIC_PICTURES = "http://blackgarlic.id/inc/images/menu/menu_id.jpg";
+    public final String BLACKGARLIC_PICTURES = "http://bgmenu.kilatstorage.com/menu_id.jpg";
 
     @SerializedName("menu_name")
     private String menu_name;
