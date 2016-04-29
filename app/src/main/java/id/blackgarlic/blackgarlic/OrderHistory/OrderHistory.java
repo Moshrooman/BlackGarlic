@@ -64,7 +64,7 @@ public class OrderHistory extends AppCompatActivity {
 
     private static UserCredentials userCredentials;
 
-    public final String BLACKGARLIC_PICTURES = "http://blackgarlic.id/inc/images/menu/menu_id.jpg";
+    public final String BLACKGARLIC_PICTURES = "http://bgmenu.kilatstorage.com/menu_id.jpg";
 
     private static ExpandableListView expandableListViewGlobalScope;
 

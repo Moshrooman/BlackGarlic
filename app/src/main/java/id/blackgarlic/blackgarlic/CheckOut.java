@@ -107,6 +107,7 @@ public class CheckOut extends AppCompatActivity {
     private static final String getUserCredentialsUrl = "http://api.blackgarlic.id:7000/app/login";
 
     private static Button updateAppCredentialsButton;
+    private static Button updateWebCredentialsButton;
 
     private static RelativeLayout checkOutRootRelativeView;
 
@@ -120,6 +121,7 @@ public class CheckOut extends AppCompatActivity {
         setImagesForTitles();
 
         updateAppCredentialsButton = (Button) findViewById(R.id.updateAppCredentialsButton);
+        updateWebCredentialsButton = (Button) findViewById(R.id.updateWebCredentialsButton);
 
         grandTotal = 0;
         deliveryFee = "";
@@ -478,6 +480,74 @@ public class CheckOut extends AppCompatActivity {
             }
         });
 
+        updateWebCredentialsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final JSONObject updateWebCredentialsBody = new JSONObject();
+                try {
+                    updateWebCredentialsBody.put("address_id", userCredentials.getAddress_id());
+                    updateWebCredentialsBody.put("customer_id", userCredentials.getCustomer_id());
+                    updateWebCredentialsBody.put("address_content", String.valueOf(checkOutAddressContent.getText()));
+                    updateWebCredentialsBody.put("city", String.valueOf(checkOutCityDropDown.getSelectedItemPosition() + 1));
+                    updateWebCredentialsBody.put("mobile", String.valueOf(checkOutMobile.getText()));
+                    updateWebCredentialsBody.put("zipcode", String.valueOf(checkOutZipCodeEditText.getText()));
+                    updateWebCredentialsBody.put("address_notes", String.valueOf(checkOutAddressNotes.getText()));
+                    updateWebCredentialsBody.put("address_status", "1");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                //When the response is successful then we are going to update the webCredentials
+                StringRequest updateWebCredentialsRequest = new StringRequest(Request.Method.POST, updateUrl, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.e("Update User: ", "WEB");
+
+                        Runnable runnable2sec = new Runnable() {
+                            @Override
+                            public void run() {
+
+                                //If the web response is successful we are going to click the buttons on click listener above
+                                //Which will update the apps credentials
+                                updateAppCredentialsButton.performClick();
+
+
+                            }
+                        };
+
+                        android.os.Handler myHandler = new android.os.Handler();
+                        myHandler.postDelayed(runnable2sec, 2000);
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+
+                    @Override
+                    public byte[] getBody() throws AuthFailureError {
+                        return updateWebCredentialsBody.toString().getBytes();
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json";
+                    }
+
+                };
+
+                ConnectionManager.getInstance(CheckOut.this).add(updateWebCredentialsRequest);
+
+                //End of string request to update user credentials
+
+            }
+        });
+
         updateAppCredentialsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -549,22 +619,6 @@ public class CheckOut extends AppCompatActivity {
                 } else {
 
                     //Start of stringrequest to update user credentials
-
-                    final JSONObject updateWebCredentialsBody = new JSONObject();
-                    try {
-                        updateWebCredentialsBody.put("address_id", userCredentials.getAddress_id());
-                        updateWebCredentialsBody.put("customer_id", userCredentials.getCustomer_id());
-                        updateWebCredentialsBody.put("address_content", String.valueOf(checkOutAddressContent.getText()));
-                        updateWebCredentialsBody.put("city", String.valueOf(checkOutCityDropDown.getSelectedItemPosition() + 1));
-                        updateWebCredentialsBody.put("mobile", String.valueOf(checkOutMobile.getText()));
-                        updateWebCredentialsBody.put("zipcode", String.valueOf(checkOutZipCodeEditText.getText()));
-                        updateWebCredentialsBody.put("address_notes", String.valueOf(checkOutAddressNotes.getText()));
-                        updateWebCredentialsBody.put("address_status", "1");
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
 
                     placeOrderButton.setEnabled(false);
 
@@ -652,55 +706,8 @@ public class CheckOut extends AppCompatActivity {
                             thankYouForOrderingIntent.putExtra("uniqueId", response);
                             thankYouForOrderingIntent.putExtra("paymentMethod", selectedPaymentMethod);
                             startActivity(thankYouForOrderingIntent);
-                            finish();
 
-                            //When the response is successful then we are going to update the webCredentials
-                            StringRequest updateWebCredentialsRequest = new StringRequest(Request.Method.POST, updateUrl, new Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-
-                                    Log.e("Update User: ", "WEB");
-
-                                    Runnable runnable2sec = new Runnable() {
-                                        @Override
-                                        public void run() {
-
-                                            //If the web response is successful we are going to click the buttons on click listener above
-                                            //Which will update the apps credentials
-                                            updateAppCredentialsButton.performClick();
-
-
-                                        }
-                                    };
-
-                                    android.os.Handler myHandler = new android.os.Handler();
-                                    myHandler.postDelayed(runnable2sec, 2000);
-
-                                }
-                            }, new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-
-                                }
-                            }) {
-
-                                @Override
-                                public byte[] getBody() throws AuthFailureError {
-                                    return updateWebCredentialsBody.toString().getBytes();
-                                }
-
-                                @Override
-                                public String getBodyContentType() {
-                                    return "application/json";
-                                }
-
-                            };
-
-                            ConnectionManager.getInstance(CheckOut.this).add(updateWebCredentialsRequest);
-
-                            //End of string request to update user credentials
-
-                            finish();
+                            updateWebCredentialsButton.performClick();
 
                         }
 
