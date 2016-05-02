@@ -38,9 +38,9 @@ import id.blackgarlic.blackgarlic.model.UserCredentials;
 
 public class PaymentConfirmation extends AppCompatActivity {
 
-    private static String orderHistoryLink = "http://jdev.blackgarlic.id:7000/app/orderhistory";
+    private static String orderHistoryLink = "http://10.0.3.2:3000/app/orderhistory";
 
-    private static String paymentConfirmationLink = "http://jdev.blackgarlic.id:7000/app/paymentconfirmation";
+    private static String paymentConfirmationLink = "http://10.0.3.2:3000/app/paymentconfirmation";
 
     private static UserCredentials userCredentials;
 

@@ -24,22 +24,14 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
-import com.facebook.drawee.drawable.AutoRotateDrawable;
-import com.facebook.drawee.drawable.ProgressBarDrawable;
-import com.facebook.drawee.generic.GenericDraweeHierarchy;
-import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.johnpersano.supertoasts.util.Style;
@@ -60,7 +52,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
-import java.util.concurrent.Callable;
 
 import id.blackgarlic.blackgarlic.OrderHistory.OrderHistory;
 import id.blackgarlic.blackgarlic.model.Data;
@@ -413,7 +404,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
         Log.e("After Date: ", String.valueOf(localDate));
 
-        String BlackGarlicMenusNew = "http://api.blackgarlic.id:7000/app/menu/"+String.valueOf(localDate)+"";
+        String BlackGarlicMenusNew = "http://10.0.3.2:3000/app/menu/"+String.valueOf(localDate)+"";
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerListView);
         recyclerView.setHasFixedSize(true);

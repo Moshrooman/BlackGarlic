@@ -111,6 +111,11 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name=".model.gcm.PushNotificationHandling"
+            android:exported="false">
+        </service>
+
         <activity
             android:name=".PDFWebView"
             android:label="@string/title_activity_pdfweb_view"

@@ -56,7 +56,7 @@ import id.blackgarlic.blackgarlic.model.UserCredentials;
 
 public class OrderHistory extends AppCompatActivity {
 
-    private static String orderHistoryLink = "http://jdev.blackgarlic.id:7000/app/orderhistory";
+    private static String orderHistoryLink = "http://10.0.3.2:3000/app/orderhistory";
 
     private static List<List<menuObjects>> menuObjectList;
 
@@ -64,7 +64,7 @@ public class OrderHistory extends AppCompatActivity {
 
     private static UserCredentials userCredentials;
 
-    public final String BLACKGARLIC_PICTURES = "http://blackgarlic.id/inc/images/menu/menu_id.jpg";
+    public final String BLACKGARLIC_PICTURES = "http://bgmenu.kilatstorage.com/menu_id.jpg";
 
     private static ExpandableListView expandableListViewGlobalScope;
 

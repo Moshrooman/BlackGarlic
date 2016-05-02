@@ -2,11 +2,6 @@ package id.blackgarlic.blackgarlic;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -29,13 +24,12 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.StringRequest;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.github.johnpersano.supertoasts.SuperToast;
@@ -47,8 +41,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Method;
-import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -58,10 +50,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
-import java.util.zip.Inflater;
 
 import id.blackgarlic.blackgarlic.model.Data;
 import id.blackgarlic.blackgarlic.model.UserCredentials;
+import id.blackgarlic.blackgarlic.model.gcm.PushNotificationHandling;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class CheckOut extends AppCompatActivity {
@@ -98,7 +90,7 @@ public class CheckOut extends AppCompatActivity {
     private static int grandTotal;
 
     //Connecting to local database doesnt work because it doesnt contain the menu ids retrieved here.
-    private static String orderApiLink = "http://api.blackgarlic.id:7000/app/order";
+    private static String orderApiLink = "http://10.0.3.2:3000/app/order";
 
     private static Integer boxId;
 
@@ -107,6 +99,7 @@ public class CheckOut extends AppCompatActivity {
     private static final String getUserCredentialsUrl = "http://api.blackgarlic.id:7000/app/login";
 
     private static Button updateAppCredentialsButton;
+    private static Button updateWebCredentialsButton;
 
     private static RelativeLayout checkOutRootRelativeView;
 
@@ -120,6 +113,7 @@ public class CheckOut extends AppCompatActivity {
         setImagesForTitles();
 
         updateAppCredentialsButton = (Button) findViewById(R.id.updateAppCredentialsButton);
+        updateWebCredentialsButton = (Button) findViewById(R.id.updateWebCredentialsButton);
 
         grandTotal = 0;
         deliveryFee = "";
@@ -478,6 +472,74 @@ public class CheckOut extends AppCompatActivity {
             }
         });
 
+        updateWebCredentialsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final JSONObject updateWebCredentialsBody = new JSONObject();
+                try {
+                    updateWebCredentialsBody.put("address_id", userCredentials.getAddress_id());
+                    updateWebCredentialsBody.put("customer_id", userCredentials.getCustomer_id());
+                    updateWebCredentialsBody.put("address_content", String.valueOf(checkOutAddressContent.getText()));
+                    updateWebCredentialsBody.put("city", String.valueOf(checkOutCityDropDown.getSelectedItemPosition() + 1));
+                    updateWebCredentialsBody.put("mobile", String.valueOf(checkOutMobile.getText()));
+                    updateWebCredentialsBody.put("zipcode", String.valueOf(checkOutZipCodeEditText.getText()));
+                    updateWebCredentialsBody.put("address_notes", String.valueOf(checkOutAddressNotes.getText()));
+                    updateWebCredentialsBody.put("address_status", "1");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                //When the response is successful then we are going to update the webCredentials
+                StringRequest updateWebCredentialsRequest = new StringRequest(Request.Method.POST, updateUrl, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.e("Update User: ", "WEB");
+
+                        Runnable runnable2sec = new Runnable() {
+                            @Override
+                            public void run() {
+
+                                //If the web response is successful we are going to click the buttons on click listener above
+                                //Which will update the apps credentials
+                                updateAppCredentialsButton.performClick();
+
+
+                            }
+                        };
+
+                        android.os.Handler myHandler = new android.os.Handler();
+                        myHandler.postDelayed(runnable2sec, 2000);
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+
+                    @Override
+                    public byte[] getBody() throws AuthFailureError {
+                        return updateWebCredentialsBody.toString().getBytes();
+                    }
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json";
+                    }
+
+                };
+
+                ConnectionManager.getInstance(CheckOut.this).add(updateWebCredentialsRequest);
+
+                //End of string request to update user credentials
+
+            }
+        });
+
         updateAppCredentialsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -549,22 +611,6 @@ public class CheckOut extends AppCompatActivity {
                 } else {
 
                     //Start of stringrequest to update user credentials
-
-                    final JSONObject updateWebCredentialsBody = new JSONObject();
-                    try {
-                        updateWebCredentialsBody.put("address_id", userCredentials.getAddress_id());
-                        updateWebCredentialsBody.put("customer_id", userCredentials.getCustomer_id());
-                        updateWebCredentialsBody.put("address_content", String.valueOf(checkOutAddressContent.getText()));
-                        updateWebCredentialsBody.put("city", String.valueOf(checkOutCityDropDown.getSelectedItemPosition() + 1));
-                        updateWebCredentialsBody.put("mobile", String.valueOf(checkOutMobile.getText()));
-                        updateWebCredentialsBody.put("zipcode", String.valueOf(checkOutZipCodeEditText.getText()));
-                        updateWebCredentialsBody.put("address_notes", String.valueOf(checkOutAddressNotes.getText()));
-                        updateWebCredentialsBody.put("address_status", "1");
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
 
                     placeOrderButton.setEnabled(false);
 
@@ -652,55 +698,12 @@ public class CheckOut extends AppCompatActivity {
                             thankYouForOrderingIntent.putExtra("uniqueId", response);
                             thankYouForOrderingIntent.putExtra("paymentMethod", selectedPaymentMethod);
                             startActivity(thankYouForOrderingIntent);
-                            finish();
 
-                            //When the response is successful then we are going to update the webCredentials
-                            StringRequest updateWebCredentialsRequest = new StringRequest(Request.Method.POST, updateUrl, new Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
+                            Intent pushNotificationHandlingIntent = new Intent(CheckOut.this, PushNotificationHandling.class);
+                            pushNotificationHandlingIntent.putExtra("uniqueId", response);
+                            startService(pushNotificationHandlingIntent);
 
-                                    Log.e("Update User: ", "WEB");
-
-                                    Runnable runnable2sec = new Runnable() {
-                                        @Override
-                                        public void run() {
-
-                                            //If the web response is successful we are going to click the buttons on click listener above
-                                            //Which will update the apps credentials
-                                            updateAppCredentialsButton.performClick();
-
-
-                                        }
-                                    };
-
-                                    android.os.Handler myHandler = new android.os.Handler();
-                                    myHandler.postDelayed(runnable2sec, 2000);
-
-                                }
-                            }, new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-
-                                }
-                            }) {
-
-                                @Override
-                                public byte[] getBody() throws AuthFailureError {
-                                    return updateWebCredentialsBody.toString().getBytes();
-                                }
-
-                                @Override
-                                public String getBodyContentType() {
-                                    return "application/json";
-                                }
-
-                            };
-
-                            ConnectionManager.getInstance(CheckOut.this).add(updateWebCredentialsRequest);
-
-                            //End of string request to update user credentials
-
-                            finish();
+                            updateWebCredentialsButton.performClick();
 
                         }
 
@@ -709,7 +712,7 @@ public class CheckOut extends AppCompatActivity {
                         public void onErrorResponse(VolleyError error) {
 
                             placeOrderButton.setEnabled(true);
-                            Log.e("Status", "Unsuccessful");
+                            Log.e("Error: ", "Place Order Error");
 
                         }
                     }) {
@@ -727,6 +730,7 @@ public class CheckOut extends AppCompatActivity {
 
                     };
 
+                    request.setRetryPolicy(new DefaultRetryPolicy(0, -1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                     ConnectionManager.getInstance(CheckOut.this).add(request);
                 }
 
