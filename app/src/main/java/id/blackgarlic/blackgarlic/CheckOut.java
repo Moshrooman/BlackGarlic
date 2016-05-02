@@ -702,7 +702,7 @@ public class CheckOut extends AppCompatActivity {
                             Intent pushNotificationHandlingIntent = new Intent(CheckOut.this, PushNotificationHandling.class);
                             pushNotificationHandlingIntent.putExtra("uniqueId", response);
                             startService(pushNotificationHandlingIntent);
-                            //hello
+
                             updateWebCredentialsButton.performClick();
 
                         }
