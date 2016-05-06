@@ -404,7 +404,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
         Log.e("After Date: ", String.valueOf(localDate));
 
-        String BlackGarlicMenusNew = "http://10.0.3.2:3000/app/menu/"+String.valueOf(localDate)+"";
+        String BlackGarlicMenusNew = "http://188.166.221.241:3000/app/menu/"+String.valueOf(localDate)+"";
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerListView);
         recyclerView.setHasFixedSize(true);

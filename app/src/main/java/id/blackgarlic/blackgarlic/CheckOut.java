@@ -90,13 +90,13 @@ public class CheckOut extends AppCompatActivity {
     private static int grandTotal;
 
     //Connecting to local database doesnt work because it doesnt contain the menu ids retrieved here.
-    private static String orderApiLink = "http://10.0.3.2:3000/app/order";
+    private static String orderApiLink = "http://188.166.221.241:3000/app/order";
 
     private static Integer boxId;
 
-    private static final String updateUrl = "http://api.blackgarlic.id:7000/app/updateaccount";
+    private static final String updateUrl = "http://188.166.221.241:3000/app/updateaccount";
 
-    private static final String getUserCredentialsUrl = "http://api.blackgarlic.id:7000/app/login";
+    private static final String getUserCredentialsUrl = "http://188.166.221.241:3000/app/login";
 
     private static Button updateAppCredentialsButton;
     private static Button updateWebCredentialsButton;
@@ -148,7 +148,7 @@ public class CheckOut extends AppCompatActivity {
         checkOutZipCodeEditText.setText(userCredentials.getZipcode());
 
         final Spinner checkOutCityDropDown = (Spinner) findViewById(R.id.checkOutCityDropDown);
-        String[] cities = new String[]{"Jakarta Pusat", "Jakarta Selatan", "Jakarta Barat", "Jakarta Utara", "Jakarta Timur", "Tangerang", "Bekasi", "Tangerang Selatan", "Depok"};
+        String[] cities = new String[]{"Jakarta Pusat", "Jakarta Selatan", "Jakarta Barat", "Jakarta Utara", "Jakarta Timur", "Tangerang", "Bekasi", "Tangerang Selatan", "Depok", "Bogor"};
         ArrayAdapter<String> cityadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, cities);
         checkOutCityDropDown.setAdapter(cityadapter);
         checkOutCityDropDown.setSelection(cityadapter.getPosition(userCredentials.getCity()));
@@ -609,8 +609,6 @@ public class CheckOut extends AppCompatActivity {
                     superToast.show();
 
                 } else {
-
-                    //Start of stringrequest to update user credentials
 
                     placeOrderButton.setEnabled(false);
 

@@ -36,7 +36,7 @@ import id.blackgarlic.blackgarlic.SplashActivity;
  */
 public class PushNotificationHandling extends IntentService {
 
-    private static String pushOrderHistory = "http://10.0.3.2:3000/app/pushorderhistory";
+    private static String pushOrderHistory = "http://188.166.221.241:3000/app/pushorderhistory";
 
     private static JSONObject body = new JSONObject();
 

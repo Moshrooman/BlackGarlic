@@ -58,7 +58,7 @@ public class MyAccount extends AppCompatActivity {
         final EditText zipcodeEditText = (EditText) findViewById(R.id.zipcodeEditText);
         final EditText addressnotesEditText = (EditText) findViewById(R.id.addressnotesEditText);
         final Spinner cityDropDown = (Spinner) findViewById(R.id.cityDropDown);
-        String[] cities = new String[]{"Jakarta Pusat", "Jakarta Selatan", "Jakarta Barat", "Jakarta Utara", "Jakarta Timur", "Tangerang", "Bekasi", "Tangerang Selatan", "Depok"};
+        String[] cities = new String[]{"Jakarta Pusat", "Jakarta Selatan", "Jakarta Barat", "Jakarta Utara", "Jakarta Timur", "Tangerang", "Bekasi", "Tangerang Selatan", "Depok", "Bogor"};
         ArrayAdapter<String> cityadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, cities);
         cityDropDown.setAdapter(cityadapter);
 
@@ -81,8 +81,8 @@ public class MyAccount extends AppCompatActivity {
         final TextView loadingTextView = (TextView) findViewById(R.id.textViewLoading);
         loadingTextView.bringToFront();
 
-        final String updateUrl = "http://api.blackgarlic.id:7000/app/updateaccount";
-        final String getUserCredentialsUrl = "http://api.blackgarlic.id:7000/app/login";
+        final String updateUrl = "http://188.166.221.241:3000/app/updateaccount";
+        final String getUserCredentialsUrl = "http://188.166.221.241:3000/app/login";
 
         TextView backToMenusTextView = (TextView) findViewById(R.id.backToMenuTextView);
         backToMenusTextView.setOnClickListener(new View.OnClickListener() {
@@ -107,11 +107,11 @@ public class MyAccount extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                Log.e("Second Body: ", String.valueOf(body2));
-
                 StringRequest request = new StringRequest(Request.Method.POST, getUserCredentialsUrl, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+
+                        Log.e("Second Response: ", response);
 
                         SharedPreferences.Editor editor = sharedPreferences.edit();
 

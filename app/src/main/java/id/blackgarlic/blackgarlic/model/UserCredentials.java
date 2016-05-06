@@ -102,6 +102,8 @@ public class UserCredentials {
             this.city = "Tangerang Selatan";
         } else if (this.city.equals("9")) {
             this.city = "Depok";
+        } else if (this.city.equals("10")) {
+            this.city = "Bogor";
         }
 
         return this.city;

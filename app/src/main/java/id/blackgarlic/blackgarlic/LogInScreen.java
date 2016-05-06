@@ -139,7 +139,7 @@ public class LogInScreen extends AppCompatActivity {
 
                 myAccountSha1Password = sha1Password;
 
-                String url = "http://api.blackgarlic.id:7000/app/login";
+                String url = "http://188.166.221.241:3000/app/login";
 
                 final JSONObject body = new JSONObject();
                 try {
