@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -103,12 +105,19 @@ public class CheckOut extends AppCompatActivity {
 
     private static RelativeLayout checkOutRootRelativeView;
 
+    private static EditText voucherEditText;
+    private static Button validateVoucherButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_out);
 
         checkOutRootRelativeView = (RelativeLayout) findViewById(R.id.checkOutRootRelativeView);
+
+        voucherEditText = (EditText) findViewById(R.id.voucherEditText);
+        voucherEditText.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
+        validateVoucherButton = (Button) findViewById(R.id.validateVoucherButton);
 
         setImagesForTitles();
 
@@ -190,6 +199,85 @@ public class CheckOut extends AppCompatActivity {
         selectedPortionSizes = MainActivity.getPortionSizes();
         subTotalCost = MainActivity.getSubTotalCost();
         selectedIndividualPrices = MainActivity.getIndividualPrices();
+
+        final String validateEntryUrl = "http://188.166.221.241:3000/app/voucher";
+
+        //In the on response if it does not contain invalid then we get the voucher value, then we make the table row of voucher discount
+        //available with the value of the voucher.
+
+        //Then change the grandtotal to subtract the voucher discount value
+        //Then in the json body make the voucher discount not 0 value.
+        //Then in the nodejs of the order api, if the voucher discount is not 0 then enter it in the order_discount.
+
+        validateVoucherButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String voucherEntry = voucherEditText.getText().toString();
+
+                final JSONObject voucherEntryObject = new JSONObject();
+
+                try {
+                    voucherEntryObject.put("voucher_code", voucherEntry);
+                    voucherEntryObject.put("subtotal", ""+subTotalCost+"");
+                } catch (JSONException e){
+                    e.printStackTrace();
+                }
+
+                Log.e("Voucher Body: ", voucherEntryObject.toString());
+
+                StringRequest voucherValidationRequest = new StringRequest(Request.Method.POST, validateEntryUrl, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        if (response.equals("invalid")) {
+
+                            SuperToast superToast = SuperToast.create(CheckOut.this, "Invalid Voucher Code! Please Try Again", SuperToast.Duration.MEDIUM, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
+                            superToast.show();
+
+                        } else if (response.equals("expired")) {
+
+                            SuperToast superToast = SuperToast.create(CheckOut.this, "Entered Voucher Code Is Expired! Please Enter A Different Voucher Code", SuperToast.Duration.MEDIUM, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
+                            superToast.show();
+
+                        } else if (response.contains("voucher_min")) {
+
+                            int minimumPurchaseAmount = Integer.valueOf(response.substring(13, response.length()));
+
+                            SuperToast superToast = SuperToast.create(CheckOut.this, "Need To Meet Minimum Purchase Amount Of: RP." + new DecimalFormat().format(minimumPurchaseAmount), SuperToast.Duration.MEDIUM, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
+                            superToast.show();
+
+                        } else {
+
+                            SuperToast superToast = SuperToast.create(CheckOut.this, response, SuperToast.Duration.MEDIUM, Style.getStyle(Style.BLUE, SuperToast.Animations.POPUP));
+                            superToast.show();
+
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        SuperToast superToast = SuperToast.create(CheckOut.this, "Error Connecting To The Server!", SuperToast.Duration.SHORT, Style.getStyle(Style.GRAY, SuperToast.Animations.POPUP));
+                        superToast.show();
+                    }
+                }) {
+
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json";
+                    }
+
+                    @Override
+                    public byte[] getBody() throws AuthFailureError {
+                        return voucherEntryObject.toString().getBytes();
+                    }
+                };
+
+                ConnectionManager.getInstance(CheckOut.this).add(voucherValidationRequest);
+
+            }
+        });
 
         checkOutCityDropDown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -1103,6 +1191,7 @@ public class CheckOut extends AppCompatActivity {
         SimpleDraweeView shippingOptionsImageView = (SimpleDraweeView) findViewById(R.id.shippingOptionsImageView);
         SimpleDraweeView paymentOptionImageView = (SimpleDraweeView) findViewById(R.id.paymentOptionImageView);
         SimpleDraweeView yourOrderImageView = (SimpleDraweeView) findViewById(R.id.yourOrderImageView);
+        SimpleDraweeView voucherCodeDraweeView = (SimpleDraweeView) findViewById(R.id.voucherCodeDraweeView);
 
         Uri uri1 = Uri.parse("http://oldhamsymphonyorchestra.org.uk/static/calendar.png");
         Uri uri2 = Uri.parse("https://cdn4.iconfinder.com/data/icons/adiante-apps-app-templates-incos-in-grey/512/app_type_shop_512px_GREY.png");
@@ -1110,6 +1199,7 @@ public class CheckOut extends AppCompatActivity {
         Uri uri4 = Uri.parse("https://d30y9cdsu7xlg0.cloudfront.net/png/26575-200.png");
         Uri uri5 = Uri.parse("http://icons.iconarchive.com/icons/iconsmind/outline/512/Credit-Card-2-icon.png");
         Uri uri6 = Uri.parse("http://simpleicon.com/wp-content/uploads/Shopping-Cart-10.png");
+        Uri uri7 = Uri.parse("https://d30y9cdsu7xlg0.cloudfront.net/png/164565-200.png");
 
         deliveryDateImageView.setImageURI(uri1);
         orderSummaryImageView.setImageURI(uri2);
@@ -1117,6 +1207,7 @@ public class CheckOut extends AppCompatActivity {
         shippingOptionsImageView.setImageURI(uri4);
         paymentOptionImageView.setImageURI(uri5);
         yourOrderImageView.setImageURI(uri6);
+        voucherCodeDraweeView.setImageURI(uri7);
     }
 
     @Override

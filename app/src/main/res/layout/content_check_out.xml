@@ -699,8 +699,79 @@
             </RelativeLayout>
 
             <!-- End of fifth payment method root layout -->
+
+            <!-- Start of sixth voucher code root layout -->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:background="@drawable/border_checkout"
+                android:padding="10dp"
+                android:layout_marginBottom="5dp"
+                >
+
+                <!-- Start of title layout -->
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_toLeftOf="@+id/seventhTitle"
+                    android:layout_alignTop="@+id/seventhTitle"
+                    android:id="@+id/voucherCodeDraweeView"
+                    fresco:actualImageScaleType="fitXY"
+                    />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="6. Voucher Code"
+                    android:paddingBottom="8dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/bottomsiderectangle"
+                    android:id="@+id/seventhTitle"
+                    fontPath="fonts/Roboto-Bold.ttf"
+                    />
+
+                <!-- End of title layout -->
+
+                <EditText
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Your Voucher Code Here"
+                    fontPath="fonts/Roboto-Medium.ttf"
+                    android:textSize="15dp"
+                    android:layout_below="@+id/seventhTitle"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:textAlignment="center"
+                    android:id="@+id/voucherEditText"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/bordercheckoutaddress"
+                    />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Validate Voucher"
+                    android:textSize="15dp"
+                    android:background="@drawable/checkoutbutton"
+                    android:textColor="@color/BGDARKGREEN"
+                    android:layout_marginTop="20dp"
+                    android:layout_below="@+id/voucherEditText"
+                    android:id="@+id/validateVoucherButton"
+                    android:layout_centerHorizontal="true"
+                    fontPath="fonts/Roboto-Bold.ttf"
+                    android:padding="5dp"
+                    />
+
+            </RelativeLayout>
+            <!-- End of sixth Voucher Code Root Layout -->
             
-            <!-- Start of sixth your order root layout -->
+            <!-- Start of seventh your order root layout -->
             
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -724,7 +795,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="6. Your Order"
+                    android:text="7. Your Order"
                     android:paddingBottom="8dp"
                     android:layout_marginTop="15dp"
                     android:layout_centerHorizontal="true"
@@ -884,7 +955,7 @@
 
 
                     <Button
-                        android:layout_width="300dp"
+                        android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:background="@drawable/greyedoutloading"
                         android:text="Place Order"
@@ -900,7 +971,7 @@
 
             </RelativeLayout>
             
-            <!-- End of sixth your order root layout -->
+            <!-- End of seventh your order root layout -->
 
 
         </LinearLayout>
