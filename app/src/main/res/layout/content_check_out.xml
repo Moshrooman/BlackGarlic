@@ -890,6 +890,32 @@
                         fontPath="fonts/Roboto-Regular.ttf"
                         />
 
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="10dp"
+                        android:gravity="left"
+                        android:text="Voucher Discount"
+                        android:layout_weight="1"
+                        android:id="@+id/voucherDiscountTitleTextView"
+                        android:background="@drawable/bordercheckoutaddress"
+                        android:visibility="gone"
+                        fontPath="fonts/Roboto-Regular.ttf"
+                        />
+
+                    <TextView
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="10dp"
+                        android:gravity="right"
+                        android:id="@+id/voucherDiscountTextView"
+                        android:layout_weight="1"
+                        android:background="@drawable/bordercheckoutaddress"
+                        android:visibility="gone"
+                        fontPath="fonts/Roboto-Regular.ttf"
+                        />
+
+
                     <org.apmem.tools.layouts.FlowLayout
                         xmlns:android="http://schemas.android.com/apk/res/android"
                         android:layout_width="match_parent"

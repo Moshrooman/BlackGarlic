@@ -108,16 +108,27 @@ public class CheckOut extends AppCompatActivity {
     private static EditText voucherEditText;
     private static Button validateVoucherButton;
 
+    private static int voucherValue;
+    private static int validateVoucherInt;
+    private static String voucher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_out);
+
+        voucherValue = 0;
+        validateVoucherInt = 0;
+        voucher = "";
 
         checkOutRootRelativeView = (RelativeLayout) findViewById(R.id.checkOutRootRelativeView);
 
         voucherEditText = (EditText) findViewById(R.id.voucherEditText);
         voucherEditText.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
         validateVoucherButton = (Button) findViewById(R.id.validateVoucherButton);
+
+        final TextView voucherDiscountTitleTextView = (TextView) findViewById(R.id.voucherDiscountTitleTextView);
+        final TextView voucherDiscountTextView = (TextView) findViewById(R.id.voucherDiscountTextView);
 
         setImagesForTitles();
 
@@ -213,7 +224,7 @@ public class CheckOut extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String voucherEntry = voucherEditText.getText().toString();
+                final String voucherEntry = voucherEditText.getText().toString();
 
                 final JSONObject voucherEntryObject = new JSONObject();
 
@@ -223,8 +234,6 @@ public class CheckOut extends AppCompatActivity {
                 } catch (JSONException e){
                     e.printStackTrace();
                 }
-
-                Log.e("Voucher Body: ", voucherEntryObject.toString());
 
                 StringRequest voucherValidationRequest = new StringRequest(Request.Method.POST, validateEntryUrl, new Response.Listener<String>() {
                     @Override
@@ -249,8 +258,62 @@ public class CheckOut extends AppCompatActivity {
 
                         } else {
 
-                            SuperToast superToast = SuperToast.create(CheckOut.this, response, SuperToast.Duration.MEDIUM, Style.getStyle(Style.BLUE, SuperToast.Animations.POPUP));
+                            int voucherDiscountInt = Integer.valueOf(response.substring(1, response.length()));
+                            String voucherDiscountString = new DecimalFormat().format(voucherDiscountInt);
+                            validateVoucherInt++;
+
+                            if (voucherEntry.equals(voucher)) {
+                                SuperToast superToast = SuperToast.create(CheckOut.this, "Same Voucher Code Entered!", SuperToast.Duration.SHORT, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
+                                superToast.show();
+                                return;
+                            }
+
+                            voucher = voucherEntry;
+
+                            if (grandTotal < voucherDiscountInt) {
+
+                                SuperToast superToast = SuperToast.create(CheckOut.this, "Grand Total Must Be Equal To Or Greater Than The Voucher Value!\n\nVoucher Value: IDR "+voucherDiscountString+"", SuperToast.Duration.EXTRA_LONG, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
+                                superToast.show();
+                                return;
+
+                            }
+
+                            if (validateVoucherInt == 1) {
+                                voucherValue = 0;
+                            }
+
+                            //Ended here
+
+                            voucherDiscountTitleTextView.setVisibility(View.VISIBLE);
+                            voucherDiscountTextView.setVisibility(View.VISIBLE);
+
+                            voucherDiscountTextView.setText("- IDR " + voucherDiscountString);
+
+                            SuperToast superToast = SuperToast.create(CheckOut.this, "Voucher Value Of: IDR " + voucherDiscountString + " Applied!", SuperToast.Duration.MEDIUM, Style.getStyle(Style.BLUE, SuperToast.Animations.POPUP));
                             superToast.show();
+
+                            if (voucherValue == 0) {
+
+                                grandTotal = grandTotal - voucherDiscountInt;
+                                grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
+
+                                //This is called the first time so I will save the voucher value.
+                                voucherValue = voucherDiscountInt;
+
+                            } else {
+
+                                //Gotta add the last voucher address and add the current one.
+                                grandTotal = grandTotal + voucherValue;
+                                grandTotal = grandTotal - voucherDiscountInt;
+                                grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
+
+                                //The second and above time that it is called, I am adding the voucher value because this will be the previous one
+                                //Then I will subtract the voucherDiscountInt because that is the current one.
+                                //Then I will set the voucher value to the voucherDiscountInt because that is now the current one.
+                                voucherValue = voucherDiscountInt;
+
+                            }
+
 
                         }
 
