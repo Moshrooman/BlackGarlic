@@ -366,12 +366,12 @@ public class CheckOut extends AppCompatActivity {
 
                         employeeDiscountTextView.setText("- IDR " + new DecimalFormat().format((subTotalCost / 2)));
 
-                        grandTotal = (subTotalCost / 2);
+                        grandTotal = ((subTotalCost / 2) - voucherValue);
                         grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
 
                         Log.e("grandtotalDiscount: ", String.valueOf(grandTotal));
                     } else {
-                        grandTotal = subTotalCost;
+                        grandTotal = subTotalCost - voucherValue;
                         grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
                     }
 
@@ -400,12 +400,12 @@ public class CheckOut extends AppCompatActivity {
 
                         employeeDiscountTextView.setText("- IDR " + new DecimalFormat().format((subTotalCost / 2)));
 
-                        grandTotal = (subTotalCost / 2);
+                        grandTotal = ((subTotalCost / 2) - voucherValue);
                         grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
 
                         Log.e("grandtotalDiscount: ", String.valueOf(grandTotal));
                     } else {
-                        grandTotal = subTotalCost;
+                        grandTotal = subTotalCost - voucherValue;
                         grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
                     }
 
@@ -446,12 +446,12 @@ public class CheckOut extends AppCompatActivity {
 
                         employeeDiscountTextView.setText("- IDR " + new DecimalFormat().format((subTotalCost / 2)));
 
-                        grandTotal = (subTotalCost / 2);
+                        grandTotal = ((subTotalCost / 2) - voucherValue);
                         grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
 
                         Log.e("grandtotalDiscount: ", String.valueOf(grandTotal));
                     } else {
-                        grandTotal = subTotalCost;
+                        grandTotal = subTotalCost - voucherValue;
                         grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
                     }
                 }
@@ -492,12 +492,12 @@ public class CheckOut extends AppCompatActivity {
 
                         employeeDiscountTextView.setText("- IDR " + new DecimalFormat().format(discountedSubTotalCost));
 
-                        grandTotal = (subTotalCost / 2) + 20000;
+                        grandTotal = ((subTotalCost / 2) - voucherValue) + 20000;
                         grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
 
                         Log.e("grandtotalDiscount: ", String.valueOf(grandTotal));
                     } else {
-                        grandTotal = subTotalCost + 20000;
+                        grandTotal = (subTotalCost - voucherValue) + 20000;
                         grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
                     }
 
@@ -809,7 +809,7 @@ public class CheckOut extends AppCompatActivity {
                             body.put("balance_discount", "0");
                         }
 
-                        body.put("voucher_discount", "0");
+                        body.put("voucher_discount", String.valueOf(voucherValue));
 
                         if (deliveryFee.equals("FREE!!!")) {
                             body.put("delivery_fee", "0");
