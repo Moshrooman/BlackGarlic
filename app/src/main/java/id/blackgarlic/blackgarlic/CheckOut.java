@@ -53,6 +53,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import id.blackgarlic.blackgarlic.Voucher.VoucherObject;
 import id.blackgarlic.blackgarlic.model.Data;
 import id.blackgarlic.blackgarlic.model.UserCredentials;
 import id.blackgarlic.blackgarlic.model.gcm.PushNotificationHandling;
@@ -111,6 +112,7 @@ public class CheckOut extends AppCompatActivity {
     private static int voucherValue;
     private static int validateVoucherInt;
     private static String voucher;
+    private static VoucherObject voucherObjectStatic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +122,7 @@ public class CheckOut extends AppCompatActivity {
         voucherValue = 0;
         validateVoucherInt = 0;
         voucher = "";
+        voucherObjectStatic = null;
 
         checkOutRootRelativeView = (RelativeLayout) findViewById(R.id.checkOutRootRelativeView);
 
@@ -243,11 +246,13 @@ public class CheckOut extends AppCompatActivity {
 
                             SuperToast superToast = SuperToast.create(CheckOut.this, "Invalid Voucher Code! Please Try Again", SuperToast.Duration.MEDIUM, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
                             superToast.show();
+                            return;
 
                         } else if (response.equals("expired")) {
 
                             SuperToast superToast = SuperToast.create(CheckOut.this, "Entered Voucher Code Is Expired! Please Enter A Different Voucher Code", SuperToast.Duration.MEDIUM, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
                             superToast.show();
+                            return;
 
                         } else if (response.contains("voucher_min")) {
 
@@ -255,10 +260,19 @@ public class CheckOut extends AppCompatActivity {
 
                             SuperToast superToast = SuperToast.create(CheckOut.this, "Need To Meet Minimum Purchase Amount Of: RP." + new DecimalFormat().format(minimumPurchaseAmount), SuperToast.Duration.MEDIUM, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
                             superToast.show();
+                            return;
 
                         } else {
 
-                            int voucherDiscountInt = Integer.valueOf(response.substring(1, response.length()));
+                            Log.e("Response: ", response);
+
+                            VoucherObject voucherObject = new Gson().fromJson(response, VoucherObject.class);
+                            voucherObjectStatic = voucherObject;
+
+                            String voucherDiscountStringBefore = String.valueOf(voucherObject.getVoucher_value());
+                            voucherDiscountStringBefore = voucherDiscountStringBefore.substring(1, voucherDiscountStringBefore.length());
+
+                            int voucherDiscountInt = Integer.valueOf(voucherDiscountStringBefore);
                             String voucherDiscountString = new DecimalFormat().format(voucherDiscountInt);
                             validateVoucherInt++;
 
@@ -268,49 +282,96 @@ public class CheckOut extends AppCompatActivity {
                                 return;
                             }
 
-                            voucher = voucherEntry;
-
-                            if (grandTotal < voucherDiscountInt) {
-
-                                SuperToast superToast = SuperToast.create(CheckOut.this, "Grand Total Must Be Equal To Or Greater Than The Voucher Value!\n\nVoucher Value: IDR "+voucherDiscountString+"", SuperToast.Duration.EXTRA_LONG, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
-                                superToast.show();
-                                return;
-
-                            }
-
                             if (validateVoucherInt == 1) {
                                 voucherValue = 0;
                             }
 
                             //Ended here
 
-                            voucherDiscountTitleTextView.setVisibility(View.VISIBLE);
-                            voucherDiscountTextView.setVisibility(View.VISIBLE);
-
-                            voucherDiscountTextView.setText("- IDR " + voucherDiscountString);
-
-                            SuperToast superToast = SuperToast.create(CheckOut.this, "Voucher Value Of: IDR " + voucherDiscountString + " Applied!", SuperToast.Duration.MEDIUM, Style.getStyle(Style.BLUE, SuperToast.Animations.POPUP));
-                            superToast.show();
-
+                            //SO here we check if the voucher value is = 0, which means that this will be the first voucher that is entered
                             if (voucherValue == 0) {
 
-                                grandTotal = grandTotal - voucherDiscountInt;
-                                grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
+                                //This will be the first voucher that is entered so all we have to do is check if the grandtotal is less
+                                //Than the voucherDiscountInt, and if it does then we super toast and tell them that the grandtotal needs
+                                //To be equal to or greater than the value of the voucher entered.
 
-                                //This is called the first time so I will save the voucher value.
-                                voucherValue = voucherDiscountInt;
+                                //Remember, voucherDiscountInt is the JUST ENTERED voucher value.
+                                if (grandTotal < voucherDiscountInt) {
+
+                                    SuperToast superToast2 = SuperToast.create(CheckOut.this, "Grand Total Must Be Equal To Or Greater Than The Voucher Value!\n\nVoucher Value: IDR "+voucherDiscountString+"", SuperToast.Duration.EXTRA_LONG, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
+                                    superToast2.show();
+                                    return;
+
+                                    //So if everything works fine, we want to set the voucher to the voucher entry.
+                                    //Subtract the voucherDiscountInt from the grandtotal, set the textview grandtotal.
+                                    //Then we want to set the vouchervalue private static variable to the voucherDiscountInt, this is
+                                    //because the next time they enter a voucher in, we want voucher value to be the value of the
+                                    //previous voucher so that we can add that before subtracting the current one.
+                                } else {
+
+                                    voucher = voucherEntry;
+
+                                    grandTotal = grandTotal - voucherDiscountInt;
+                                    grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
+
+                                    //This is called the first time so I will save the voucher value.
+                                    voucherValue = voucherDiscountInt;
+
+                                    voucherDiscountTitleTextView.setVisibility(View.VISIBLE);
+                                    voucherDiscountTextView.setVisibility(View.VISIBLE);
+
+                                    voucherDiscountTextView.setText("- IDR " + voucherDiscountString);
+
+                                    SuperToast superToast = SuperToast.create(CheckOut.this, "Voucher Value Of: IDR " + voucherDiscountString + " Applied!", SuperToast.Duration.MEDIUM, Style.getStyle(Style.BLUE, SuperToast.Animations.POPUP));
+                                    superToast.show();
+
+                                }
 
                             } else {
 
                                 //Gotta add the last voucher address and add the current one.
                                 grandTotal = grandTotal + voucherValue;
-                                grandTotal = grandTotal - voucherDiscountInt;
-                                grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
 
-                                //The second and above time that it is called, I am adding the voucher value because this will be the previous one
-                                //Then I will subtract the voucherDiscountInt because that is the current one.
-                                //Then I will set the voucher value to the voucherDiscountInt because that is now the current one.
-                                voucherValue = voucherDiscountInt;
+                                //So after we have added the last voucher value to the grandtotal, then we check if the grandtotal is less
+                                //Than the voucher discount int so say we applied 100k voucher and now the grandtotal is 80k, if the user
+                                //Were to enter a 200k voucher in, then we have to add the 100k voucher to the 80k which makes 180k
+                                //Then we have to see if the grandtotal is less than the 200k that is entered.
+
+                                if (grandTotal < voucherDiscountInt) {
+
+                                    SuperToast superToast3 = SuperToast.create(CheckOut.this, "Grand Total Must Be Equal To Or Greater Than The Voucher Value!\n\nVoucher Value: IDR "+voucherDiscountString+"", SuperToast.Duration.EXTRA_LONG, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
+                                    superToast3.show();
+
+                                    //So if the grandtotal is less than the voucherDiscountInt after adding the voucher value back
+                                    //we want to subtract the vouchervalue back into the grandtotal so the voucher is still in use.
+
+                                    grandTotal = grandTotal - voucherValue;
+
+                                    return;
+
+                                } else {
+
+                                    //If everything goes fine, we do the same as above, we set the voucher to the voucher entry
+                                    //subtract the voucherDiscountInt from the grandtotal, set the grandtotalTextView
+
+                                    voucher = voucherEntry;
+
+                                    grandTotal = grandTotal - voucherDiscountInt;
+                                    grandTotalTextView.setText("IDR " + new DecimalFormat().format(grandTotal));
+
+                                    //The second time a voucher is entered (a different one) I will subtract the voucherDiscountInt because that is the current one.
+                                    //Then I will set the voucher value to the voucherDiscountInt because that is now the current one.
+                                    voucherValue = voucherDiscountInt;
+
+                                    voucherDiscountTitleTextView.setVisibility(View.VISIBLE);
+                                    voucherDiscountTextView.setVisibility(View.VISIBLE);
+
+                                    voucherDiscountTextView.setText("- IDR " + voucherDiscountString);
+
+                                    SuperToast superToast = SuperToast.create(CheckOut.this, "Voucher Value Of: IDR " + voucherDiscountString + " Applied!", SuperToast.Duration.MEDIUM, Style.getStyle(Style.BLUE, SuperToast.Animations.POPUP));
+                                    superToast.show();
+
+                                }
 
                             }
 
@@ -809,7 +870,11 @@ public class CheckOut extends AppCompatActivity {
                             body.put("balance_discount", "0");
                         }
 
-                        body.put("voucher_discount", String.valueOf(voucherValue));
+                        if (voucherObjectStatic != null) {
+                            body.put("voucher_discount", String.valueOf(voucherObjectStatic.getVoucher_value()));
+                        } else {
+                            body.put("voucher_discount", "0");
+                        }
 
                         if (deliveryFee.equals("FREE!!!")) {
                             body.put("delivery_fee", "0");
@@ -821,9 +886,14 @@ public class CheckOut extends AppCompatActivity {
                         }
 
                         body.put("grandtotal", String.valueOf(grandTotal));
-
                         body.put("address", addressObject);
                         body.put("menu", menuJsonArray);
+
+                        if (voucherObjectStatic != null) {
+                            body.put("voucher_id", String.valueOf(voucherObjectStatic.getVoucher_id()));
+                        } else {
+                            body.put("voucher_id", "0");
+                        }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
