@@ -27,11 +27,14 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.facebook.drawee.generic.RoundingParams;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.johnpersano.supertoasts.util.Style;
@@ -43,8 +46,11 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.timehop.stickyheadersrecyclerview.StickyRecyclerHeadersDecoration;
 
 import org.joda.time.LocalDate;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -103,6 +109,10 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
     private static BlackGarlicAdapter blackGarlicAdapter2;
 
     private static LayoutInflater layoutInflater;
+
+    private static final String profilePictureRequestLink = "http://188.166.221.241:3000/app/checkprofilepicture";
+
+    //Start of public static methods.
 
     public static List<Data> getCurrentMenuList() {
         return currentMenuList;
@@ -887,8 +897,55 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             }
 
             if ((isLoggedIn == true) && (position == 0)) {
+
                 TextView chefNameTextView = (TextView) convertView.findViewById(R.id.chefNameTextView);
+                final SimpleDraweeView profileImageDraweeView = (SimpleDraweeView) convertView.findViewById(R.id.profileImageDraweeView);
+
+                RoundingParams roundingParams = new RoundingParams();
+                roundingParams.setRoundAsCircle(true);
+                profileImageDraweeView.getHierarchy().setRoundingParams(roundingParams);
+
+                final JSONObject profilePictureJsonObject = new JSONObject();
+
+                try {
+                    profilePictureJsonObject.put("customer_id", userCredentials.getCustomer_id());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                StringRequest profilePictureRequest = new StringRequest(Request.Method.POST, profilePictureRequestLink, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.e("Profile Picture: ", response);
+
+                        if (response.contains("empty")) {
+                            Uri uriAnonymousProfileImageDraweeView = Uri.parse("http://learngroup.org/assets/images/logos/default_male.jpg");
+                            profileImageDraweeView.setImageURI(uriAnonymousProfileImageDraweeView);
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Profile Picture: ", "Error!");
+                    }
+                }) {
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json";
+                    }
+
+                    @Override
+                    public byte[] getBody() throws AuthFailureError {
+                        return profilePictureJsonObject.toString().getBytes();
+                    }
+                };
+
+                ConnectionManager.getInstance(MainActivity.this).add(profilePictureRequest);
+
                 chefNameTextView.setText(userCredentials.getCustomer_name());
+
             }  else if ((isLoggedIn == true) && (position == 5)) {
                 TextView navBarEntry = (TextView) convertView.findViewById(R.id.navBarEntryImageView);
                 navBarEntry.setText(drawerEntries[position - 1]);

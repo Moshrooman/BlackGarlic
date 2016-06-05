@@ -48,6 +48,7 @@ public class PushNotificationHandling extends IntentService {
     protected void onHandleIntent(Intent intent) {
 
         SharedPreferences sharedPreferences = SplashActivity.getSharedPreferences();
+        body = new JSONObject();
 
         try {
             body.put("unique_id", Integer.valueOf(intent.getExtras().getString("uniqueId", "")));
