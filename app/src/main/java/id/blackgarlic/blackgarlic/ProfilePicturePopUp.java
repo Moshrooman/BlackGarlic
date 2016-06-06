@@ -72,7 +72,7 @@ public class ProfilePicturePopUp extends AppCompatActivity {
         Button takePictureButton = (Button) findViewById(R.id.takePictureButton);
         saveProfilePictureButton = (Button) findViewById(R.id.saveProfilePictureButton);
 
-        saveProfilePictureButton.setClickable(false);
+        saveProfilePictureButton.setEnabled(false);
 
         profilePictureRootRelativeLayout.post(new Runnable() {
             @Override
@@ -191,7 +191,7 @@ public class ProfilePicturePopUp extends AppCompatActivity {
             changeProfilePictureDraweeView.setImageURI(selectedImageUri);
             saveProfilePictureButton.setBackgroundResource(R.drawable.checkoutbutton);
             saveProfilePictureButton.setTextColor(getResources().getColor(R.color.BGDARKGREEN));
-            saveProfilePictureButton.setClickable(true);
+            saveProfilePictureButton.setEnabled(true);
         }
     }
 }
