@@ -12,5 +12,6 @@
     <color name="BGGREEN">#03c9a9</color>
     <color name="BGRED">#FF1919</color>
     <color name="BGDARKGREEN">#00584a</color>
+    <color name="LIGHTGREY">#d8d8d8</color>
 
 </resources>

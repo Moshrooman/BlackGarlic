@@ -76,7 +76,7 @@
             android:name=".ThankYouForOrdering"
             android:label="@string/title_activity_thank_you_for_ordering"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
@@ -110,16 +110,18 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
-
         <service
             android:name=".model.gcm.PushNotificationHandling"
-            android:exported="false">
-        </service>
+            android:exported="false"></service>
 
         <activity
             android:name=".PDFWebView"
             android:label="@string/title_activity_pdfweb_view"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ProfilePicturePopUp"
+            android:label="@string/title_activity_profile_picture_pop_up"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

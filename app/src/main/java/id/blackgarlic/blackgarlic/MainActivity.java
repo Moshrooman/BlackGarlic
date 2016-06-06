@@ -112,7 +112,14 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     private static final String profilePictureRequestLink = "http://188.166.221.241:3000/app/checkprofilepicture";
 
+    private static SimpleDraweeView profileImageDraweeViewGlobal;
+
     //Start of public static methods.
+
+
+    public static SimpleDraweeView getProfileImageDraweeViewGlobal() {
+        return profileImageDraweeViewGlobal;
+    }
 
     public static List<Data> getCurrentMenuList() {
         return currentMenuList;
@@ -905,6 +912,15 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                 roundingParams.setRoundAsCircle(true);
                 profileImageDraweeView.getHierarchy().setRoundingParams(roundingParams);
 
+                profileImageDraweeView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent profilePicturePopup = new Intent(MainActivity.this, id.blackgarlic.blackgarlic.ProfilePicturePopUp.class);
+                        drawerLayout.closeDrawer(Gravity.LEFT);
+                        startActivity(profilePicturePopup);
+                    }
+                });
+
                 final JSONObject profilePictureJsonObject = new JSONObject();
 
                 try {
@@ -922,6 +938,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                         if (response.contains("empty")) {
                             Uri uriAnonymousProfileImageDraweeView = Uri.parse("http://learngroup.org/assets/images/logos/default_male.jpg");
                             profileImageDraweeView.setImageURI(uriAnonymousProfileImageDraweeView);
+                            profileImageDraweeViewGlobal = profileImageDraweeView;
                         }
 
                     }
