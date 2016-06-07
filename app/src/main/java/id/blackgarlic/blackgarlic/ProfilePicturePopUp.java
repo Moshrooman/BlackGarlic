@@ -3,6 +3,7 @@ package id.blackgarlic.blackgarlic;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -36,12 +39,15 @@ import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
 import com.facebook.imagepipeline.image.CloseableImage;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.github.johnpersano.supertoasts.SuperToast;
+import com.github.johnpersano.supertoasts.util.Style;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 import id.blackgarlic.blackgarlic.model.UserCredentials;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -60,6 +66,10 @@ public class ProfilePicturePopUp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_picture_pop_up);
+
+        Log.e("Has Profile: ", String.valueOf(MainActivity.getHasProfilePicture()));
+
+        overridePendingTransition(R.anim.fade_in, R.anim.actual_fade_out);
 
         newImageUri = null;
 
@@ -82,7 +92,13 @@ public class ProfilePicturePopUp extends AppCompatActivity {
         });
 
         changeProfilePictureChefNameTextView.setText(userCredentials.getCustomer_name());
-        changeProfilePictureDraweeView.setImageDrawable(MainActivity.getProfileImageDraweeViewGlobal().getDrawable());
+
+        if (MainActivity.getHasProfilePicture() == false) {
+            Uri uriAnonymousProfileImageDraweeView = Uri.parse("http://learngroup.org/assets/images/logos/default_male.jpg");
+            changeProfilePictureDraweeView.setImageURI(uriAnonymousProfileImageDraweeView);
+        } else {
+            changeProfilePictureDraweeView.setImageDrawable(MainActivity.getProfileImageCircleImageView().getDrawable());
+        }
 
         fromGalleryButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,8 +129,6 @@ public class ProfilePicturePopUp extends AppCompatActivity {
 
                                              String newImageEncoded = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
 
-                                             Log.e("Image: ", newImageEncoded);
-
                                              final JSONObject bodyRequest = new JSONObject();
 
                                              try {
@@ -128,13 +142,27 @@ public class ProfilePicturePopUp extends AppCompatActivity {
                                                  @Override
                                                  public void onResponse(String response) {
 
-                                                     Log.e("Upload Response: ", response);
+                                                     MainActivity.setHasProfilePicture(true);
+
+                                                     SuperToast superToast = SuperToast.create(ProfilePicturePopUp.this, "Successfully Changed Profile Picture!", SuperToast.Duration.SHORT, Style.getStyle(Style.BLUE, SuperToast.Animations.POPUP));
+                                                     superToast.show();
+
+                                                     byte[] encodedByte = Base64.decode(response, Base64.DEFAULT);
+                                                     Bitmap newBitmap = BitmapFactory.decodeByteArray(encodedByte, 0, encodedByte.length);
+
+                                                     MainActivity.setVisibilityDraweeView(View.GONE);
+                                                     MainActivity.setVisibilityCircularView(View.VISIBLE);
+
+                                                     MainActivity.setProfileImageCircleImageView(newBitmap);
+
+                                                     finish();
 
                                                  }
                                              }, new Response.ErrorListener() {
                                                  @Override
                                                  public void onErrorResponse(VolleyError error) {
-
+                                                     SuperToast superToast = SuperToast.create(ProfilePicturePopUp.this, "Error Uploading Profile Picture!", SuperToast.Duration.SHORT, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
+                                                     superToast.show();
                                                  }
                                              }) {
                                                  @Override

@@ -3,6 +3,8 @@ package id.blackgarlic.blackgarlic;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -59,6 +62,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import id.blackgarlic.blackgarlic.OrderHistory.OrderHistory;
 import id.blackgarlic.blackgarlic.model.Data;
 import id.blackgarlic.blackgarlic.model.MenuId;
@@ -114,8 +118,35 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
     private static SimpleDraweeView profileImageDraweeViewGlobal;
 
+    private static boolean hasProfilePicture = false;
+
+    private static CircleImageView profileImageCircleImageView;
+
     //Start of public static methods.
 
+    public static CircleImageView getProfileImageCircleImageView() {
+        return profileImageCircleImageView;
+    }
+
+    public static void setVisibilityDraweeView(int view) {
+        profileImageDraweeViewGlobal.setVisibility(view);
+    }
+
+    public static void setVisibilityCircularView(int view) {
+        profileImageCircleImageView.setVisibility(view);
+    }
+
+    public static void setProfileImageCircleImageView(Bitmap bitmap) {
+        profileImageCircleImageView.setImageBitmap(bitmap);
+    }
+
+    public static boolean getHasProfilePicture() {
+        return hasProfilePicture;
+    }
+
+    public static void setHasProfilePicture(boolean input) {
+        hasProfilePicture = input;
+    }
 
     public static SimpleDraweeView getProfileImageDraweeViewGlobal() {
         return profileImageDraweeViewGlobal;
@@ -906,13 +937,24 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             if ((isLoggedIn == true) && (position == 0)) {
 
                 TextView chefNameTextView = (TextView) convertView.findViewById(R.id.chefNameTextView);
-                final SimpleDraweeView profileImageDraweeView = (SimpleDraweeView) convertView.findViewById(R.id.profileImageDraweeView);
+                profileImageDraweeViewGlobal = (SimpleDraweeView) convertView.findViewById(R.id.profileImageDraweeView);
+
+                profileImageCircleImageView = (CircleImageView) convertView.findViewById(R.id.profileImageCircleImageView);
+
+                profileImageCircleImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent profilePicturePopup = new Intent(MainActivity.this, id.blackgarlic.blackgarlic.ProfilePicturePopUp.class);
+                        drawerLayout.closeDrawer(Gravity.LEFT);
+                        startActivity(profilePicturePopup);
+                    }
+                });
 
                 RoundingParams roundingParams = new RoundingParams();
                 roundingParams.setRoundAsCircle(true);
-                profileImageDraweeView.getHierarchy().setRoundingParams(roundingParams);
+                profileImageDraweeViewGlobal.getHierarchy().setRoundingParams(roundingParams);
 
-                profileImageDraweeView.setOnClickListener(new View.OnClickListener() {
+                profileImageDraweeViewGlobal.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent profilePicturePopup = new Intent(MainActivity.this, id.blackgarlic.blackgarlic.ProfilePicturePopUp.class);
@@ -933,12 +975,22 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                     @Override
                     public void onResponse(String response) {
 
-                        Log.e("Profile Picture: ", response);
-
                         if (response.contains("empty")) {
                             Uri uriAnonymousProfileImageDraweeView = Uri.parse("http://learngroup.org/assets/images/logos/default_male.jpg");
-                            profileImageDraweeView.setImageURI(uriAnonymousProfileImageDraweeView);
-                            profileImageDraweeViewGlobal = profileImageDraweeView;
+                            profileImageDraweeViewGlobal.setImageURI(uriAnonymousProfileImageDraweeView);
+
+                            hasProfilePicture = false;
+                        } else {
+                            byte[] encodedByte = Base64.decode(response, Base64.DEFAULT);
+                            Bitmap newBitmap = BitmapFactory.decodeByteArray(encodedByte, 0, encodedByte.length);
+
+                            profileImageDraweeViewGlobal.setVisibility(View.GONE);
+                            profileImageCircleImageView.setVisibility(View.VISIBLE);
+
+                            profileImageCircleImageView.setImageBitmap(newBitmap);
+
+                            hasProfilePicture = true;
+
                         }
 
                     }
