@@ -243,7 +243,6 @@ public class ProfilePicturePopUp extends AppCompatActivity {
     }
 
     public void changeProfilePictureRequest(final JSONObject body) {
-
         StringRequest changeProfilePictureRequest = new StringRequest(Request.Method.POST, CHANGE_PROFILE_PICTURE_URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
