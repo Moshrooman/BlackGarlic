@@ -55,10 +55,16 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class ProfilePicturePopUp extends AppCompatActivity {
 
     private static UserCredentials userCredentials;
-    private static final int RESULT_LOAD_IMAGE = 1;
     private static SimpleDraweeView changeProfilePictureDraweeView;
     private static Button saveProfilePictureButton;
+
     private static Uri newImageUri;
+    private static Bitmap newImageBitmap;
+
+    private static final int RESULT_LOAD_IMAGE = 1;
+    private static final int RESULT_TAKE_PICTURE = 2;
+
+    private static String galleryOrPicture;
 
     private static final String CHANGE_PROFILE_PICTURE_URL = "http://188.166.221.241:3000/app/uploadprofilepicture";
 
@@ -67,11 +73,14 @@ public class ProfilePicturePopUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_picture_pop_up);
 
+        galleryOrPicture = "";
+
         Log.e("Has Profile: ", String.valueOf(MainActivity.getHasProfilePicture()));
 
         overridePendingTransition(R.anim.fade_in, R.anim.actual_fade_out);
 
         newImageUri = null;
+        newImageBitmap = null;
 
         userCredentials = new Gson().fromJson(SplashActivity.getSharedPreferences().getString("Credentials", ""), UserCredentials.class);
 
@@ -108,86 +117,81 @@ public class ProfilePicturePopUp extends AppCompatActivity {
             }
         });
 
+        takePictureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(pictureIntent, RESULT_TAKE_PICTURE);
+            }
+        });
+
         saveProfilePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ImageRequest imageRequest = ImageRequestBuilder
-                        .newBuilderWithSource(newImageUri)
-                        .setProgressiveRenderingEnabled(true)
-                        .build();
 
-                ImagePipeline imagePipeline = Fresco.getImagePipeline();
+                //if the picture that was chosen was taken from the gallery
+                if (galleryOrPicture.equals("gallery")) {
 
-                DataSource<CloseableReference<CloseableImage>> dataSource = imagePipeline.fetchDecodedImage(imageRequest, ProfilePicturePopUp.this);
+                    ImageRequest imageRequest = ImageRequestBuilder
+                            .newBuilderWithSource(newImageUri)
+                            .setProgressiveRenderingEnabled(true)
+                            .build();
 
-                dataSource.subscribe(new BaseBitmapDataSubscriber() {
+                    ImagePipeline imagePipeline = Fresco.getImagePipeline();
 
-                                         @Override
-                                         public void onNewResultImpl(@Nullable Bitmap bitmap) {
-                                             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                                             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                    DataSource<CloseableReference<CloseableImage>> dataSource = imagePipeline.fetchDecodedImage(imageRequest, ProfilePicturePopUp.this);
 
-                                             String newImageEncoded = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+                    dataSource.subscribe(new BaseBitmapDataSubscriber() {
 
-                                             final JSONObject bodyRequest = new JSONObject();
+                                             @Override
+                                             public void onNewResultImpl(@Nullable Bitmap bitmap) {
+                                                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                                                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
 
-                                             try {
-                                                 bodyRequest.put("customer_id", userCredentials.getCustomer_id());
-                                                 bodyRequest.put("profile_picture", newImageEncoded);
-                                             } catch (JSONException e) {
-                                                 e.printStackTrace();
+                                                 String newImageEncoded = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+
+                                                 final JSONObject bodyRequest = new JSONObject();
+
+                                                 try {
+                                                     bodyRequest.put("customer_id", userCredentials.getCustomer_id());
+                                                     bodyRequest.put("profile_picture", newImageEncoded);
+                                                 } catch (JSONException e) {
+                                                     e.printStackTrace();
+                                                 }
+
+                                                 changeProfilePictureRequest(bodyRequest);
+
                                              }
 
-                                             StringRequest changeProfilePictureRequest = new StringRequest(Request.Method.POST, CHANGE_PROFILE_PICTURE_URL, new Response.Listener<String>() {
-                                                 @Override
-                                                 public void onResponse(String response) {
+                                             @Override
+                                             public void onFailureImpl(DataSource dataSource) {
+                                                 // No cleanup required here.
+                                             }
+                                         },
+                            CallerThreadExecutor.getInstance());
 
-                                                     MainActivity.setHasProfilePicture(true);
+                } else if (galleryOrPicture.equals("picture")) {
 
-                                                     SuperToast superToast = SuperToast.create(ProfilePicturePopUp.this, "Successfully Changed Profile Picture!", SuperToast.Duration.SHORT, Style.getStyle(Style.BLUE, SuperToast.Animations.POPUP));
-                                                     superToast.show();
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    newImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
 
-                                                     byte[] encodedByte = Base64.decode(response, Base64.DEFAULT);
-                                                     Bitmap newBitmap = BitmapFactory.decodeByteArray(encodedByte, 0, encodedByte.length);
+                    String newImageBitmapEncoded = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
 
-                                                     MainActivity.setVisibilityDraweeView(View.GONE);
-                                                     MainActivity.setVisibilityCircularView(View.VISIBLE);
+                    JSONObject body = new JSONObject();
 
-                                                     MainActivity.setProfileImageCircleImageView(newBitmap);
+                    try {
+                        body.put("customer_id", userCredentials.getCustomer_id());
+                        body.put("profile_picture", newImageBitmapEncoded);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
-                                                     finish();
+                    changeProfilePictureRequest(body);
 
-                                                 }
-                                             }, new Response.ErrorListener() {
-                                                 @Override
-                                                 public void onErrorResponse(VolleyError error) {
-                                                     SuperToast superToast = SuperToast.create(ProfilePicturePopUp.this, "Error Uploading Profile Picture!", SuperToast.Duration.SHORT, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
-                                                     superToast.show();
-                                                 }
-                                             }) {
-                                                 @Override
-                                                 public String getBodyContentType() {
-                                                     return "application/json";
-                                                 }
-
-                                                 @Override
-                                                 public byte[] getBody() throws AuthFailureError {
-                                                     return bodyRequest.toString().getBytes();
-                                                 }
-                                             };
-
-                                             ConnectionManager.getInstance(ProfilePicturePopUp.this).add(changeProfilePictureRequest);
-
-                                         }
-
-                                         @Override
-                                         public void onFailureImpl(DataSource dataSource) {
-                                             // No cleanup required here.
-                                         }
-                                     },
-                        CallerThreadExecutor.getInstance());
+                }
 
             }
+
         });
 
     }
@@ -220,6 +224,65 @@ public class ProfilePicturePopUp extends AppCompatActivity {
             saveProfilePictureButton.setBackgroundResource(R.drawable.checkoutbutton);
             saveProfilePictureButton.setTextColor(getResources().getColor(R.color.BGDARKGREEN));
             saveProfilePictureButton.setEnabled(true);
+
+            galleryOrPicture = "gallery";
+
+        } else if (requestCode == RESULT_TAKE_PICTURE && resultCode == RESULT_OK && data != null) {
+
+            Bitmap pictureTakenBitmap = (Bitmap) data.getExtras().get("data");
+
+            newImageBitmap = pictureTakenBitmap;
+
+            changeProfilePictureDraweeView.setImageBitmap(pictureTakenBitmap);
+            saveProfilePictureButton.setBackgroundResource(R.drawable.checkoutbutton);
+            saveProfilePictureButton.setTextColor(getResources().getColor(R.color.BGDARKGREEN));
+            saveProfilePictureButton.setEnabled(true);
+
+            galleryOrPicture = "picture";
         }
+    }
+
+    public void changeProfilePictureRequest(final JSONObject body) {
+
+        StringRequest changeProfilePictureRequest = new StringRequest(Request.Method.POST, CHANGE_PROFILE_PICTURE_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                MainActivity.setHasProfilePicture(true);
+
+                SuperToast superToast = SuperToast.create(ProfilePicturePopUp.this, "Successfully Changed Profile Picture!", SuperToast.Duration.SHORT, Style.getStyle(Style.BLUE, SuperToast.Animations.POPUP));
+                superToast.show();
+
+                byte[] encodedByte = Base64.decode(response, Base64.DEFAULT);
+                Bitmap newBitmap = BitmapFactory.decodeByteArray(encodedByte, 0, encodedByte.length);
+
+                MainActivity.setVisibilityDraweeView(View.GONE);
+                MainActivity.setVisibilityCircularView(View.VISIBLE);
+
+                MainActivity.setProfileImageCircleImageView(newBitmap);
+
+                finish();
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                SuperToast superToast = SuperToast.create(ProfilePicturePopUp.this, "Error Uploading Profile Picture!", SuperToast.Duration.SHORT, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
+                superToast.show();
+            }
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                return body.toString().getBytes();
+            }
+        };
+
+        ConnectionManager.getInstance(ProfilePicturePopUp.this).add(changeProfilePictureRequest);
+
     }
 }
