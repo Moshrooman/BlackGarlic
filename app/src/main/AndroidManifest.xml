@@ -112,7 +112,7 @@
         </service>
         <service
             android:name=".model.gcm.PushNotificationHandling"
-            android:exported="false"></service>
+            android:exported="false" />
 
         <activity
             android:name=".PDFWebView"
@@ -121,7 +121,11 @@
         <activity
             android:name=".ProfilePicturePopUp"
             android:label="@string/title_activity_profile_picture_pop_up"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CookBookModel.CookBook"
+            android:label="@string/title_activity_cook_book"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

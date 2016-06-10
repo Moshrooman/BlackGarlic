@@ -30,7 +30,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -53,7 +52,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
-import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -63,6 +61,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import id.blackgarlic.blackgarlic.CookBookModel.CookBook;
 import id.blackgarlic.blackgarlic.OrderHistory.OrderHistory;
 import id.blackgarlic.blackgarlic.model.Data;
 import id.blackgarlic.blackgarlic.model.MenuId;
@@ -346,12 +345,14 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
         } else {
             menuMainActivityTextView.setVisibility(View.VISIBLE);
 
-            drawerEntries = new String[6];
+            //The reason why its one more than it should be is because there needs space for the welcome justin kwik chef thing
+            drawerEntries = new String[7];
             drawerEntries[0] = "Home";
             drawerEntries[1] = "My Account";
             drawerEntries[2] = "Order History";
             drawerEntries[3] = "Payment Confirmation";
-            drawerEntries[4] = "Log Out";
+            drawerEntries[4] = "CookBook";
+            drawerEntries[5] = "Log Out";
         }
 
         drawerListView.setAdapter(new MyNavBarAdapter());
@@ -843,6 +844,13 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                 startActivity(paymentConfirmationIntent);
 
             } else if (position == 5) {
+
+                Intent cookBookIntent = new Intent(MainActivity.this, CookBook.class);
+                drawerListView.setItemChecked(position, true);
+                drawerLayout.closeDrawer(Gravity.LEFT);
+                startActivity(cookBookIntent);
+
+            } else if (position == 6) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.remove("Credentials");
                 editor.remove("Email");
@@ -1015,7 +1023,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
                 chefNameTextView.setText(userCredentials.getCustomer_name());
 
-            }  else if ((isLoggedIn == true) && (position == 5)) {
+            }  else if ((isLoggedIn == true) && (position == 6)) {
                 TextView navBarEntry = (TextView) convertView.findViewById(R.id.navBarEntryImageView);
                 navBarEntry.setText(drawerEntries[position - 1]);
                 navBarEntry.setTextColor(getResources().getColor(R.color.BGRED));
