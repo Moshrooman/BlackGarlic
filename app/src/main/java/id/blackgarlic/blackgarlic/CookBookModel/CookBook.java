@@ -7,6 +7,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -14,28 +15,50 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import id.blackgarlic.blackgarlic.ConnectionManager;
 import id.blackgarlic.blackgarlic.R;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class CookBook extends AppCompatActivity {
+public class CookBook extends AppCompatActivity{
 
     private static final String cookBookLink = "http://188.166.221.241:3000/app/cookbook";
 
     private RecyclerView cookBookRecyclerView;
+
+    private static List<CookBookObject> cookBookObjectList = new ArrayList<CookBookObject>();
+
+    private static List<CookBookObject> cookBookObjectListAdapter = new ArrayList<CookBookObject>();
+
+    private static int startingPositionForAddingIntoAdapterList;
+
+    public static int getStartingPositionForAddingIntoAdapterList() {
+        return startingPositionForAddingIntoAdapterList;
+    }
+
+    public static void setStartingPositionForAddingIntoAdapterList(int startingPositionForAddingIntoAdapterList) {
+        CookBook.startingPositionForAddingIntoAdapterList = startingPositionForAddingIntoAdapterList;
+    }
+
+    public static List<CookBookObject> getCookBookObjectList() {
+        return cookBookObjectList;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cook_book);
 
+        cookBookObjectList.clear();
+        cookBookObjectListAdapter.clear();
+        startingPositionForAddingIntoAdapterList = 0;
+
         cookBookRecyclerView = (RecyclerView) findViewById(R.id.cookBookRecyclerView);
         cookBookRecyclerView.setHasFixedSize(true);
         cookBookRecyclerView.setItemAnimator(new DefaultItemAnimator());
         cookBookRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
 
         StringRequest cookBookRequest = new StringRequest(Request.Method.POST, cookBookLink, new Response.Listener<String>() {
             @Override
@@ -47,7 +70,7 @@ public class CookBook extends AppCompatActivity {
 
                 CookBookList cookBookList = new Gson().fromJson(modifiedResponse, CookBookList.class);
 
-                List<CookBookObject> cookBookObjectList = cookBookList.getCookBookList();
+                cookBookObjectList = cookBookList.getCookBookList();
 
                 int positionToGrabString = 0;
                 int totalRemoved = 0;
@@ -70,19 +93,18 @@ public class CookBook extends AppCompatActivity {
                     }
                 }
 
-                CookBookAdapter cookBookAdapter = new CookBookAdapter(cookBookObjectList, CookBook.this);
+                for (int i = 0; i < 20; i++) {
+
+                    cookBookObjectListAdapter.add(cookBookObjectList.get(i));
+
+                    if (i == 19) {
+                        startingPositionForAddingIntoAdapterList = startingPositionForAddingIntoAdapterList + 20;
+                    }
+                }
+
+                CookBookAdapter cookBookAdapter = new CookBookAdapter(cookBookObjectListAdapter, CookBook.this);
 
                 cookBookRecyclerView.setAdapter(cookBookAdapter);
-
-                //So first I made the main array called "menus" that way I can find it in the cookbook list.
-                //Then I made the cookbook object which has all of the main objects in each element but also a list of cookbook steps
-                //Then in the cookbook steps I serialized named all the things in the steps array in each element.
-
-                //But important thing is that I had to make the whole thing an object because if I were to do the new Gson().fromJson
-                //and have the variable an array, which it should be, because the first item would be an array called menus,
-                //then it wouldn't work because I would have no access to the method in cookbookList that returns a list,
-                //so what I had to do was make the whole thing into an object by adding { in the beginning and } in the end,
-                //so that way I can call the .getCookBookList on it.
 
             }
         }, new Response.ErrorListener() {
@@ -99,6 +121,4 @@ public class CookBook extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
-
-
 }

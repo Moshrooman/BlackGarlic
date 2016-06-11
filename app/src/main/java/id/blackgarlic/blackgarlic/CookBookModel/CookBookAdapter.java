@@ -2,9 +2,11 @@ package id.blackgarlic.blackgarlic.CookBookModel;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +17,9 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import java.util.ArrayList;
 import java.util.List;
 
+import id.blackgarlic.blackgarlic.MainActivity;
 import id.blackgarlic.blackgarlic.R;
+import id.blackgarlic.blackgarlic.Voucher.VoucherObject;
 import uk.co.chrisjenx.calligraphy.CalligraphyTypefaceSpan;
 import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 
@@ -28,6 +32,15 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
 
     List<CookBookObject> cookBookList = new ArrayList<CookBookObject>();
     Context mContext;
+    List<CookBookObject> fullCookBookList = CookBook.getCookBookObjectList();
+    boolean lastOne = false;
+    int amountRemovedOnLastOne = 0;
+
+    public void addMenus() {
+
+        new MyAsyncTask().execute();
+
+    }
 
     public CookBookAdapter(List<CookBookObject> cookBookObjectList, Context context) {
         this.cookBookList = cookBookObjectList;
@@ -67,6 +80,14 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
 
         myViewHolder.cookBookTextView.setText(menuTitleStringBuilder, TextView.BufferType.SPANNABLE);
 
+        if (position == cookBookList.size() - 1) {
+
+            if (lastOne == false) {
+                addMenus();
+            }
+
+        }
+
     }
 
     @Override
@@ -86,4 +107,69 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
             cookBookTextView = (TextView) itemView.findViewById(R.id.cookBookTextView);
         }
     }
+
+
+    private class MyAsyncTask extends AsyncTask<Void, Integer, Void> {
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            Log.e("Size: ", String.valueOf(cookBookList.size()));
+
+            if (lastOne == false) {
+                notifyItemRangeInserted(CookBook.getStartingPositionForAddingIntoAdapterList() - 20, CookBook.getStartingPositionForAddingIntoAdapterList() + 19);
+            } else if (lastOne == true) {
+                notifyItemRangeInserted(CookBook.getStartingPositionForAddingIntoAdapterList() - amountRemovedOnLastOne, fullCookBookList.size());
+            }
+
+            super.onPostExecute(aVoid);
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            int startingPositionForAddingIntoAdapterList = CookBook.getStartingPositionForAddingIntoAdapterList();
+
+            if (startingPositionForAddingIntoAdapterList + 20 > fullCookBookList.size()) {
+
+                Log.e("Before Starting: ", String.valueOf(startingPositionForAddingIntoAdapterList));
+
+                for (int i = startingPositionForAddingIntoAdapterList; i < fullCookBookList.size(); i++) {
+                    cookBookList.add(fullCookBookList.get(i));
+                    amountRemovedOnLastOne++;
+                }
+
+                CookBook.setStartingPositionForAddingIntoAdapterList(CookBook.getStartingPositionForAddingIntoAdapterList() + (fullCookBookList.size() - startingPositionForAddingIntoAdapterList));
+
+                Log.e("After Starting: ", String.valueOf(CookBook.getStartingPositionForAddingIntoAdapterList()));
+
+                Log.e("Last One: ", String.valueOf(amountRemovedOnLastOne));
+
+                lastOne = true;
+
+                return null;
+
+            } else {
+                Log.e("Before Starting: ", String.valueOf(startingPositionForAddingIntoAdapterList));
+
+                for (int i = startingPositionForAddingIntoAdapterList; i < startingPositionForAddingIntoAdapterList + 20; i++) {
+                    cookBookList.add(fullCookBookList.get(i));
+                }
+
+                CookBook.setStartingPositionForAddingIntoAdapterList(CookBook.getStartingPositionForAddingIntoAdapterList() + 20);
+
+                Log.e("After Starting: ", String.valueOf(CookBook.getStartingPositionForAddingIntoAdapterList()));
+
+                lastOne = false;
+
+                return null;
+            }
+
+        }
+    }
+
 }
