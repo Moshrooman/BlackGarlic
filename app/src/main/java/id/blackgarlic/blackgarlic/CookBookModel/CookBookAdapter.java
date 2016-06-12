@@ -3,6 +3,7 @@ package id.blackgarlic.blackgarlic.CookBookModel;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -48,42 +49,73 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
     }
 
     @Override
+    public int getItemViewType(int position) {
+
+        if (position == fullCookBookList.size()) {
+            return 2;
+        } else if (position == cookBookList.size()) {
+            return 1;
+        } else if (position != cookBookList.size()) {
+            return 0;
+        } else {
+            return 3;
+        }
+
+    }
+
+    @Override
     public MyCookBookViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cookbookrow, viewGroup, false);
-        return new MyCookBookViewHolder(view);
+
+        if ((viewType == 3 || viewType == 2)) {
+            View emptyView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.emptyrowcookbook, viewGroup, false);
+            return new MyCookBookViewHolder(emptyView);
+        } else if (viewType == 1) {
+            //Inflate loading shit
+            View progressView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cookbookloadingrow, viewGroup, false);
+            return new MyCookBookViewHolder(progressView);
+        } else {
+            View menuView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cookbookrow, viewGroup, false);
+            return new MyCookBookViewHolder(menuView);
+        }
+
     }
 
     @Override
     public void onBindViewHolder(MyCookBookViewHolder myViewHolder, int position) {
-        Uri uri = Uri.parse(BLACKGARLIC_PICTURES.replace("menu_id", String.valueOf(cookBookList.get(position).getMenu_id())));
-        myViewHolder.cookBookImage.setImageURI(uri);
 
-        int menuTitleLength = cookBookList.get(position).getMenu_name().length();
-        int menuSubNameLength = cookBookList.get(position).getMenu_subname().length();
+        if (position != cookBookList.size()) {
 
-        String menuTitle = cookBookList.get(position).getMenu_name();
-        String menuSubname = cookBookList.get(position).getMenu_subname();
+            Uri uri = Uri.parse(BLACKGARLIC_PICTURES.replace("menu_id", String.valueOf(cookBookList.get(position).getMenu_id())));
+            myViewHolder.cookBookImage.setImageURI(uri);
 
-        CalligraphyTypefaceSpan robotoMedium = new CalligraphyTypefaceSpan(TypefaceUtils.load(mContext.getAssets(), "fonts/Roboto-Medium.ttf"));
-        CalligraphyTypefaceSpan robotoThin = new CalligraphyTypefaceSpan(TypefaceUtils.load(mContext.getAssets(), "fonts/Roboto-Thin.ttf"));
+            int menuTitleLength = cookBookList.get(position).getMenu_name().length();
+            int menuSubNameLength = cookBookList.get(position).getMenu_subname().length();
 
-        SpannableStringBuilder menuTitleStringBuilder = new SpannableStringBuilder();
+            String menuTitle = cookBookList.get(position).getMenu_name();
+            String menuSubname = cookBookList.get(position).getMenu_subname();
 
-        if (menuSubNameLength != 0) {
-            menuTitleStringBuilder.append(menuTitle).append("\n" + menuSubname);
-            menuTitleStringBuilder.setSpan(robotoMedium, 0, menuTitleLength + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            menuTitleStringBuilder.setSpan(robotoThin, menuTitleLength + 1, menuTitleLength + menuSubNameLength + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            CalligraphyTypefaceSpan robotoMedium = new CalligraphyTypefaceSpan(TypefaceUtils.load(mContext.getAssets(), "fonts/Roboto-Medium.ttf"));
+            CalligraphyTypefaceSpan robotoThin = new CalligraphyTypefaceSpan(TypefaceUtils.load(mContext.getAssets(), "fonts/Roboto-Thin.ttf"));
+
+            SpannableStringBuilder menuTitleStringBuilder = new SpannableStringBuilder();
+
+            if (menuSubNameLength != 0) {
+                menuTitleStringBuilder.append(menuTitle).append("\n" + menuSubname);
+                menuTitleStringBuilder.setSpan(robotoMedium, 0, menuTitleLength + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                menuTitleStringBuilder.setSpan(robotoThin, menuTitleLength + 1, menuTitleLength + menuSubNameLength + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            } else {
+                menuTitleStringBuilder.append(menuTitle);
+                menuTitleStringBuilder.setSpan(robotoMedium, 0, menuTitleLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+
+            myViewHolder.cookBookTextView.setText(menuTitleStringBuilder, TextView.BufferType.SPANNABLE);
+
         } else {
-            menuTitleStringBuilder.append(menuTitle);
-            menuTitleStringBuilder.setSpan(robotoMedium, 0, menuTitleLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-
-        myViewHolder.cookBookTextView.setText(menuTitleStringBuilder, TextView.BufferType.SPANNABLE);
-
-        if (position == cookBookList.size() - 1) {
 
             if (lastOne == false) {
+
                 addMenus();
+
             }
 
         }
@@ -92,7 +124,7 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
 
     @Override
     public int getItemCount() {
-        return cookBookList.size();
+        return cookBookList.size() + 1;
     }
 
     public class MyCookBookViewHolder extends RecyclerView.ViewHolder {
@@ -115,11 +147,16 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
         protected void onPostExecute(Void aVoid) {
             Log.e("Size: ", String.valueOf(cookBookList.size()));
 
-            if (lastOne == false) {
-                notifyItemRangeInserted(CookBook.getStartingPositionForAddingIntoAdapterList() - 20, CookBook.getStartingPositionForAddingIntoAdapterList() + 19);
-            } else if (lastOne == true) {
-                notifyItemRangeInserted(CookBook.getStartingPositionForAddingIntoAdapterList() - amountRemovedOnLastOne, fullCookBookList.size());
-            }
+            Runnable runnable2Secs = new Runnable() {
+                @Override
+                public void run() {
+                    notifyDataSetChanged();
+                }
+            };
+
+            Handler handler = new Handler();
+
+            handler.postDelayed(runnable2Secs, (int) (Math.random() * 1500));
 
             super.onPostExecute(aVoid);
         }
@@ -154,6 +191,7 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
                 return null;
 
             } else {
+
                 Log.e("Before Starting: ", String.valueOf(startingPositionForAddingIntoAdapterList));
 
                 for (int i = startingPositionForAddingIntoAdapterList; i < startingPositionForAddingIntoAdapterList + 20; i++) {
