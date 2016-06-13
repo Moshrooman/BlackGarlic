@@ -75,8 +75,6 @@ public class ProfilePicturePopUp extends AppCompatActivity {
 
         galleryOrPicture = "";
 
-        Log.e("Has Profile: ", String.valueOf(MainActivity.getHasProfilePicture()));
-
         overridePendingTransition(R.anim.fade_in, R.anim.actual_fade_out);
 
         newImageUri = null;
