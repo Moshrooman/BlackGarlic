@@ -5,13 +5,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CookBookModel.CookBook"
-    tools:showIn="@layout/activity_cook_book">
+    tools:showIn="@layout/activity_cook_book"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:id="@+id/cookBookSearchLinearLayout"
+        android:weightSum="1"
+        android:orientation="horizontal"
+        >
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="0.15"
+            android:id="@+id/cookBookSearchDraweeView"
+            fresco:actualImageScaleType="fitXY"
+            />
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:background="@drawable/border"
+            android:hint="Search"
+            android:gravity="center"
+            android:layout_weight="0.85"
+            android:id="@+id/cookBookSearchEditText"
+            fontPath="fonts/Roboto-Medium.ttf"
+            />
+
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/cookBookRecyclerView"
         android:background="@color/SUPERLIGHTGREY"
+        android:layout_below="@+id/cookBookSearchLinearLayout"
         >
 
     </android.support.v7.widget.RecyclerView>
