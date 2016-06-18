@@ -49,41 +49,24 @@ public class CookBook extends AppCompatActivity{
 
     private static SimpleDraweeView cookBookSearchDraweeView;
 
-    //So to understand this part, we need to understand that CookBookAdapter's constructor takes 4 LIST parameters (exclude context parameter)
-    //the first one is for the adapters cookBookList, the second one is for the adapters cookBookListSearch
-    //the third one is for adapters fullcookBookList, and the fourth one is for the adapters fullCookBookListSearch
-    //so 1 and 3 pertain to if the user DIDN'T search
-    //and 2 and 4 pertain to if the user DID search
+    //So the knowledge that we learnt is that if we create a new instance of an adapter and fill in the parameters, then the cookbookadapter
+    //class then sets their variables to the variables passed in the constructor, then the variable in the cookbookadapter will now point to
+    //the same object as the parameter does, which is the object here in cookbook class, so we avoided that by going through for loop.
 
-    //So the reason why we only have 1 adapter is because when the user searches, we call new CookBookAdapter on this 1 adapter,
-    //and if the user then deletes everything in the search bar, then it will also call new CookBookAdapter on this 1 adapter.
-
-    //However, knowing the constructor information we know above, we will be filling in specific parameters in the constructor and leaving
-    //the other ones blank, depending on if they have anything in the search bar, vs. if they do have something in the search bar.
-
-    //So using the knowledge we just learnt, we can call new CookBookAdapter as it will indeed create a whole new object, and previous
-    //values from the CookBookAdapter class will not be carried. So knowing that, because in our constructor for CookBookAdapter
-    // we are using for loops to add values into our variables in the CookBookAdapter as opposed to using "="
-    // (TO AVOID REFERENCING THE SAME OBJECT, BECAUSE IF WE USE "=" IF WE DELETE SOMETHING FROM THE LIST OF COOKBOOKADAPTER IT WILL DELETE
-    //FROM THE LIST HERE IN COOKBOOKADAPTER BECAUSE WE PASSED IT AS THE PARAMETER, AN OBJECT IN DIFFERENT CLASS REFERENCES IT, SO NOW
-    //THEY POINT TO THE SAME OBJECT, SO CHANGE IN ONE RESULTS IN CHANGE IN ANOTHER), it won't add onto a list with previous values
-    //because new CookBookAdapter actually does create a new Object from the class.
-
-    //So the first time that this adapter is given value and is called = new CookBookAdapter on, is in the string request.
-    //And because the first list that is gonna be shown to the user is the absolute full list, without any search, we pass the
-    //cookbookobjectlistadapter (with 20 of the first items in it) as the first parameter, and the full cookbookobjectlist as the third
-    //parameter, and therefore make the second and fourth parameter null, also remember to set search boolean to false.
-
-    //Then if the user then searches something in the edittext.addontextchanged listener, we create a new adapter out of this 1 adapter
-    //again, then we pass the cookBookObjectListSearchAdapter as the second parameter (which will contain the items that contains
-    //the searched string, and will have been emptied out prior to prevent adding onto existing items, and the cookBookObjectList as the
-    //fourth parameter, then as a result we make the first and third parameters null, also we set the searchedboolean to true.
-
-    //Then in the addontextchangedlistener if the user then deletes all what he searched, we create the same adapter that we did in the
-    //string request because this is the correct setting for if the user didn't search anything, and we set the searched boolean to false.
+    //However, we want to create 2 different cookbookAdapters because for the first cookbookAdapter, this will be given value in the string
+    //request so we will use this for when the user deletes everything from the search and when the user first opens the cookbook.
+    //But for if the user searches something, then thats when we want to create a new adapter using the cookBookAdapter search for everytime
+    //that they search.
+    //But by recycling and continuously using the cookBookAdapter for the blank search bar the menus loaded before will already be there,
+    //and also, the cookbookadapter deals with the staringpositionforaddingintoadapterlist variable to mark the last position of the last
+    //menu added, so that way it doesn't fuck up. The way it would fuck up is that if everytime we would create a new adapter, we always pass the
+    //first 20 items and in cookbookadapter itll switch the startingposition to 40 after loading new 20. Then now if we search and delete so create a new one,
+    //then starting position will be 40 so instead of adding the menus starting at position 20, itll start at 40.
 
     //NOW GO DOWN TO STRING REQUEST TO SHOW THE PARAMETERS FILLED IN.
     private static CookBookAdapter cookBookAdapter;
+
+    private static CookBookAdapter cookBookAdapterSearch;
 
     public static int getStartingPositionForAddingIntoAdapterList() {
         return startingPositionForAddingIntoAdapterList;
@@ -117,8 +100,6 @@ public class CookBook extends AppCompatActivity{
 
                     //Then just like explained above, we create same settings as the stringrequest adapter.
 
-                    cookBookAdapter = new CookBookAdapter(cookBookObjectListAdapter, null, cookBookObjectList, null, CookBook.this);
-                    cookBookAdapter.setSearchBoolean(false);
                     cookBookRecyclerView.setAdapter(cookBookAdapter);
                 } else {
 
@@ -151,12 +132,12 @@ public class CookBook extends AppCompatActivity{
                     //Then we create new cookbookadapter, again, like explained above, filling in second and fourth parameter, setting
                     //searched boolean to true and setting the searchedstring to the string.value of s (which is the searched string).
 
-                    cookBookAdapter = new CookBookAdapter(null, cookBookObjectListSearchAdapter, null, cookBookObjectList, CookBook.this);
-                    cookBookAdapter.setSearchBoolean(true);
-                    cookBookAdapter.setSearchedString(String.valueOf(s));
+                    cookBookAdapterSearch = new CookBookAdapter(null, cookBookObjectListSearchAdapter, null, cookBookObjectList, CookBook.this);
+                    cookBookAdapterSearch.setSearchBoolean(true);
+                    cookBookAdapterSearch.setSearchedString(String.valueOf(s));
 
                     //Then set the adapter.
-                    cookBookRecyclerView.setAdapter(cookBookAdapter);
+                    cookBookRecyclerView.setAdapter(cookBookAdapterSearch);
                 }
             }
 

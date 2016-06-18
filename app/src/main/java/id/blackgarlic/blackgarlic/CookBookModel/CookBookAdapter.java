@@ -34,14 +34,13 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
     //So again, the idea here is so that we have 2 different sets of lists, 2 lists for if they search, 2 lists for if they don't.
 
     List<CookBookObject> cookBookList = new ArrayList<CookBookObject>();
-    List<CookBookObject> cookBookListSearch = new ArrayList<CookBookObject>();
-    Context mContext;
     List<CookBookObject> fullCookBookList = new ArrayList<CookBookObject>();
+    List<CookBookObject> cookBookListSearch = new ArrayList<CookBookObject>();
     List<CookBookObject> fullCookBookListSearch = new ArrayList<CookBookObject>();
     boolean lastOne = false;
-    int amountRemovedOnLastOne = 0;
     boolean searchBoolean = false;
     String searchedString = "";
+    Context mContext;
 
     public void setSearchedString(String newSearchedString) {
         this.searchedString = newSearchedString;
@@ -347,14 +346,11 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
 
                     for (int i = startingPositionForAddingIntoAdapterList; i < fullCookBookList.size(); i++) {
                         cookBookList.add(fullCookBookList.get(i));
-                        amountRemovedOnLastOne++;
                     }
 
                     CookBook.setStartingPositionForAddingIntoAdapterList(CookBook.getStartingPositionForAddingIntoAdapterList() + (fullCookBookList.size() - startingPositionForAddingIntoAdapterList));
 
                     Log.e("After Starting: ", String.valueOf(CookBook.getStartingPositionForAddingIntoAdapterList()));
-
-                    Log.e("Last One: ", String.valueOf(amountRemovedOnLastOne));
 
                     lastOne = true;
 
