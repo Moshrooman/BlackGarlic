@@ -52,7 +52,6 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
 
     public void addMenus() {
 
-        //SKIP THIS COME BACK WHEN TOLD
         //So we first check if searchboolean is false, if it is then we automatically execute myasynctask.
 
         if (searchBoolean == false) {
@@ -156,8 +155,6 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
             }
 
         }
-
-
     }
 
     @Override
@@ -181,11 +178,6 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
 
     @Override
     public void onBindViewHolder(MyCookBookViewHolder myViewHolder, int position) {
-
-        //So the idea here is that we want to explicitly split up the code so that it does different things if search boolean is false
-        //or if its true
-
-        //So we've seen the code below already, which is if searchboolean is false.
 
         if (searchBoolean == false) {
             if (position != cookBookList.size()) {
@@ -225,10 +217,8 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
 
             }
 
-            //Here is the else if searchboolean is true.
-            //Basically what we did here is that we copy and pasted the same code except we changed everything that if there is cookBookList,
-            //we changed it to cookBookListSearch, if there is fullcookbooklist, we changed it to fullcookbooklistsearch.
         } else {
+
             if (position != cookBookListSearch.size()) {
 
                 Uri uri = Uri.parse(BLACKGARLIC_PICTURES.replace("menu_id", String.valueOf(cookBookListSearch.get(position).getMenu_id())));
@@ -340,7 +330,7 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
             if (searchBoolean == false) {
                 int startingPositionForAddingIntoAdapterList = CookBook.getStartingPositionForAddingIntoAdapterList();
 
-                if (startingPositionForAddingIntoAdapterList + 20 > fullCookBookList.size()) {
+                if (startingPositionForAddingIntoAdapterList + 20 >= fullCookBookList.size()) {
 
                     Log.e("Before Starting: ", String.valueOf(startingPositionForAddingIntoAdapterList));
 

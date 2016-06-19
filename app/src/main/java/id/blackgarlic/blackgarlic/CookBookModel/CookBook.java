@@ -169,11 +169,10 @@ public class CookBook extends AppCompatActivity{
 
                 cookBookObjectList = cookBookList.getCookBookList();
 
-                int positionToGrabString = 0;
                 int totalRemoved = 0;
 
-                for (int i = positionToGrabString; i < cookBookObjectList.size(); i++) {
-                    String menuTitle = cookBookObjectList.get(positionToGrabString).getMenu_name();
+                for (int i = 0; i < cookBookObjectList.size(); i++) {
+                    String menuTitle = cookBookObjectList.get(i).getMenu_name();
 
                     for (int j = i + 1; j < cookBookObjectList.size(); j++) {
                         if (cookBookObjectList.get(j).getMenu_name().equals(menuTitle)) {
@@ -182,8 +181,6 @@ public class CookBook extends AppCompatActivity{
                             totalRemoved++;
                         }
                     }
-
-                    positionToGrabString++;
 
                     if (i == cookBookObjectList.size() - 1) {
                         Log.e("Removed: ", String.valueOf(totalRemoved));
