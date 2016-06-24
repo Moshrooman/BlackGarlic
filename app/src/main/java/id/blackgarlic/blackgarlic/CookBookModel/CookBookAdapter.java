@@ -11,16 +11,30 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.google.gson.Gson;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import id.blackgarlic.blackgarlic.ConnectionManager;
 import id.blackgarlic.blackgarlic.MainActivity;
 import id.blackgarlic.blackgarlic.R;
+import id.blackgarlic.blackgarlic.SplashActivity;
 import id.blackgarlic.blackgarlic.Voucher.VoucherObject;
+import id.blackgarlic.blackgarlic.model.UserCredentials;
 import uk.co.chrisjenx.calligraphy.CalligraphyTypefaceSpan;
 import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 
@@ -30,6 +44,7 @@ import uk.co.chrisjenx.calligraphy.TypefaceUtils;
 public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCookBookViewHolder> {
 
     public final String BLACKGARLIC_PICTURES = "http://bgmenu.kilatstorage.com/menu_id.jpg";
+    public final String insertOrDeleteFavoritesLink = "http://188.166.221.241:3000/app/insertordeletefavorite";
 
     //So again, the idea here is so that we have 2 different sets of lists, 2 lists for if they search, 2 lists for if they don't.
 
@@ -41,6 +56,7 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
     boolean searchBoolean = false;
     String searchedString = "";
     Context mContext;
+    UserCredentials userCredentials = new Gson().fromJson(SplashActivity.getSharedPreferences().getString("Credentials", ""), UserCredentials.class);
 
     public void setSearchedString(String newSearchedString) {
         this.searchedString = newSearchedString;
@@ -63,10 +79,61 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
 
             //GO DOWN TO ASYNC TASK
         } else if ((searchBoolean == true) && (cookBookListSearch.size() >= 20)) {
-            Log.e("Loading More: ", "True");
             new MyAsyncTask().execute();
         }
 
+    }
+
+    public void insertOrDeleteMenu(String menuName, final int position) {
+        final JSONObject insertOrDeleteMenuBody = new JSONObject();
+
+        try {
+            insertOrDeleteMenuBody.put("customer_id", String.valueOf(userCredentials.getCustomer_id()));
+            insertOrDeleteMenuBody.put("menu_name", menuName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        StringRequest insertOrDeleteMenuRequest = new StringRequest(Request.Method.POST, insertOrDeleteFavoritesLink, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.e("Response: ", response);
+
+                if (response.equals("added")) {
+                    if (searchBoolean == true) {
+                        cookBookListSearch.get(position).setIsFavorited(true);
+                    } else {
+                        cookBookList.get(position).setIsFavorited(true);
+                    }
+                } else if (response.equals("removed")) {
+                    if (searchBoolean == true) {
+                        cookBookListSearch.get(position).setIsFavorited(false);
+                    } else {
+                        cookBookList.get(position).setIsFavorited(false);
+                        //add t notes, then if statement in the onbindviewholder to set checked if getisfavorited is true.
+                    }
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                return insertOrDeleteMenuBody.toString().getBytes();
+            }
+        };
+
+        ConnectionManager.getInstance(mContext).add(insertOrDeleteMenuRequest);
     }
 
     public CookBookAdapter(List<CookBookObject> cookBookObjectList, List<CookBookObject> cookBookObjectListParameterSearch, List<CookBookObject> fullCookBookListParameter, List<CookBookObject> fullCookBookListSearchParameter, Context context) {
@@ -110,22 +177,18 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
             //If search boolean is false the first thing is we have to check if we are at the very last object, if it is we return 2
             //which returns an empty view
             if (position == fullCookBookList.size()) {
-                Log.e("Return: ", "2");
                 return 2;
 
                 //Then we check if we are at the last one in the visible list, if we are we return 1, which returns a loading view
             } else if ((position == cookBookList.size())) {
-                Log.e("Return: ", "1");
                 return 1;
 
                 //Then if we are not at the last of the visible list we have to return 0, which returns an actual row
             } else if (position != cookBookList.size()) {
-                Log.e("Return: ", "0");
                 return 0;
 
                 //And in the else we return 3 which also returns an empty row.
             } else {
-                Log.e("Return: ", "3");
                 return 3;
             }
 
@@ -177,10 +240,42 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
     }
 
     @Override
-    public void onBindViewHolder(MyCookBookViewHolder myViewHolder, int position) {
+    public void onBindViewHolder(final MyCookBookViewHolder myViewHolder, final int position) {
 
         if (searchBoolean == false) {
+
             if (position != cookBookList.size()) {
+
+                //Favorite button work
+                if (cookBookList.get(position).getIsFavorited() == true) {
+                    myViewHolder.favoriteButton.setLiked(true);
+                } else {
+                    myViewHolder.favoriteButton.setLiked(false);
+                }
+
+                myViewHolder.favoriteButton.setOnLikeListener(new OnLikeListener() {
+                    @Override
+                    public void liked(LikeButton likeButton) {
+                        insertOrDeleteMenu(cookBookList.get(position).getMenu_name(), position);
+                    }
+
+                    @Override
+                    public void unLiked(LikeButton likeButton) {
+                        insertOrDeleteMenu(cookBookList.get(position).getMenu_name(), position);
+                    }
+                });
+
+                //end of favorite button work
+
+                myViewHolder.cookBookImage.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        RelativeLayout.LayoutParams favoriteButtonMargin = (RelativeLayout.LayoutParams) myViewHolder.favoriteButton.getLayoutParams();
+                        favoriteButtonMargin.setMargins(0, myViewHolder.cookBookImage.getHeight() - myViewHolder.favoriteButton.getHeight(), 0, 0);
+                        myViewHolder.favoriteButton.setLayoutParams(favoriteButtonMargin);
+                        myViewHolder.favoriteButton.setVisibility(View.VISIBLE);
+                    }
+                });
 
                 Uri uri = Uri.parse(BLACKGARLIC_PICTURES.replace("menu_id", String.valueOf(cookBookList.get(position).getMenu_id())));
                 myViewHolder.cookBookImage.setImageURI(uri);
@@ -221,6 +316,38 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
 
             if (position != cookBookListSearch.size()) {
 
+                //Start of favorites work
+
+                if (cookBookListSearch.get(position).getIsFavorited() == true) {
+                    myViewHolder.favoriteButton.setLiked(true);
+                } else {
+                    myViewHolder.favoriteButton.setLiked(false);
+                }
+
+                myViewHolder.favoriteButton.setOnLikeListener(new OnLikeListener() {
+                    @Override
+                    public void liked(LikeButton likeButton) {
+                        insertOrDeleteMenu(cookBookListSearch.get(position).getMenu_name(), position);
+                    }
+
+                    @Override
+                    public void unLiked(LikeButton likeButton) {
+                        insertOrDeleteMenu(cookBookListSearch.get(position).getMenu_name(), position);
+                    }
+                });
+
+                //end of favorites work
+
+                myViewHolder.cookBookImage.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        RelativeLayout.LayoutParams favoriteButtonMargin = (RelativeLayout.LayoutParams) myViewHolder.favoriteButton.getLayoutParams();
+                        favoriteButtonMargin.setMargins(0, myViewHolder.cookBookImage.getHeight() - myViewHolder.favoriteButton.getHeight(), 0, 0);
+                        myViewHolder.favoriteButton.setLayoutParams(favoriteButtonMargin);
+                        myViewHolder.favoriteButton.setVisibility(View.VISIBLE);
+                    }
+                });
+
                 Uri uri = Uri.parse(BLACKGARLIC_PICTURES.replace("menu_id", String.valueOf(cookBookListSearch.get(position).getMenu_id())));
                 myViewHolder.cookBookImage.setImageURI(uri);
 
@@ -259,7 +386,6 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
         }
 
 
-
     }
 
     @Override
@@ -281,12 +407,17 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
 
         public SimpleDraweeView cookBookImage;
         public TextView cookBookTextView;
+        public RelativeLayout draweeViewRelativeLayout;
+        public LikeButton favoriteButton;
 
         public MyCookBookViewHolder(View itemView) {
             super(itemView);
 
             cookBookImage = (SimpleDraweeView) itemView.findViewById(R.id.cookBookImage);
             cookBookTextView = (TextView) itemView.findViewById(R.id.cookBookTextView);
+            draweeViewRelativeLayout = (RelativeLayout) itemView.findViewById(R.id.draweeViewRelativeLayout);
+            favoriteButton = (LikeButton) itemView.findViewById(R.id.favoriteButton);
+
         }
     }
 
@@ -295,13 +426,6 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
 
         @Override
         protected void onPostExecute(Void aVoid) {
-
-            if (searchBoolean == false) {
-                Log.e("Size: ", String.valueOf(cookBookList.size()));
-            } else {
-                Log.e("Size: ", String.valueOf(cookBookListSearch.size()));
-            }
-
 
             Runnable runnable2Secs = new Runnable() {
                 @Override
@@ -332,15 +456,11 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
 
                 if (startingPositionForAddingIntoAdapterList + 20 >= fullCookBookList.size()) {
 
-                    Log.e("Before Starting: ", String.valueOf(startingPositionForAddingIntoAdapterList));
-
                     for (int i = startingPositionForAddingIntoAdapterList; i < fullCookBookList.size(); i++) {
                         cookBookList.add(fullCookBookList.get(i));
                     }
 
                     CookBook.setStartingPositionForAddingIntoAdapterList(CookBook.getStartingPositionForAddingIntoAdapterList() + (fullCookBookList.size() - startingPositionForAddingIntoAdapterList));
-
-                    Log.e("After Starting: ", String.valueOf(CookBook.getStartingPositionForAddingIntoAdapterList()));
 
                     lastOne = true;
 
@@ -348,15 +468,11 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
 
                 } else {
 
-                    Log.e("Before Starting: ", String.valueOf(startingPositionForAddingIntoAdapterList));
-
                     for (int i = startingPositionForAddingIntoAdapterList; i < startingPositionForAddingIntoAdapterList + 20; i++) {
                         cookBookList.add(fullCookBookList.get(i));
                     }
 
                     CookBook.setStartingPositionForAddingIntoAdapterList(CookBook.getStartingPositionForAddingIntoAdapterList() + 20);
-
-                    Log.e("After Starting: ", String.valueOf(CookBook.getStartingPositionForAddingIntoAdapterList()));
 
                     lastOne = false;
 

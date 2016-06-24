@@ -11,6 +11,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.EditText;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -18,16 +19,25 @@ import com.android.volley.toolbox.StringRequest;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import id.blackgarlic.blackgarlic.ConnectionManager;
 import id.blackgarlic.blackgarlic.R;
+import id.blackgarlic.blackgarlic.SplashActivity;
+import id.blackgarlic.blackgarlic.model.UserCredentials;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class CookBook extends AppCompatActivity{
 
     private static final String cookBookLink = "http://188.166.221.241:3000/app/cookbook";
+
+    private static final String checkFavoritesLink = "http://188.166.221.241:3000/app/getfavorites";
+
+    private static UserCredentials userCredentials;
 
     private RecyclerView cookBookRecyclerView;
 
@@ -80,6 +90,46 @@ public class CookBook extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cook_book);
+
+        userCredentials = new Gson().fromJson(SplashActivity.getSharedPreferences().getString("Credentials", ""), UserCredentials.class);
+
+        //Start of checking favorites - delete
+
+        final JSONObject checkFavoritesBody = new JSONObject();
+
+        try {
+            checkFavoritesBody.put("customer_id", String.valueOf(userCredentials.getCustomer_id()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        StringRequest checkFavoritesRequest = new StringRequest(Request.Method.POST, checkFavoritesLink, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                Log.e("Favorites: ", response);
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                return checkFavoritesBody.toString().getBytes();
+            }
+        };
+
+        ConnectionManager.getInstance(CookBook.this).add(checkFavoritesRequest);
+
+        //End of checking favorites - delete
 
         cookBookObjectList.clear();
         cookBookObjectListAdapter.clear();

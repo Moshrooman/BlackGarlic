@@ -60,6 +60,16 @@ public class CookBookObject {
     @SerializedName("steps")
     private List<CookBookSteps> cookBookStepList;
 
+    private boolean isFavorited = false;
+
+    public boolean getIsFavorited() {
+        return isFavorited;
+    }
+
+    public void setIsFavorited(boolean isFavorited) {
+        this.isFavorited = isFavorited;
+    }
+
     public int getMenu_id() {
         return menu_id;
     }
