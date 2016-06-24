@@ -78,6 +78,8 @@ public class CookBook extends AppCompatActivity{
 
     private static CookBookAdapter cookBookAdapterSearch;
 
+    private static List<String> favoritesList = new ArrayList<String>();
+
     public static int getStartingPositionForAddingIntoAdapterList() {
         return startingPositionForAddingIntoAdapterList;
     }
@@ -93,46 +95,9 @@ public class CookBook extends AppCompatActivity{
 
         userCredentials = new Gson().fromJson(SplashActivity.getSharedPreferences().getString("Credentials", ""), UserCredentials.class);
 
-        //Start of checking favorites - delete
-
-        final JSONObject checkFavoritesBody = new JSONObject();
-
-        try {
-            checkFavoritesBody.put("customer_id", String.valueOf(userCredentials.getCustomer_id()));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        StringRequest checkFavoritesRequest = new StringRequest(Request.Method.POST, checkFavoritesLink, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-                Log.e("Favorites: ", response);
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }) {
-            @Override
-            public String getBodyContentType() {
-                return "application/json";
-            }
-
-            @Override
-            public byte[] getBody() throws AuthFailureError {
-                return checkFavoritesBody.toString().getBytes();
-            }
-        };
-
-        ConnectionManager.getInstance(CookBook.this).add(checkFavoritesRequest);
-
-        //End of checking favorites - delete
-
         cookBookObjectList.clear();
         cookBookObjectListAdapter.clear();
+        favoritesList.clear();
         startingPositionForAddingIntoAdapterList = 0;
 
         //Then here we reference the edit text that we just created.
@@ -207,49 +172,108 @@ public class CookBook extends AppCompatActivity{
         cookBookRecyclerView.setItemAnimator(new DefaultItemAnimator());
         cookBookRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        //Start of outer cookbook string request.
         StringRequest cookBookRequest = new StringRequest(Request.Method.POST, cookBookLink, new Response.Listener<String>() {
             @Override
-            public void onResponse(String response) {
+            public void onResponse(final String response1) {
 
-                String modifiedResponse = "{\"menus\"" + ": " + response;
+                //THen in the on response we do favorites request cuz we wanna delete shit.
+                final JSONObject checkFavoritesBody = new JSONObject();
 
-                modifiedResponse = modifiedResponse + "}";
+                try {
+                    checkFavoritesBody.put("customer_id", String.valueOf(userCredentials.getCustomer_id()));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-                CookBookList cookBookList = new Gson().fromJson(modifiedResponse, CookBookList.class);
+                //Start of inner favorites string request
 
-                cookBookObjectList = cookBookList.getCookBookList();
+                StringRequest checkFavoritesRequest = new StringRequest(Request.Method.POST, checkFavoritesLink, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response2) {
 
-                int totalRemoved = 0;
+                        Log.e("Favorites: ", response2);
 
-                for (int i = 0; i < cookBookObjectList.size(); i++) {
-                    String menuTitle = cookBookObjectList.get(i).getMenu_name();
+                        String modifiedResponse = "{\"menus\"" + ": " + response1;
+                        modifiedResponse = modifiedResponse + "}";
 
-                    for (int j = i + 1; j < cookBookObjectList.size(); j++) {
-                        if (cookBookObjectList.get(j).getMenu_name().equals(menuTitle)) {
-                            cookBookObjectList.remove(j);
-                            j--;
-                            totalRemoved++;
+                        String modifiedResponseFavorites = "{\"favorites\"" + ": " + response2;
+                        modifiedResponseFavorites = modifiedResponseFavorites + "}";
+
+                        CookBookList cookBookList = new Gson().fromJson(modifiedResponse, CookBookList.class);
+                        cookBookObjectList = cookBookList.getCookBookList();
+
+                        if (!(response2.equals("empty"))) {
+                            FavoritesArray favoritesArrayObject = new Gson().fromJson(modifiedResponseFavorites, FavoritesArray.class);
+                            favoritesList = favoritesArrayObject.getFavoritesArray();
                         }
+
+                        int totalRemoved = 0;
+
+                        //Deleting all duplicates within the same list
+                        for (int i = 0; i < cookBookObjectList.size(); i++) {
+                            String menuTitle = cookBookObjectList.get(i).getMenu_name();
+
+                            for (int j = i + 1; j < cookBookObjectList.size(); j++) {
+                                if (cookBookObjectList.get(j).getMenu_name().equals(menuTitle)) {
+                                    cookBookObjectList.remove(j);
+                                    j--;
+                                    totalRemoved++;
+                                }
+                            }
+
+                            if (i == cookBookObjectList.size() - 1) {
+                                Log.e("Removed: ", String.valueOf(totalRemoved));
+                            }
+                        }
+
+                        if (!(response2.equals("empty"))) {
+                            //Setting all the favorites using the favorites retrieved
+                            for (int i = 0; i < favoritesList.size(); i++) {
+                                String menuNameToFavorite = favoritesList.get(i);
+
+                                for (int j = 0; j < cookBookObjectList.size(); j++) {
+                                    if (cookBookObjectList.get(j).getMenu_name().equals(menuNameToFavorite)) {
+                                        cookBookObjectList.get(j).setIsFavorited(true);
+                                    }
+                                }
+                            }
+                        }
+
+                        for (int i = 0; i < 20; i++) {
+
+                            cookBookObjectListAdapter.add(cookBookObjectList.get(i));
+
+                            if (i == 19) {
+                                startingPositionForAddingIntoAdapterList = startingPositionForAddingIntoAdapterList + 20;
+                            }
+                        }
+
+                        //PUT THIS IN NOTES THEN GO BACK UP TO SETTING DRAWEE VIEW.
+                        cookBookAdapter = new CookBookAdapter(cookBookObjectListAdapter, null, cookBookObjectList, null, CookBook.this);
+                        cookBookAdapter.setSearchBoolean(false);
+                        cookBookRecyclerView.setAdapter(cookBookAdapter);
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json";
                     }
 
-                    if (i == cookBookObjectList.size() - 1) {
-                        Log.e("Removed: ", String.valueOf(totalRemoved));
+                    @Override
+                    public byte[] getBody() throws AuthFailureError {
+                        return checkFavoritesBody.toString().getBytes();
                     }
-                }
+                };
 
-                for (int i = 0; i < 20; i++) {
-
-                    cookBookObjectListAdapter.add(cookBookObjectList.get(i));
-
-                    if (i == 19) {
-                        startingPositionForAddingIntoAdapterList = startingPositionForAddingIntoAdapterList + 20;
-                    }
-                }
-
-                //PUT THIS IN NOTES THEN GO BACK UP TO SETTING DRAWEE VIEW.
-                cookBookAdapter = new CookBookAdapter(cookBookObjectListAdapter, null, cookBookObjectList, null, CookBook.this);
-                cookBookAdapter.setSearchBoolean(false);
-                cookBookRecyclerView.setAdapter(cookBookAdapter);
+                ConnectionManager.getInstance(CookBook.this).add(checkFavoritesRequest);
+                //End of inner, favorites string request
 
             }
         }, new Response.ErrorListener() {
@@ -260,6 +284,8 @@ public class CookBook extends AppCompatActivity{
         });
 
         ConnectionManager.getInstance(CookBook.this).add(cookBookRequest);
+
+        //End of outer cookbook string request
     }
 
     @Override
