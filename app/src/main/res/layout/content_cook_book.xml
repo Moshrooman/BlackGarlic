@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,21 +18,39 @@
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="0.15"
+            android:layout_height="37dp"
+            android:layout_weight="0.1"
             android:id="@+id/cookBookSearchDraweeView"
             fresco:actualImageScaleType="fitXY"
+            android:layout_gravity="center"
             />
 
         <EditText
             android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:background="@drawable/border"
+            android:layout_height="37dp"
+            android:background="@drawable/bordersearchbar"
             android:hint="Search"
             android:gravity="center"
-            android:layout_weight="0.85"
+            android:layout_weight="0.7"
             android:id="@+id/cookBookSearchEditText"
             fontPath="fonts/Roboto-Medium.ttf"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/BGGREEN"
+            android:textColorHint="@color/BGLIGHTGREEN"
+            android:layout_gravity="center"
+            />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="37dp"
+            android:id="@+id/filterButton"
+            android:text="Filters"
+            android:layout_weight="0.2"
+            android:layout_gravity="center"
+            fontPath="fonts/Roboto-Medium.ttf"
+            android:background="@drawable/borderfilter"
+            android:textColor="@color/BGGREEN"
+            android:layout_marginRight="5dp"
             />
 
     </LinearLayout>

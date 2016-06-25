@@ -10,9 +10,11 @@
     <color name="black">#000</color>
     <color name="BGGREY">#444</color>
     <color name="BGGREEN">#03c9a9</color>
+    <color name="BGLIGHTGREEN">#67decb</color>
     <color name="BGRED">#FF1919</color>
     <color name="BGDARKGREEN">#00584a</color>
     <color name="LIGHTGREY">#d8d8d8</color>
     <color name="SUPERLIGHTGREY">#e5e5e5</color>
+    <color name="SEARCHBARGRAY">#eaeaea</color>
 
 </resources>
