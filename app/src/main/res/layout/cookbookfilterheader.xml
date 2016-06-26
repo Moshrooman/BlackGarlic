@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="20dp"
+    android:background="@drawable/filterheaderdrawable"
+    android:weightSum="1"
+    >
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_weight="0.1"
+        android:layout_gravity="center"
+        android:id="@+id/leftSideFilterArrow"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Filters"
+        android:layout_gravity="center"
+        fontPath="fonts/Roboto-Medium.ttf"
+        android:layout_weight="0.8"
+        android:gravity="center"
+        />
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_weight="0.1"
+        android:layout_gravity="center"
+        android:id="@+id/rightSideFilterArrow"
+        />
+
+</LinearLayout>

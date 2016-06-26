@@ -14,12 +14,13 @@
         android:id="@+id/cookBookSearchLinearLayout"
         android:weightSum="1"
         android:orientation="horizontal"
+        android:layout_marginBottom="5dp"
         >
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:layout_width="0dp"
             android:layout_height="37dp"
-            android:layout_weight="0.1"
+            android:layout_weight="0.15"
             android:id="@+id/cookBookSearchDraweeView"
             fresco:actualImageScaleType="fitXY"
             android:layout_gravity="center"
@@ -31,7 +32,7 @@
             android:background="@drawable/bordersearchbar"
             android:hint="Search"
             android:gravity="center"
-            android:layout_weight="0.7"
+            android:layout_weight="0.85"
             android:id="@+id/cookBookSearchEditText"
             fontPath="fonts/Roboto-Medium.ttf"
             android:layout_marginRight="10dp"
@@ -40,27 +41,25 @@
             android:layout_gravity="center"
             />
 
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="37dp"
-            android:id="@+id/filterButton"
-            android:text="Filters"
-            android:layout_weight="0.2"
-            android:layout_gravity="center"
-            fontPath="fonts/Roboto-Medium.ttf"
-            android:background="@drawable/borderfilter"
-            android:textColor="@color/BGGREEN"
-            android:layout_marginRight="5dp"
-            />
-
     </LinearLayout>
+
+    <ExpandableListView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cookBookSearchLinearLayout"
+        android:id="@+id/filtersExpandableListView"
+        android:groupIndicator="@null"
+        android:layout_marginBottom="5dp"
+        >
+
+    </ExpandableListView>
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/cookBookRecyclerView"
         android:background="@color/SUPERLIGHTGREY"
-        android:layout_below="@+id/cookBookSearchLinearLayout"
+        android:layout_below="@+id/filtersExpandableListView"
         >
 
     </android.support.v7.widget.RecyclerView>

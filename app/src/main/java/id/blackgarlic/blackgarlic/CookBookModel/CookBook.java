@@ -1,6 +1,7 @@
 package id.blackgarlic.blackgarlic.CookBookModel;
 
 import android.content.Context;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -9,7 +10,15 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -80,6 +89,42 @@ public class CookBook extends AppCompatActivity{
 
     private static List<String> favoritesList = new ArrayList<String>();
 
+    private static ExpandableListView filtersExpandableListView;
+
+    private static Button favoritesFilterButtonStatic;
+    private static Button favoriteCountHeartStatic;
+
+    public static void setFavoriteCountHeart(boolean trueOrFalse) {
+        if (favoriteCountHeartStatic != null) {
+            Log.e("Adding: ", "True");
+            Log.e("Boolean: ", String.valueOf(trueOrFalse));
+            if (trueOrFalse == true) {
+                int beforecount = Integer.valueOf(favoriteCountHeartStatic.getText().toString());
+                final int aftercount = beforecount + 1;
+
+                Log.e("Count: ", String.valueOf(aftercount));
+                favoriteCountHeartStatic.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        favoriteCountHeartStatic.setText(String.valueOf(aftercount));
+                    }
+                });
+            } else {
+                int beforecount = Integer.valueOf(favoriteCountHeartStatic.getText().toString());
+                final int aftercount = beforecount - 1;
+
+                Log.e("Count: ", String.valueOf(aftercount));
+                favoriteCountHeartStatic.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        favoriteCountHeartStatic.setText(String.valueOf(aftercount));
+                    }
+                });
+
+            }
+        }
+    }
+
     public static int getStartingPositionForAddingIntoAdapterList() {
         return startingPositionForAddingIntoAdapterList;
     }
@@ -92,6 +137,12 @@ public class CookBook extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cook_book);
+
+        favoritesFilterButtonStatic = null;
+        favoriteCountHeartStatic = null;
+
+        filtersExpandableListView = (ExpandableListView) findViewById(R.id.filtersExpandableListView);
+        filtersExpandableListView.setAdapter(new FilterExpandableListViewAdapter());
 
         userCredentials = new Gson().fromJson(SplashActivity.getSharedPreferences().getString("Credentials", ""), UserCredentials.class);
 
@@ -286,6 +337,121 @@ public class CookBook extends AppCompatActivity{
         ConnectionManager.getInstance(CookBook.this).add(cookBookRequest);
 
         //End of outer cookbook string request
+    }
+
+    public class FilterExpandableListViewAdapter extends BaseExpandableListAdapter {
+
+        @Override
+        public int getGroupCount() {
+            return 1;
+        }
+
+        @Override
+        public int getChildrenCount(int groupPosition) {
+            return 1;
+        }
+
+        @Override
+        public Object getGroup(int groupPosition) {
+            return null;
+        }
+
+        @Override
+        public Object getChild(int groupPosition, int childPosition) {
+            return null;
+        }
+
+        @Override
+        public long getGroupId(int groupPosition) {
+            return 0;
+        }
+
+        @Override
+        public long getChildId(int groupPosition, int childPosition) {
+            return 0;
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return true;
+        }
+
+        @Override
+        public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) CookBook.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.cookbookfilterheader, null);
+            }
+
+            ImageView rightSideFilterArrow = (ImageView) convertView.findViewById(R.id.rightSideFilterArrow);
+            ImageView leftSideFilterArrow = (ImageView) convertView.findViewById(R.id.leftSideFilterArrow);
+
+            if (isExpanded == true) {
+                rightSideFilterArrow.setImageDrawable(getResources().getDrawable(R.drawable.arrowdown));
+                leftSideFilterArrow.setImageDrawable(getResources().getDrawable(R.drawable.arrowdown));
+            } else {
+                rightSideFilterArrow.setImageDrawable(getResources().getDrawable(R.drawable.arrowright));
+                leftSideFilterArrow.setImageDrawable(getResources().getDrawable(R.drawable.arrowright));
+            }
+
+            return convertView;
+        }
+
+        @Override
+        public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) CookBook.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.cookbookfilterexpanded, null);
+            }
+
+            if ((favoritesFilterButtonStatic == null) && (favoriteCountHeartStatic == null)) {
+                favoritesFilterButtonStatic = (Button) convertView.findViewById(R.id.favoriteFilterButton);
+                favoriteCountHeartStatic = (Button) convertView.findViewById(R.id.favoriteCountHeart);
+            }
+
+            int favoriteCount = 0;
+
+            for (int i = 0; i < cookBookObjectList.size(); i++) {
+                if (cookBookObjectList.get(i).getIsFavorited() == true) {
+                    favoriteCount++;
+                }
+
+                if (i == cookBookObjectList.size() - 1) {
+                    favoriteCountHeartStatic.setText(String.valueOf(favoriteCount));
+                }
+            }
+
+            favoritesFilterButtonStatic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (favoritesFilterButtonStatic.getBackground().getConstantState().equals(getResources().getDrawable(R.drawable.borderfilterbefore).getConstantState())) {
+                        favoritesFilterButtonStatic.setBackgroundDrawable(getResources().getDrawable(R.drawable.borderfilterafter));
+                        favoritesFilterButtonStatic.setTextColor(getResources().getColor(R.color.white));
+
+                        favoriteCountHeartStatic.setBackgroundDrawable(getResources().getDrawable(R.drawable.redheartblackoutline));
+                        favoriteCountHeartStatic.setTextColor(getResources().getColor(R.color.white));
+
+                        // need to loop through the list and check if the boolean for is favorite is true, if it is put in new list and
+                        //create a new adapter with this new list and set the recyclerview adapter to this.
+
+                        //then make sure that in the cookbookadapter there is a boolean for favorites and load everything, not 20 at a time.
+                    } else {
+                        favoritesFilterButtonStatic.setBackgroundDrawable(getResources().getDrawable(R.drawable.borderfilterbefore));
+                        favoritesFilterButtonStatic.setTextColor(getResources().getColor(R.color.red));
+
+                        favoriteCountHeartStatic.setBackgroundDrawable(getResources().getDrawable(R.drawable.whiteheartredoutline));
+                        favoriteCountHeartStatic.setTextColor(getResources().getColor(R.color.black));
+                    }
+                }
+            });
+
+            return convertView;
+        }
+
+        @Override
+        public boolean isChildSelectable(int groupPosition, int childPosition) {
+            return false;
+        }
     }
 
     @Override

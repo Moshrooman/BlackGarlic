@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:background="@color/SEARCHBARGRAY"
+    >
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="37dp"
+        android:id="@+id/favoriteFilterButton"
+        android:text="Favorites"
+        android:layout_gravity="center"
+        fontPath="fonts/Roboto-Medium.ttf"
+        android:background="@drawable/borderfilterbefore"
+        android:textColor="@color/red"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        />
+
+    <Button
+        android:layout_width="37dp"
+        android:layout_height="37dp"
+        android:layout_toRightOf="@+id/favoriteFilterButton"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/whiteheartredoutline"
+        android:id="@+id/favoriteCountHeart"
+        fontPath="fonts/Roboto-Medium.ttf"
+        android:gravity="center"
+        />
+
+</RelativeLayout>

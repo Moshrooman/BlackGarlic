@@ -29,6 +29,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import id.blackgarlic.blackgarlic.CircleProgressBarDrawable;
 import id.blackgarlic.blackgarlic.ConnectionManager;
 import id.blackgarlic.blackgarlic.MainActivity;
 import id.blackgarlic.blackgarlic.R;
@@ -246,6 +247,12 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
 
             if (position != cookBookList.size()) {
 
+                CircleProgressBarDrawable progressBar = new CircleProgressBarDrawable();
+                progressBar.setBackgroundColor(mContext.getResources().getColor(R.color.BGGREY));
+                progressBar.setColor(mContext.getResources().getColor(R.color.BGGREEN));
+
+                myViewHolder.cookBookImage.getHierarchy().setProgressBarImage(progressBar);
+
                 //Favorite button work
                 if (cookBookList.get(position).getIsFavorited() == true) {
                     myViewHolder.favoriteButton.setLiked(true);
@@ -257,11 +264,13 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
                     @Override
                     public void liked(LikeButton likeButton) {
                         insertOrDeleteMenu(cookBookList.get(position).getMenu_name(), position);
+                        CookBook.setFavoriteCountHeart(true);
                     }
 
                     @Override
                     public void unLiked(LikeButton likeButton) {
                         insertOrDeleteMenu(cookBookList.get(position).getMenu_name(), position);
+                        CookBook.setFavoriteCountHeart(false);
                     }
                 });
 
@@ -316,6 +325,12 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
 
             if (position != cookBookListSearch.size()) {
 
+                CircleProgressBarDrawable progressBar = new CircleProgressBarDrawable();
+                progressBar.setBackgroundColor(mContext.getResources().getColor(R.color.BGGREY));
+                progressBar.setColor(mContext.getResources().getColor(R.color.BGGREEN));
+
+                myViewHolder.cookBookImage.getHierarchy().setProgressBarImage(progressBar);
+
                 //Start of favorites work
 
                 if (cookBookListSearch.get(position).getIsFavorited() == true) {
@@ -328,11 +343,13 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
                     @Override
                     public void liked(LikeButton likeButton) {
                         insertOrDeleteMenu(cookBookListSearch.get(position).getMenu_name(), position);
+                        CookBook.setFavoriteCountHeart(true);
                     }
 
                     @Override
                     public void unLiked(LikeButton likeButton) {
                         insertOrDeleteMenu(cookBookListSearch.get(position).getMenu_name(), position);
+                        CookBook.setFavoriteCountHeart(false);
                     }
                 });
 
