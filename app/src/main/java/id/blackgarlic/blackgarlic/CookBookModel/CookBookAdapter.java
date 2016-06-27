@@ -31,10 +31,8 @@ import java.util.List;
 
 import id.blackgarlic.blackgarlic.CircleProgressBarDrawable;
 import id.blackgarlic.blackgarlic.ConnectionManager;
-import id.blackgarlic.blackgarlic.MainActivity;
 import id.blackgarlic.blackgarlic.R;
 import id.blackgarlic.blackgarlic.SplashActivity;
-import id.blackgarlic.blackgarlic.Voucher.VoucherObject;
 import id.blackgarlic.blackgarlic.model.UserCredentials;
 import uk.co.chrisjenx.calligraphy.CalligraphyTypefaceSpan;
 import uk.co.chrisjenx.calligraphy.TypefaceUtils;
@@ -53,10 +51,12 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
     List<CookBookObject> fullCookBookList = new ArrayList<CookBookObject>();
     List<CookBookObject> cookBookListSearch = new ArrayList<CookBookObject>();
     List<CookBookObject> fullCookBookListSearch = new ArrayList<CookBookObject>();
+    List<CookBookObject> cookBookListFavorites = new ArrayList<>();
     boolean lastOne = false;
     boolean searchBoolean = false;
     String searchedString = "";
     Context mContext;
+    boolean favoriteBoolean = false;
     UserCredentials userCredentials = new Gson().fromJson(SplashActivity.getSharedPreferences().getString("Credentials", ""), UserCredentials.class);
 
     public void setSearchedString(String newSearchedString) {
@@ -67,10 +67,13 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
         this.searchBoolean = newSearchBoolean;
     }
 
+    public void setFavoriteBoolean(boolean newFavoriteBoolean) {
+        this.favoriteBoolean = newFavoriteBoolean;
+    }
+
     public void addMenus() {
 
         //So we first check if searchboolean is false, if it is then we automatically execute myasynctask.
-
         if (searchBoolean == false) {
             new MyAsyncTask().execute();
 
@@ -101,21 +104,31 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
                 Log.e("Response: ", response);
 
                 if (response.equals("added")) {
-                    if (searchBoolean == true) {
-                        cookBookListSearch.get(position).setIsFavorited(true);
+
+                    if (favoriteBoolean == true) {
+                        cookBookListFavorites.get(position).setIsFavorited(true);
                     } else {
-                        cookBookList.get(position).setIsFavorited(true);
+                        if (searchBoolean == true) {
+                            cookBookListSearch.get(position).setIsFavorited(true);
+                        } else {
+                            cookBookList.get(position).setIsFavorited(true);
+                        }
                     }
+
                 } else if (response.equals("removed")) {
-                    if (searchBoolean == true) {
-                        cookBookListSearch.get(position).setIsFavorited(false);
+
+                    if (favoriteBoolean == true) {
+                        cookBookListFavorites.get(position).setIsFavorited(false);
                     } else {
-                        cookBookList.get(position).setIsFavorited(false);
-                        //add t notes, then if statement in the onbindviewholder to set checked if getisfavorited is true.
+                        if (searchBoolean == true) {
+                            cookBookListSearch.get(position).setIsFavorited(false);
+                        } else {
+                            cookBookList.get(position).setIsFavorited(false);
+                            //add t notes, then if statement in the onbindviewholder to set checked if getisfavorited is true.
+                        }
                     }
+
                 }
-
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -137,11 +150,17 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
         ConnectionManager.getInstance(mContext).add(insertOrDeleteMenuRequest);
     }
 
-    public CookBookAdapter(List<CookBookObject> cookBookObjectList, List<CookBookObject> cookBookObjectListParameterSearch, List<CookBookObject> fullCookBookListParameter, List<CookBookObject> fullCookBookListSearchParameter, Context context) {
+    public CookBookAdapter(List<CookBookObject> cookBookObjectList, List<CookBookObject> cookBookObjectListParameterSearch, List<CookBookObject> fullCookBookListParameter, List<CookBookObject> fullCookBookListSearchParameter, List<CookBookObject> cookBookListFavorites, Context context) {
 
 
         //Have to loop through parameters and manually add them into list, because if i set them equal to the parameters then it will reference
         //the same object so if i change value here, it'll change value in cookbook activity because parameter came from there.
+
+        if ((cookBookListFavorites != null) && (cookBookListFavorites.size() != 0)) {
+            for (int i = 0; i < cookBookListFavorites.size(); i++) {
+                this.cookBookListFavorites.add(cookBookListFavorites.get(i));
+            }
+        }
 
         if ((cookBookObjectList != null) && (cookBookObjectList.size() != 0)) {
             for (int i = 0; i < cookBookObjectList.size(); i++) {
@@ -172,6 +191,10 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
 
     @Override
     public int getItemViewType(int position) {
+
+        if (favoriteBoolean == true) {
+            return 0;
+        }
 
         if (searchBoolean == false) {
 
@@ -243,165 +266,234 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
     @Override
     public void onBindViewHolder(final MyCookBookViewHolder myViewHolder, final int position) {
 
-        if (searchBoolean == false) {
+        if (favoriteBoolean == true) {
 
-            if (position != cookBookList.size()) {
+            CircleProgressBarDrawable progressBar = new CircleProgressBarDrawable();
+            progressBar.setBackgroundColor(mContext.getResources().getColor(R.color.BGGREY));
+            progressBar.setColor(mContext.getResources().getColor(R.color.BGGREEN));
 
-                CircleProgressBarDrawable progressBar = new CircleProgressBarDrawable();
-                progressBar.setBackgroundColor(mContext.getResources().getColor(R.color.BGGREY));
-                progressBar.setColor(mContext.getResources().getColor(R.color.BGGREEN));
+            myViewHolder.cookBookImage.getHierarchy().setProgressBarImage(progressBar);
 
-                myViewHolder.cookBookImage.getHierarchy().setProgressBarImage(progressBar);
-
-                //Favorite button work
-                if (cookBookList.get(position).getIsFavorited() == true) {
-                    myViewHolder.favoriteButton.setLiked(true);
-                } else {
-                    myViewHolder.favoriteButton.setLiked(false);
-                }
-
-                myViewHolder.favoriteButton.setOnLikeListener(new OnLikeListener() {
-                    @Override
-                    public void liked(LikeButton likeButton) {
-                        insertOrDeleteMenu(cookBookList.get(position).getMenu_name(), position);
-                        CookBook.setFavoriteCountHeart(true);
-                    }
-
-                    @Override
-                    public void unLiked(LikeButton likeButton) {
-                        insertOrDeleteMenu(cookBookList.get(position).getMenu_name(), position);
-                        CookBook.setFavoriteCountHeart(false);
-                    }
-                });
-
-                //end of favorite button work
-
-                myViewHolder.cookBookImage.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        RelativeLayout.LayoutParams favoriteButtonMargin = (RelativeLayout.LayoutParams) myViewHolder.favoriteButton.getLayoutParams();
-                        favoriteButtonMargin.setMargins(0, myViewHolder.cookBookImage.getHeight() - myViewHolder.favoriteButton.getHeight(), 0, 0);
-                        myViewHolder.favoriteButton.setLayoutParams(favoriteButtonMargin);
-                        myViewHolder.favoriteButton.setVisibility(View.VISIBLE);
-                    }
-                });
-
-                Uri uri = Uri.parse(BLACKGARLIC_PICTURES.replace("menu_id", String.valueOf(cookBookList.get(position).getMenu_id())));
-                myViewHolder.cookBookImage.setImageURI(uri);
-
-                int menuTitleLength = cookBookList.get(position).getMenu_name().length();
-                int menuSubNameLength = cookBookList.get(position).getMenu_subname().length();
-
-                String menuTitle = cookBookList.get(position).getMenu_name();
-                String menuSubname = cookBookList.get(position).getMenu_subname();
-
-                CalligraphyTypefaceSpan robotoMedium = new CalligraphyTypefaceSpan(TypefaceUtils.load(mContext.getAssets(), "fonts/Roboto-Medium.ttf"));
-                CalligraphyTypefaceSpan robotoThin = new CalligraphyTypefaceSpan(TypefaceUtils.load(mContext.getAssets(), "fonts/Roboto-Thin.ttf"));
-
-                SpannableStringBuilder menuTitleStringBuilder = new SpannableStringBuilder();
-
-                if (menuSubNameLength != 0) {
-                    menuTitleStringBuilder.append(menuTitle).append("\n" + menuSubname);
-                    menuTitleStringBuilder.setSpan(robotoMedium, 0, menuTitleLength + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    menuTitleStringBuilder.setSpan(robotoThin, menuTitleLength + 1, menuTitleLength + menuSubNameLength + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                } else {
-                    menuTitleStringBuilder.append(menuTitle);
-                    menuTitleStringBuilder.setSpan(robotoMedium, 0, menuTitleLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
-
-                myViewHolder.cookBookTextView.setText(menuTitleStringBuilder, TextView.BufferType.SPANNABLE);
-
+            //Favorite button work
+            if (cookBookListFavorites.get(position).getIsFavorited() == true) {
+                myViewHolder.favoriteButton.setLiked(true);
             } else {
+                myViewHolder.favoriteButton.setLiked(false);
+            }
 
-                if (lastOne == false) {
-
-                    addMenus();
-
+            myViewHolder.favoriteButton.setOnLikeListener(new OnLikeListener() {
+                @Override
+                public void liked(LikeButton likeButton) {
+                    insertOrDeleteMenu(cookBookListFavorites.get(position).getMenu_name(), position);
+                    CookBook.setFavoriteCountHeart(true);
                 }
 
+                @Override
+                public void unLiked(LikeButton likeButton) {
+                    insertOrDeleteMenu(cookBookListFavorites.get(position).getMenu_name(), position);
+                    CookBook.setFavoriteCountHeart(false);
+                }
+            });
+
+            //end of favorite button work
+
+            myViewHolder.cookBookImage.post(new Runnable() {
+                @Override
+                public void run() {
+                    RelativeLayout.LayoutParams favoriteButtonMargin = (RelativeLayout.LayoutParams) myViewHolder.favoriteButton.getLayoutParams();
+                    favoriteButtonMargin.setMargins(0, myViewHolder.cookBookImage.getHeight() - myViewHolder.favoriteButton.getHeight(), 0, 0);
+                    myViewHolder.favoriteButton.setLayoutParams(favoriteButtonMargin);
+                    myViewHolder.favoriteButton.setVisibility(View.VISIBLE);
+                }
+            });
+
+            Uri uri = Uri.parse(BLACKGARLIC_PICTURES.replace("menu_id", String.valueOf(cookBookListFavorites.get(position).getMenu_id())));
+            myViewHolder.cookBookImage.setImageURI(uri);
+
+            int menuTitleLength = cookBookListFavorites.get(position).getMenu_name().length();
+            int menuSubNameLength = cookBookListFavorites.get(position).getMenu_subname().length();
+
+            String menuTitle = cookBookListFavorites.get(position).getMenu_name();
+            String menuSubname = cookBookListFavorites.get(position).getMenu_subname();
+
+            CalligraphyTypefaceSpan robotoMedium = new CalligraphyTypefaceSpan(TypefaceUtils.load(mContext.getAssets(), "fonts/Roboto-Medium.ttf"));
+            CalligraphyTypefaceSpan robotoThin = new CalligraphyTypefaceSpan(TypefaceUtils.load(mContext.getAssets(), "fonts/Roboto-Thin.ttf"));
+
+            SpannableStringBuilder menuTitleStringBuilder = new SpannableStringBuilder();
+
+            if (menuSubNameLength != 0) {
+                menuTitleStringBuilder.append(menuTitle).append("\n" + menuSubname);
+                menuTitleStringBuilder.setSpan(robotoMedium, 0, menuTitleLength + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                menuTitleStringBuilder.setSpan(robotoThin, menuTitleLength + 1, menuTitleLength + menuSubNameLength + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            } else {
+                menuTitleStringBuilder.append(menuTitle);
+                menuTitleStringBuilder.setSpan(robotoMedium, 0, menuTitleLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
+
+            myViewHolder.cookBookTextView.setText(menuTitleStringBuilder, TextView.BufferType.SPANNABLE);
 
         } else {
 
-            if (position != cookBookListSearch.size()) {
+            if (searchBoolean == false) {
 
-                CircleProgressBarDrawable progressBar = new CircleProgressBarDrawable();
-                progressBar.setBackgroundColor(mContext.getResources().getColor(R.color.BGGREY));
-                progressBar.setColor(mContext.getResources().getColor(R.color.BGGREEN));
+                if (position != cookBookList.size()) {
 
-                myViewHolder.cookBookImage.getHierarchy().setProgressBarImage(progressBar);
+                    CircleProgressBarDrawable progressBar = new CircleProgressBarDrawable();
+                    progressBar.setBackgroundColor(mContext.getResources().getColor(R.color.BGGREY));
+                    progressBar.setColor(mContext.getResources().getColor(R.color.BGGREEN));
 
-                //Start of favorites work
+                    myViewHolder.cookBookImage.getHierarchy().setProgressBarImage(progressBar);
 
-                if (cookBookListSearch.get(position).getIsFavorited() == true) {
-                    myViewHolder.favoriteButton.setLiked(true);
+                    //Favorite button work
+                    if (cookBookList.get(position).getIsFavorited() == true) {
+                        myViewHolder.favoriteButton.setLiked(true);
+                    } else {
+                        myViewHolder.favoriteButton.setLiked(false);
+                    }
+
+                    myViewHolder.favoriteButton.setOnLikeListener(new OnLikeListener() {
+                        @Override
+                        public void liked(LikeButton likeButton) {
+                            insertOrDeleteMenu(cookBookList.get(position).getMenu_name(), position);
+                            CookBook.setFavoriteCountHeart(true);
+                        }
+
+                        @Override
+                        public void unLiked(LikeButton likeButton) {
+                            insertOrDeleteMenu(cookBookList.get(position).getMenu_name(), position);
+                            CookBook.setFavoriteCountHeart(false);
+                        }
+                    });
+
+                    //end of favorite button work
+
+                    myViewHolder.cookBookImage.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            RelativeLayout.LayoutParams favoriteButtonMargin = (RelativeLayout.LayoutParams) myViewHolder.favoriteButton.getLayoutParams();
+                            favoriteButtonMargin.setMargins(0, myViewHolder.cookBookImage.getHeight() - myViewHolder.favoriteButton.getHeight(), 0, 0);
+                            myViewHolder.favoriteButton.setLayoutParams(favoriteButtonMargin);
+                            myViewHolder.favoriteButton.setVisibility(View.VISIBLE);
+                        }
+                    });
+
+                    Uri uri = Uri.parse(BLACKGARLIC_PICTURES.replace("menu_id", String.valueOf(cookBookList.get(position).getMenu_id())));
+                    myViewHolder.cookBookImage.setImageURI(uri);
+
+                    int menuTitleLength = cookBookList.get(position).getMenu_name().length();
+                    int menuSubNameLength = cookBookList.get(position).getMenu_subname().length();
+
+                    String menuTitle = cookBookList.get(position).getMenu_name();
+                    String menuSubname = cookBookList.get(position).getMenu_subname();
+
+                    CalligraphyTypefaceSpan robotoMedium = new CalligraphyTypefaceSpan(TypefaceUtils.load(mContext.getAssets(), "fonts/Roboto-Medium.ttf"));
+                    CalligraphyTypefaceSpan robotoThin = new CalligraphyTypefaceSpan(TypefaceUtils.load(mContext.getAssets(), "fonts/Roboto-Thin.ttf"));
+
+                    SpannableStringBuilder menuTitleStringBuilder = new SpannableStringBuilder();
+
+                    if (menuSubNameLength != 0) {
+                        menuTitleStringBuilder.append(menuTitle).append("\n" + menuSubname);
+                        menuTitleStringBuilder.setSpan(robotoMedium, 0, menuTitleLength + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        menuTitleStringBuilder.setSpan(robotoThin, menuTitleLength + 1, menuTitleLength + menuSubNameLength + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    } else {
+                        menuTitleStringBuilder.append(menuTitle);
+                        menuTitleStringBuilder.setSpan(robotoMedium, 0, menuTitleLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+
+                    myViewHolder.cookBookTextView.setText(menuTitleStringBuilder, TextView.BufferType.SPANNABLE);
+
                 } else {
-                    myViewHolder.favoriteButton.setLiked(false);
+
+                    if (lastOne == false) {
+
+                        addMenus();
+
+                    }
+
                 }
-
-                myViewHolder.favoriteButton.setOnLikeListener(new OnLikeListener() {
-                    @Override
-                    public void liked(LikeButton likeButton) {
-                        insertOrDeleteMenu(cookBookListSearch.get(position).getMenu_name(), position);
-                        CookBook.setFavoriteCountHeart(true);
-                    }
-
-                    @Override
-                    public void unLiked(LikeButton likeButton) {
-                        insertOrDeleteMenu(cookBookListSearch.get(position).getMenu_name(), position);
-                        CookBook.setFavoriteCountHeart(false);
-                    }
-                });
-
-                //end of favorites work
-
-                myViewHolder.cookBookImage.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        RelativeLayout.LayoutParams favoriteButtonMargin = (RelativeLayout.LayoutParams) myViewHolder.favoriteButton.getLayoutParams();
-                        favoriteButtonMargin.setMargins(0, myViewHolder.cookBookImage.getHeight() - myViewHolder.favoriteButton.getHeight(), 0, 0);
-                        myViewHolder.favoriteButton.setLayoutParams(favoriteButtonMargin);
-                        myViewHolder.favoriteButton.setVisibility(View.VISIBLE);
-                    }
-                });
-
-                Uri uri = Uri.parse(BLACKGARLIC_PICTURES.replace("menu_id", String.valueOf(cookBookListSearch.get(position).getMenu_id())));
-                myViewHolder.cookBookImage.setImageURI(uri);
-
-                int menuTitleLength = cookBookListSearch.get(position).getMenu_name().length();
-                int menuSubNameLength = cookBookListSearch.get(position).getMenu_subname().length();
-
-                String menuTitle = cookBookListSearch.get(position).getMenu_name();
-                String menuSubname = cookBookListSearch.get(position).getMenu_subname();
-
-                CalligraphyTypefaceSpan robotoMedium = new CalligraphyTypefaceSpan(TypefaceUtils.load(mContext.getAssets(), "fonts/Roboto-Medium.ttf"));
-                CalligraphyTypefaceSpan robotoThin = new CalligraphyTypefaceSpan(TypefaceUtils.load(mContext.getAssets(), "fonts/Roboto-Thin.ttf"));
-
-                SpannableStringBuilder menuTitleStringBuilder = new SpannableStringBuilder();
-
-                if (menuSubNameLength != 0) {
-                    menuTitleStringBuilder.append(menuTitle).append("\n" + menuSubname);
-                    menuTitleStringBuilder.setSpan(robotoMedium, 0, menuTitleLength + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    menuTitleStringBuilder.setSpan(robotoThin, menuTitleLength + 1, menuTitleLength + menuSubNameLength + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                } else {
-                    menuTitleStringBuilder.append(menuTitle);
-                    menuTitleStringBuilder.setSpan(robotoMedium, 0, menuTitleLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                }
-
-                myViewHolder.cookBookTextView.setText(menuTitleStringBuilder, TextView.BufferType.SPANNABLE);
 
             } else {
 
-                //Then of course we check if there is last one, if the last one wasn't loaded, then we call add menus, GO DOWN NOW TO GETITEMCOUNT OVERRIDE METHOD.
+                if (position != cookBookListSearch.size()) {
 
-                if (lastOne == false) {
+                    CircleProgressBarDrawable progressBar = new CircleProgressBarDrawable();
+                    progressBar.setBackgroundColor(mContext.getResources().getColor(R.color.BGGREY));
+                    progressBar.setColor(mContext.getResources().getColor(R.color.BGGREEN));
 
-                    addMenus();
+                    myViewHolder.cookBookImage.getHierarchy().setProgressBarImage(progressBar);
 
+                    //Start of favorites work
+
+                    if (cookBookListSearch.get(position).getIsFavorited() == true) {
+                        myViewHolder.favoriteButton.setLiked(true);
+                    } else {
+                        myViewHolder.favoriteButton.setLiked(false);
+                    }
+
+                    myViewHolder.favoriteButton.setOnLikeListener(new OnLikeListener() {
+                        @Override
+                        public void liked(LikeButton likeButton) {
+                            insertOrDeleteMenu(cookBookListSearch.get(position).getMenu_name(), position);
+                            CookBook.setFavoriteCountHeart(true);
+                        }
+
+                        @Override
+                        public void unLiked(LikeButton likeButton) {
+                            insertOrDeleteMenu(cookBookListSearch.get(position).getMenu_name(), position);
+                            CookBook.setFavoriteCountHeart(false);
+                        }
+                    });
+
+                    //end of favorites work
+
+                    myViewHolder.cookBookImage.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            RelativeLayout.LayoutParams favoriteButtonMargin = (RelativeLayout.LayoutParams) myViewHolder.favoriteButton.getLayoutParams();
+                            favoriteButtonMargin.setMargins(0, myViewHolder.cookBookImage.getHeight() - myViewHolder.favoriteButton.getHeight(), 0, 0);
+                            myViewHolder.favoriteButton.setLayoutParams(favoriteButtonMargin);
+                            myViewHolder.favoriteButton.setVisibility(View.VISIBLE);
+                        }
+                    });
+
+                    Uri uri = Uri.parse(BLACKGARLIC_PICTURES.replace("menu_id", String.valueOf(cookBookListSearch.get(position).getMenu_id())));
+                    myViewHolder.cookBookImage.setImageURI(uri);
+
+                    int menuTitleLength = cookBookListSearch.get(position).getMenu_name().length();
+                    int menuSubNameLength = cookBookListSearch.get(position).getMenu_subname().length();
+
+                    String menuTitle = cookBookListSearch.get(position).getMenu_name();
+                    String menuSubname = cookBookListSearch.get(position).getMenu_subname();
+
+                    CalligraphyTypefaceSpan robotoMedium = new CalligraphyTypefaceSpan(TypefaceUtils.load(mContext.getAssets(), "fonts/Roboto-Medium.ttf"));
+                    CalligraphyTypefaceSpan robotoThin = new CalligraphyTypefaceSpan(TypefaceUtils.load(mContext.getAssets(), "fonts/Roboto-Thin.ttf"));
+
+                    SpannableStringBuilder menuTitleStringBuilder = new SpannableStringBuilder();
+
+                    if (menuSubNameLength != 0) {
+                        menuTitleStringBuilder.append(menuTitle).append("\n" + menuSubname);
+                        menuTitleStringBuilder.setSpan(robotoMedium, 0, menuTitleLength + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        menuTitleStringBuilder.setSpan(robotoThin, menuTitleLength + 1, menuTitleLength + menuSubNameLength + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    } else {
+                        menuTitleStringBuilder.append(menuTitle);
+                        menuTitleStringBuilder.setSpan(robotoMedium, 0, menuTitleLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
+
+                    myViewHolder.cookBookTextView.setText(menuTitleStringBuilder, TextView.BufferType.SPANNABLE);
+
+                } else {
+
+                    //Then of course we check if there is last one, if the last one wasn't loaded, then we call add menus, GO DOWN NOW TO GETITEMCOUNT OVERRIDE METHOD.
+
+                    if (lastOne == false) {
+
+                        addMenus();
+
+                    }
                 }
             }
-        }
 
+        }
 
     }
 
@@ -411,6 +503,9 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
         //So in the getitemcount method we also split it up depending on the search boolean, if the search boolean is false, then we return
         //the cookbooklist.size + 1, remember its + 1 because we have to give space for the loading view, then if the search boolean is
         //true, then we return the cookbooklistsearch size + 1. GO UP NOW TO ADD MENUS METHOD.
+        if (favoriteBoolean == true) {
+            return cookBookListFavorites.size();
+        }
         if (searchBoolean == false) {
             return cookBookList.size() + 1;
         } else {

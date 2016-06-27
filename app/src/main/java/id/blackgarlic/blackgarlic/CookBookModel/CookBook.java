@@ -62,6 +62,8 @@ public class CookBook extends AppCompatActivity{
 
     private static List<CookBookObject> cookBookObjectListSearchAdapter = new ArrayList<CookBookObject>();
 
+    private static List<CookBookObject> cookBookObjectListFavoritesAdapter = new ArrayList<CookBookObject>();
+
     private static int startingPositionForAddingIntoAdapterList;
 
     private static EditText cookBookSearchEditText;
@@ -86,6 +88,8 @@ public class CookBook extends AppCompatActivity{
     private static CookBookAdapter cookBookAdapter;
 
     private static CookBookAdapter cookBookAdapterSearch;
+
+    private static CookBookAdapter cookBookAdapterFavorites;
 
     private static List<String> favoritesList = new ArrayList<String>();
 
@@ -198,8 +202,9 @@ public class CookBook extends AppCompatActivity{
                     //Then we create new cookbookadapter, again, like explained above, filling in second and fourth parameter, setting
                     //searched boolean to true and setting the searchedstring to the string.value of s (which is the searched string).
 
-                    cookBookAdapterSearch = new CookBookAdapter(null, cookBookObjectListSearchAdapter, null, cookBookObjectList, CookBook.this);
+                    cookBookAdapterSearch = new CookBookAdapter(null, cookBookObjectListSearchAdapter, null, cookBookObjectList, null, CookBook.this);
                     cookBookAdapterSearch.setSearchBoolean(true);
+                    cookBookAdapterSearch.setFavoriteBoolean(false);
                     cookBookAdapterSearch.setSearchedString(String.valueOf(s));
 
                     //Then set the adapter.
@@ -301,8 +306,9 @@ public class CookBook extends AppCompatActivity{
                         }
 
                         //PUT THIS IN NOTES THEN GO BACK UP TO SETTING DRAWEE VIEW.
-                        cookBookAdapter = new CookBookAdapter(cookBookObjectListAdapter, null, cookBookObjectList, null, CookBook.this);
+                        cookBookAdapter = new CookBookAdapter(cookBookObjectListAdapter, null, cookBookObjectList, null, null, CookBook.this);
                         cookBookAdapter.setSearchBoolean(false);
+                        cookBookAdapter.setFavoriteBoolean(false);
                         cookBookRecyclerView.setAdapter(cookBookAdapter);
 
                     }
@@ -431,6 +437,18 @@ public class CookBook extends AppCompatActivity{
                         favoriteCountHeartStatic.setBackgroundDrawable(getResources().getDrawable(R.drawable.redheartblackoutline));
                         favoriteCountHeartStatic.setTextColor(getResources().getColor(R.color.white));
 
+                        cookBookObjectListFavoritesAdapter.clear();
+
+                        for (int i = 0; i < cookBookObjectList.size(); i++) {
+                            if(cookBookObjectList.get(i).getIsFavorited() == true) {
+                                cookBookObjectListFavoritesAdapter.add(cookBookObjectList.get(i));
+                            }
+                        }
+
+                        cookBookAdapterFavorites = new CookBookAdapter(null, null, null, null, cookBookObjectListFavoritesAdapter, CookBook.this);
+                        cookBookAdapterFavorites.setFavoriteBoolean(true);
+                        cookBookRecyclerView.setAdapter(cookBookAdapterFavorites);
+
                         // need to loop through the list and check if the boolean for is favorite is true, if it is put in new list and
                         //create a new adapter with this new list and set the recyclerview adapter to this.
 
@@ -441,6 +459,8 @@ public class CookBook extends AppCompatActivity{
 
                         favoriteCountHeartStatic.setBackgroundDrawable(getResources().getDrawable(R.drawable.whiteheartredoutline));
                         favoriteCountHeartStatic.setTextColor(getResources().getColor(R.color.black));
+
+                        cookBookRecyclerView.setAdapter(cookBookAdapter);
                     }
                 }
             });
