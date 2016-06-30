@@ -43,23 +43,23 @@
 
     </LinearLayout>
 
-    <ExpandableListView
+    <id.blackgarlic.blackgarlic.CookBookModel.AnimatedExpandableListView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/cookBookSearchLinearLayout"
-        android:id="@+id/filtersExpandableListView"
+        android:id="@+id/filtersExpandableListViewAnimated"
         android:groupIndicator="@null"
         android:layout_marginBottom="5dp"
         >
 
-    </ExpandableListView>
+    </id.blackgarlic.blackgarlic.CookBookModel.AnimatedExpandableListView>
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/cookBookRecyclerView"
         android:background="@color/SUPERLIGHTGREY"
-        android:layout_below="@+id/filtersExpandableListView"
+        android:layout_below="@+id/filtersExpandableListViewAnimated"
         >
 
     </android.support.v7.widget.RecyclerView>

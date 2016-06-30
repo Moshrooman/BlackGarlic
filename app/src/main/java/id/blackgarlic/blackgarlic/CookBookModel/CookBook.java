@@ -13,12 +13,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -93,10 +98,12 @@ public class CookBook extends AppCompatActivity{
 
     private static List<String> favoritesList = new ArrayList<String>();
 
-    private static ExpandableListView filtersExpandableListView;
+    private static AnimatedExpandableListView filtersExpandableListViewAnimated;
 
     private static Button favoritesFilterButtonStatic;
     private static Button favoriteCountHeartStatic;
+
+    private static int heightOfGroupView;
 
     public static void setFavoriteCountHeart(boolean trueOrFalse) {
         if (favoriteCountHeartStatic != null) {
@@ -142,11 +149,27 @@ public class CookBook extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cook_book);
 
+        heightOfGroupView = 0;
+
         favoritesFilterButtonStatic = null;
         favoriteCountHeartStatic = null;
 
-        filtersExpandableListView = (ExpandableListView) findViewById(R.id.filtersExpandableListView);
-        filtersExpandableListView.setAdapter(new FilterExpandableListViewAdapter());
+        filtersExpandableListViewAnimated = (AnimatedExpandableListView) findViewById(R.id.filtersExpandableListViewAnimated);
+        filtersExpandableListViewAnimated.setAdapter(new FilterExpandableListViewAdapterWithAnimation());
+
+        filtersExpandableListViewAnimated.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                if (filtersExpandableListViewAnimated.isGroupExpanded(groupPosition)) {
+                    filtersExpandableListViewAnimated.collapseGroupWithAnimation(groupPosition);
+                } else {
+                    Log.e("In Expanding: ", "True");
+                    filtersExpandableListViewAnimated.expandGroupWithAnimation(groupPosition);
+                }
+
+                return true;
+            }
+        });
 
         userCredentials = new Gson().fromJson(SplashActivity.getSharedPreferences().getString("Credentials", ""), UserCredentials.class);
 
@@ -345,66 +368,10 @@ public class CookBook extends AppCompatActivity{
         //End of outer cookbook string request
     }
 
-    public class FilterExpandableListViewAdapter extends BaseExpandableListAdapter {
+    public class FilterExpandableListViewAdapterWithAnimation extends AnimatedExpandableListView.AnimatedExpandableListAdapter {
 
         @Override
-        public int getGroupCount() {
-            return 1;
-        }
-
-        @Override
-        public int getChildrenCount(int groupPosition) {
-            return 1;
-        }
-
-        @Override
-        public Object getGroup(int groupPosition) {
-            return null;
-        }
-
-        @Override
-        public Object getChild(int groupPosition, int childPosition) {
-            return null;
-        }
-
-        @Override
-        public long getGroupId(int groupPosition) {
-            return 0;
-        }
-
-        @Override
-        public long getChildId(int groupPosition, int childPosition) {
-            return 0;
-        }
-
-        @Override
-        public boolean hasStableIds() {
-            return true;
-        }
-
-        @Override
-        public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) CookBook.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.cookbookfilterheader, null);
-            }
-
-            ImageView rightSideFilterArrow = (ImageView) convertView.findViewById(R.id.rightSideFilterArrow);
-            ImageView leftSideFilterArrow = (ImageView) convertView.findViewById(R.id.leftSideFilterArrow);
-
-            if (isExpanded == true) {
-                rightSideFilterArrow.setImageDrawable(getResources().getDrawable(R.drawable.arrowdown));
-                leftSideFilterArrow.setImageDrawable(getResources().getDrawable(R.drawable.arrowdown));
-            } else {
-                rightSideFilterArrow.setImageDrawable(getResources().getDrawable(R.drawable.arrowright));
-                leftSideFilterArrow.setImageDrawable(getResources().getDrawable(R.drawable.arrowright));
-            }
-
-            return convertView;
-        }
-
-        @Override
-        public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        public View getRealChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
             if (convertView == null) {
                 LayoutInflater inflater = (LayoutInflater) CookBook.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.cookbookfilterexpanded, null);
@@ -440,7 +407,7 @@ public class CookBook extends AppCompatActivity{
                         cookBookObjectListFavoritesAdapter.clear();
 
                         for (int i = 0; i < cookBookObjectList.size(); i++) {
-                            if(cookBookObjectList.get(i).getIsFavorited() == true) {
+                            if (cookBookObjectList.get(i).getIsFavorited() == true) {
                                 cookBookObjectListFavoritesAdapter.add(cookBookObjectList.get(i));
                             }
                         }
@@ -469,8 +436,65 @@ public class CookBook extends AppCompatActivity{
         }
 
         @Override
+        public int getRealChildrenCount(int groupPosition) {
+            return 1;
+        }
+
+        @Override
+        public int getGroupCount() {
+            return 1;
+        }
+
+        @Override
+        public Object getGroup(int groupPosition) {
+            return null;
+        }
+
+        @Override
+        public Object getChild(int groupPosition, int childPosition) {
+            return null;
+        }
+
+        @Override
+        public long getGroupId(int groupPosition) {
+            return groupPosition;
+        }
+
+        @Override
+        public long getChildId(int groupPosition, int childPosition) {
+            return childPosition;
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return true;
+        }
+
+        @Override
+        public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) CookBook.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.cookbookfilterheader, null);
+            }
+
+                ImageView rightSideFilterArrow = (ImageView) convertView.findViewById(R.id.rightSideFilterArrow);
+                ImageView leftSideFilterArrow = (ImageView) convertView.findViewById(R.id.leftSideFilterArrow);
+
+                if (isExpanded == true) {
+                    rightSideFilterArrow.setImageDrawable(getResources().getDrawable(R.drawable.arrowdown));
+                    leftSideFilterArrow.setImageDrawable(getResources().getDrawable(R.drawable.arrowdown));
+                } else {
+                    rightSideFilterArrow.setImageDrawable(getResources().getDrawable(R.drawable.arrowright));
+                    leftSideFilterArrow.setImageDrawable(getResources().getDrawable(R.drawable.arrowright));
+                }
+
+            return convertView;
+        }
+
+        @Override
         public boolean isChildSelectable(int groupPosition, int childPosition) {
-            return false;
+            return true;
         }
     }
 
