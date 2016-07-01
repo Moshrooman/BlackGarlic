@@ -69,6 +69,8 @@ public class CookBook extends AppCompatActivity{
 
     private static List<CookBookObject> cookBookObjectListFavoritesAdapter = new ArrayList<CookBookObject>();
 
+    private static List<CookBookObject> cookBookObjectListFavoritesSearchAdapter = new ArrayList<CookBookObject>();
+
     private static int startingPositionForAddingIntoAdapterList;
 
     private static EditText cookBookSearchEditText;
@@ -96,6 +98,8 @@ public class CookBook extends AppCompatActivity{
 
     private static CookBookAdapter cookBookAdapterFavorites;
 
+    private static CookBookAdapter cookBookAdapterFavoritesSearch;
+
     private static List<String> favoritesList = new ArrayList<String>();
 
     private static AnimatedExpandableListView filtersExpandableListViewAnimated;
@@ -103,7 +107,7 @@ public class CookBook extends AppCompatActivity{
     private static Button favoritesFilterButtonStatic;
     private static Button favoriteCountHeartStatic;
 
-    private static int heightOfGroupView;
+    private static boolean searchFavoriteBoolean;
 
     public static void setFavoriteCountHeart(boolean trueOrFalse) {
         if (favoriteCountHeartStatic != null) {
@@ -149,7 +153,7 @@ public class CookBook extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cook_book);
 
-        heightOfGroupView = 0;
+        searchFavoriteBoolean = false;
 
         favoritesFilterButtonStatic = null;
         favoriteCountHeartStatic = null;
@@ -163,7 +167,6 @@ public class CookBook extends AppCompatActivity{
                 if (filtersExpandableListViewAnimated.isGroupExpanded(groupPosition)) {
                     filtersExpandableListViewAnimated.collapseGroupWithAnimation(groupPosition);
                 } else {
-                    Log.e("In Expanding: ", "True");
                     filtersExpandableListViewAnimated.expandGroupWithAnimation(groupPosition);
                 }
 
@@ -176,6 +179,7 @@ public class CookBook extends AppCompatActivity{
         cookBookObjectList.clear();
         cookBookObjectListAdapter.clear();
         favoritesList.clear();
+        cookBookObjectListFavoritesSearchAdapter.clear();
         startingPositionForAddingIntoAdapterList = 0;
 
         //Then here we reference the edit text that we just created.
@@ -189,12 +193,31 @@ public class CookBook extends AppCompatActivity{
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (String.valueOf(s).length() == 0) {
+                if ((String.valueOf(s).length() == 0) && (searchFavoriteBoolean == false)) {
 
                     //Then just like explained above, we create same settings as the stringrequest adapter.
 
                     cookBookRecyclerView.setAdapter(cookBookAdapter);
-                } else {
+                } else if ((String.valueOf(s).length() == 0) && (searchFavoriteBoolean == true)) {
+
+                    cookBookAdapterFavorites.setFavoriteBoolean(true);
+                    cookBookRecyclerView.setAdapter(cookBookAdapterFavorites);
+
+                } else if ((searchFavoriteBoolean == true) && (String.valueOf(s).length() != 0)) {
+
+                    cookBookObjectListFavoritesSearchAdapter.clear();
+
+                    for (int i = 0; i < cookBookObjectList.size(); i++) {
+                        if ((cookBookObjectList.get(i).getMenu_name().contains(String.valueOf(s))) && (cookBookObjectList.get(i).getIsFavorited() == true)) {
+                            cookBookObjectListFavoritesSearchAdapter.add(cookBookObjectList.get(i));
+                        }
+                    }
+
+                    cookBookAdapterFavoritesSearch = new CookBookAdapter(null, null, null, null, cookBookObjectListFavoritesSearchAdapter, CookBook.this);
+                    cookBookAdapterFavoritesSearch.setFavoriteBoolean(true);
+                    cookBookRecyclerView.setAdapter(cookBookAdapterFavoritesSearch);
+
+                } else if ((searchFavoriteBoolean == false) && (String.valueOf(s).length() != 0)){
 
                     //Also explained like above, we first clear it.
 
@@ -416,6 +439,9 @@ public class CookBook extends AppCompatActivity{
                         cookBookAdapterFavorites.setFavoriteBoolean(true);
                         cookBookRecyclerView.setAdapter(cookBookAdapterFavorites);
 
+                        searchFavoriteBoolean = true;
+                        cookBookSearchEditText.setText("");
+
                         // need to loop through the list and check if the boolean for is favorite is true, if it is put in new list and
                         //create a new adapter with this new list and set the recyclerview adapter to this.
 
@@ -428,6 +454,9 @@ public class CookBook extends AppCompatActivity{
                         favoriteCountHeartStatic.setTextColor(getResources().getColor(R.color.black));
 
                         cookBookRecyclerView.setAdapter(cookBookAdapter);
+
+                        searchFavoriteBoolean = false;
+                        cookBookSearchEditText.setText("");
                     }
                 }
             });
