@@ -45,7 +45,7 @@ import id.blackgarlic.blackgarlic.SplashActivity;
 import id.blackgarlic.blackgarlic.model.UserCredentials;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class CookBook extends AppCompatActivity{
+public class CookBook extends AppCompatActivity {
 
     private static final String cookBookLink = "http://188.166.221.241:3000/app/cookbook";
 
