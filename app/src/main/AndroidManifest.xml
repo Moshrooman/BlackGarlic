@@ -125,6 +125,10 @@
         <activity
             android:name=".CookBookModel.CookBook"
             android:label="@string/title_activity_cook_book"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".CookBookModel.CookBookClicked"
+            android:label="@string/title_activity_cook_book_clicked"
             android:theme="@style/AppTheme"></activity>
     </application>
 

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="id.blackgarlic.blackgarlic.CookBookModel.CookBookClicked"
+    tools:showIn="@layout/activity_cook_book_clicked"
+    android:orientation="vertical"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fontPath="fonts/Roboto-Medium.ttf"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:text="Exit Button"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fontPath="fonts/Roboto-Medium.ttf"
+            android:textColor="@color/BGGREEN"
+            android:text="Steps"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/viewPagerTitle"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/dotsLinearLayout"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/viewPagerTitle"
+            android:orientation="horizontal"
+            android:gravity="center"
+            >
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+    <android.support.v4.view.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/cookBookViewPager"
+        >
+
+    </android.support.v4.view.ViewPager>
+
+</LinearLayout>

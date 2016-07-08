@@ -1,6 +1,7 @@
 package id.blackgarlic.blackgarlic.CookBookModel;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -332,6 +333,14 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
 
             myViewHolder.cookBookTextView.setText(menuTitleStringBuilder, TextView.BufferType.SPANNABLE);
 
+            myViewHolder.cookBookImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent cookBookClickedIntent = new Intent(mContext, CookBookClicked.class);
+                    mContext.startActivity(cookBookClickedIntent);
+                }
+            });
+
         } else {
 
             if (searchBoolean == false) {
@@ -401,6 +410,14 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
                     }
 
                     myViewHolder.cookBookTextView.setText(menuTitleStringBuilder, TextView.BufferType.SPANNABLE);
+
+                    myViewHolder.cookBookImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent cookBookClickedIntent = new Intent(mContext, CookBookClicked.class);
+                            mContext.startActivity(cookBookClickedIntent);
+                        }
+                    });
 
                 } else {
 
@@ -480,6 +497,14 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
                     }
 
                     myViewHolder.cookBookTextView.setText(menuTitleStringBuilder, TextView.BufferType.SPANNABLE);
+
+                    myViewHolder.cookBookImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent cookBookClickedIntent = new Intent(mContext, CookBookClicked.class);
+                            mContext.startActivity(cookBookClickedIntent);
+                        }
+                    });
 
                 } else {
 
