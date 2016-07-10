@@ -337,6 +337,8 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
                 @Override
                 public void onClick(View v) {
                     Intent cookBookClickedIntent = new Intent(mContext, CookBookClicked.class);
+                    String cookBookString = new Gson().toJson(cookBookListFavorites.get(position));
+                    cookBookClickedIntent.putExtra("object", cookBookString);
                     mContext.startActivity(cookBookClickedIntent);
                 }
             });
@@ -415,6 +417,8 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
                         @Override
                         public void onClick(View v) {
                             Intent cookBookClickedIntent = new Intent(mContext, CookBookClicked.class);
+                            String cookBookString = new Gson().toJson(cookBookList.get(position));
+                            cookBookClickedIntent.putExtra("object", cookBookString);
                             mContext.startActivity(cookBookClickedIntent);
                         }
                     });
@@ -502,6 +506,8 @@ public class CookBookAdapter extends RecyclerView.Adapter<CookBookAdapter.MyCook
                         @Override
                         public void onClick(View v) {
                             Intent cookBookClickedIntent = new Intent(mContext, CookBookClicked.class);
+                            String cookBookString = new Gson().toJson(cookBookListSearch.get(position));
+                            cookBookClickedIntent.putExtra("object", cookBookString);
                             mContext.startActivity(cookBookClickedIntent);
                         }
                     });

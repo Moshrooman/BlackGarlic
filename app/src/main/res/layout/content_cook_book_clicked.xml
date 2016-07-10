@@ -10,17 +10,20 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="35dp"
         android:orientation="horizontal"
         >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            fontPath="fonts/Roboto-Medium.ttf"
+        <Button
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/exitbutton"
             android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:text="Exit Button"
+            android:layout_marginLeft="7dp"
+            android:text="X"
+            android:textColor="@color/BGGREEN"
+            android:gravity="center"
+            android:id="@+id/exitButton"
             />
 
         <TextView
@@ -28,7 +31,7 @@
             android:layout_height="wrap_content"
             fontPath="fonts/Roboto-Medium.ttf"
             android:textColor="@color/BGGREEN"
-            android:text="Steps"
+            android:text="Overview"
             android:layout_centerHorizontal="true"
             android:id="@+id/viewPagerTitle"
             />

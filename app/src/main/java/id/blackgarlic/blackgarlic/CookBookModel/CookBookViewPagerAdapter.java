@@ -17,14 +17,16 @@ import id.blackgarlic.blackgarlic.R;
 public class CookBookViewPagerAdapter extends PagerAdapter {
 
     Context mcontext;
+    CookBookObject mCookBookObject;
 
-    public CookBookViewPagerAdapter(Context context) {
+    public CookBookViewPagerAdapter(Context context, CookBookObject cookBookObject) {
         this.mcontext = context;
+        this.mCookBookObject = cookBookObject;
     }
 
     @Override
     public int getCount() {
-        return 5;
+        return mCookBookObject.getCookBookStepList().size() + 1;
     }
 
     @Override
