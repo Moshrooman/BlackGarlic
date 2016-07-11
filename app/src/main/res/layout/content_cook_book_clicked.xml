@@ -10,17 +10,18 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="55dp"
         android:orientation="horizontal"
         >
 
         <Button
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:background="@drawable/exitbutton"
             android:layout_centerVertical="true"
             android:layout_marginLeft="7dp"
             android:text="X"
+            android:textSize="12dp"
             android:textColor="@color/BGGREEN"
             android:gravity="center"
             android:id="@+id/exitButton"
@@ -28,12 +29,13 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="18dp"
             fontPath="fonts/Roboto-Medium.ttf"
             android:textColor="@color/BGGREEN"
             android:text="Overview"
             android:layout_centerHorizontal="true"
             android:id="@+id/viewPagerTitle"
+            android:layout_marginTop="13dp"
             />
 
         <LinearLayout
