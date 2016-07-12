@@ -29,6 +29,38 @@
             android:id="@+id/cookBookClickedImageTitle"
             />
 
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:background="@color/LIGHTGREY"
+            android:layout_below="@+id/cookBookClickedImageTitle"
+            android:layout_marginTop="20dp"
+            android:id="@+id/firstBorder"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fontPath="fonts/Roboto-Bold.ttf"
+            android:layout_below="@+id/firstBorder"
+            android:text="Description"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="15dp"
+            android:id="@+id/descriptionTitleTextView"
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            fontPath="fonts/Roboto-Thin.ttf"
+            android:layout_below="@+id/descriptionTitleTextView"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="5dp"
+            android:id="@+id/descriptionTextView"
+            android:textColor="@color/BGGREY"
+            />
+
     </RelativeLayout>
 
 </ScrollView>

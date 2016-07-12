@@ -17,6 +17,11 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import id.blackgarlic.blackgarlic.R;
 import uk.co.chrisjenx.calligraphy.CalligraphyTypefaceSpan;
 import uk.co.chrisjenx.calligraphy.TypefaceUtils;
@@ -52,8 +57,10 @@ public class CookBookViewPagerAdapter extends PagerAdapter {
         if (position == 0) {
             View clickedOverviewView = LayoutInflater.from(mcontext).inflate(R.layout.clicked_overview, container, false);
 
+            //Instantiations
             SimpleDraweeView cookBookClickedImage = (SimpleDraweeView) clickedOverviewView.findViewById(R.id.cookBookClickedImage);
             TextView cookBookClickedImageTitle = (TextView) clickedOverviewView.findViewById(R.id.cookBookClickedImageTitle);
+            TextView descriptionTextView = (TextView) clickedOverviewView.findViewById(R.id.descriptionTextView);
 
             //Setting Image Work
             cookBookClickedImage.setImageURI(Uri.parse(BLACKGARLIC_PICTURES.replace("menu_id", String.valueOf(mCookBookObject.getMenu_id()))));
@@ -79,12 +86,38 @@ public class CookBookViewPagerAdapter extends PagerAdapter {
 
             cookBookClickedImageTitle.setText(stringBuilder, TextView.BufferType.SPANNABLE);
 
+            //Setting description only if the description is not empty
+
+            if (mCookBookObject.getMenu_description().equals("")) {
+                descriptionTextView.setTextColor(mcontext.getResources().getColor(R.color.red));
+                descriptionTextView.setText("Not Available At This Moment!");
+            } else {
+                descriptionTextView.setText(mCookBookObject.getMenu_description());
+            }
+
             container.addView(clickedOverviewView);
             return clickedOverviewView;
 
         } else {
 
-            return null;
+            View clickedStepsView = LayoutInflater.from(mcontext).inflate(R.layout.clicked_steps, container, false);
+
+            //Instantiations
+            TextView stepNumberTextView = (TextView) clickedStepsView.findViewById(R.id.stepNumberTextView);
+            TextView stepsTextViewEnglish = (TextView) clickedStepsView.findViewById(R.id.stepsTextViewEnglish);
+            TextView stepsTextViewIndo = (TextView) clickedStepsView.findViewById(R.id.stepsTextViewIndo);
+
+            //Getting list from cookbookobject
+            List<CookBookSteps> cookBookStepList = mCookBookObject.getCookBookStepList();
+
+            //Setting textviews
+
+            stepNumberTextView.setText(String.valueOf(position));
+            stepsTextViewEnglish.setText(cookBookStepList.get(position - 1).getContent_en());
+            stepsTextViewIndo.setText(cookBookStepList.get(position - 1).getContent_id());
+
+            container.addView(clickedStepsView);
+            return clickedStepsView;
 
         }
 
