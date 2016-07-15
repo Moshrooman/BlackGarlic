@@ -7,12 +7,15 @@ import android.support.v4.view.PagerAdapter;
 import android.text.Layout;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -43,7 +46,15 @@ public class CookBookViewPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return mCookBookObject.getCookBookStepList().size() + 1;
+
+        //If have no ingredients just leave 1 space for the overview
+        if (mCookBookObject.getCookBookIngredientsList().size() == 0) {
+            return mCookBookObject.getCookBookStepList().size() + 1;
+        } else {
+            return mCookBookObject.getCookBookStepList().size() + 2;
+        }
+        //But if there is ingredients, leave 2 spaces, 1 for overview and 1 for ingredients.
+
     }
 
     @Override
@@ -98,7 +109,7 @@ public class CookBookViewPagerAdapter extends PagerAdapter {
             container.addView(clickedOverviewView);
             return clickedOverviewView;
 
-        } else {
+        } else if (mCookBookObject.getCookBookIngredientsList().size() == 0) {
 
             View clickedStepsView = LayoutInflater.from(mcontext).inflate(R.layout.clicked_steps, container, false);
 
@@ -119,6 +130,57 @@ public class CookBookViewPagerAdapter extends PagerAdapter {
             container.addView(clickedStepsView);
             return clickedStepsView;
 
+        } else if ((mCookBookObject.getCookBookIngredientsList().size() != 0) && (position == 1)){
+            View ingredientsView = LayoutInflater.from(mcontext).inflate(R.layout.clicked_ingredients, container, false);
+
+            //So what i wanna do is loop through the ingredints list, and until the ingredients list size, I inflate a layout that has table
+            //row as root layout and i set all the stuff inside, then i add the view into the table layout that I get from the clicked_ingredients
+
+            TableLayout ingredientsTableLayout = (TableLayout) ingredientsView.findViewById(R.id.ingredientsTableLayout);
+
+            List<CookBookIngredients> ingredientsList = mCookBookObject.getCookBookIngredientsList();
+
+            for (int i = 0; i < ingredientsList.size(); i++) {
+
+                TableRow ingredientsTableRow = (TableRow) View.inflate(mcontext, R.layout.ingredients_row, null);
+                ingredientsTableRow.setTag(i);
+
+                TextView firstIngredient = (TextView) ingredientsTableRow.findViewById(R.id.firstIngredient);
+                TextView secondIngredient = (TextView) ingredientsTableRow.findViewById(R.id.secondIngredient);
+
+                firstIngredient.setText(ingredientsList.get(i).getIngredient_name());
+                i++;
+                if (i != ingredientsList.size()) {
+                    secondIngredient.setText(ingredientsList.get(i).getIngredient_name());
+                } else {
+                    secondIngredient.setVisibility(View.GONE);
+                }
+
+                ingredientsTableLayout.addView(ingredientsTableRow);
+
+            }
+
+            container.addView(ingredientsView);
+            return ingredientsView;
+        } else {
+            View clickedStepsView = LayoutInflater.from(mcontext).inflate(R.layout.clicked_steps, container, false);
+
+            //Instantiations
+            TextView stepNumberTextView = (TextView) clickedStepsView.findViewById(R.id.stepNumberTextView);
+            TextView stepsTextViewEnglish = (TextView) clickedStepsView.findViewById(R.id.stepsTextViewEnglish);
+            TextView stepsTextViewIndo = (TextView) clickedStepsView.findViewById(R.id.stepsTextViewIndo);
+
+            //Getting list from cookbookobject
+            List<CookBookSteps> cookBookStepList = mCookBookObject.getCookBookStepList();
+
+            //Setting textviews
+
+            stepNumberTextView.setText(String.valueOf(position - 1));
+            stepsTextViewEnglish.setText(cookBookStepList.get(position - 2).getContent_en());
+            stepsTextViewIndo.setText(cookBookStepList.get(position - 2).getContent_id());
+
+            container.addView(clickedStepsView);
+            return clickedStepsView;
         }
 
     }

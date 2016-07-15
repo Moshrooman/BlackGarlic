@@ -142,8 +142,12 @@ public class CookBookClicked extends AppCompatActivity implements ViewPager.OnPa
 
         if (position == 0) {
             viewPagerTitle.setText("Overview");
-        } else {
+        } else if (cookBookObject.getCookBookIngredientsList().size() == 0){
             viewPagerTitle.setText("Step " + String.valueOf(position) + " of " + String.valueOf(cookBookObject.getCookBookStepList().size()));
+        } else if (position == 1) {
+            viewPagerTitle.setText("Ingredients");
+        } else {
+            viewPagerTitle.setText("Step " + String.valueOf(position - 1) + " of " + String.valueOf(cookBookObject.getCookBookStepList().size()));
         }
 
     }

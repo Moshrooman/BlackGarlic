@@ -60,6 +60,9 @@ public class CookBookObject {
     @SerializedName("steps")
     private List<CookBookSteps> cookBookStepList;
 
+    @SerializedName("ingredients")
+    private List<CookBookIngredients> cookBookIngredientsList;
+
     private boolean isFavorited = false;
 
     public boolean getIsFavorited() {
@@ -164,5 +167,13 @@ public class CookBookObject {
 
     public void setCookBookStepList(List<CookBookSteps> cookBookStepList) {
         this.cookBookStepList = cookBookStepList;
+    }
+
+    public List<CookBookIngredients> getCookBookIngredientsList() {
+        return cookBookIngredientsList;
+    }
+
+    public void setCookBookIngredientsList(List<CookBookIngredients> cookBookIngredientsList) {
+        this.cookBookIngredientsList = cookBookIngredientsList;
     }
 }
