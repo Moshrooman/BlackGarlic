@@ -1,6 +1,7 @@
 package id.blackgarlic.blackgarlic.CookBookModel;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +32,7 @@ public class CookBookClicked extends AppCompatActivity implements ViewPager.OnPa
     private static int currentPosition;
     private static CookBookObject cookBookObject;
     private static Button exitButton;
+    private static ImageView shareButtonImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class CookBookClicked extends AppCompatActivity implements ViewPager.OnPa
         viewPagerAdapter = new CookBookViewPagerAdapter(CookBookClicked.this, cookBookObject);
         currentPosition = 0;
         exitButton = (Button) findViewById(R.id.exitButton);
+        shareButtonImageView = (ImageView) findViewById(R.id.shareButtonImageView);
 
         cookBookViewPager.setAdapter(viewPagerAdapter);
         cookBookViewPager.setCurrentItem(0);
@@ -96,6 +99,15 @@ public class CookBookClicked extends AppCompatActivity implements ViewPager.OnPa
                 }
 
                 return false;
+            }
+        });
+
+        shareButtonImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sharePopUpActivity = new Intent(CookBookClicked.this, SharePopUpActivity.class);
+                sharePopUpActivity.putExtra("object", new Gson().toJson(cookBookObject));
+                startActivity(sharePopUpActivity);
             }
         });
 

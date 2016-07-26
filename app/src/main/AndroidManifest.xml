@@ -129,6 +129,25 @@
         <activity
             android:name=".CookBookModel.CookBookClicked"
             android:label="@string/title_activity_cook_book_clicked"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="BlackGarlic"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="1079719872085385" />
+
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FaceBookContentProvider1079719872085385"
+            android:exported="true" />
+
+        <activity
+            android:name=".CookBookModel.SharePopUpActivity"
+            android:label="@string/title_activity_share_pop_up"
             android:theme="@style/AppTheme"></activity>
     </application>
 

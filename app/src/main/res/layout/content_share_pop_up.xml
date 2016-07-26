@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="350dp"
+    android:layout_height="200dp"
+    tools:context="id.blackgarlic.blackgarlic.CookBookModel.SharePopUpActivity"
+    tools:showIn="@layout/activity_share_pop_up"
+    android:id="@+id/sharePopUpRelativeLayout"
+    android:background="@color/LIGHTGREY"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        fontPath="fonts/Roboto-Medium.ttf"
+        android:text="Share This Menu Through"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:id="@+id/shareMenuTitleTextView"
+        />
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/shareMenuTitleTextView"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true"
+        fresco:actualImageScaleType="centerInside"
+        android:id="@+id/faceBookImage"
+        />
+
+</RelativeLayout>

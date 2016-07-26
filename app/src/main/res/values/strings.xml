@@ -3,6 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_splash">SplashActivity</string>
     <string name="title_activity_welcome">WelcomeActivity</string>
+    <string name="facebook_app_id">1079719872085385</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_test">Test</string>
@@ -24,4 +25,5 @@
     <string name="title_activity_profile_picture_pop_up">ProfilePicturePopUp</string>
     <string name="title_activity_cook_book">CookBook</string>
     <string name="title_activity_cook_book_clicked">CookBookClicked</string>
+    <string name="title_activity_share_pop_up">SharePopUpActivity</string>
 </resources>
