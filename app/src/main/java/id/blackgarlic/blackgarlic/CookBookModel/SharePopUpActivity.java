@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
 import com.facebook.common.executors.CallerThreadExecutor;
 import com.facebook.common.references.CloseableReference;
 import com.facebook.datasource.DataSource;
@@ -54,13 +55,15 @@ public class SharePopUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share_pop_up);
 
+        FacebookSdk.sdkInitialize(getApplicationContext());
+
         overridePendingTransition(R.anim.fade_in, R.anim.actual_fade_out);
 
         cookBookObject = new Gson().fromJson(getIntent().getExtras().getString("object", ""), CookBookObject.class);
         sharePopUpRelativeLayout = (RelativeLayout) findViewById(R.id.sharePopUpRelativeLayout);
         faceBookImage = (SimpleDraweeView) findViewById(R.id.faceBookImage);
         callbackManager = CallbackManager.Factory.create();
-        final List<String> permissions = Arrays.asList("publish_action");
+        final List<String> permissions = Arrays.asList("publish_actions");
         loginManager = LoginManager.getInstance();
 
         sharePopUpRelativeLayout.post(new Runnable() {
@@ -131,7 +134,6 @@ public class SharePopUpActivity extends AppCompatActivity {
         SharePhoto photo = new SharePhoto.Builder()
                 .setBitmap(imageToShare)
                 .setCaption("Awesome Menu From BlackGarlic!")
-                .setImageUrl(Uri.parse("www.blackgarlic.id"))
                 .build();
 
         SharePhotoContent content = new SharePhotoContent.Builder()
