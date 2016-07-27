@@ -2,13 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="350dp"
-    android:layout_height="200dp"
+    android:layout_height="wrap_content"
     tools:context="id.blackgarlic.blackgarlic.CookBookModel.SharePopUpActivity"
     tools:showIn="@layout/activity_share_pop_up"
     android:id="@+id/sharePopUpRelativeLayout"
     android:background="@color/LIGHTGREY"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
     >
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -25,9 +27,55 @@
         android:layout_height="50dp"
         android:layout_below="@+id/shareMenuTitleTextView"
         android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
         android:layout_centerHorizontal="true"
         fresco:actualImageScaleType="centerInside"
         android:id="@+id/faceBookImage"
         />
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@+id/faceBookImage"
+        android:layout_marginLeft="20dp"
+        android:id="@+id/confirmImage"
+        android:visibility="gone"
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_toRightOf="@+id/confirmImage"
+        android:layout_below="@+id/faceBookImage"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/bordersearchbar"
+        fontPath="fonts/Roboto-Medium.ttf"
+        android:textColor="@color/BGGREEN"
+        android:textColorHint="@color/BGLIGHTGREEN"
+        android:layout_marginBottom="20dp"
+        android:hint="Say something about this image..."
+        android:id="@+id/pictureDescriptionEditText"
+        android:textSize="10dp"
+        android:gravity="top|left"
+        android:visibility="gone"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/pictureDescriptionEditText"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/filterheaderdrawable"
+        android:text="Post"
+        fontPath="fonts/Roboto-Medium.ttf"
+        android:id="@+id/postButton"
+        android:visibility="gone"
+        android:layout_marginBottom="20dp"
+        />
+
+
 
 </RelativeLayout>
