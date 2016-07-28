@@ -1,11 +1,13 @@
 package id.blackgarlic.blackgarlic.CookBookModel;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,6 +51,7 @@ import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.johnpersano.supertoasts.util.Style;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -67,10 +71,16 @@ public class SharePopUpActivity extends AppCompatActivity {
     private static ImageView confirmImage;
     private static EditText pictureDescriptionEditText;
     private static Button postButton;
+    private static View firstEmptyView;
+    private static View secondEmptyView;
+    private static int heightNeededToAdd;
+    private static List<View> viewListSetLayoutListener = new ArrayList<View>();
+    private static int count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_share_pop_up);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
@@ -83,9 +93,49 @@ public class SharePopUpActivity extends AppCompatActivity {
         confirmImage = (ImageView) findViewById(R.id.confirmImage);
         pictureDescriptionEditText = (EditText) findViewById(R.id.pictureDescriptionEditText);
         postButton = (Button) findViewById(R.id.postButton);
+        firstEmptyView = findViewById(R.id.firstEmptyView);
+        secondEmptyView = findViewById(R.id.secondEmptyView);
         callbackManager = CallbackManager.Factory.create();
         final List<String> permissions = Arrays.asList("publish_actions");
         loginManager = LoginManager.getInstance();
+        heightNeededToAdd = 0;
+        count = 0;
+
+        viewListSetLayoutListener.clear();
+
+        //heightNeededToAdd = pictureDescriptionEditText + postButton + firstEmptyView + secondEmptyView;
+        viewListSetLayoutListener.add(pictureDescriptionEditText);
+        viewListSetLayoutListener.add(postButton);
+        viewListSetLayoutListener.add(firstEmptyView);
+        viewListSetLayoutListener.add(secondEmptyView);
+
+        for (int i = 0; i < viewListSetLayoutListener.size(); i++) {
+            final int outsideI = i;
+            viewListSetLayoutListener.get(i).getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    heightNeededToAdd = heightNeededToAdd + viewListSetLayoutListener.get(outsideI).getHeight();
+                    viewListSetLayoutListener.get(outsideI).getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    viewListSetLayoutListener.get(outsideI).setVisibility(View.GONE);
+                    count++;
+                    //The reason why we check if count is the list.size and not size - 1, is because we want all 4 to be done, therefore
+                    //if the size of the list is 4 we want all 4 to be done.
+                    if (count == viewListSetLayoutListener.size()) {
+
+                        sharePopUpRelativeLayout.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                getWindow().setLayout(sharePopUpRelativeLayout.getWidth(), sharePopUpRelativeLayout.getHeight());
+
+                            }
+                        });
+
+                    }
+                }
+            });
+
+        }
+
         facebookCallback = new FacebookCallback<Sharer.Result>() {
             @Override
             public void onSuccess(Sharer.Result result) {
@@ -106,13 +156,6 @@ public class SharePopUpActivity extends AppCompatActivity {
             }
         };
 
-        sharePopUpRelativeLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                getWindow().setLayout(sharePopUpRelativeLayout.getWidth(), sharePopUpRelativeLayout.getHeight());
-            }
-        });
-
         faceBookImage.setImageURI(Uri.parse("https://www.seeklogo.net/wp-content/uploads/2013/11/facebook-flat-vector-logo-400x400.png"));
 
         faceBookImage.setOnClickListener(new View.OnClickListener() {
@@ -130,8 +173,11 @@ public class SharePopUpActivity extends AppCompatActivity {
                         confirmImage.setVisibility(View.VISIBLE);
                         pictureDescriptionEditText.setVisibility(View.VISIBLE);
                         postButton.setVisibility(View.VISIBLE);
+                        firstEmptyView.setVisibility(View.VISIBLE);
+                        secondEmptyView.setVisibility(View.VISIBLE);
+                        faceBookImage.setEnabled(false);
 
-                        getWindow().setLayout(sharePopUpRelativeLayout.getWidth(), 1500);
+                        getWindow().setLayout(sharePopUpRelativeLayout.getWidth(), sharePopUpRelativeLayout.getHeight() + heightNeededToAdd);
 
                         setConfirmImageAndBitmap();
                     }
@@ -147,6 +193,7 @@ public class SharePopUpActivity extends AppCompatActivity {
                         Log.e("Error: ", error.getCause().toString());
                     }
                 });
+
             }
         });
 

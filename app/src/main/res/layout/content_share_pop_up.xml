@@ -53,18 +53,25 @@
         fontPath="fonts/Roboto-Medium.ttf"
         android:textColor="@color/BGGREEN"
         android:textColorHint="@color/BGLIGHTGREEN"
-        android:layout_marginBottom="20dp"
         android:hint="Say something about this image..."
         android:id="@+id/pictureDescriptionEditText"
         android:textSize="10dp"
         android:gravity="top|left"
-        android:visibility="gone"
+        android:visibility="visible"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:id="@+id/firstEmptyView"
+        android:layout_below="@+id/pictureDescriptionEditText"
+        android:visibility="visible"
         />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_below="@+id/pictureDescriptionEditText"
+        android:layout_below="@+id/firstEmptyView"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
         android:layout_centerHorizontal="true"
@@ -72,10 +79,15 @@
         android:text="Post"
         fontPath="fonts/Roboto-Medium.ttf"
         android:id="@+id/postButton"
-        android:visibility="gone"
-        android:layout_marginBottom="20dp"
+        android:visibility="visible"
         />
 
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:id="@+id/secondEmptyView"
+        android:layout_below="@+id/postButton"
+        android:visibility="visible"
+        />
 
 </RelativeLayout>
