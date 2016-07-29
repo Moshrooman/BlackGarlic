@@ -17,6 +17,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -76,6 +78,7 @@ public class SharePopUpActivity extends AppCompatActivity {
     private static int heightNeededToAdd;
     private static List<View> viewListSetLayoutListener = new ArrayList<View>();
     private static int count;
+    private static RelativeLayout confirmFaceBookRelativeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +98,7 @@ public class SharePopUpActivity extends AppCompatActivity {
         postButton = (Button) findViewById(R.id.postButton);
         firstEmptyView = findViewById(R.id.firstEmptyView);
         secondEmptyView = findViewById(R.id.secondEmptyView);
+        confirmFaceBookRelativeLayout = (RelativeLayout) findViewById(R.id.confirmFaceBookRelativeLayout);
         callbackManager = CallbackManager.Factory.create();
         final List<String> permissions = Arrays.asList("publish_actions");
         loginManager = LoginManager.getInstance();
@@ -122,6 +126,7 @@ public class SharePopUpActivity extends AppCompatActivity {
                     //if the size of the list is 4 we want all 4 to be done.
                     if (count == viewListSetLayoutListener.size()) {
 
+                        confirmFaceBookRelativeLayout.setVisibility(View.GONE);
                         sharePopUpRelativeLayout.post(new Runnable() {
                             @Override
                             public void run() {
@@ -175,6 +180,14 @@ public class SharePopUpActivity extends AppCompatActivity {
                         postButton.setVisibility(View.VISIBLE);
                         firstEmptyView.setVisibility(View.VISIBLE);
                         secondEmptyView.setVisibility(View.VISIBLE);
+                        confirmFaceBookRelativeLayout.setVisibility(View.VISIBLE);
+
+                        AnimationSet animationSet = new AnimationSet(true);
+                        animationSet.addAnimation(AnimationUtils.loadAnimation(SharePopUpActivity.this, R.anim.down_to_up));
+                        animationSet.addAnimation(AnimationUtils.loadAnimation(SharePopUpActivity.this, R.anim.fade_in_share));
+
+                        confirmFaceBookRelativeLayout.startAnimation(animationSet);
+
                         faceBookImage.setEnabled(false);
 
                         getWindow().setLayout(sharePopUpRelativeLayout.getWidth(), sharePopUpRelativeLayout.getHeight() + heightNeededToAdd);

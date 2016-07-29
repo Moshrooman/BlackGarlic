@@ -33,61 +33,71 @@
         android:id="@+id/faceBookImage"
         />
 
-    <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/faceBookImage"
-        android:layout_marginLeft="20dp"
-        android:id="@+id/confirmImage"
-        android:visibility="gone"
-        />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_toRightOf="@+id/confirmImage"
-        android:layout_below="@+id/faceBookImage"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="10dp"
-        android:background="@drawable/bordersearchbar"
-        fontPath="fonts/Roboto-Medium.ttf"
-        android:textColor="@color/BGGREEN"
-        android:textColorHint="@color/BGLIGHTGREEN"
-        android:hint="Say something about this image..."
-        android:id="@+id/pictureDescriptionEditText"
-        android:textSize="10dp"
-        android:gravity="top|left"
+        android:id="@+id/confirmFaceBookRelativeLayout"
         android:visibility="visible"
-        />
+        >
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:id="@+id/firstEmptyView"
-        android:layout_below="@+id/pictureDescriptionEditText"
-        android:visibility="visible"
-        />
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="20dp"
+            android:id="@+id/confirmImage"
+            android:visibility="visible"
+            />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_below="@+id/firstEmptyView"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/filterheaderdrawable"
-        android:text="Post"
-        fontPath="fonts/Roboto-Medium.ttf"
-        android:id="@+id/postButton"
-        android:visibility="visible"
-        />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_toRightOf="@+id/confirmImage"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/bordersearchbar"
+            fontPath="fonts/Roboto-Medium.ttf"
+            android:textColor="@color/BGGREEN"
+            android:textColorHint="@color/BGLIGHTGREEN"
+            android:hint="Say something about this image..."
+            android:id="@+id/pictureDescriptionEditText"
+            android:textSize="10dp"
+            android:gravity="top|left"
+            android:visibility="visible"
+            />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:id="@+id/secondEmptyView"
-        android:layout_below="@+id/postButton"
-        android:visibility="visible"
-        />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:id="@+id/firstEmptyView"
+            android:layout_below="@+id/pictureDescriptionEditText"
+            android:visibility="visible"
+            />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_below="@+id/firstEmptyView"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/filterheaderdrawable"
+            android:text="Post"
+            fontPath="fonts/Roboto-Medium.ttf"
+            android:id="@+id/postButton"
+            android:visibility="visible"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:id="@+id/secondEmptyView"
+            android:layout_below="@+id/postButton"
+            android:visibility="visible"
+            />
+
+    </RelativeLayout>
+
+
 
 </RelativeLayout>
