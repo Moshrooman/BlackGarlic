@@ -11,7 +11,6 @@
     android:layout_gravity="center"
     >
 
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,21 +21,40 @@
         android:id="@+id/shareMenuTitleTextView"
         />
 
-    <com.facebook.drawee.view.SimpleDraweeView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_below="@+id/shareMenuTitleTextView"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="30dp"
-        android:layout_centerHorizontal="true"
-        fresco:actualImageScaleType="centerInside"
-        android:id="@+id/faceBookImage"
-        />
+        android:id="@+id/relativeLayoutOptions"
+        android:gravity="center"
+        android:orientation="horizontal"
+        >
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            fresco:actualImageScaleType="centerInside"
+            android:id="@+id/faceBookImage"
+            android:layout_marginRight="15dp"
+            />
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            fresco:actualImageScaleType="centerInside"
+            android:id="@+id/emailImage"
+            />
+
+
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/faceBookImage"
+        android:layout_below="@+id/relativeLayoutOptions"
         android:id="@+id/confirmFaceBookRelativeLayout"
         android:visibility="visible"
         >
@@ -98,6 +116,139 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relativeLayoutOptions"
+        android:id="@+id/confirmEmailRelativeLayout"
+        android:visibility="visible"
+        >
 
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="20dp"
+            android:id="@+id/emailConfirmImage"
+            android:visibility="visible"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_toRightOf="@+id/emailConfirmImage"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/bordersearchbar"
+            fontPath="fonts/Roboto-Medium.ttf"
+            android:textColor="@color/BGGREEN"
+            android:textColorHint="@color/BGLIGHTGREEN"
+            android:hint="To..."
+            android:id="@+id/emailToEditText"
+            android:textSize="10dp"
+            android:gravity="top|left"
+            android:visibility="visible"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_below="@+id/emailToEditText"
+            android:layout_toRightOf="@+id/emailConfirmImage"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/bordersearchbar"
+            fontPath="fonts/Roboto-Medium.ttf"
+            android:textColor="@color/BGGREEN"
+            android:textColorHint="@color/BGLIGHTGREEN"
+            android:hint="CC..."
+            android:id="@+id/emailCcEditText"
+            android:textSize="10dp"
+            android:gravity="top|left"
+            android:visibility="visible"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:id="@+id/firstEmailEmptyView"
+            android:layout_below="@+id/emailConfirmImage"
+            android:visibility="visible"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_below="@+id/firstEmailEmptyView"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/bordersearchbar"
+            fontPath="fonts/Roboto-Medium.ttf"
+            android:textColor="@color/BGGREEN"
+            android:textColorHint="@color/BGLIGHTGREEN"
+            android:hint="Subject..."
+            android:id="@+id/emailSubjectEditText"
+            android:textSize="10dp"
+            android:gravity="top|left"
+            android:visibility="visible"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:id="@+id/secondEmailEmptyView"
+            android:layout_below="@+id/emailSubjectEditText"
+            android:visibility="visible"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_below="@+id/secondEmailEmptyView"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/bordersearchbar"
+            fontPath="fonts/Roboto-Medium.ttf"
+            android:textColor="@color/BGGREEN"
+            android:textColorHint="@color/BGLIGHTGREEN"
+            android:hint="Say something about this menu..."
+            android:id="@+id/emailBodyEditText"
+            android:textSize="10dp"
+            android:gravity="top|left"
+            android:visibility="visible"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:id="@+id/thirdEmailEmptyView"
+            android:layout_below="@+id/emailBodyEditText"
+            android:visibility="visible"
+            />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_below="@+id/thirdEmailEmptyView"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/filterheaderdrawable"
+            android:text="Send Email"
+            fontPath="fonts/Roboto-Medium.ttf"
+            android:id="@+id/sendEmailButton"
+            android:visibility="visible"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:id="@+id/fourthEmailEmptyView"
+            android:layout_below="@+id/sendEmailButton"
+            android:visibility="visible"
+            />
+
+
+    </RelativeLayout>
 
 </RelativeLayout>

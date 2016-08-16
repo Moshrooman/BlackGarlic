@@ -1,29 +1,19 @@
 package id.blackgarlic.blackgarlic.CookBookModel;
 
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
-import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.facebook.CallbackManager;
@@ -48,7 +38,6 @@ import com.facebook.share.ShareApi;
 import com.facebook.share.Sharer;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
-import com.facebook.share.widget.ShareDialog;
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.johnpersano.supertoasts.util.Style;
 import com.google.gson.Gson;
@@ -75,10 +64,29 @@ public class SharePopUpActivity extends AppCompatActivity {
     private static Button postButton;
     private static View firstEmptyView;
     private static View secondEmptyView;
-    private static int heightNeededToAdd;
-    private static List<View> viewListSetLayoutListener = new ArrayList<View>();
-    private static int count;
+    private static int heightNeededToAddFacebook;
+    private static List<View> viewListSetLayoutListenerFacebook = new ArrayList<View>();
+    private static int countFacebook;
     private static RelativeLayout confirmFaceBookRelativeLayout;
+
+    //Start of reference for email
+    private static SimpleDraweeView emailImage;
+    private static RelativeLayout confirmEmailRelativeLayout;
+    private static ImageView emailConfirmImage;
+    private static EditText emailToEditText;
+    private static EditText emailCcEditText;
+    private static View firstEmailEmptyView;
+    private static EditText emailSubjectEditText;
+    private static View secondEmailEmptyView;
+    private static EditText emailBodyEditText;
+    private static View thirdEmailEmptyView;
+    private static Button sendEmailButton;
+    private static View fourthEmailEmptyView;
+    private static List<View> viewListSetLayoutListenerEmail = new ArrayList<View>();
+    private static int countEmail;
+    private static int heightNeededToAddEmail;
+
+    private static int previousHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,39 +100,33 @@ public class SharePopUpActivity extends AppCompatActivity {
 
         cookBookObject = new Gson().fromJson(getIntent().getExtras().getString("object", ""), CookBookObject.class);
         sharePopUpRelativeLayout = (RelativeLayout) findViewById(R.id.sharePopUpRelativeLayout);
-        faceBookImage = (SimpleDraweeView) findViewById(R.id.faceBookImage);
-        confirmImage = (ImageView) findViewById(R.id.confirmImage);
-        pictureDescriptionEditText = (EditText) findViewById(R.id.pictureDescriptionEditText);
-        postButton = (Button) findViewById(R.id.postButton);
-        firstEmptyView = findViewById(R.id.firstEmptyView);
-        secondEmptyView = findViewById(R.id.secondEmptyView);
-        confirmFaceBookRelativeLayout = (RelativeLayout) findViewById(R.id.confirmFaceBookRelativeLayout);
-        callbackManager = CallbackManager.Factory.create();
-        final List<String> permissions = Arrays.asList("publish_actions");
-        loginManager = LoginManager.getInstance();
-        heightNeededToAdd = 0;
-        count = 0;
+        previousHeight = 0;
 
-        viewListSetLayoutListener.clear();
+        referenceFacebook();
+        referenceEmail();
 
-        //heightNeededToAdd = pictureDescriptionEditText + postButton + firstEmptyView + secondEmptyView;
-        viewListSetLayoutListener.add(pictureDescriptionEditText);
-        viewListSetLayoutListener.add(postButton);
-        viewListSetLayoutListener.add(firstEmptyView);
-        viewListSetLayoutListener.add(secondEmptyView);
+        //Global layout shit for the facebook views
 
-        for (int i = 0; i < viewListSetLayoutListener.size(); i++) {
+        viewListSetLayoutListenerFacebook.clear();
+
+        //heightNeededToAddFacebook = pictureDescriptionEditText + postButton + firstEmptyView + secondEmptyView;
+        viewListSetLayoutListenerFacebook.add(pictureDescriptionEditText);
+        viewListSetLayoutListenerFacebook.add(postButton);
+        viewListSetLayoutListenerFacebook.add(firstEmptyView);
+        viewListSetLayoutListenerFacebook.add(secondEmptyView);
+
+        for (int i = 0; i < viewListSetLayoutListenerFacebook.size(); i++) {
             final int outsideI = i;
-            viewListSetLayoutListener.get(i).getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            viewListSetLayoutListenerFacebook.get(i).getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
-                    heightNeededToAdd = heightNeededToAdd + viewListSetLayoutListener.get(outsideI).getHeight();
-                    viewListSetLayoutListener.get(outsideI).getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    viewListSetLayoutListener.get(outsideI).setVisibility(View.GONE);
-                    count++;
-                    //The reason why we check if count is the list.size and not size - 1, is because we want all 4 to be done, therefore
+                    heightNeededToAddFacebook = heightNeededToAddFacebook + viewListSetLayoutListenerFacebook.get(outsideI).getHeight();
+                    viewListSetLayoutListenerFacebook.get(outsideI).getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    viewListSetLayoutListenerFacebook.get(outsideI).setVisibility(View.GONE);
+                    countFacebook++;
+                    //The reason why we check if countFacebook is the list.size and not size - 1, is because we want all 4 to be done, therefore
                     //if the size of the list is 4 we want all 4 to be done.
-                    if (count == viewListSetLayoutListener.size()) {
+                    if (countFacebook == viewListSetLayoutListenerFacebook.size()) {
 
                         confirmFaceBookRelativeLayout.setVisibility(View.GONE);
                         sharePopUpRelativeLayout.post(new Runnable() {
@@ -139,6 +141,48 @@ public class SharePopUpActivity extends AppCompatActivity {
                 }
             });
 
+        }
+
+        //Global layout shit for the email views
+
+        viewListSetLayoutListenerEmail.clear();
+
+        viewListSetLayoutListenerEmail.add(emailConfirmImage);
+        viewListSetLayoutListenerEmail.add(firstEmailEmptyView);
+        viewListSetLayoutListenerEmail.add(emailSubjectEditText);
+        viewListSetLayoutListenerEmail.add(secondEmailEmptyView);
+        viewListSetLayoutListenerEmail.add(emailBodyEditText);
+        viewListSetLayoutListenerEmail.add(thirdEmailEmptyView);
+        viewListSetLayoutListenerEmail.add(sendEmailButton);
+        viewListSetLayoutListenerEmail.add(fourthEmailEmptyView);
+
+        for (int i = 0; i < viewListSetLayoutListenerEmail.size(); i++) {
+            final int outSideI = i;
+
+            viewListSetLayoutListenerEmail.get(i).getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    heightNeededToAddEmail = heightNeededToAddEmail + viewListSetLayoutListenerEmail.get(outSideI).getHeight();
+                    viewListSetLayoutListenerEmail.get(outSideI).getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    viewListSetLayoutListenerEmail.get(outSideI).setVisibility(View.GONE);
+                    countEmail++;
+
+                    if (countEmail == viewListSetLayoutListenerEmail.size()) {
+                        confirmEmailRelativeLayout.setVisibility(View.GONE);
+
+                        sharePopUpRelativeLayout.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                getWindow().setLayout(sharePopUpRelativeLayout.getWidth(), sharePopUpRelativeLayout.getHeight());
+
+                            }
+                        });
+
+                        Log.e("Height Email: ", String.valueOf(heightNeededToAddEmail));
+
+                    }
+                }
+            });
         }
 
         facebookCallback = new FacebookCallback<Sharer.Result>() {
@@ -162,10 +206,12 @@ public class SharePopUpActivity extends AppCompatActivity {
         };
 
         faceBookImage.setImageURI(Uri.parse("https://www.seeklogo.net/wp-content/uploads/2013/11/facebook-flat-vector-logo-400x400.png"));
+        emailImage.setImageURI(Uri.parse("https://d3rnbxvnd0hlox.cloudfront.net/images/channels/6/icons/large.png"));
 
         faceBookImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final List<String> permissions = Arrays.asList("publish_actions");
                 loginManager.logInWithPublishPermissions(SharePopUpActivity.this, permissions);
                 loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                     @Override
@@ -175,12 +221,10 @@ public class SharePopUpActivity extends AppCompatActivity {
                         roundingParams.setBorder(R.color.red, 4);
                         roundingParams.setRoundAsCircle(false);
                         faceBookImage.getHierarchy().setRoundingParams(roundingParams);
-                        confirmImage.setVisibility(View.VISIBLE);
-                        pictureDescriptionEditText.setVisibility(View.VISIBLE);
-                        postButton.setVisibility(View.VISIBLE);
-                        firstEmptyView.setVisibility(View.VISIBLE);
-                        secondEmptyView.setVisibility(View.VISIBLE);
-                        confirmFaceBookRelativeLayout.setVisibility(View.VISIBLE);
+                        emailImage.getHierarchy().setRoundingParams(null);
+
+                        setEmailGone();
+                        setFacebookVisible();
 
                         AnimationSet animationSet = new AnimationSet(true);
                         animationSet.addAnimation(AnimationUtils.loadAnimation(SharePopUpActivity.this, R.anim.down_to_up));
@@ -188,9 +232,11 @@ public class SharePopUpActivity extends AppCompatActivity {
 
                         confirmFaceBookRelativeLayout.startAnimation(animationSet);
 
+                        emailImage.setEnabled(true);
                         faceBookImage.setEnabled(false);
 
-                        getWindow().setLayout(sharePopUpRelativeLayout.getWidth(), sharePopUpRelativeLayout.getHeight() + heightNeededToAdd);
+                        getWindow().setLayout(sharePopUpRelativeLayout.getWidth(), sharePopUpRelativeLayout.getHeight() - previousHeight + heightNeededToAddFacebook);
+                        previousHeight = heightNeededToAddFacebook;
 
                         setConfirmImageAndBitmap();
                     }
@@ -206,6 +252,36 @@ public class SharePopUpActivity extends AppCompatActivity {
                         Log.e("Error: ", error.getCause().toString());
                     }
                 });
+
+            }
+        });
+
+        emailImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                RoundingParams roundingParams = RoundingParams.fromCornersRadius(5f);
+                roundingParams.setBorder(R.color.red, 4);
+                roundingParams.setRoundAsCircle(false);
+                emailImage.getHierarchy().setRoundingParams(roundingParams);
+                faceBookImage.getHierarchy().setRoundingParams(null);
+
+                setFacebookGone();
+                setEmailVisible();
+
+                AnimationSet animationSet = new AnimationSet(true);
+                animationSet.addAnimation(AnimationUtils.loadAnimation(SharePopUpActivity.this, R.anim.down_to_up));
+                animationSet.addAnimation(AnimationUtils.loadAnimation(SharePopUpActivity.this, R.anim.fade_in_share));
+
+                confirmEmailRelativeLayout.startAnimation(animationSet);
+
+                faceBookImage.setEnabled(true);
+                emailImage.setEnabled(false);
+
+                getWindow().setLayout(sharePopUpRelativeLayout.getWidth(), sharePopUpRelativeLayout.getHeight() - previousHeight + heightNeededToAddEmail);
+                previousHeight = heightNeededToAddEmail;
+
+                setConfirmImageAndBitmap();
 
             }
         });
@@ -252,6 +328,7 @@ public class SharePopUpActivity extends AppCompatActivity {
 
                 imageToShare = bitmap;
                 confirmImage.setImageBitmap(bitmap);
+                emailConfirmImage.setImageBitmap(bitmap);
 
             }
 
@@ -262,6 +339,83 @@ public class SharePopUpActivity extends AppCompatActivity {
         }, CallerThreadExecutor.getInstance());
 
         }
+
+    public void referenceFacebook() {
+        faceBookImage = (SimpleDraweeView) findViewById(R.id.faceBookImage);
+        confirmImage = (ImageView) findViewById(R.id.confirmImage);
+        pictureDescriptionEditText = (EditText) findViewById(R.id.pictureDescriptionEditText);
+        postButton = (Button) findViewById(R.id.postButton);
+        firstEmptyView = findViewById(R.id.firstEmptyView);
+        secondEmptyView = findViewById(R.id.secondEmptyView);
+        confirmFaceBookRelativeLayout = (RelativeLayout) findViewById(R.id.confirmFaceBookRelativeLayout);
+        callbackManager = CallbackManager.Factory.create();
+        loginManager = LoginManager.getInstance();
+        heightNeededToAddFacebook = 0;
+        countFacebook = 0;
+    }
+
+    public void referenceEmail() {
+        emailImage = (SimpleDraweeView) findViewById(R.id.emailImage);
+        confirmEmailRelativeLayout = (RelativeLayout) findViewById(R.id.confirmEmailRelativeLayout);
+        emailConfirmImage = (ImageView) findViewById(R.id.emailConfirmImage);
+        emailToEditText = (EditText) findViewById(R.id.emailToEditText);
+        emailCcEditText = (EditText) findViewById(R.id.emailCcEditText);
+        firstEmailEmptyView = findViewById(R.id.firstEmailEmptyView);
+        emailSubjectEditText = (EditText) findViewById(R.id.emailSubjectEditText);
+        secondEmailEmptyView = findViewById(R.id.secondEmailEmptyView);
+        emailBodyEditText = (EditText) findViewById(R.id.emailBodyEditText);
+        thirdEmailEmptyView = findViewById(R.id.thirdEmailEmptyView);
+        sendEmailButton = (Button) findViewById(R.id.sendEmailButton);
+        fourthEmailEmptyView = findViewById(R.id.fourthEmailEmptyView);
+        countEmail = 0;
+        heightNeededToAddEmail = 0;
+    }
+
+    public void setFacebookVisible() {
+        confirmImage.setVisibility(View.VISIBLE);
+        pictureDescriptionEditText.setVisibility(View.VISIBLE);
+        postButton.setVisibility(View.VISIBLE);
+        firstEmptyView.setVisibility(View.VISIBLE);
+        secondEmptyView.setVisibility(View.VISIBLE);
+        confirmFaceBookRelativeLayout.setVisibility(View.VISIBLE);
+    }
+
+    public void setFacebookGone() {
+        confirmImage.setVisibility(View.GONE);
+        pictureDescriptionEditText.setVisibility(View.GONE);
+        postButton.setVisibility(View.GONE);
+        firstEmptyView.setVisibility(View.GONE);
+        secondEmptyView.setVisibility(View.GONE);
+        confirmFaceBookRelativeLayout.setVisibility(View.GONE);
+    }
+
+    public void setEmailVisible() {
+        confirmEmailRelativeLayout.setVisibility(View.VISIBLE);
+        emailConfirmImage.setVisibility(View.VISIBLE);
+        emailToEditText.setVisibility(View.VISIBLE);
+        emailCcEditText.setVisibility(View.VISIBLE);
+        firstEmailEmptyView.setVisibility(View.VISIBLE);
+        emailSubjectEditText.setVisibility(View.VISIBLE);
+        secondEmailEmptyView.setVisibility(View.VISIBLE);
+        emailBodyEditText.setVisibility(View.VISIBLE);
+        thirdEmailEmptyView.setVisibility(View.VISIBLE);
+        sendEmailButton.setVisibility(View.VISIBLE);
+        fourthEmailEmptyView.setVisibility(View.VISIBLE);
+    }
+
+    public void setEmailGone() {
+        confirmEmailRelativeLayout.setVisibility(View.GONE);
+        emailConfirmImage.setVisibility(View.GONE);
+        emailToEditText.setVisibility(View.GONE);
+        emailCcEditText.setVisibility(View.GONE);
+        firstEmailEmptyView.setVisibility(View.GONE);
+        emailSubjectEditText.setVisibility(View.GONE);
+        secondEmailEmptyView.setVisibility(View.GONE);
+        emailBodyEditText.setVisibility(View.GONE);
+        thirdEmailEmptyView.setVisibility(View.GONE);
+        sendEmailButton.setVisibility(View.GONE);
+        fourthEmailEmptyView.setVisibility(View.GONE);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
