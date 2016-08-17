@@ -134,7 +134,7 @@
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/emailConfirmImage"
             android:layout_marginRight="20dp"
             android:layout_marginLeft="10dp"
@@ -142,7 +142,7 @@
             fontPath="fonts/Roboto-Medium.ttf"
             android:textColor="@color/BGGREEN"
             android:textColorHint="@color/BGLIGHTGREEN"
-            android:hint="To..."
+            android:hint="To... (Separate Multiple Recipients With Commas)"
             android:id="@+id/emailToEditText"
             android:textSize="10dp"
             android:gravity="top|left"
@@ -151,7 +151,7 @@
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/emailToEditText"
             android:layout_toRightOf="@+id/emailConfirmImage"
             android:layout_marginRight="20dp"
@@ -161,7 +161,7 @@
             fontPath="fonts/Roboto-Medium.ttf"
             android:textColor="@color/BGGREEN"
             android:textColorHint="@color/BGLIGHTGREEN"
-            android:hint="CC..."
+            android:hint="CC... (Separate Multiple Recipients With Commas)"
             android:id="@+id/emailCcEditText"
             android:textSize="10dp"
             android:gravity="top|left"
@@ -178,7 +178,7 @@
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/firstEmailEmptyView"
             android:layout_marginRight="20dp"
             android:layout_marginLeft="10dp"

@@ -1,5 +1,6 @@
 package id.blackgarlic.blackgarlic.CookBookModel;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -52,6 +53,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class SharePopUpActivity extends AppCompatActivity {
 
     public final String BLACKGARLIC_PICTURES = "http://bgmenu.kilatstorage.com/menu_id.jpg";
+    public final int EMAIL_REQUEST = 10;
+
     private static RelativeLayout sharePopUpRelativeLayout;
     private static CookBookObject cookBookObject;
     private static SimpleDraweeView faceBookImage;
@@ -302,6 +305,32 @@ public class SharePopUpActivity extends AppCompatActivity {
                 ShareApi.share(content, facebookCallback);
             }
         });
+
+        sendEmailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.setDataAndType(Uri.parse("mailto:"), "message/rfc882");
+
+                String[] toArray = String.valueOf(emailToEditText.getText()).split(",", -1);
+                String[] ccArray = String.valueOf(emailCcEditText.getText()).split(",", -1);
+
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, toArray);
+                emailIntent.putExtra(Intent.EXTRA_CC, ccArray);
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, emailSubjectEditText.getText().toString());
+                emailIntent.putExtra(Intent.EXTRA_TEXT, emailBodyEditText.getText().toString());
+                emailIntent.putExtra(Intent.EXTRA_STREAM, imageToShare);
+
+                try {
+                    startActivityForResult(Intent.createChooser(emailIntent, "Confirm Email"), EMAIL_REQUEST);
+
+                    finish();
+
+                } catch (ActivityNotFoundException e) {
+                    Log.e("Email Error: ", e.getMessage());
+                }
+            }
+        });
     }
 
     @Override
@@ -420,7 +449,17 @@ public class SharePopUpActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
+
         super.onActivityResult(requestCode, resultCode, data);
+
+        if ((requestCode == EMAIL_REQUEST) && (resultCode == RESULT_OK) && (data != null)) {
+
+            SuperToast superToast = SuperToast.create(SharePopUpActivity.this, "Successfully Sent Email!", SuperToast.Duration.MEDIUM, Style.getStyle(Style.BLUE, SuperToast.Animations.FLYIN));
+            superToast.show();
+
+            Log.e("Email Sent: ", "Successful");
+
+        }
     }
 
     @Override
