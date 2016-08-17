@@ -142,11 +142,12 @@
             fontPath="fonts/Roboto-Medium.ttf"
             android:textColor="@color/BGGREEN"
             android:textColorHint="@color/BGLIGHTGREEN"
-            android:hint="To... (Separate Multiple Recipients With Commas)"
+            android:hint="To... (Separate Recipients With Commas)"
             android:id="@+id/emailToEditText"
             android:textSize="10dp"
             android:gravity="top|left"
             android:visibility="visible"
+            android:singleLine="true"
             />
 
         <EditText
@@ -156,16 +157,17 @@
             android:layout_toRightOf="@+id/emailConfirmImage"
             android:layout_marginRight="20dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/bordersearchbar"
             fontPath="fonts/Roboto-Medium.ttf"
             android:textColor="@color/BGGREEN"
             android:textColorHint="@color/BGLIGHTGREEN"
-            android:hint="CC... (Separate Multiple Recipients With Commas)"
+            android:hint="CC... (Separate Recipients With Commas)"
             android:id="@+id/emailCcEditText"
             android:textSize="10dp"
             android:gravity="top|left"
             android:visibility="visible"
+            android:singleLine="true"
             />
 
         <View
@@ -191,6 +193,7 @@
             android:textSize="10dp"
             android:gravity="top|left"
             android:visibility="visible"
+            android:singleLine="true"
             />
 
         <View

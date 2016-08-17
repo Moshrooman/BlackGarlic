@@ -21,6 +21,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.common.executors.CallerThreadExecutor;
 import com.facebook.common.references.CloseableReference;
@@ -91,6 +92,8 @@ public class SharePopUpActivity extends AppCompatActivity {
 
     private static int previousHeight;
 
+    private static int finishedGlobalCount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +107,7 @@ public class SharePopUpActivity extends AppCompatActivity {
         cookBookObject = new Gson().fromJson(getIntent().getExtras().getString("object", ""), CookBookObject.class);
         sharePopUpRelativeLayout = (RelativeLayout) findViewById(R.id.sharePopUpRelativeLayout);
         previousHeight = 0;
+        finishedGlobalCount = 0;
 
         referenceFacebook();
         referenceEmail();
@@ -132,13 +136,7 @@ public class SharePopUpActivity extends AppCompatActivity {
                     if (countFacebook == viewListSetLayoutListenerFacebook.size()) {
 
                         confirmFaceBookRelativeLayout.setVisibility(View.GONE);
-                        sharePopUpRelativeLayout.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                getWindow().setLayout(sharePopUpRelativeLayout.getWidth(), sharePopUpRelativeLayout.getHeight());
-
-                            }
-                        });
+                        Log.e("FaceBook Height: ", String.valueOf(heightNeededToAddFacebook));
 
                     }
                 }
@@ -173,13 +171,12 @@ public class SharePopUpActivity extends AppCompatActivity {
                     if (countEmail == viewListSetLayoutListenerEmail.size()) {
                         confirmEmailRelativeLayout.setVisibility(View.GONE);
 
-                        sharePopUpRelativeLayout.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                getWindow().setLayout(sharePopUpRelativeLayout.getWidth(), sharePopUpRelativeLayout.getHeight());
-
-                            }
-                        });
+                            sharePopUpRelativeLayout.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    getWindow().setLayout(sharePopUpRelativeLayout.getWidth(), sharePopUpRelativeLayout.getHeight());
+                                }
+                            });
 
                         Log.e("Height Email: ", String.valueOf(heightNeededToAddEmail));
 
