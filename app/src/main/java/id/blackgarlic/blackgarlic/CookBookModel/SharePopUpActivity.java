@@ -4,9 +4,13 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -16,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -43,6 +48,8 @@ import com.facebook.share.model.SharePhotoContent;
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.johnpersano.supertoasts.util.Style;
 import com.google.gson.Gson;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -72,6 +79,10 @@ public class SharePopUpActivity extends AppCompatActivity {
     private static List<View> viewListSetLayoutListenerFacebook = new ArrayList<View>();
     private static int countFacebook;
     private static RelativeLayout confirmFaceBookRelativeLayout;
+    private static TextView faceBookNameTextView;
+    private static TextView faceBookLogOutTextView;
+    private static View faceBookNameEmptyView;
+    private static View faceBookLogoutEmptyView;
 
     //Start of reference for email
     private static SimpleDraweeView emailImage;
@@ -92,7 +103,7 @@ public class SharePopUpActivity extends AppCompatActivity {
 
     private static int previousHeight;
 
-    private static int finishedGlobalCount;
+    private static Profile faceBookProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +118,6 @@ public class SharePopUpActivity extends AppCompatActivity {
         cookBookObject = new Gson().fromJson(getIntent().getExtras().getString("object", ""), CookBookObject.class);
         sharePopUpRelativeLayout = (RelativeLayout) findViewById(R.id.sharePopUpRelativeLayout);
         previousHeight = 0;
-        finishedGlobalCount = 0;
 
         referenceFacebook();
         referenceEmail();
@@ -116,11 +126,15 @@ public class SharePopUpActivity extends AppCompatActivity {
 
         viewListSetLayoutListenerFacebook.clear();
 
-        //heightNeededToAddFacebook = pictureDescriptionEditText + postButton + firstEmptyView + secondEmptyView;
+        //heightNeededToAddFacebook = facebooknametextview + facebookemtpyview + pictureDescriptionEditText + postButton + firstEmptyView + secondEmptyView;
         viewListSetLayoutListenerFacebook.add(pictureDescriptionEditText);
         viewListSetLayoutListenerFacebook.add(postButton);
         viewListSetLayoutListenerFacebook.add(firstEmptyView);
         viewListSetLayoutListenerFacebook.add(secondEmptyView);
+        viewListSetLayoutListenerFacebook.add(faceBookNameTextView);
+        viewListSetLayoutListenerFacebook.add(faceBookNameEmptyView);
+        viewListSetLayoutListenerFacebook.add(faceBookLogOutTextView);
+        viewListSetLayoutListenerFacebook.add(faceBookLogoutEmptyView);
 
         for (int i = 0; i < viewListSetLayoutListenerFacebook.size(); i++) {
             final int outsideI = i;
@@ -239,6 +253,15 @@ public class SharePopUpActivity extends AppCompatActivity {
                         previousHeight = heightNeededToAddFacebook;
 
                         setConfirmImageAndBitmap();
+
+                        faceBookProfile = Profile.getCurrentProfile();
+
+                        SpannableStringBuilder faceBookNameStringBuilder = new SpannableStringBuilder();
+                        faceBookNameStringBuilder.append("Logged In As: ").append(faceBookProfile.getName());
+                        faceBookNameStringBuilder.setSpan(new ForegroundColorSpan(Color.GRAY), 0, 13, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        faceBookNameStringBuilder.setSpan(new ForegroundColorSpan(Color.BLUE), 13, 13 + faceBookProfile.getName().length() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                        faceBookNameTextView.setText(faceBookNameStringBuilder, TextView.BufferType.SPANNABLE);
                     }
 
                     @Override
@@ -328,6 +351,17 @@ public class SharePopUpActivity extends AppCompatActivity {
                 }
             }
         });
+
+        faceBookLogOutTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FacebookSdk.sdkInitialize(getApplicationContext());
+                LoginManager.getInstance().logOut();
+                faceBookProfile = null;
+                faceBookImage.setEnabled(true);
+                faceBookImage.performClick();
+            }
+        });
     }
 
     @Override
@@ -378,6 +412,10 @@ public class SharePopUpActivity extends AppCompatActivity {
         loginManager = LoginManager.getInstance();
         heightNeededToAddFacebook = 0;
         countFacebook = 0;
+        faceBookNameTextView = (TextView) findViewById(R.id.faceBookNameTextView);
+        faceBookLogOutTextView = (TextView) findViewById(R.id.faceBookLogOutTextView);
+        faceBookNameEmptyView = findViewById(R.id.faceBookNameEmptyView);
+        faceBookLogoutEmptyView = findViewById(R.id.faceBookLogoutEmptyView);
     }
 
     public void referenceEmail() {
@@ -404,6 +442,10 @@ public class SharePopUpActivity extends AppCompatActivity {
         firstEmptyView.setVisibility(View.VISIBLE);
         secondEmptyView.setVisibility(View.VISIBLE);
         confirmFaceBookRelativeLayout.setVisibility(View.VISIBLE);
+        faceBookNameTextView.setVisibility(View.VISIBLE);
+        faceBookNameEmptyView.setVisibility(View.VISIBLE);
+        faceBookLogOutTextView.setVisibility(View.VISIBLE);
+        faceBookLogoutEmptyView.setVisibility(View.VISIBLE);
     }
 
     public void setFacebookGone() {
@@ -413,6 +455,10 @@ public class SharePopUpActivity extends AppCompatActivity {
         firstEmptyView.setVisibility(View.GONE);
         secondEmptyView.setVisibility(View.GONE);
         confirmFaceBookRelativeLayout.setVisibility(View.GONE);
+        faceBookNameTextView.setVisibility(View.GONE);
+        faceBookNameEmptyView.setVisibility(View.GONE);
+        faceBookLogOutTextView.setVisibility(View.GONE);
+        faceBookLogoutEmptyView.setVisibility(View.GONE);
     }
 
     public void setEmailVisible() {

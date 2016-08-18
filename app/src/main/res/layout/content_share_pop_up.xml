@@ -59,12 +59,48 @@
         android:visibility="visible"
         >
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            fontPath="fonts/Roboto-Medium.ttf"
+            android:id="@+id/faceBookNameTextView"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fontPath="fonts/Roboto-Medium.ttf"
+            android:text="Sign in with different user..."
+            android:textColor="@color/red"
+            android:layout_below="@+id/faceBookNameEmptyView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="15dp"
+            android:id="@+id/faceBookLogOutTextView"
+            android:textSize="10dp"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:id="@+id/faceBookNameEmptyView"
+            android:layout_below="@+id/faceBookNameTextView"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:id="@+id/faceBookLogoutEmptyView"
+            android:layout_below="@+id/faceBookLogOutTextView"
+            />
+
         <ImageView
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginLeft="20dp"
             android:id="@+id/confirmImage"
             android:visibility="visible"
+            android:layout_below="@+id/faceBookLogoutEmptyView"
             />
 
         <EditText
@@ -73,6 +109,7 @@
             android:layout_toRightOf="@+id/confirmImage"
             android:layout_marginRight="20dp"
             android:layout_marginLeft="10dp"
+            android:layout_below="@+id/faceBookLogoutEmptyView"
             android:background="@drawable/bordersearchbar"
             fontPath="fonts/Roboto-Medium.ttf"
             android:textColor="@color/BGGREEN"
