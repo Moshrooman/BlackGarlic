@@ -3,25 +3,32 @@ package id.blackgarlic.blackgarlic.CookBookModel;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInstaller;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.media.tv.TvInputService;
 import android.net.Uri;
 import android.os.Bundle;
+import android.service.textservice.SpellCheckerService;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -101,6 +108,11 @@ public class SharePopUpActivity extends AppCompatActivity {
     private static int countEmail;
     private static int heightNeededToAddEmail;
 
+    private static ProgressBar sharePopUpProgressBar;
+    private static TextView sharePopUpProgressBarTextView;
+    private static RelativeLayout sharePopUpProgressBarRelativeLayout;
+    private static View sharePopUpGreyScreen;
+
     private static int previousHeight;
 
     private static Profile faceBookProfile;
@@ -121,6 +133,11 @@ public class SharePopUpActivity extends AppCompatActivity {
 
         referenceFacebook();
         referenceEmail();
+
+        sharePopUpGreyScreen.bringToFront();
+        sharePopUpProgressBarTextView.bringToFront();
+        sharePopUpProgressBar.bringToFront();
+        sharePopUpProgressBarRelativeLayout.bringToFront();
 
         //Global layout shit for the facebook views
 
@@ -205,17 +222,54 @@ public class SharePopUpActivity extends AppCompatActivity {
                 Log.e("Facebook Callback: ", String.valueOf(result.getPostId()));
                 SuperToast superToast = SuperToast.create(SharePopUpActivity.this, "Successfully Posted Picture!", SuperToast.Duration.MEDIUM, Style.getStyle(Style.BLUE, SuperToast.Animations.FLYIN));
                 superToast.show();
+
+                Animation fadeOutAnimation = AnimationUtils.loadAnimation(SharePopUpActivity.this, R.anim.actual_fade_out);
+                sharePopUpProgressBar.setVisibility(View.GONE);
+                sharePopUpProgressBar.startAnimation(fadeOutAnimation);
+
+                sharePopUpProgressBarTextView.setVisibility(View.GONE);
+                sharePopUpProgressBarTextView.startAnimation(fadeOutAnimation);
+
+                sharePopUpGreyScreen.setVisibility(View.GONE);
+                sharePopUpGreyScreen.startAnimation(fadeOutAnimation);
+
                 finish();
             }
 
             @Override
             public void onCancel() {
                 Log.e("Facebook Callback: ", "Cancelled");
+
+                SuperToast superToast = SuperToast.create(SharePopUpActivity.this, "Error Posting Picture!", SuperToast.Duration.MEDIUM, Style.getStyle(Style.RED, SuperToast.Animations.FLYIN));
+                superToast.show();
+
+                Animation fadeOutAnimation = AnimationUtils.loadAnimation(SharePopUpActivity.this, R.anim.actual_fade_out);
+                sharePopUpProgressBar.setVisibility(View.GONE);
+                sharePopUpProgressBar.startAnimation(fadeOutAnimation);
+
+                sharePopUpProgressBarTextView.setVisibility(View.GONE);
+                sharePopUpProgressBarTextView.startAnimation(fadeOutAnimation);
+
+                sharePopUpGreyScreen.setVisibility(View.GONE);
+                sharePopUpGreyScreen.startAnimation(fadeOutAnimation);
             }
 
             @Override
             public void onError(FacebookException error) {
                 Log.e("Facebook Callback: ", error.getCause().toString());
+                Animation fadeOutAnimation = AnimationUtils.loadAnimation(SharePopUpActivity.this, R.anim.actual_fade_out);
+
+                SuperToast superToast = SuperToast.create(SharePopUpActivity.this, "Error Posting Picture!", SuperToast.Duration.MEDIUM, Style.getStyle(Style.RED, SuperToast.Animations.FLYIN));
+                superToast.show();
+
+                sharePopUpProgressBar.setVisibility(View.GONE);
+                sharePopUpProgressBar.startAnimation(fadeOutAnimation);
+
+                sharePopUpProgressBarTextView.setVisibility(View.GONE);
+                sharePopUpProgressBarTextView.startAnimation(fadeOutAnimation);
+
+                sharePopUpGreyScreen.setVisibility(View.GONE);
+                sharePopUpGreyScreen.startAnimation(fadeOutAnimation);
             }
         };
 
@@ -323,12 +377,73 @@ public class SharePopUpActivity extends AppCompatActivity {
                         .build();
 
                 ShareApi.share(content, facebookCallback);
+
+                Animation fadeInAnimation = AnimationUtils.loadAnimation(SharePopUpActivity.this, R.anim.fade_in);
+
+                sharePopUpProgressBar.setVisibility(View.VISIBLE);
+                sharePopUpProgressBar.startAnimation(fadeInAnimation);
+
+                sharePopUpProgressBarTextView.setVisibility(View.VISIBLE);
+                sharePopUpProgressBarTextView.startAnimation(fadeInAnimation);
+
+                sharePopUpGreyScreen.setVisibility(View.VISIBLE);
+                sharePopUpGreyScreen.startAnimation(fadeInAnimation);
+            }
+        });
+
+        postButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                        postButton.setBackground(getResources().getDrawable(R.drawable.filterheaderdrawable));
+                        postButton.setTextColor(getResources().getColor(R.color.black));
+                        break;
+
+                    case MotionEvent.ACTION_DOWN:
+                        postButton.setBackground(getResources().getDrawable(R.drawable.filterheaderdrawablelight));
+                        postButton.setTextColor(getResources().getColor(R.color.LIGHTGREY));
+                        break;
+
+                }
+
+                return false;
+            }
+
+        });
+
+        sendEmailButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                switch (event.getAction()) {
+                    case (MotionEvent.ACTION_UP):
+                        sendEmailButton.setBackground(getResources().getDrawable(R.drawable.filterheaderdrawable));
+                        sendEmailButton.setTextColor(getResources().getColor(R.color.black));
+                        break;
+                    case(MotionEvent.ACTION_DOWN):
+                        sendEmailButton.setBackground(getResources().getDrawable(R.drawable.filterheaderdrawablelight));
+                        sendEmailButton.setTextColor(getResources().getColor(R.color.LIGHTGREY));
+                        break;
+                }
+
+                return false;
             }
         });
 
         sendEmailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                //Remember when we use == "" for string, it will always return true because it compares the types.
+                //But if we use .equals for strings then it actually compares the contents of the string.
+
+                if ((String.valueOf(emailToEditText.getText()).equals(""))) {
+                    SuperToast superToast = SuperToast.create(SharePopUpActivity.this, "Please Enter A Recipient!", SuperToast.Duration.MEDIUM, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
+                    superToast.show();
+                    return;
+                }
+
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
                 emailIntent.setDataAndType(Uri.parse("mailto:"), "message/rfc882");
 
@@ -355,11 +470,13 @@ public class SharePopUpActivity extends AppCompatActivity {
         faceBookLogOutTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FacebookSdk.sdkInitialize(getApplicationContext());
-                LoginManager.getInstance().logOut();
-                faceBookProfile = null;
-                faceBookImage.setEnabled(true);
-                faceBookImage.performClick();
+//                FacebookSdk.sdkInitialize(getApplicationContext());
+//                LoginManager.getInstance().logOut();
+//                faceBookProfile = null;
+
+                String uri = "fb://about";
+                Intent faceBookIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                startActivity(faceBookIntent);
             }
         });
     }
@@ -416,6 +533,11 @@ public class SharePopUpActivity extends AppCompatActivity {
         faceBookLogOutTextView = (TextView) findViewById(R.id.faceBookLogOutTextView);
         faceBookNameEmptyView = findViewById(R.id.faceBookNameEmptyView);
         faceBookLogoutEmptyView = findViewById(R.id.faceBookLogoutEmptyView);
+
+        sharePopUpProgressBar = (ProgressBar) findViewById(R.id.sharePopUpProgressBar);
+        sharePopUpProgressBarTextView = (TextView) findViewById(R.id.sharePopUpProgressBarTextView);
+        sharePopUpProgressBarRelativeLayout = (RelativeLayout) findViewById(R.id.sharePopUpProgressBarRelativeLayout);
+        sharePopUpGreyScreen = findViewById(R.id.sharePopUpGreyScreen);
     }
 
     public void referenceEmail() {

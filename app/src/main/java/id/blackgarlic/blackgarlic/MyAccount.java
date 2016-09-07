@@ -205,7 +205,6 @@ public class MyAccount extends AppCompatActivity {
                 loadingTextView.setVisibility(View.VISIBLE);
                 loadingTextView.startAnimation(fadeIn);
 
-
                 final JSONObject body = new JSONObject();
                 try {
                     body.put("address_id", userCredentials.getAddress_id());

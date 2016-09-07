@@ -16,5 +16,7 @@
     <color name="LIGHTGREY">#d8d8d8</color>
     <color name="SUPERLIGHTGREY">#e5e5e5</color>
     <color name="SEARCHBARGRAY">#eaeaea</color>
+    <color name="SKYBLUE">#7EC0EE</color>
+    <color name="GreyedOutLoading">#7c7777</color>
 
 </resources>

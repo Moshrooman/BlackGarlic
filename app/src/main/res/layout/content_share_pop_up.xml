@@ -11,6 +11,46 @@
     android:layout_gravity="center"
     >
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.7"
+        android:background="@color/GreyedOutLoading"
+        android:visibility="gone"
+        android:id="@+id/sharePopUpGreyScreen"
+        />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/sharePopUpProgressBarRelativeLayout"
+        >
+
+        <ProgressBar
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/sharePopUpProgressBar"
+            android:visibility="invisible"
+            android:layout_centerHorizontal="true"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fontPath="fonts/Roboto-Medium.ttf"
+            android:text="Posting Image..."
+            android:textColor="@color/SKYBLUE"
+            android:id="@+id/sharePopUpProgressBarTextView"
+            android:visibility="invisible"
+            android:layout_below="@id/sharePopUpProgressBar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            />
+
+    </RelativeLayout>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
