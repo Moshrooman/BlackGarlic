@@ -148,7 +148,11 @@
         <activity
             android:name=".CookBookModel.SharePopUpActivity"
             android:label="@string/title_activity_share_pop_up"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Referral.ReferralActivity"
+            android:label="@string/title_activity_referral"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

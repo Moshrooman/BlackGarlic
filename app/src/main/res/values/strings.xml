@@ -26,4 +26,5 @@
     <string name="title_activity_cook_book">CookBook</string>
     <string name="title_activity_cook_book_clicked">CookBookClicked</string>
     <string name="title_activity_share_pop_up">SharePopUpActivity</string>
+    <string name="title_activity_referral">ReferralActivity</string>
 </resources>

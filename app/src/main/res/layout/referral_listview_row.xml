@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    >
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/referralListViewDraweeView"
+        fresco:actualImageScaleType="fitXY"
+        />
+
+    <TextView
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:text="Menu Name"
+        android:layout_toRightOf="@+id/referralListViewDraweeView"
+        android:layout_marginLeft="10dp"
+        android:layout_centerVertical="true"
+        fontPath="fonts/Roboto-Medium.ttf"
+        android:id="@+id/referralListViewMenuName"
+        android:textSize="15dp"
+        android:gravity="left"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2P"
+        android:textSize="15dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:id="@+id/referralListView2P"
+        fontPath="fonts/Roboto-Thin.ttf"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        fontPath="fonts/Roboto-Thin.ttf"
+        android:text="Menu Type"
+        android:textSize="15dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/referralListViewMenuType"
+        />
+
+</RelativeLayout>

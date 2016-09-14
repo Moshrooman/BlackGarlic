@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="id.blackgarlic.blackgarlic.Referral.ReferralActivity"
+    tools:showIn="@layout/activity_referral">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1. Select Maximum 3 Menus"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:textSize="20dp"
+        fontPath="fonts/Roboto-Medium.ttf"
+        android:id="@+id/referralFirstTitle"
+        />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:id="@+id/referralMenuListView"
+        android:layout_below="@+id/referralFirstTitle"
+        android:layout_marginTop="15dp"
+        >
+
+    </ListView>
+
+</RelativeLayout>
