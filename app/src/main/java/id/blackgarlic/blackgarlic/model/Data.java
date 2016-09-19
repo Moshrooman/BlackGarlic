@@ -84,11 +84,11 @@ public class Data {
     }
 
     public String getMenu_type_string() {
-        if ((this.menu_type.equals("3")) || (this.menu_type.equals("5"))) {
+        if ((getMenu_type().equals("3")) || (getMenu_type().equals("5"))) {
             return "Breakfast";
-        } else if ((this.menu_type.equals("4")) || (this.menu_type.equals("6"))) {
+        } else if ((getMenu_type().equals("4")) || (getMenu_type().equals("6"))) {
             return "Original";
-        } else if ((this.menu_type.equals("7"))){
+        } else if ((getMenu_type().equals("7"))){
             return "Kids";
         } else {
             return "N/A";

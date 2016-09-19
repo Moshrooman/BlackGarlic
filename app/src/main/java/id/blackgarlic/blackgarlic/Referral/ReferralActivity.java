@@ -22,6 +22,8 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.facebook.drawee.generic.GenericDraweeHierarchy;
+import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -33,6 +35,7 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 
+import id.blackgarlic.blackgarlic.CircleProgressBarDrawable;
 import id.blackgarlic.blackgarlic.ConnectionManager;
 import id.blackgarlic.blackgarlic.LogInScreen;
 import id.blackgarlic.blackgarlic.R;
@@ -66,6 +69,7 @@ public class ReferralActivity extends AppCompatActivity {
 
         sharedPreferences = SplashActivity.getSharedPreferences();
         userCredentials = new Gson().fromJson(sharedPreferences.getString("Credentials", ""), UserCredentials.class);
+        referralMenuListView = (ListView) findViewById(R.id.referralMenuListView);
 
         Gson gSon = new Gson();
 
@@ -78,6 +82,7 @@ public class ReferralActivity extends AppCompatActivity {
         menuList = gSon.fromJson(menuListJson, listDataType);
         menuIdList = gSon.fromJson(menuIdListJson, integerDataType);
 
+        //Need to actually set the menu ids to the menu ids that the user clicks.
         int[] menuIds = {23, 76, 26, 92, 10};
         int customerId = Integer.valueOf(userCredentials.getCustomer_id());
         String referredEmail = "justinkwik@test.com";
@@ -96,6 +101,7 @@ public class ReferralActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 Log.e("Referral Code: ", response);
+                referralMenuListView.setAdapter(new ReferralListViewAdapter());
             }
         }, new Response.ErrorListener() {
             @Override
@@ -161,11 +167,32 @@ public class ReferralActivity extends AppCompatActivity {
                 convertView = LayoutInflater.from(ReferralActivity.this).inflate(R.layout.referral_listview_row, null);
             }
 
-            SimpleDraweeView referralListViewDraweeView = (SimpleDraweeView) findViewById(R.id.referralListViewDraweeView);
-            TextView referralListViewMenuName = (TextView) findViewById(R.id.referralListViewMenuName);
-            TextView referralListViewMenuType = (TextView) findViewById(R.id.referralListViewMenuType);
+            SimpleDraweeView referralListViewDraweeView = (SimpleDraweeView) convertView.findViewById(R.id.referralListViewDraweeView);
+            TextView referralListViewMenuName = (TextView) convertView.findViewById(R.id.referralListViewMenuName);
+            TextView referralListViewMenuType = (TextView) convertView.findViewById(R.id.referralListViewMenuType);
 
-            referralListViewDraweeView.setImageURI(Uri.parse(menuList.get(position)));
+            referralListViewDraweeView.setImageURI(Uri.parse(menuList.get(position).BLACKGARLIC_PICTURES.replace("menu_id", String.valueOf(menuIdList.get(position)))));
+            referralListViewMenuName.setText(menuList.get(position).getMenu_name());
+            referralListViewMenuType.setText(menuList.get(position).getMenu_type());
+
+            if ((menuList.get(position).getMenu_type().equals("3")) || (menuList.get(position).getMenu_type().equals("5"))) {
+                referralListViewMenuType.setText("Original");
+            } else if ((menuList.get(position).getMenu_type().equals("4")) || (menuList.get(position).getMenu_type().equals("6"))) {
+                referralListViewMenuType.setText("Breakfast");
+            } else if ((menuList.get(position).getMenu_type().equals("7"))) {
+                referralListViewMenuType.setText("Kids");
+            } else {
+                referralListViewMenuType.setText("N/A");
+            }
+
+            CircleProgressBarDrawable progressBar = new CircleProgressBarDrawable();
+            progressBar.setBackgroundColor(getResources().getColor(R.color.BGGREY));
+            progressBar.setColor(getResources().getColor(R.color.BGGREEN));
+
+            GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(getResources());
+            GenericDraweeHierarchy hierarchy = builder.setFadeDuration(300).setProgressBarImage(progressBar).build();
+
+            referralListViewDraweeView.setHierarchy(hierarchy);
 
             return convertView;
         }
