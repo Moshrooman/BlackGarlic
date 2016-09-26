@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,13 +26,17 @@ import com.android.volley.toolbox.StringRequest;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.github.johnpersano.supertoasts.SuperToast;
+import com.github.johnpersano.supertoasts.util.Style;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,7 +51,7 @@ import id.blackgarlic.blackgarlic.model.Menus;
 import id.blackgarlic.blackgarlic.model.UserCredentials;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class ReferralActivity extends AppCompatActivity {
+public class ReferralActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
     private static final String referralLink = "http://188.166.221.241:3000/app/setupreferral";
 
@@ -56,6 +61,18 @@ public class ReferralActivity extends AppCompatActivity {
     private static SharedPreferences sharedPreferences;
 
     private static ListView referralMenuListView;
+
+    //References for the tablerow objects
+    private static SimpleDraweeView selectedMenuImage1;
+    private static SimpleDraweeView selectedMenuImage2;
+    private static SimpleDraweeView selectedMenuImage3;
+    private static TextView selectedMenuTitle1;
+    private static TextView selectedMenuTitle2;
+    private static TextView selectedMenuTitle3;
+    private static List<SimpleDraweeView> selectedMenuImageList = new ArrayList<SimpleDraweeView>();
+    private static List<TextView> selectedMenuTitleList = new ArrayList<TextView>();
+
+    private static int amountOfMenusSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +84,16 @@ public class ReferralActivity extends AppCompatActivity {
 
         //Remember that the StringRequest in the MainActivity uses the localdate to choose the current box.
 
+        selectedMenuImageList.clear();
+        selectedMenuTitleList.clear();
+
+        referenceSelectedVariables();
+        amountOfMenusSelected = 0;
+
         sharedPreferences = SplashActivity.getSharedPreferences();
         userCredentials = new Gson().fromJson(sharedPreferences.getString("Credentials", ""), UserCredentials.class);
         referralMenuListView = (ListView) findViewById(R.id.referralMenuListView);
+        referralMenuListView.setOnItemClickListener(this);
 
         Gson gSon = new Gson();
 
@@ -82,46 +106,47 @@ public class ReferralActivity extends AppCompatActivity {
         menuList = gSon.fromJson(menuListJson, listDataType);
         menuIdList = gSon.fromJson(menuIdListJson, integerDataType);
 
+        referralMenuListView.setAdapter(new ReferralListViewAdapter());
+
         //Need to actually set the menu ids to the menu ids that the user clicks.
-        int[] menuIds = {23, 76, 26, 92, 10};
-        int customerId = Integer.valueOf(userCredentials.getCustomer_id());
-        String referredEmail = "justinkwik@test.com";
-
-        final JSONObject referralBody = new JSONObject();
-
-        try {
-            referralBody.put("menu_ids", Arrays.toString(menuIds));
-            referralBody.put("referrer_id", customerId);
-            referralBody.put("referred_email", referredEmail);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        StringRequest referralRequest = new StringRequest(Request.Method.POST, referralLink, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Log.e("Referral Code: ", response);
-                referralMenuListView.setAdapter(new ReferralListViewAdapter());
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }) {
-
-            @Override
-            public String getBodyContentType() {
-                return "application/json";
-            }
-
-            @Override
-            public byte[] getBody() throws AuthFailureError {
-                return referralBody.toString().getBytes();
-            }
-        };
-
-        ConnectionManager.getInstance(ReferralActivity.this).add(referralRequest);
+//        int[] menuIds = {23, 76, 26, 92, 10};
+//        int customerId = Integer.valueOf(userCredentials.getCustomer_id());
+//        String referredEmail = "justinkwik@test.com";
+//
+//        final JSONObject referralBody = new JSONObject();
+//
+//        try {
+//            referralBody.put("menu_ids", Arrays.toString(menuIds));
+//            referralBody.put("referrer_id", customerId);
+//            referralBody.put("referred_email", referredEmail);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        StringRequest referralRequest = new StringRequest(Request.Method.POST, referralLink, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                Log.e("Referral Code: ", response);
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//
+//            }
+//        }) {
+//
+//            @Override
+//            public String getBodyContentType() {
+//                return "application/json";
+//            }
+//
+//            @Override
+//            public byte[] getBody() throws AuthFailureError {
+//                return referralBody.toString().getBytes();
+//            }
+//        };
+//
+//        ConnectionManager.getInstance(ReferralActivity.this).add(referralRequest);
 
         //Array of menu_ids
         //Referrer Customer Id
@@ -140,8 +165,35 @@ public class ReferralActivity extends AppCompatActivity {
 
     }
 
-    public void setReferralVariables() {
-        referralMenuListView = (ListView) findViewById(R.id.referralMenuListView);
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        Log.e("Selected: ", String.valueOf(amountOfMenusSelected));
+
+        if (amountOfMenusSelected == 3) {
+            SuperToast superToast = SuperToast.create(ReferralActivity.this, "Maximum of 3 Menus!", SuperToast.Duration.SHORT, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
+            superToast.show();
+            return;
+        }
+
+        String menuNameToAdd = menuList.get(position).getMenu_name();
+        Uri menuUriToAdd = Uri.parse(menuList.get(position).BLACKGARLIC_PICTURES.replace("menu_id", String.valueOf(menuIdList.get(position))));
+
+        for (int i = 0; i < selectedMenuTitleList.size(); i++) {
+            if(selectedMenuTitleList.get(i).getVisibility() == View.INVISIBLE) {
+                selectedMenuTitleList.get(i).setVisibility(View.VISIBLE);
+                selectedMenuImageList.get(i).setVisibility(View.VISIBLE);
+
+                selectedMenuTitleList.get(i).setText(menuNameToAdd);
+                selectedMenuImageList.get(i).setImageURI(menuUriToAdd);
+                amountOfMenusSelected++;
+                Log.e("Adding Position: ", String.valueOf(i));
+                Log.e("Adding Menu: ", menuNameToAdd);
+                Log.e("Added: ", "Success");
+                break;
+            }
+        }
+
     }
 
     public class ReferralListViewAdapter extends BaseAdapter{
@@ -201,6 +253,26 @@ public class ReferralActivity extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    public void referenceSelectedVariables() {
+
+        selectedMenuImage1 = (SimpleDraweeView) findViewById(R.id.selectedMenuImage1);
+        selectedMenuImage2 = (SimpleDraweeView) findViewById(R.id.selectedMenuImage2);
+        selectedMenuImage3 = (SimpleDraweeView) findViewById(R.id.selectedMenuImage3);
+
+        selectedMenuTitle1 = (TextView) findViewById(R.id.selectedMenuTitle1);
+        selectedMenuTitle2 = (TextView) findViewById(R.id.selectedMenuTitle2);
+        selectedMenuTitle3 = (TextView) findViewById(R.id.selectedMenuTitle3);
+
+        selectedMenuImageList.add(selectedMenuImage1);
+        selectedMenuImageList.add(selectedMenuImage2);
+        selectedMenuImageList.add(selectedMenuImage3);
+
+        selectedMenuTitleList.add(selectedMenuTitle1);
+        selectedMenuTitleList.add(selectedMenuTitle2);
+        selectedMenuTitleList.add(selectedMenuTitle3);
+
     }
 
 }

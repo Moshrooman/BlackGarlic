@@ -697,6 +697,9 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
     }
 
 
+    //This onitemclick is an inheritance method that is called in the blackgarlicadapter and all of the variable are passed
+    //it is the one that updates the number of menus in the box, updates the subtotal, and updates the order summary listview.
+    //We pass the new lists into the order summary listview's adapter because the updates of the menus are done in the blackgarlicadapter.
     @Override
     public void OnItemClick(List<Data> selectedMenuList, List<Integer> selectedMenuIdList, String menuAdded, List<String> currentMenuListUrls, List<String> portionSizeList, List<String> individualPricesAdapter, Data currentMenu) {
 

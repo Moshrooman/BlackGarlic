@@ -24,7 +24,7 @@
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="315dp"
             android:id="@+id/referralMenuListView"
             android:layout_below="@+id/referralFirstTitle"
             android:layout_marginTop="15dp"
@@ -44,7 +44,7 @@
 
         <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="90dp"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/referralListViewSelectedMenusTextView"
             android:layout_marginTop="10dp"
             xmlns:android="http://schemas.android.com/apk/res/android"
@@ -64,6 +64,7 @@
                     android:layout_weight="0.33"
                     fresco:actualImageScaleType="fitXY"
                     android:id="@+id/selectedMenuImage1"
+                    android:visibility="invisible"
                     />
 
                 <com.facebook.drawee.view.SimpleDraweeView
@@ -72,6 +73,7 @@
                     android:layout_weight="0.33"
                     fresco:actualImageScaleType="fitXY"
                     android:id="@+id/selectedMenuImage2"
+                    android:visibility="invisible"
                     />
 
                 <com.facebook.drawee.view.SimpleDraweeView
@@ -80,6 +82,7 @@
                     android:layout_weight="0.33"
                     fresco:actualImageScaleType="fitXY"
                     android:id="@+id/selectedMenuImage3"
+                    android:visibility="invisible"
                     />
 
             </TableRow>
@@ -87,35 +90,41 @@
             <TableRow
                 android:layout_width="fill_parent"
                 android:layout_height="15dp"
-                android:background="@color/BGGREY"
                 android:weightSum="1"
                 android:layout_marginTop="10dp"
                 >
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_height="15dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="0.33"
-                    android:text="Menu Name 1"
                     android:gravity="center"
                     fontPath="fonts/Roboto-Medium.ttf"
                     android:id="@+id/selectedMenuTitle1"
+                    android:visibility="invisible"
+                    android:textSize="10dp"
                     />
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_height="15dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="0.33"
                     fontPath="fonts/Roboto-Medium.ttf"
+                    android:gravity="center"
                     android:id="@+id/selectedMenuTitle2"
+                    android:visibility="invisible"
+                    android:textSize="10dp"
                     />
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_height="15dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="0.33"
                     fontPath="fonts/Roboto-Medium.ttf"
+                    android:gravity="center"
                     android:id="@+id/selectedMenuTitle3"
+                    android:visibility="invisible"
+                    android:textSize="10dp"
                     />
 
             </TableRow>
