@@ -74,6 +74,9 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
 
     private static int amountOfMenusSelected;
 
+    private static List<Integer> toSubmitMenuIdList = new ArrayList<Integer>();
+    private static int[] toSubmitMenuIds;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,6 +110,11 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
         menuIdList = gSon.fromJson(menuIdListJson, integerDataType);
 
         referralMenuListView.setAdapter(new ReferralListViewAdapter());
+
+        //todo: When the user clicks the submit referral request button then we have to transfer all of things inside of the toSubmitmenuidlist
+        //into the int array of tosubmitmenuids. IF THE VALUE IS NOT 0, because when they click the menu it removes it and replaces the
+        //value with 0, otherwise we get issues with out of bounds.
+
 
         //Need to actually set the menu ids to the menu ids that the user clicks.
 //        int[] menuIds = {23, 76, 26, 92, 10};
@@ -171,13 +179,14 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
         Log.e("Selected: ", String.valueOf(amountOfMenusSelected));
 
         if (amountOfMenusSelected == 3) {
-            SuperToast superToast = SuperToast.create(ReferralActivity.this, "Maximum of 3 Menus!", SuperToast.Duration.SHORT, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
+            SuperToast superToast = SuperToast.create(ReferralActivity.this, "Maximum of 3 Menus! Please Press To Remove Menu", SuperToast.Duration.SHORT, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
             superToast.show();
             return;
         }
 
         String menuNameToAdd = menuList.get(position).getMenu_name();
         Uri menuUriToAdd = Uri.parse(menuList.get(position).BLACKGARLIC_PICTURES.replace("menu_id", String.valueOf(menuIdList.get(position))));
+        int menuIdToAdd = menuIdList.get(position);
 
         for (int i = 0; i < selectedMenuTitleList.size(); i++) {
             if(selectedMenuTitleList.get(i).getVisibility() == View.INVISIBLE) {
@@ -187,6 +196,9 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
                 selectedMenuTitleList.get(i).setText(menuNameToAdd);
                 selectedMenuImageList.get(i).setImageURI(menuUriToAdd);
                 amountOfMenusSelected++;
+
+                toSubmitMenuIdList.add(menuIdToAdd);
+
                 Log.e("Adding Position: ", String.valueOf(i));
                 Log.e("Adding Menu: ", menuNameToAdd);
                 Log.e("Added: ", "Success");
@@ -272,6 +284,58 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
         selectedMenuTitleList.add(selectedMenuTitle1);
         selectedMenuTitleList.add(selectedMenuTitle2);
         selectedMenuTitleList.add(selectedMenuTitle3);
+
+        //Giving them all on click listeners and do a couple tests:
+        //1. First set it to gone and see if the row is pushed to the left, if it is then we set it to gone, set the image to null, menu title
+        //to null then set it to invisible.
+        //2. Then we remove it from the menu_id list.
+
+        //Just giving the selectedmenuimagelist a click listener
+
+        for (int i = 0; i < selectedMenuImageList.size(); i++) {
+            final int finalI = i;
+            selectedMenuImageList.get(i).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    for (int i = 0; i < toSubmitMenuIdList.size(); i++) {
+                        Log.e("B Menu Ids: ", String.valueOf(toSubmitMenuIdList.get(i)));
+                    }
+
+                    selectedMenuImageList.get(finalI).setImageURI(null);
+                    selectedMenuTitleList.get(finalI).setText("");
+
+                    toSubmitMenuIdList.remove(finalI);
+                    toSubmitMenuIdList.add(finalI, 0);
+                    selectedMenuImageList.get(finalI).setVisibility(View.GONE);
+                    selectedMenuTitleList.get(finalI).setVisibility(View.GONE);
+
+                    for (int i = 0; i < toSubmitMenuIdList.size(); i++) {
+                        Log.e("A Menu Ids: ", String.valueOf(toSubmitMenuIdList.get(i)));
+                    }
+
+                    //Looping through everytime to see if everything in the list is gone, if it is then set all to invisible so they can
+                    //add menus again
+
+                    int count = 0;
+
+                    for (int i = 0; i < selectedMenuImageList.size(); i++) {
+                        if(selectedMenuImageList.get(i).getVisibility() == View.GONE) {
+                            count++;
+                        }
+
+                        if(count == 3) {
+                            Log.e("All Gone: ", "True");
+                            for (int j = 0; j < selectedMenuImageList.size(); j++) {
+                                selectedMenuImageList.get(i).setVisibility(View.INVISIBLE);
+                                selectedMenuTitleList.get(i).setVisibility(View.INVISIBLE);
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
 
     }
 
