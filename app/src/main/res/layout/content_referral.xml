@@ -50,6 +50,7 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:shrinkColumns="*"
             android:stretchColumns="*"
+            android:id="@+id/selectedMenuTableLayout"
             >
 
             <TableRow
@@ -130,6 +131,36 @@
             </TableRow>
 
         </TableLayout>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="37dp"
+            android:background="@drawable/bordersearchbar"
+            android:hint="Enter Referred Email Address"
+            android:gravity="center"
+            android:id="@+id/referredEmailAddressEditText"
+            fontPath="fonts/Roboto-Medium.ttf"
+            android:textColor="@color/BGGREEN"
+            android:textColorHint="@color/BGLIGHTGREEN"
+            android:layout_gravity="center"
+            android:layout_below="@+id/selectedMenuTableLayout"
+            android:layout_marginTop="10dp"
+            />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_below="@+id/referredEmailAddressEditText"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/greyedoutloading"
+            android:textColor="@color/BGGREY"
+            android:textSize="15dp"
+            fontPath="fonts/Roboto-Bold.ttf"
+            android:padding="5dp"
+            android:text="Send Referral Request"
+            android:id="@+id/sendReferralButton"
+            android:clickable="false"
+            />
 
     </RelativeLayout>
 

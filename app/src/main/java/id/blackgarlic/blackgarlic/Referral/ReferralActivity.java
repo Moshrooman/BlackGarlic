@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -31,6 +33,7 @@ import com.github.johnpersano.supertoasts.util.Style;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.apache.commons.validator.routines.EmailValidator;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
@@ -51,7 +54,7 @@ import id.blackgarlic.blackgarlic.model.Menus;
 import id.blackgarlic.blackgarlic.model.UserCredentials;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class ReferralActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
+public class ReferralActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private static final String referralLink = "http://188.166.221.241:3000/app/setupreferral";
 
@@ -77,6 +80,10 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
     private static List<Integer> toSubmitMenuIdList = new ArrayList<Integer>();
     private static int[] toSubmitMenuIds;
 
+    private static Button sendReferralButton;
+    private static EditText referredEmailAddressEditText;
+    private static EmailValidator emailValidator;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +93,98 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
         //where it just takes all of the menus.
 
         //Remember that the StringRequest in the MainActivity uses the localdate to choose the current box.
+
+        emailValidator = EmailValidator.getInstance();
+        sendReferralButton = (Button) findViewById(R.id.sendReferralButton);
+        referredEmailAddressEditText = (EditText) findViewById(R.id.referredEmailAddressEditText);
+
+        sendReferralButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //todo: When the user clicks the submit referral request button then we have to transfer all of things inside of the toSubmitmenuidlist
+                //into the int array of tosubmitmenuids. IF THE VALUE IS NOT 0, because when they click the menu it removes it and replaces the
+                //value with 0, otherwise we get issues with out of bounds.
+
+                String referredEmail = "";
+
+                if (!(emailValidator.isValid(referredEmailAddressEditText.getText().toString()))) {
+                    SuperToast superToast = SuperToast.create(ReferralActivity.this, "Invalid Email Address Entered!", SuperToast.Duration.SHORT, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
+                    superToast.show();
+                    return;
+                } else {
+                    referredEmail = referredEmailAddressEditText.getText().toString();
+                }
+
+                for (int i = 0; i < toSubmitMenuIdList.size(); i++) {
+                    if (toSubmitMenuIdList.get(i) == 0) {
+                        toSubmitMenuIdList.remove(i);
+                    }
+                }
+
+                toSubmitMenuIds = new int[toSubmitMenuIdList.size()];
+
+                for (int i = 0; i < toSubmitMenuIdList.size(); i++) {
+                    toSubmitMenuIds[i] = toSubmitMenuIdList.get(i);
+                }
+
+                int customerId = Integer.valueOf(userCredentials.getCustomer_id());
+
+                final JSONObject referralBody = new JSONObject();
+
+                try {
+                    referralBody.put("menu_ids", Arrays.toString(toSubmitMenuIds));
+                    referralBody.put("referrer_id", customerId);
+                    referralBody.put("referred_email", referredEmail);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+        StringRequest referralRequest = new StringRequest(Request.Method.POST, referralLink, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.e("Referral Code: ", response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                return referralBody.toString().getBytes();
+            }
+        };
+
+        ConnectionManager.getInstance(ReferralActivity.this).add(referralRequest);
+
+                //Referred Email (can't be existing customer), check in nodejs if he is existing customer.
+
+                //Referral Status will just be 0 by default.
+                //Referral Code will be created in the backend
+
+                //Then when this is done it will generate a random code and insert that into the unique_code column, then the user has to enter
+                //the code in order to redeem the menus.
+
+                //So that means that there has to be another tab called referral redemption and when they enter the code the menus will come up
+                //under neath and will be like "are you sure you want to redeem"? But of course have to check that the referral_status is 0 and
+                //not -1 or 1.
+                //Then when that happens and they do redeem, then the referral_status will be changed to 1 and can't be redeemed again
+
+
+            }
+        });
+
+        for (int i = 0; i < 3; i++) {
+            toSubmitMenuIdList.add(0);
+        }
 
         selectedMenuImageList.clear();
         selectedMenuTitleList.clear();
@@ -103,73 +202,15 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
         String menuListJson = getIntent().getExtras().getString("menulist");
         String menuIdListJson = getIntent().getExtras().getString("menuidlist");
 
-        Type listDataType = new TypeToken<List<Data>>(){}.getType();
-        Type integerDataType = new TypeToken<List<Integer>>(){}.getType();
+        Type listDataType = new TypeToken<List<Data>>() {
+        }.getType();
+        Type integerDataType = new TypeToken<List<Integer>>() {
+        }.getType();
 
         menuList = gSon.fromJson(menuListJson, listDataType);
         menuIdList = gSon.fromJson(menuIdListJson, integerDataType);
 
         referralMenuListView.setAdapter(new ReferralListViewAdapter());
-
-        //todo: When the user clicks the submit referral request button then we have to transfer all of things inside of the toSubmitmenuidlist
-        //into the int array of tosubmitmenuids. IF THE VALUE IS NOT 0, because when they click the menu it removes it and replaces the
-        //value with 0, otherwise we get issues with out of bounds.
-
-
-        //Need to actually set the menu ids to the menu ids that the user clicks.
-//        int[] menuIds = {23, 76, 26, 92, 10};
-//        int customerId = Integer.valueOf(userCredentials.getCustomer_id());
-//        String referredEmail = "justinkwik@test.com";
-//
-//        final JSONObject referralBody = new JSONObject();
-//
-//        try {
-//            referralBody.put("menu_ids", Arrays.toString(menuIds));
-//            referralBody.put("referrer_id", customerId);
-//            referralBody.put("referred_email", referredEmail);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//
-//        StringRequest referralRequest = new StringRequest(Request.Method.POST, referralLink, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                Log.e("Referral Code: ", response);
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//
-//            }
-//        }) {
-//
-//            @Override
-//            public String getBodyContentType() {
-//                return "application/json";
-//            }
-//
-//            @Override
-//            public byte[] getBody() throws AuthFailureError {
-//                return referralBody.toString().getBytes();
-//            }
-//        };
-//
-//        ConnectionManager.getInstance(ReferralActivity.this).add(referralRequest);
-
-        //Array of menu_ids
-        //Referrer Customer Id
-        //Referred Email (can't be existing customer)
-
-        //Referral Status will just be 0 by default.
-        //Referral Code will be created in the backend
-
-        //Then when this is done it will generate a random code and insert that into the unique_code column, then the user has to enter
-        //the code in order to redeem the menus.
-
-        //So that means that there has to be another tab called referral redemption and when they enter the code the menus will come up
-        //under neath and will be like "are you sure you want to redeem"? But of course have to check that the referral_status is 0 and
-        //not -1 or 1.
-        //Then when that happens and they do redeem, then the referral_status will be changed to 1 and can't be redeemed again
 
     }
 
@@ -189,7 +230,7 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
         int menuIdToAdd = menuIdList.get(position);
 
         for (int i = 0; i < selectedMenuTitleList.size(); i++) {
-            if(selectedMenuTitleList.get(i).getVisibility() == View.INVISIBLE) {
+            if ((selectedMenuTitleList.get(i).getVisibility() == View.INVISIBLE) || (selectedMenuTitleList.get(i).getVisibility() == View.GONE)) {
                 selectedMenuTitleList.get(i).setVisibility(View.VISIBLE);
                 selectedMenuImageList.get(i).setVisibility(View.VISIBLE);
 
@@ -197,7 +238,7 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
                 selectedMenuImageList.get(i).setImageURI(menuUriToAdd);
                 amountOfMenusSelected++;
 
-                toSubmitMenuIdList.add(menuIdToAdd);
+                toSubmitMenuIdList.set(i, menuIdToAdd);
 
                 Log.e("Adding Position: ", String.valueOf(i));
                 Log.e("Adding Menu: ", menuNameToAdd);
@@ -206,9 +247,16 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
             }
         }
 
+        if (amountOfMenusSelected == 1) {
+            sendReferralButton.setEnabled(true);
+            sendReferralButton.setBackgroundResource(R.drawable.checkoutbutton);
+            //sendReferralButton.setText("Send Referral Request");
+            sendReferralButton.setTextColor(getResources().getColor(R.color.BGDARKGREEN));
+        }
+
     }
 
-    public class ReferralListViewAdapter extends BaseAdapter{
+    public class ReferralListViewAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {
@@ -285,13 +333,6 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
         selectedMenuTitleList.add(selectedMenuTitle2);
         selectedMenuTitleList.add(selectedMenuTitle3);
 
-        //Giving them all on click listeners and do a couple tests:
-        //1. First set it to gone and see if the row is pushed to the left, if it is then we set it to gone, set the image to null, menu title
-        //to null then set it to invisible.
-        //2. Then we remove it from the menu_id list.
-
-        //Just giving the selectedmenuimagelist a click listener
-
         for (int i = 0; i < selectedMenuImageList.size(); i++) {
             final int finalI = i;
             selectedMenuImageList.get(i).setOnClickListener(new View.OnClickListener() {
@@ -305,8 +346,7 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
                     selectedMenuImageList.get(finalI).setImageURI(null);
                     selectedMenuTitleList.get(finalI).setText("");
 
-                    toSubmitMenuIdList.remove(finalI);
-                    toSubmitMenuIdList.add(finalI, 0);
+                    toSubmitMenuIdList.set(finalI, 0);
                     selectedMenuImageList.get(finalI).setVisibility(View.GONE);
                     selectedMenuTitleList.get(finalI).setVisibility(View.GONE);
 
@@ -320,17 +360,30 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
                     int count = 0;
 
                     for (int i = 0; i < selectedMenuImageList.size(); i++) {
-                        if(selectedMenuImageList.get(i).getVisibility() == View.GONE) {
+                        if (selectedMenuImageList.get(i).getVisibility() == View.GONE) {
                             count++;
                         }
 
-                        if(count == 3) {
+                        if (count == 3) {
                             Log.e("All Gone: ", "True");
                             for (int j = 0; j < selectedMenuImageList.size(); j++) {
                                 selectedMenuImageList.get(i).setVisibility(View.INVISIBLE);
                                 selectedMenuTitleList.get(i).setVisibility(View.INVISIBLE);
+
+                                sendReferralButton.setEnabled(false);
+                                sendReferralButton.setBackgroundResource(R.drawable.greyedoutloading);
+                                sendReferralButton.setTextColor(getResources().getColor(R.color.BGGREY));
+                                //sendReferralButton.setText("Send Referral Request");
                             }
                         }
+                    }
+
+                    amountOfMenusSelected--;
+
+                    if (amountOfMenusSelected == 0) {
+                        sendReferralButton.setEnabled(false);
+                        sendReferralButton.setBackgroundResource(R.drawable.greyedoutloading);
+                        sendReferralButton.setTextColor(getResources().getColor(R.color.BGGREY));
                     }
                 }
             });
