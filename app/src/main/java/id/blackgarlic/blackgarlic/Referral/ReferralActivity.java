@@ -79,6 +79,7 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
 
     private static List<Integer> toSubmitMenuIdList = new ArrayList<Integer>();
     private static int[] toSubmitMenuIds;
+    private static List<Integer> positionOfZeros = new ArrayList<Integer>();
 
     private static Button sendReferralButton;
     private static EditText referredEmailAddressEditText;
@@ -93,6 +94,8 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
         //where it just takes all of the menus.
 
         //Remember that the StringRequest in the MainActivity uses the localdate to choose the current box.
+
+        positionOfZeros.clear();
 
         emailValidator = EmailValidator.getInstance();
         sendReferralButton = (Button) findViewById(R.id.sendReferralButton);
@@ -119,6 +122,7 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
                 for (int i = 0; i < toSubmitMenuIdList.size(); i++) {
                     if (toSubmitMenuIdList.get(i) == 0) {
                         toSubmitMenuIdList.remove(i);
+                        positionOfZeros.add(i);
                     }
                 }
 
@@ -143,12 +147,35 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
         StringRequest referralRequest = new StringRequest(Request.Method.POST, referralLink, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.e("Referral Code: ", response);
+                Log.e("Response: ", response);
+
+                if(response.equals("Email Exists")) {
+                    SuperToast superToast = SuperToast.create(ReferralActivity.this, "Can't Refer An Existing Email!", SuperToast.Duration.SHORT, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
+                    superToast.show();
+                } else if(response.equals("Email Exists Refer")) {
+
+                    SuperToast superToast = SuperToast.create(ReferralActivity.this, "Email Already Has Pending Referral!", SuperToast.Duration.SHORT, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
+                    superToast.show();
+
+                } else {
+                    SuperToast superToast = SuperToast.create(ReferralActivity.this, response, SuperToast.Duration.SHORT, Style.getStyle(Style.BLUE, SuperToast.Animations.POPUP));
+                    superToast.show();
+                }
+
+                for (int i = 0; i < positionOfZeros.size(); i++) {
+                    toSubmitMenuIdList.set(positionOfZeros.get(i), 0);
+                }
+
+                //we needed to set the 0's back into the tosubmitmenusidlist because remember we removed the 0's, so we keep track of
+                //the postions of the 0's deleted and change them back to 0 if the string request was both successful and fail.
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                //On error return the 0's at the correct positions
+                for (int i = 0; i < positionOfZeros.size(); i++) {
+                    toSubmitMenuIdList.set(positionOfZeros.get(i), 0);
+                }
             }
         }) {
 
