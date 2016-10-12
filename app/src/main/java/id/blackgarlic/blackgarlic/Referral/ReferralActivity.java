@@ -79,7 +79,6 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
 
     private static List<Integer> toSubmitMenuIdList = new ArrayList<Integer>();
     private static int[] toSubmitMenuIds;
-    private static List<Integer> positionOfZeros = new ArrayList<Integer>();
 
     private static Button sendReferralButton;
     private static EditText referredEmailAddressEditText;
@@ -95,8 +94,6 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
 
         //Remember that the StringRequest in the MainActivity uses the localdate to choose the current box.
 
-        positionOfZeros.clear();
-
         emailValidator = EmailValidator.getInstance();
         sendReferralButton = (Button) findViewById(R.id.sendReferralButton);
         referredEmailAddressEditText = (EditText) findViewById(R.id.referredEmailAddressEditText);
@@ -111,6 +108,11 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
 
                 String referredEmail = "";
 
+                final List<Integer> beforeToSubmitMenuIdList = new ArrayList<Integer>();
+                for (int i = 0; i < toSubmitMenuIdList.size(); i++) {
+                    beforeToSubmitMenuIdList.add(toSubmitMenuIdList.get(i));
+                }
+
                 if (!(emailValidator.isValid(referredEmailAddressEditText.getText().toString()))) {
                     SuperToast superToast = SuperToast.create(ReferralActivity.this, "Invalid Email Address Entered!", SuperToast.Duration.SHORT, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
                     superToast.show();
@@ -122,7 +124,7 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
                 for (int i = 0; i < toSubmitMenuIdList.size(); i++) {
                     if (toSubmitMenuIdList.get(i) == 0) {
                         toSubmitMenuIdList.remove(i);
-                        positionOfZeros.add(i);
+                        i--;
                     }
                 }
 
@@ -162,8 +164,10 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
                     superToast.show();
                 }
 
-                for (int i = 0; i < positionOfZeros.size(); i++) {
-                    toSubmitMenuIdList.set(positionOfZeros.get(i), 0);
+                toSubmitMenuIdList.clear();
+
+                for (int i = 0; i < beforeToSubmitMenuIdList.size(); i++) {
+                    toSubmitMenuIdList.add(beforeToSubmitMenuIdList.get(i));
                 }
 
                 //we needed to set the 0's back into the tosubmitmenusidlist because remember we removed the 0's, so we keep track of
@@ -173,9 +177,12 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
             @Override
             public void onErrorResponse(VolleyError error) {
                 //On error return the 0's at the correct positions
-                for (int i = 0; i < positionOfZeros.size(); i++) {
-                    toSubmitMenuIdList.set(positionOfZeros.get(i), 0);
+                toSubmitMenuIdList.clear();
+
+                for (int i = 0; i < beforeToSubmitMenuIdList.size(); i++) {
+                    toSubmitMenuIdList.add(beforeToSubmitMenuIdList.get(i));
                 }
+
             }
         }) {
 
@@ -192,22 +199,17 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
 
         ConnectionManager.getInstance(ReferralActivity.this).add(referralRequest);
 
-                //Referred Email (can't be existing customer), check in nodejs if he is existing customer.
-
-                //Referral Status will just be 0 by default.
-                //Referral Code will be created in the backend
-
-                //Then when this is done it will generate a random code and insert that into the unique_code column, then the user has to enter
-                //the code in order to redeem the menus.
-
                 //So that means that there has to be another tab called referral redemption and when they enter the code the menus will come up
                 //under neath and will be like "are you sure you want to redeem"? But of course have to check that the referral_status is 0 and
                 //not -1 or 1.
-                //Then when that happens and they do redeem, then the referral_status will be changed to 1 and can't be redeemed again
+                //Then when that happens and they do redeem, then the referral_status will be changed to 1, an order
+                //will be placed, and can't be redeemed again due to referral status of 1 in database.
 
 
             }
         });
+
+        toSubmitMenuIdList.clear();
 
         for (int i = 0; i < 3; i++) {
             toSubmitMenuIdList.add(0);
@@ -244,8 +246,6 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        Log.e("Selected: ", String.valueOf(amountOfMenusSelected));
-
         if (amountOfMenusSelected == 3) {
             SuperToast superToast = SuperToast.create(ReferralActivity.this, "Maximum of 3 Menus! Please Press To Remove Menu", SuperToast.Duration.SHORT, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
             superToast.show();
@@ -267,9 +267,6 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
 
                 toSubmitMenuIdList.set(i, menuIdToAdd);
 
-                Log.e("Adding Position: ", String.valueOf(i));
-                Log.e("Adding Menu: ", menuNameToAdd);
-                Log.e("Added: ", "Success");
                 break;
             }
         }
@@ -277,7 +274,6 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
         if (amountOfMenusSelected == 1) {
             sendReferralButton.setEnabled(true);
             sendReferralButton.setBackgroundResource(R.drawable.checkoutbutton);
-            //sendReferralButton.setText("Send Referral Request");
             sendReferralButton.setTextColor(getResources().getColor(R.color.BGDARKGREEN));
         }
 
@@ -366,9 +362,13 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
                 @Override
                 public void onClick(View v) {
 
+                    Log.e("Clicked Menu: ", String.valueOf(finalI));
+
                     for (int i = 0; i < toSubmitMenuIdList.size(); i++) {
                         Log.e("B Menu Ids: ", String.valueOf(toSubmitMenuIdList.get(i)));
                     }
+
+                    Log.e("---", "---");
 
                     selectedMenuImageList.get(finalI).setImageURI(null);
                     selectedMenuTitleList.get(finalI).setText("");
@@ -380,6 +380,8 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
                     for (int i = 0; i < toSubmitMenuIdList.size(); i++) {
                         Log.e("A Menu Ids: ", String.valueOf(toSubmitMenuIdList.get(i)));
                     }
+
+                    Log.e("----------", "--------------------------------");
 
                     //Looping through everytime to see if everything in the list is gone, if it is then set all to invisible so they can
                     //add menus again
