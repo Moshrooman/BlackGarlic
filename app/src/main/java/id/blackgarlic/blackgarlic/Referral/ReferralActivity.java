@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.renderscript.Element;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -84,6 +86,12 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
     private static EditText referredEmailAddressEditText;
     private static EmailValidator emailValidator;
 
+    private static long mLastClickTime;
+
+    //Using a boolean instead of sendReferralButton.setEnabled because set enabled has issues, instead we just set the boolean
+    //to true or false and in the sendreferralbutton on click listener we check what the boolean is.
+    private static boolean sendReferralButtonBoolean;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,14 +102,42 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
 
         //Remember that the StringRequest in the MainActivity uses the localdate to choose the current box.
 
+        sendReferralButtonBoolean = false;
+        mLastClickTime = 0;
         emailValidator = EmailValidator.getInstance();
         sendReferralButton = (Button) findViewById(R.id.sendReferralButton);
         referredEmailAddressEditText = (EditText) findViewById(R.id.referredEmailAddressEditText);
+
+        sendReferralButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                if (sendReferralButtonBoolean == false) {
+                    return false;
+                }
+
+                switch(event.getAction()) {
+                    case(MotionEvent.ACTION_DOWN):
+                        sendReferralButton.setBackgroundResource(R.drawable.pressdowncheckout);
+                        sendReferralButton.setTextColor(getResources().getColor(R.color.BGGREEN));
+                        break;
+                    case(MotionEvent.ACTION_UP):
+                        sendReferralButton.setBackgroundResource(R.drawable.checkoutbutton);
+                        sendReferralButton.setTextColor(getResources().getColor(R.color.BGDARKGREEN));
+                        break;
+                }
+
+                return false;
+            }
+        });
 
         sendReferralButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                if(sendReferralButtonBoolean == false) {
+                    return;
+                }
                 //todo: When the user clicks the submit referral request button then we have to transfer all of things inside of the toSubmitmenuidlist
                 //into the int array of tosubmitmenuids. IF THE VALUE IS NOT 0, because when they click the menu it removes it and replaces the
                 //value with 0, otherwise we get issues with out of bounds.
@@ -272,7 +308,7 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
         }
 
         if (amountOfMenusSelected == 1) {
-            sendReferralButton.setEnabled(true);
+            sendReferralButtonBoolean = true;
             sendReferralButton.setBackgroundResource(R.drawable.checkoutbutton);
             sendReferralButton.setTextColor(getResources().getColor(R.color.BGDARKGREEN));
         }
@@ -362,6 +398,19 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
                 @Override
                 public void onClick(View v) {
 
+                    //So here basically what we do is that right from the beginning we check if the elapsedTime of the systemclock
+                    //minus the last time that we clicked is less than 1000, which is 1 second, if it is then we return.
+                    //If not then we let the instructions run.
+                    if (SystemClock.elapsedRealtime() - mLastClickTime < 500) {
+                        return;
+                    }
+
+                    //And if it goes through then we set the mlastclicktime to the elapsedtime of the systemclock.
+                    //So basically if we click a menu, say it was at an elapsed time of 15000, and we go to click the menu again, and if
+                    //since then the time has only gone up by 300, then the elapsedtime would be 15300, mlastclicktime would be 15000, so
+                    //15300 - 15000 is just 300 which is less than 500 so it will return, it won't run the code.
+                    mLastClickTime = SystemClock.elapsedRealtime();
+
                     Log.e("Clicked Menu: ", String.valueOf(finalI));
 
                     for (int i = 0; i < toSubmitMenuIdList.size(); i++) {
@@ -399,7 +448,7 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
                                 selectedMenuImageList.get(i).setVisibility(View.INVISIBLE);
                                 selectedMenuTitleList.get(i).setVisibility(View.INVISIBLE);
 
-                                sendReferralButton.setEnabled(false);
+                                sendReferralButtonBoolean = false;
                                 sendReferralButton.setBackgroundResource(R.drawable.greyedoutloading);
                                 sendReferralButton.setTextColor(getResources().getColor(R.color.BGGREY));
                                 //sendReferralButton.setText("Send Referral Request");
@@ -410,7 +459,7 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
                     amountOfMenusSelected--;
 
                     if (amountOfMenusSelected == 0) {
-                        sendReferralButton.setEnabled(false);
+                        sendReferralButtonBoolean = false;
                         sendReferralButton.setBackgroundResource(R.drawable.greyedoutloading);
                         sendReferralButton.setTextColor(getResources().getColor(R.color.BGGREY));
                     }
