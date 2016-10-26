@@ -1,6 +1,7 @@
 package id.blackgarlic.blackgarlic.Referral;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -138,9 +139,6 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
                 if(sendReferralButtonBoolean == false) {
                     return;
                 }
-                //todo: When the user clicks the submit referral request button then we have to transfer all of things inside of the toSubmitmenuidlist
-                //into the int array of tosubmitmenuids. IF THE VALUE IS NOT 0, because when they click the menu it removes it and replaces the
-                //value with 0, otherwise we get issues with out of bounds.
 
                 String referredEmail = "";
 
@@ -182,6 +180,8 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
                     e.printStackTrace();
                 }
 
+                final String referredEmailFinal = referredEmail;
+
         StringRequest referralRequest = new StringRequest(Request.Method.POST, referralLink, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -196,8 +196,11 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
                     superToast.show();
 
                 } else {
-                    SuperToast superToast = SuperToast.create(ReferralActivity.this, response, SuperToast.Duration.SHORT, Style.getStyle(Style.BLUE, SuperToast.Animations.POPUP));
-                    superToast.show();
+                    Intent referralConfirmationIntent = new Intent(ReferralActivity.this, ReferralConfirmation.class);
+                    referralConfirmationIntent.putExtra("code", response);
+                    referralConfirmationIntent.putExtra("email", referredEmailFinal);
+                    startActivity(referralConfirmationIntent);
+                    finish();
                 }
 
                 toSubmitMenuIdList.clear();
@@ -206,8 +209,6 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
                     toSubmitMenuIdList.add(beforeToSubmitMenuIdList.get(i));
                 }
 
-                //we needed to set the 0's back into the tosubmitmenusidlist because remember we removed the 0's, so we keep track of
-                //the postions of the 0's deleted and change them back to 0 if the string request was both successful and fail.
             }
         }, new Response.ErrorListener() {
             @Override
@@ -234,13 +235,6 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
         };
 
         ConnectionManager.getInstance(ReferralActivity.this).add(referralRequest);
-
-                //So that means that there has to be another tab called referral redemption and when they enter the code the menus will come up
-                //under neath and will be like "are you sure you want to redeem"? But of course have to check that the referral_status is 0 and
-                //not -1 or 1.
-                //Then when that happens and they do redeem, then the referral_status will be changed to 1, an order
-                //will be placed, and can't be redeemed again due to referral status of 1 in database.
-
 
             }
         });

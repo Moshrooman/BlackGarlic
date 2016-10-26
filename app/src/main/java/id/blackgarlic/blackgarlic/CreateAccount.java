@@ -116,7 +116,7 @@ public class CreateAccount extends AppCompatActivity {
                 email = String.valueOf(createAccountEmail.getText());
                 password = new String(Hex.encodeHex(DigestUtils.sha1(String.valueOf(createAccountPassword.getText()))));
 
-                String url = "http://api.blackgarlic.id:7000/app/createaccount";
+                String url = "http://188.166.221.241:3000/app/createaccount";
 
                 final JSONObject body = new JSONObject();
                 try {
