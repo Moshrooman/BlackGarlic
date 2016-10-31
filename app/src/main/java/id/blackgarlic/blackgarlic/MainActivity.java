@@ -71,6 +71,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import id.blackgarlic.blackgarlic.CookBookModel.CookBook;
 import id.blackgarlic.blackgarlic.OrderHistory.OrderHistory;
 import id.blackgarlic.blackgarlic.Referral.ReferralActivity;
+import id.blackgarlic.blackgarlic.Referral.ReferralRedemption;
 import id.blackgarlic.blackgarlic.model.Data;
 import id.blackgarlic.blackgarlic.model.MenuId;
 import id.blackgarlic.blackgarlic.model.Menus;
@@ -354,14 +355,15 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             menuMainActivityTextView.setVisibility(View.VISIBLE);
 
             //The reason why its one more than it should be is because there needs space for the welcome justin kwik chef thing
-            drawerEntries = new String[8];
+            drawerEntries = new String[9];
             drawerEntries[0] = "Home";
             drawerEntries[1] = "My Account";
             drawerEntries[2] = "Order History";
             drawerEntries[3] = "Payment Confirmation";
             drawerEntries[4] = "CookBook";
             drawerEntries[5] = "Referral";
-            drawerEntries[6] = "Log Out";
+            drawerEntries[6] = "Referral Redemption";
+            drawerEntries[7] = "Log Out";
         }
 
         drawerListView.setAdapter(new MyNavBarAdapter());
@@ -875,7 +877,13 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
                 drawerLayout.closeDrawer(Gravity.LEFT);
                 startActivity(referralIntent);
 
-            } else if (position == 7) {
+            } else if(position == 7) {
+
+                Intent referralRedemptionIntent = new Intent(MainActivity.this, ReferralRedemption.class);
+
+                startActivity(referralRedemptionIntent);
+
+            } else if (position == 8) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.remove("Credentials");
                 editor.remove("Email");
@@ -1048,7 +1056,7 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
 
                 chefNameTextView.setText(userCredentials.getCustomer_name());
 
-            }  else if ((isLoggedIn == true) && (position == 7)) {
+            }  else if ((isLoggedIn == true) && (position == 8)) {
                 TextView navBarEntry = (TextView) convertView.findViewById(R.id.navBarEntryImageView);
                 navBarEntry.setText(drawerEntries[position - 1]);
                 navBarEntry.setTextColor(getResources().getColor(R.color.BGRED));

@@ -156,6 +156,10 @@
         <activity
             android:name=".Referral.ReferralConfirmation"
             android:label="@string/title_activity_referral_confirmation"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Referral.ReferralRedemption"
+            android:label="@string/title_activity_referral_redemption"
             android:theme="@style/AppTheme"></activity>
     </application>
 

@@ -165,14 +165,13 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/greyedoutloading"
+            android:background="@drawable/checkoutbutton"
             android:textColor="@color/BGGREY"
             android:textSize="15dp"
             fontPath="fonts/Roboto-Bold.ttf"
             android:padding="5dp"
-            android:text="Send Referral Request"
-            android:id="@+id/sendReferralButton"
-            android:clickable="false"
+            android:text="Back To Menus"
+            android:id="@+id/backToMenusReferralConfirmation"
             />
 
     </LinearLayout>

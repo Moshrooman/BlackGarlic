@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="id.blackgarlic.blackgarlic.Referral.ReferralRedemption"
+    tools:showIn="@layout/activity_referral_redemption">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="37dp"
+            android:background="@drawable/bordersearchbar"
+            android:hint="Enter Referral Code"
+            android:gravity="center"
+            android:id="@+id/enterReferralCodeEditText"
+            fontPath="fonts/Roboto-Medium.ttf"
+            android:textColor="@color/BGGREEN"
+            android:textColorHint="@color/BGLIGHTGREEN"
+            android:layout_gravity="center"
+            android:maxLength="5"
+            />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/enterReferralCodeEditText"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/greyedoutloading"
+            android:textColor="@color/BGGREY"
+            android:textSize="15dp"
+            fontPath="fonts/Roboto-Bold.ttf"
+            android:padding="5dp"
+            android:text="Submit Code"
+            android:id="@+id/sendReferralCodeButton"
+            />
+
+    </RelativeLayout>
+
+</ScrollView>
