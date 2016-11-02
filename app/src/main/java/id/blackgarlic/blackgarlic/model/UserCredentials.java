@@ -34,7 +34,10 @@ public class UserCredentials {
     @SerializedName("customer_status")
     private String customer_status;
 
-    public UserCredentials(String customer_name, String customer_id, String address_content, String city, String mobile, String zipcode, String address_notes, String address_id, String customer_status) {
+    @SerializedName("customer_email")
+    private String customer_email;
+
+    public UserCredentials(String customer_name, String customer_id, String address_content, String city, String mobile, String zipcode, String address_notes, String address_id, String customer_status, String customer_email) {
         this.customer_name = customer_name;
         this.customer_id = customer_id;
         this.address_content = address_content;
@@ -44,6 +47,7 @@ public class UserCredentials {
         this.address_notes = address_notes;
         this.address_id = address_id;
         this.customer_status = customer_status;
+        this.customer_email = customer_email;
     }
 
     public String getCustomer_name() {
@@ -80,6 +84,10 @@ public class UserCredentials {
 
     public String getCustomer_status() {
         return customer_status;
+    }
+
+    public String getCustomer_email() {
+        return customer_email;
     }
 
     public String setCity() {

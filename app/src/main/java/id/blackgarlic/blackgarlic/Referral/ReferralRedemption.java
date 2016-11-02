@@ -1,6 +1,7 @@
 package id.blackgarlic.blackgarlic.Referral;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,7 +16,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.sql.Connection;
+
+import id.blackgarlic.blackgarlic.ConnectionManager;
 import id.blackgarlic.blackgarlic.R;
+import id.blackgarlic.blackgarlic.SplashActivity;
+import id.blackgarlic.blackgarlic.model.UserCredentials;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ReferralRedemption extends AppCompatActivity {
@@ -23,6 +39,9 @@ public class ReferralRedemption extends AppCompatActivity {
     private static boolean sendReferralCodeButtonActivated;
     private static Button sendReferralCodeButton;
     private static EditText enterReferralCodeEditText;
+    private static SharedPreferences sharedPreferences;
+    private static UserCredentials userCredentials;
+    private static final String referralLink = "http://188.166.221.241:3000/app/checkreferral";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +53,8 @@ public class ReferralRedemption extends AppCompatActivity {
         enterReferralCodeEditText = (EditText) findViewById(R.id.enterReferralCodeEditText);
         sendReferralCodeButton = (Button) findViewById(R.id.sendReferralCodeButton);
         sendReferralCodeButtonActivated = false;
+        sharedPreferences = SplashActivity.getSharedPreferences();
+        userCredentials = new Gson().fromJson(sharedPreferences.getString("Credentials", ""),UserCredentials.class);
 
         sendReferralCodeButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -65,7 +86,43 @@ public class ReferralRedemption extends AppCompatActivity {
                     return;
                 }
 
+                String referralCode = enterReferralCodeEditText.getText().toString();
+                String email = userCredentials.getCustomer_email();
 
+                final JSONObject body = new JSONObject();
+
+                try {
+                    body.put("referral_code", referralCode);
+                    body.put("customer_email", email);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                StringRequest referralRequest = new StringRequest(Request.Method.POST, referralLink, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.e("Response: ", response);
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+                    @Override
+                    public String getBodyContentType() {
+                        return "application/json";
+                    }
+
+                    @Override
+                    public byte[] getBody() throws AuthFailureError {
+                        return body.toString().getBytes();
+                    }
+                };
+
+                ConnectionManager.getInstance(ReferralRedemption.this).add(referralRequest);
 
             }
         });
