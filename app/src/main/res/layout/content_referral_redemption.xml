@@ -22,7 +22,6 @@
             android:textColor="@color/BGGREEN"
             android:textColorHint="@color/BGLIGHTGREEN"
             android:layout_gravity="center"
-            android:maxLength="5"
             />
 
         <Button
