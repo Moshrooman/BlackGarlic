@@ -2,6 +2,7 @@ package id.blackgarlic.blackgarlic.Referral;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,12 +17,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.johnpersano.supertoasts.util.Style;
 import com.google.gson.Gson;
@@ -51,6 +55,21 @@ public class ReferralRedemption extends AppCompatActivity {
     private static ReferralObject referralObject;
     private static List<String> referralMenuList = new ArrayList<String >();
 
+    private static TextView referrerNameTextView;
+    private static TextView referrerEmailTextView;
+    private static RelativeLayout responseRelativeLayout;
+
+    private static SimpleDraweeView firstMenuImage;
+    private static SimpleDraweeView secondMenuImage;
+    private static SimpleDraweeView thirdMenuImage;
+    private static TextView firstMenuName;
+    private static TextView secondMenuName;
+    private static TextView thirdMenuName;
+    private static List<SimpleDraweeView> menuImageList = new ArrayList<>();
+    private static List<TextView> menuNameList = new ArrayList<>();
+
+    public final String BLACKGARLIC_PICTURES = "http://bgmenu.kilatstorage.com/menu_id.jpg";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,11 +77,7 @@ public class ReferralRedemption extends AppCompatActivity {
 
         //We only want to activate the sendreferralcodebutton if they have entered 5 letters.
 
-        enterReferralCodeEditText = (EditText) findViewById(R.id.enterReferralCodeEditText);
-        sendReferralCodeButton = (Button) findViewById(R.id.sendReferralCodeButton);
-        sendReferralCodeButtonActivated = false;
-        sharedPreferences = SplashActivity.getSharedPreferences();
-        userCredentials = new Gson().fromJson(sharedPreferences.getString("Credentials", ""), UserCredentials.class);
+        assignReferences();
 
         enterReferralCodeEditText.setFilters(new InputFilter[] {new InputFilter.AllCaps(), new InputFilter.LengthFilter(5)});
 
@@ -112,7 +127,12 @@ public class ReferralRedemption extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
 
-                        if (response.equals("Completed")) {
+                        if(response.equals("Non Existent")) {
+
+                            SuperToast superToast = SuperToast.create(ReferralRedemption.this, "Wrong Code/Not Your Referral!", SuperToast.Duration.SHORT, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
+                            superToast.show();
+
+                        } else if (response.equals("Completed")) {
 
                             SuperToast superToast = SuperToast.create(ReferralRedemption.this, "Referral Already Redeemed!", SuperToast.Duration.SHORT, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
                             superToast.show();
@@ -132,6 +152,20 @@ public class ReferralRedemption extends AppCompatActivity {
                             //all spaces with empty string.
                             referralObject.setReferral_menus(new ArrayList<String>(Arrays.asList(referralObject.getMenu_ids().replaceAll("\\[", "").replaceAll("\\]", "").replaceAll(" ", "").split(","))));
                             referralMenuList = referralObject.getReferral_menus();
+
+                            responseRelativeLayout.setVisibility(View.VISIBLE);
+                            referrerNameTextView.setText(referralObject.getReferrerName());
+                            referrerEmailTextView.setText(referralObject.getReferrer_email());
+
+                            for (int i = 0; i < referralMenuList.size(); i++) {
+
+                                menuImageList.get(i).setVisibility(View.VISIBLE);
+                                menuImageList.get(i).setImageURI(Uri.parse(BLACKGARLIC_PICTURES.replace("menu_id", referralMenuList.get(i).toString())));
+
+                                menuNameList.get(i).setVisibility(View.VISIBLE);
+                                menuNameList.get(i).setText("TEST");
+
+                            }
 
                         }
 
@@ -200,5 +234,32 @@ public class ReferralRedemption extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    public void assignReferences() {
+
+        enterReferralCodeEditText = (EditText) findViewById(R.id.enterReferralCodeEditText);
+        sendReferralCodeButton = (Button) findViewById(R.id.sendReferralCodeButton);
+        sendReferralCodeButtonActivated = false;
+        sharedPreferences = SplashActivity.getSharedPreferences();
+        userCredentials = new Gson().fromJson(sharedPreferences.getString("Credentials", ""), UserCredentials.class);
+        referrerNameTextView = (TextView) findViewById(R.id.referrerNameTextView);
+        referrerEmailTextView = (TextView) findViewById(R.id.referrerEmailTextView);
+        responseRelativeLayout = (RelativeLayout) findViewById(R.id.responseRelativeLayout);
+
+        firstMenuImage = (SimpleDraweeView) findViewById(R.id.firstMenuImage);
+        secondMenuImage = (SimpleDraweeView) findViewById(R.id.secondMenuImage);
+        thirdMenuImage = (SimpleDraweeView) findViewById(R.id.thirdMenuImage);
+        menuImageList.add(firstMenuImage);
+        menuImageList.add(secondMenuImage);
+        menuImageList.add(thirdMenuImage);
+
+        firstMenuName = (TextView) findViewById(R.id.firstMenuName);
+        secondMenuName = (TextView) findViewById(R.id.secondMenuName);
+        thirdMenuName = (TextView) findViewById(R.id.thirdMenuName);
+        menuNameList.add(firstMenuName);
+        menuNameList.add(secondMenuName);
+        menuNameList.add(thirdMenuName);
+
     }
 }

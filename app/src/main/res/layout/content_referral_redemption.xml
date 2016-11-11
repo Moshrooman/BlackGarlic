@@ -1,43 +1,206 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="id.blackgarlic.blackgarlic.Referral.ReferralRedemption"
-    tools:showIn="@layout/activity_referral_redemption">
+    tools:showIn="@layout/activity_referral_redemption"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    >
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
 
-        <EditText
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="37dp"
-            android:background="@drawable/bordersearchbar"
-            android:hint="Enter Referral Code"
-            android:gravity="center"
-            android:id="@+id/enterReferralCodeEditText"
-            fontPath="fonts/Roboto-Medium.ttf"
-            android:textColor="@color/BGGREEN"
-            android:textColorHint="@color/BGLIGHTGREEN"
-            android:layout_gravity="center"
-            />
+            android:layout_height="wrap_content"
+            android:id="@+id/enterReferralCodeRelativeLayout"
+            >
 
-        <Button
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="37dp"
+                android:background="@drawable/bordersearchbar"
+                android:hint="Enter Referral Code"
+                android:gravity="center"
+                android:id="@+id/enterReferralCodeEditText"
+                fontPath="fonts/Roboto-Medium.ttf"
+                android:textColor="@color/BGGREEN"
+                android:textColorHint="@color/BGLIGHTGREEN"
+                android:layout_gravity="center"
+                />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@+id/enterReferralCodeEditText"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/greyedoutloading"
+                android:textColor="@color/BGGREY"
+                android:textSize="15dp"
+                fontPath="fonts/Roboto-Bold.ttf"
+                android:padding="5dp"
+                android:text="Submit Code"
+                android:id="@+id/sendReferralCodeButton"
+                />
+
+        </RelativeLayout>
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_below="@+id/enterReferralCodeEditText"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/greyedoutloading"
-            android:textColor="@color/BGGREY"
-            android:textSize="15dp"
-            fontPath="fonts/Roboto-Bold.ttf"
-            android:padding="5dp"
-            android:text="Submit Code"
-            android:id="@+id/sendReferralCodeButton"
-            />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            >
 
-    </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/responseRelativeLayout"
+                android:visibility="visible"
+                >
 
-</ScrollView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Referrer Name:"
+                    fontPath="fonts/Roboto-Bold.ttf"
+                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="20dp"
+                    android:id="@+id/referrerName"
+                    android:textColor="@color/BGDARKGREEN"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/referrerName"
+                    android:id="@+id/referrerNameTextView"
+                    android:layout_marginTop="5dp"
+                    fontPath="fonts/Roboto-Medium.ttf"
+                    android:textSize="20dp"
+                    android:textColor="@color/BGGREEN"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Referrer Email:"
+                    fontPath="fonts/Roboto-Bold.ttf"
+                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="20dp"
+                    android:id="@+id/referrerEmail"
+                    android:layout_below="@id/referrerNameTextView"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/BGDARKGREEN"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/referrerEmail"
+                    android:id="@+id/referrerEmailTextView"
+                    android:layout_marginTop="5dp"
+                    fontPath="fonts/Roboto-Medium.ttf"
+                    android:textSize="20dp"
+                    android:textColor="@color/BGGREEN"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Referred Menus"
+                    fontPath="fonts/Roboto-Bold.ttf"
+                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="20dp"
+                    android:id="@+id/referredMenus"
+                    android:layout_below="@id/referrerEmailTextView"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/BGDARKGREEN"
+                    />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_below="@+id/referredMenus"
+                    android:layout_marginTop="10dp"
+                    >
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        fresco:actualImageScaleType="fitXY"
+                        android:id="@+id/firstMenuImage"
+                        android:visibility="gone"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/BGGREEN"
+                        fontPath="fonts/Roboto-Medium.ttf"
+                        android:id="@+id/firstMenuName"
+                        android:layout_marginTop="5dp"
+                        android:visibility="gone"
+                        />
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        fresco:actualImageScaleType="fitXY"
+                        android:id="@+id/secondMenuImage"
+                        android:layout_marginTop="10dp"
+                        android:visibility="gone"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/BGGREEN"
+                        fontPath="fonts/Roboto-Medium.ttf"
+                        android:id="@+id/secondMenuName"
+                        android:layout_marginTop="5dp"
+                        android:visibility="gone"
+                        />
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        fresco:actualImageScaleType="fitXY"
+                        android:id="@+id/thirdMenuImage"
+                        android:layout_marginTop="10dp"
+                        android:visibility="gone"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/BGGREEN"
+                        fontPath="fonts/Roboto-Medium.ttf"
+                        android:id="@+id/thirdMenuName"
+                        android:layout_marginTop="5dp"
+                        android:visibility="gone"
+                        />
+
+                </LinearLayout>
+
+
+
+            </RelativeLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+</RelativeLayout>
