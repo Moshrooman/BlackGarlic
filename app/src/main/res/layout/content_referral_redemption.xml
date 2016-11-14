@@ -60,7 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/responseRelativeLayout"
-                android:visibility="visible"
+                android:visibility="invisible"
                 >
 
                 <TextView
@@ -130,7 +130,7 @@
                     />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_below="@+id/referredMenus"
@@ -148,11 +148,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/BGGREEN"
-                        fontPath="fonts/Roboto-Medium.ttf"
                         android:id="@+id/firstMenuName"
                         android:layout_marginTop="5dp"
                         android:visibility="gone"
+                        fontPath="fonts/Roboto-Bold.ttf"
+                        android:textColor="#444444"
+                        android:textSize="20dp"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center"
                         />
 
                     <com.facebook.drawee.view.SimpleDraweeView
@@ -167,11 +170,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/BGGREEN"
-                        fontPath="fonts/Roboto-Medium.ttf"
                         android:id="@+id/secondMenuName"
                         android:layout_marginTop="5dp"
                         android:visibility="gone"
+                        fontPath="fonts/Roboto-Bold.ttf"
+                        android:textColor="#444444"
+                        android:textSize="20dp"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center"
                         />
 
                     <com.facebook.drawee.view.SimpleDraweeView
@@ -186,11 +192,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/BGGREEN"
-                        fontPath="fonts/Roboto-Medium.ttf"
                         android:id="@+id/thirdMenuName"
                         android:layout_marginTop="5dp"
                         android:visibility="gone"
+                        fontPath="fonts/Roboto-Bold.ttf"
+                        android:textColor="#444444"
+                        android:textSize="20dp"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center"
                         />
 
                 </LinearLayout>

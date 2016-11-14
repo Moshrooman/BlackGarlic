@@ -250,6 +250,8 @@ public class ReferralRedemption extends AppCompatActivity {
         firstMenuImage = (SimpleDraweeView) findViewById(R.id.firstMenuImage);
         secondMenuImage = (SimpleDraweeView) findViewById(R.id.secondMenuImage);
         thirdMenuImage = (SimpleDraweeView) findViewById(R.id.thirdMenuImage);
+
+        menuImageList.clear();
         menuImageList.add(firstMenuImage);
         menuImageList.add(secondMenuImage);
         menuImageList.add(thirdMenuImage);
@@ -257,6 +259,7 @@ public class ReferralRedemption extends AppCompatActivity {
         firstMenuName = (TextView) findViewById(R.id.firstMenuName);
         secondMenuName = (TextView) findViewById(R.id.secondMenuName);
         thirdMenuName = (TextView) findViewById(R.id.thirdMenuName);
+        menuNameList.clear();
         menuNameList.add(firstMenuName);
         menuNameList.add(secondMenuName);
         menuNameList.add(thirdMenuName);
