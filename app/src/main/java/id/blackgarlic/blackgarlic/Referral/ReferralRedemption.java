@@ -4,10 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -33,9 +30,7 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import id.blackgarlic.blackgarlic.ConnectionManager;
@@ -53,7 +48,6 @@ public class ReferralRedemption extends AppCompatActivity {
     private static UserCredentials userCredentials;
     private static final String referralLink = "http://188.166.221.241:3000/app/checkreferral";
     private static ReferralObject referralObject;
-    private static List<String> referralMenuList = new ArrayList<String >();
 
     private static TextView referrerNameTextView;
     private static TextView referrerEmailTextView;
@@ -66,7 +60,8 @@ public class ReferralRedemption extends AppCompatActivity {
     private static TextView secondMenuName;
     private static TextView thirdMenuName;
     private static List<SimpleDraweeView> menuImageList = new ArrayList<>();
-    private static List<TextView> menuNameList = new ArrayList<>();
+    private static List<TextView> menuNameTextViewList = new ArrayList<>();
+    private static List<MenuNameObject> menuList = new ArrayList<>();
 
     public final String BLACKGARLIC_PICTURES = "http://bgmenu.kilatstorage.com/menu_id.jpg";
 
@@ -146,24 +141,19 @@ public class ReferralRedemption extends AppCompatActivity {
 
                             referralObject = new Gson().fromJson(response, ReferralObject.class);
 
-                            //So here basically the menu_ids is set to a string that starts with [, ends with ] and has integers seperated
-                            //by commas. So I created the method set referral menus and passed a new arraylist created from callig
-                            //Arrays.asList and retrieved this string and replaced all [ with empty string, all ] with empty string,
-                            //all spaces with empty string.
-                            referralObject.setReferral_menus(new ArrayList<String>(Arrays.asList(referralObject.getMenu_ids().replaceAll("\\[", "").replaceAll("\\]", "").replaceAll(" ", "").split(","))));
-                            referralMenuList = referralObject.getReferral_menus();
+                            menuList = referralObject.getMenuNameList();
 
                             responseRelativeLayout.setVisibility(View.VISIBLE);
                             referrerNameTextView.setText(referralObject.getReferrerName());
                             referrerEmailTextView.setText(referralObject.getReferrer_email());
 
-                            for (int i = 0; i < referralMenuList.size(); i++) {
+                            for (int i = 0; i < menuList.size(); i++) {
 
                                 menuImageList.get(i).setVisibility(View.VISIBLE);
-                                menuImageList.get(i).setImageURI(Uri.parse(BLACKGARLIC_PICTURES.replace("menu_id", referralMenuList.get(i).toString())));
+                                menuImageList.get(i).setImageURI(Uri.parse(BLACKGARLIC_PICTURES.replace("menu_id", String.valueOf(menuList.get(i).getMenu_id()))));
 
-                                menuNameList.get(i).setVisibility(View.VISIBLE);
-                                menuNameList.get(i).setText("TEST");
+                                menuNameTextViewList.get(i).setVisibility(View.VISIBLE);
+                                menuNameTextViewList.get(i).setText(menuList.get(i).getMenu_name());
 
                             }
 
@@ -259,10 +249,10 @@ public class ReferralRedemption extends AppCompatActivity {
         firstMenuName = (TextView) findViewById(R.id.firstMenuName);
         secondMenuName = (TextView) findViewById(R.id.secondMenuName);
         thirdMenuName = (TextView) findViewById(R.id.thirdMenuName);
-        menuNameList.clear();
-        menuNameList.add(firstMenuName);
-        menuNameList.add(secondMenuName);
-        menuNameList.add(thirdMenuName);
+        menuNameTextViewList.clear();
+        menuNameTextViewList.add(firstMenuName);
+        menuNameTextViewList.add(secondMenuName);
+        menuNameTextViewList.add(thirdMenuName);
 
     }
 }

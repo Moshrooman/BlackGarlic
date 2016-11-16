@@ -36,23 +36,24 @@ public class ReferralObject {
     @SerializedName("last_name")
     private String last_name;
 
-    private List<String> referral_menus;
+    @SerializedName("menu_id_names")
+    private List<MenuNameObject> menuNameList;
 
-    public ReferralObject(int referral_id, int referrer_id, String referred_email, String menu_ids, int referral_status, String referral_code, List<String> referral_menus, String first_name, String last_name, String referrer_email) {
+    public ReferralObject(int referral_id, int referrer_id, String referred_email, String menu_ids, int referral_status, String referral_code, String first_name, String last_name, String referrer_email, List<MenuNameObject> menuNameList) {
         this.referral_id = referral_id;
         this.referrer_id = referrer_id;
         this.referred_email = referred_email;
         this.menu_ids = menu_ids;
         this.referral_status = referral_status;
         this.referral_code = referral_code;
-        this.referral_menus = referral_menus;
         this.first_name = first_name;
         this.last_name = last_name;
         this.referrer_email = referrer_email;
+        this.menuNameList = menuNameList;
     }
 
-    public List<String> getReferral_menus() {
-        return referral_menus;
+    public List<MenuNameObject> getMenuNameList() {
+        return menuNameList;
     }
 
     public int getReferral_id() {
@@ -111,11 +112,11 @@ public class ReferralObject {
         this.referral_code = referral_code;
     }
 
-    public void setReferral_menus(List<String> referral_menus) {
-        this.referral_menus = referral_menus;
-    }
-
     public void setReferrer_email(String referrer_email) {
         this.referrer_email = referrer_email;
+    }
+
+    public void setMenuNameList(List<MenuNameObject> menuNameList) {
+        this.menuNameList = menuNameList;
     }
 }
