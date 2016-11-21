@@ -135,6 +135,7 @@
                     android:orientation="vertical"
                     android:layout_below="@+id/referredMenus"
                     android:layout_marginTop="10dp"
+                    android:id="@+id/confirmMenuLinearLayout"
                     >
 
                     <com.facebook.drawee.view.SimpleDraweeView
@@ -204,7 +205,50 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:weightSum="1"
+                    android:orientation="horizontal"
+                    android:layout_below="@+id/confirmMenuLinearLayout"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="25dp"
+                    >
 
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:layout_marginLeft="20dp"
+                        fontPath="fonts/Roboto-Bold.ttf"
+                        android:text="Accept"
+                        android:background="@drawable/acceptunclick"
+                        android:textColor="@color/BGDARKGREEN"
+                        android:id="@+id/acceptButton"
+                        android:gravity="center"
+                        />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.2"
+                        />
+
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.4"
+                        android:layout_marginRight="20dp"
+                        fontPath="fonts/Roboto-Bold.ttf"
+                        android:text="Decline"
+                        android:background="@drawable/declineunclick"
+                        android:textColor="@color/BGGREY"
+                        android:id="@+id/declineButton"
+                        android:gravity="center"
+                        />
+
+
+                </LinearLayout>
 
             </RelativeLayout>
 

@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import id.blackgarlic.blackgarlic.CircleProgressBarDrawable;
 import id.blackgarlic.blackgarlic.ConnectionManager;
 import id.blackgarlic.blackgarlic.R;
 import id.blackgarlic.blackgarlic.SplashActivity;
@@ -63,6 +64,9 @@ public class ReferralRedemption extends AppCompatActivity {
     private static List<TextView> menuNameTextViewList = new ArrayList<>();
     private static List<MenuNameObject> menuList = new ArrayList<>();
 
+    private static Button acceptButton;
+    private static Button declineButton;
+
     public final String BLACKGARLIC_PICTURES = "http://bgmenu.kilatstorage.com/menu_id.jpg";
 
     @Override
@@ -74,7 +78,7 @@ public class ReferralRedemption extends AppCompatActivity {
 
         assignReferences();
 
-        enterReferralCodeEditText.setFilters(new InputFilter[] {new InputFilter.AllCaps(), new InputFilter.LengthFilter(5)});
+        enterReferralCodeEditText.setFilters(new InputFilter[]{new InputFilter.AllCaps(), new InputFilter.LengthFilter(5)});
 
         sendReferralCodeButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -92,6 +96,44 @@ public class ReferralRedemption extends AppCompatActivity {
                     case (MotionEvent.ACTION_UP):
                         sendReferralCodeButton.setBackgroundResource(R.drawable.checkoutbutton);
                         sendReferralCodeButton.setTextColor(getResources().getColor(R.color.BGDARKGREEN));
+                        break;
+                }
+
+                return false;
+            }
+        });
+
+        acceptButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        acceptButton.setBackgroundResource(R.drawable.acceptclick);
+                        acceptButton.setTextColor(getResources().getColor(R.color.BGGREEN));
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        acceptButton.setBackgroundResource(R.drawable.acceptunclick);
+                        acceptButton.setTextColor(getResources().getColor(R.color.BGDARKGREEN));
+                        break;
+                }
+
+                return false;
+            }
+        });
+
+        declineButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                switch (event.getAction()) {
+                    case (MotionEvent.ACTION_DOWN):
+                        declineButton.setBackgroundResource(R.drawable.declineclick);
+                        declineButton.setTextColor(getResources().getColor(R.color.red));
+                        break;
+                    case (MotionEvent.ACTION_UP):
+                        declineButton.setBackgroundResource(R.drawable.declineunclick);
+                        declineButton.setTextColor(getResources().getColor(R.color.BGGREY));
                         break;
                 }
 
@@ -241,6 +283,14 @@ public class ReferralRedemption extends AppCompatActivity {
         secondMenuImage = (SimpleDraweeView) findViewById(R.id.secondMenuImage);
         thirdMenuImage = (SimpleDraweeView) findViewById(R.id.thirdMenuImage);
 
+        CircleProgressBarDrawable progressBar = new CircleProgressBarDrawable();
+        progressBar.setBackgroundColor(ReferralRedemption.this.getResources().getColor(R.color.BGGREY));
+        progressBar.setColor(ReferralRedemption.this.getResources().getColor(R.color.BGGREEN));
+
+        firstMenuImage.getHierarchy().setProgressBarImage(progressBar);
+        secondMenuImage.getHierarchy().setProgressBarImage(progressBar);
+        thirdMenuImage.getHierarchy().setProgressBarImage(progressBar);
+
         menuImageList.clear();
         menuImageList.add(firstMenuImage);
         menuImageList.add(secondMenuImage);
@@ -253,6 +303,9 @@ public class ReferralRedemption extends AppCompatActivity {
         menuNameTextViewList.add(firstMenuName);
         menuNameTextViewList.add(secondMenuName);
         menuNameTextViewList.add(thirdMenuName);
+
+        acceptButton = (Button) findViewById(R.id.acceptButton);
+        declineButton = (Button) findViewById(R.id.declineButton);
 
     }
 }
