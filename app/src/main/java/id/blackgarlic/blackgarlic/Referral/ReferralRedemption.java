@@ -48,6 +48,7 @@ public class ReferralRedemption extends AppCompatActivity {
     private static SharedPreferences sharedPreferences;
     private static UserCredentials userCredentials;
     private static final String referralLink = "http://188.166.221.241:3000/app/checkreferral";
+    private static final String updateReferralLink = "http://188.166.221.241:3000/app/updatereferral";
     private static ReferralObject referralObject;
 
     private static TextView referrerNameTextView;
@@ -122,6 +123,15 @@ public class ReferralRedemption extends AppCompatActivity {
             }
         });
 
+        acceptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                updateReferral(true);
+
+            }
+        });
+
         declineButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -138,6 +148,13 @@ public class ReferralRedemption extends AppCompatActivity {
                 }
 
                 return false;
+            }
+        });
+
+        declineButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateReferral(false);
             }
         });
 
@@ -306,6 +323,48 @@ public class ReferralRedemption extends AppCompatActivity {
 
         acceptButton = (Button) findViewById(R.id.acceptButton);
         declineButton = (Button) findViewById(R.id.declineButton);
+
+    }
+
+    public void updateReferral(boolean acceptOrDecline) {
+
+        final JSONObject body = new JSONObject();
+
+        try {
+
+            body.put("accepted", acceptOrDecline);
+            body.put("referred_email", referralObject.getReferred_email());
+            body.put("referrer_id", referralObject.getReferrer_id());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        StringRequest updateReferralRequest = new StringRequest(Request.Method.POST, updateReferralLink, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                Log.e("Updated: ", "Successful");
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                return body.toString().getBytes();
+            }
+        };
+
+        ConnectionManager.getInstance(ReferralRedemption.this).add(updateReferralRequest);
 
     }
 }
