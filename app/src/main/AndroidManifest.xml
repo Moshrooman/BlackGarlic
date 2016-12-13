@@ -160,6 +160,10 @@
         <activity
             android:name=".Referral.ReferralRedemption"
             android:label="@string/title_activity_referral_redemption"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Referral.Referral_Redeemed"
+            android:label="@string/title_activity_referral__redeemed"
             android:theme="@style/AppTheme"></activity>
     </application>
 

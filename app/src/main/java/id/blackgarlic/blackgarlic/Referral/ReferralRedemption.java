@@ -1,6 +1,7 @@
 package id.blackgarlic.blackgarlic.Referral;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -340,11 +341,41 @@ public class ReferralRedemption extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        List<String> informationList = new ArrayList<String>();
+        informationList.add(userCredentials.getAddress_content());
+        informationList.add(userCredentials.getAddress_notes());
+        informationList.add(userCredentials.getCity());
+        informationList.add(userCredentials.getMobile());
+        informationList.add(userCredentials.getZipcode());
+
+        for (int i = 0; i < informationList.size(); i++) {
+
+            if (informationList.get(i) == null) {
+
+                SuperToast superToast = SuperToast.create(ReferralRedemption.this, "Please Completely Fill Address Info In My Account!", SuperToast.Duration.SHORT, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
+                superToast.show();
+
+                return;
+
+            } else if(informationList.get(i).equals("") || informationList.get(i).equals("0")) {
+
+                SuperToast superToast = SuperToast.create(ReferralRedemption.this, "Please Completely Fill Address Info In My Account!", SuperToast.Duration.SHORT, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
+                superToast.show();
+
+                return;
+
+            }
+
+        }
+
         StringRequest updateReferralRequest = new StringRequest(Request.Method.POST, updateReferralLink, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
-                Log.e("Updated: ", "Successful");
+                Intent referralRedeemedIntent = new Intent(ReferralRedemption.this, Referral_Redeemed.class);
+                Log.e("Succesfully Updated: ", "True");
+                startActivity(referralRedeemedIntent);
+                finish();
 
             }
         }, new Response.ErrorListener() {
