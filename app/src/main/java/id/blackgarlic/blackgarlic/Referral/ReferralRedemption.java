@@ -329,18 +329,6 @@ public class ReferralRedemption extends AppCompatActivity {
 
     public void updateReferral(boolean acceptOrDecline) {
 
-        final JSONObject body = new JSONObject();
-
-        try {
-
-            body.put("accepted", acceptOrDecline);
-            body.put("referred_email", referralObject.getReferred_email());
-            body.put("referrer_id", referralObject.getReferrer_id());
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
         List<String> informationList = new ArrayList<String>();
         informationList.add(userCredentials.getAddress_content());
         informationList.add(userCredentials.getAddress_notes());
@@ -366,6 +354,25 @@ public class ReferralRedemption extends AppCompatActivity {
 
             }
 
+        }
+
+        final JSONObject body = new JSONObject();
+
+        try {
+
+            body.put("accepted", acceptOrDecline);
+            body.put("referred_email", referralObject.getReferred_email());
+            body.put("referrer_id", referralObject.getReferrer_id());
+            body.put("customer_name", userCredentials.getCustomer_name());
+            body.put("mobile", userCredentials.getMobile());
+            body.put("address_content", userCredentials.getAddress_content());
+            body.put("city", userCredentials.getCity());
+            body.put("zipcode", userCredentials.getZipcode());
+            body.put("address_notes", userCredentials.getAddress_notes());
+            body.put("customer_id", userCredentials.getCustomer_id());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
         StringRequest updateReferralRequest = new StringRequest(Request.Method.POST, updateReferralLink, new Response.Listener<String>() {
