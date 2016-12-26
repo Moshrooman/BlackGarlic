@@ -28,6 +28,7 @@ import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.johnpersano.supertoasts.util.Style;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -358,8 +359,23 @@ public class ReferralRedemption extends AppCompatActivity {
 
         final JSONObject body = new JSONObject();
 
+        final JSONArray menuArray = new JSONArray();
+
         try {
 
+            for (int i = 0; i < menuList.size(); i++) {
+
+                JSONObject menuObject = new JSONObject();
+                menuObject.put("menu_id", menuList.get(i).getMenu_id());
+                menuObject.put("portion", 2);
+
+                menuArray.put(menuObject);
+
+            }
+
+            Log.e("Menus: ", String.valueOf(menuArray));
+
+            body.put("menus", menuArray);
             body.put("accepted", acceptOrDecline);
             body.put("referred_email", referralObject.getReferred_email());
             body.put("referrer_id", referralObject.getReferrer_id());
