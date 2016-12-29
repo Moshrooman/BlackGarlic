@@ -28,12 +28,18 @@ import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.johnpersano.supertoasts.util.Style;
 import com.google.gson.Gson;
 
+import org.joda.time.LocalDate;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import id.blackgarlic.blackgarlic.CircleProgressBarDrawable;
 import id.blackgarlic.blackgarlic.ConnectionManager;
@@ -357,6 +363,19 @@ public class ReferralRedemption extends AppCompatActivity {
 
         }
 
+        //Getting Current date and time:
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        Date currentLocalTime = cal.getTime();
+
+        //Actual Variables
+        DateFormat date = new SimpleDateFormat("yyyy-MM-dd");
+        date.setTimeZone(TimeZone.getTimeZone("Asia/Bangkok"));
+        String localTime = date.format(currentLocalTime);
+
+        //Joda-Time Library, parsing it into whitesignupbutton jodatime object, easier to add dates.
+        LocalDate orderDate = new LocalDate(localTime);
+        orderDate = orderDate.plusDays(2);
+
         final JSONObject body = new JSONObject();
 
         final JSONArray menuArray = new JSONArray();
@@ -386,6 +405,7 @@ public class ReferralRedemption extends AppCompatActivity {
             body.put("zipcode", userCredentials.getZipcode());
             body.put("address_notes", userCredentials.getAddress_notes());
             body.put("customer_id", userCredentials.getCustomer_id());
+            body.put("date", orderDate);
 
         } catch (JSONException e) {
             e.printStackTrace();

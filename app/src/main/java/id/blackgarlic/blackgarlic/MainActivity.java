@@ -548,6 +548,17 @@ public class MainActivity extends AppCompatActivity implements BlackGarlicAdapte
             @Override
             public void onResponse(String response) {
 
+                if(response.equals("empty")) {
+
+                    SuperToast superToast = SuperToast.create(MainActivity.this, "No Menus For This Week!", SuperToast.Duration.EXTRA_LONG, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
+                    superToast.setTextSize(21);
+                    superToast.show();
+                    mainActivityProgressBar.setVisibility(View.GONE);
+                    loadingThisWeeksMenuTextView.setVisibility(View.GONE);
+                    return;
+
+                }
+
                 Log.e("Response: ", response);
 
                 MenuId menuId = new Gson().fromJson(response, MenuId.class);
