@@ -416,7 +416,9 @@ public class ReferralRedemption extends AppCompatActivity {
             public void onResponse(String response) {
 
                 Intent referralRedeemedIntent = new Intent(ReferralRedemption.this, Referral_Redeemed.class);
-                Log.e("Succesfully Updated: ", "True");
+
+                Log.e("Response: ", response);
+
                 startActivity(referralRedeemedIntent);
                 finish();
 
