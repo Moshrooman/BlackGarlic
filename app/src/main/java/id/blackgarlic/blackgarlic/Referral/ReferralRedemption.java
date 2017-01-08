@@ -392,8 +392,6 @@ public class ReferralRedemption extends AppCompatActivity {
 
             }
 
-            Log.e("Menus: ", String.valueOf(menuArray));
-
             body.put("menus", menuArray);
             body.put("accepted", acceptOrDecline);
             body.put("referred_email", referralObject.getReferred_email());
@@ -417,7 +415,7 @@ public class ReferralRedemption extends AppCompatActivity {
 
                 Intent referralRedeemedIntent = new Intent(ReferralRedemption.this, Referral_Redeemed.class);
 
-                Log.e("Response: ", response);
+                referralRedeemedIntent.putExtra("response_json", response);
 
                 startActivity(referralRedeemedIntent);
                 finish();
