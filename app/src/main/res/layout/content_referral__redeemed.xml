@@ -1,10 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context="id.blackgarlic.blackgarlic.Referral.Referral_Redeemed"
     tools:showIn="@layout/activity_referral__redeemed">
 
-</RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Referral Success!"
+        android:textSize="35dp"
+        android:layout_marginBottom="35dp"
+        android:textColor="@color/red"
+        fontPath="fonts/Roboto-Bold.ttf"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        fontPath="fonts/Roboto-Bold.ttf"
+        android:text="Thank You!"
+        android:textSize="30dp"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/BGGREY"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:id="@+id/referralRedeemedNameTextView"
+        fontPath="fonts/Roboto-Medium.ttf"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/BGGREEN"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:text="Your Order Id Is:"
+        fontPath="fonts/Roboto-Bold.ttf"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/BGGREEN"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:id="@+id/referralRedeemedUniqueIdTextView"
+        fontPath="fonts/Roboto-Medium.ttf"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/BGGREEN"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:text="Your Box Will Be Sent To:"
+        fontPath="fonts/Roboto-Bold.ttf"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/BGGREY"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:id="@+id/referralRedeemedAddressTextView"
+        fontPath="fonts/Roboto-Medium.ttf"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/BGGREEN"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:text="On:"
+        fontPath="fonts/Roboto-Bold.ttf"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/BGGREY"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:id="@+id/referralRedeemedDateTextView"
+        fontPath="fonts/Roboto-Medium.ttf"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/BGGREEN"
+        />
+
+</LinearLayout>

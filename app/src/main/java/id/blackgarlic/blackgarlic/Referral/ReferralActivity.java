@@ -187,12 +187,17 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
             public void onResponse(String response) {
                 Log.e("Response: ", response);
 
-                if(response.equals("Email Exists")) {
+                if (response.equals("Email Exists")) {
                     SuperToast superToast = SuperToast.create(ReferralActivity.this, "Can't Refer An Existing Email!", SuperToast.Duration.SHORT, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
                     superToast.show();
-                } else if(response.equals("Email Exists Refer")) {
+                } else if (response.equals("Email Exists Refer")) {
 
                     SuperToast superToast = SuperToast.create(ReferralActivity.this, "Email Already Has Pending Referral!", SuperToast.Duration.SHORT, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
+                    superToast.show();
+
+                } else if (response.equals("Max Refers Reached")) {
+
+                    SuperToast superToast = SuperToast.create(ReferralActivity.this, "You Have Already Reached The Maximum Number Of Referrals!", SuperToast.Duration.SHORT, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
                     superToast.show();
 
                 } else {
