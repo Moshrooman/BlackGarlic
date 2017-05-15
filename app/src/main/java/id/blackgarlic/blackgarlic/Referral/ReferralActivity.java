@@ -185,6 +185,7 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
         StringRequest referralRequest = new StringRequest(Request.Method.POST, referralLink, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+
                 Log.e("Response: ", response);
 
                 if (response.equals("Email Exists")) {
@@ -198,6 +199,11 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
                 } else if (response.equals("Max Refers Reached")) {
 
                     SuperToast superToast = SuperToast.create(ReferralActivity.this, "You Have Already Reached The Maximum Number Of Referrals!", SuperToast.Duration.SHORT, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
+                    superToast.show();
+
+                } else if (response.contains("Still time left")) {
+
+                    SuperToast superToast = SuperToast.create(ReferralActivity.this, response.substring(15, response.length()), SuperToast.Duration.SHORT, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
                     superToast.show();
 
                 } else {
