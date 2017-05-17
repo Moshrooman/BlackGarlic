@@ -6,7 +6,6 @@ import com.google.gson.annotations.SerializedName;
  * Created by Justin Kwik on 16/11/2016.
  */
 
- //THIS IS A TEST
 public class MenuNameObject {
 
     @SerializedName("menu_name")
