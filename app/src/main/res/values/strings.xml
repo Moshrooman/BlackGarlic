@@ -30,4 +30,5 @@
     <string name="title_activity_referral_confirmation">ReferralConfirmation</string>
     <string name="title_activity_referral_redemption">ReferralRedemption</string>
     <string name="title_activity_referral__redeemed">Referral_Redeemed</string>
+    <string name="title_activity_countdown_popup">CountdownPopup</string>
 </resources>

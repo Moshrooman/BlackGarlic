@@ -12,6 +12,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,6 +22,8 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -92,6 +95,9 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
     //Using a boolean instead of sendReferralButton.setEnabled because set enabled has issues, instead we just set the boolean
     //to true or false and in the sendreferralbutton on click listener we check what the boolean is.
     private static boolean sendReferralButtonBoolean;
+
+    private PopupWindow popUpWindow;
+    private LayoutInflater layoutInflater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,8 +209,26 @@ public class ReferralActivity extends AppCompatActivity implements AdapterView.O
 
                 } else if (response.contains("Still time left")) {
 
-                    SuperToast superToast = SuperToast.create(ReferralActivity.this, response.substring(15, response.length()), SuperToast.Duration.SHORT, Style.getStyle(Style.RED, SuperToast.Animations.POPUP));
-                    superToast.show();
+                    //TODO: inflate the shit
+
+                    RelativeLayout referralRelativeLayout = (RelativeLayout) findViewById(R.id.referralRelativeLayout);
+
+                    layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+                    ViewGroup container = (ViewGroup) layoutInflater.inflate(R.layout.countdown, null);
+
+                    popUpWindow = new PopupWindow(container, 400, 400, true);
+
+                    TextView countDownTextView = (TextView) container.findViewById(R.id.countDownTextView);
+
+                    popUpWindow.showAtLocation(referralRelativeLayout, Gravity.CENTER, 0, 0);
+
+                    container.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            popUpWindow.dismiss();
+                            return true;
+                        }
+                    });
 
                 } else {
                     Intent referralConfirmationIntent = new Intent(ReferralActivity.this, ReferralConfirmation.class);
